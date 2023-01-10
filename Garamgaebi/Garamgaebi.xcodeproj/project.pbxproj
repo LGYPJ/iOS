@@ -11,12 +11,14 @@
 		2A5DAD14EE12541BAE988EB7 /* Pods_Garamgaebi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8CB1AB7E398B75581977FAF /* Pods_Garamgaebi.framework */; };
 		609A53D2296AB47300BBD338 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53D1296AB47300BBD338 /* AppDelegate.swift */; };
 		609A53D4296AB47300BBD338 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53D3296AB47300BBD338 /* SceneDelegate.swift */; };
-		609A53D6296AB47300BBD338 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53D5296AB47300BBD338 /* ViewController.swift */; };
 		609A53DB296AB47400BBD338 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 609A53DA296AB47400BBD338 /* Assets.xcassets */; };
 		609A53DE296AB47400BBD338 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 609A53DC296AB47400BBD338 /* LaunchScreen.storyboard */; };
 		609A53E9296AB47400BBD338 /* GaramgaebiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53E8296AB47400BBD338 /* GaramgaebiTests.swift */; };
 		609A53F3296AB47400BBD338 /* GaramgaebiUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53F2296AB47400BBD338 /* GaramgaebiUITests.swift */; };
 		609A53F5296AB47400BBD338 /* GaramgaebiUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53F4296AB47400BBD338 /* GaramgaebiUITestsLaunchTests.swift */; };
+		60F913FF296D2F2C00626C40 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F913FE296D2F2C00626C40 /* HomeVC.swift */; };
+		60F91401296D2F3D00626C40 /* ViewAllVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F91400296D2F3D00626C40 /* ViewAllVC.swift */; };
+		60F91403296D2F4800626C40 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F91402296D2F4800626C40 /* ProfileVC.swift */; };
 		8774F3F8C23CF17362051187 /* Pods_GaramgaebiTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE5760D4575087EF7AF0515D /* Pods_GaramgaebiTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -44,7 +46,6 @@
 		609A53CE296AB47300BBD338 /* Garamgaebi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Garamgaebi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		609A53D1296AB47300BBD338 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		609A53D3296AB47300BBD338 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		609A53D5296AB47300BBD338 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		609A53DA296AB47400BBD338 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		609A53DD296AB47400BBD338 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		609A53DF296AB47400BBD338 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -53,6 +54,9 @@
 		609A53EE296AB47400BBD338 /* GaramgaebiUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GaramgaebiUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		609A53F2296AB47400BBD338 /* GaramgaebiUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaramgaebiUITests.swift; sourceTree = "<group>"; };
 		609A53F4296AB47400BBD338 /* GaramgaebiUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaramgaebiUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		60F913FE296D2F2C00626C40 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
+		60F91400296D2F3D00626C40 /* ViewAllVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAllVC.swift; sourceTree = "<group>"; };
+		60F91402296D2F4800626C40 /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		C8CB1AB7E398B75581977FAF /* Pods_Garamgaebi.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Garamgaebi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE5760D4575087EF7AF0515D /* Pods_GaramgaebiTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaramgaebiTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0F3426C456DDD54ECB7EBDC /* Pods-Garamgaebi-GaramgaebiUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Garamgaebi-GaramgaebiUITests.release.xcconfig"; path = "Target Support Files/Pods-Garamgaebi-GaramgaebiUITests/Pods-Garamgaebi-GaramgaebiUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -116,7 +120,7 @@
 			children = (
 				609A53D1296AB47300BBD338 /* AppDelegate.swift */,
 				609A53D3296AB47300BBD338 /* SceneDelegate.swift */,
-				609A53D5296AB47300BBD338 /* ViewController.swift */,
+				60F91404296D34CD00626C40 /* View */,
 				609A53DA296AB47400BBD338 /* Assets.xcassets */,
 				609A53DC296AB47400BBD338 /* LaunchScreen.storyboard */,
 				609A53DF296AB47400BBD338 /* Info.plist */,
@@ -141,6 +145,40 @@
 			path = GaramgaebiUITests;
 			sourceTree = "<group>";
 		};
+		60F913FB296D2EFA00626C40 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				60F913FE296D2F2C00626C40 /* HomeVC.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		60F913FC296D2F0000626C40 /* ViewAll */ = {
+			isa = PBXGroup;
+			children = (
+				60F91400296D2F3D00626C40 /* ViewAllVC.swift */,
+			);
+			path = ViewAll;
+			sourceTree = "<group>";
+		};
+		60F913FD296D2F0600626C40 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				60F91402296D2F4800626C40 /* ProfileVC.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		60F91404296D34CD00626C40 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				60F913FB296D2EFA00626C40 /* Home */,
+				60F913FC296D2F0000626C40 /* ViewAll */,
+				60F913FD296D2F0600626C40 /* Profile */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		C388946E3CFC54D744C7F27F /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -151,7 +189,6 @@
 				E98E3CA38D1AEF8FDDE6C675 /* Pods-GaramgaebiTests.debug.xcconfig */,
 				5393A75B600780926B72C170 /* Pods-GaramgaebiTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -403,7 +440,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				609A53D6296AB47300BBD338 /* ViewController.swift in Sources */,
+				60F91403296D2F4800626C40 /* ProfileVC.swift in Sources */,
+				60F913FF296D2F2C00626C40 /* HomeVC.swift in Sources */,
+				60F91401296D2F3D00626C40 /* ViewAllVC.swift in Sources */,
 				609A53D2296AB47300BBD338 /* AppDelegate.swift in Sources */,
 				609A53D4296AB47300BBD338 /* SceneDelegate.swift in Sources */,
 			);
@@ -503,7 +542,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -557,7 +596,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -579,9 +618,8 @@
 				INFOPLIST_FILE = Garamgaebi/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -589,9 +627,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = garamgaebi.Garamgaebi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -607,9 +648,8 @@
 				INFOPLIST_FILE = Garamgaebi/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -617,9 +657,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = garamgaebi.Garamgaebi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

@@ -308,7 +308,7 @@
 		52554E1C9731D5352FDE9E63F8C5466B /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Accelerate.framework; sourceTree = DEVELOPER_DIR; };
 		52A6682FC1A652A2AEDDEBE2F22117AE /* ImageFormat.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageFormat.swift; path = Sources/Image/ImageFormat.swift; sourceTree = "<group>"; };
 		535E70E0CE8A165EC88137C8F47DE061 /* Result.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Result.swift; path = Sources/Utility/Result.swift; sourceTree = "<group>"; };
-		56F0C462F508C14EBAA60B9BA08912B0 /* Pods-GaramgaebiTests */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-GaramgaebiTests"; path = Pods_GaramgaebiTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		56F0C462F508C14EBAA60B9BA08912B0 /* Pods_GaramgaebiTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaramgaebiTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		578850BBD7F59E9B79B65D83E0640B9D /* SnapKit-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SnapKit-dummy.m"; sourceTree = "<group>"; };
 		580DA75528C41F6C8DC025F84BBE7E58 /* FormatIndicatedCacheSerializer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FormatIndicatedCacheSerializer.swift; path = Sources/Cache/FormatIndicatedCacheSerializer.swift; sourceTree = "<group>"; };
 		58639CC43814BE2B913A3990D1CBE67F /* Storage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Storage.swift; path = Sources/Cache/Storage.swift; sourceTree = "<group>"; };
@@ -316,7 +316,7 @@
 		5D797E9A5C5782CE845840781FA1CC81 /* Alamofire */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Alamofire; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DB7BC309FF2E56039E9E391D4057DCA /* Pods-Garamgaebi-GaramgaebiUITests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Garamgaebi-GaramgaebiUITests-Info.plist"; sourceTree = "<group>"; };
 		5E0A5D0FFC745DB155FACE2E14C02787 /* ImageView+Kingfisher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "ImageView+Kingfisher.swift"; path = "Sources/Extensions/ImageView+Kingfisher.swift"; sourceTree = "<group>"; };
-		603A8F09B8C45DBBEFC21A29318BDA48 /* Pods-Garamgaebi-GaramgaebiUITests */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-Garamgaebi-GaramgaebiUITests"; path = Pods_Garamgaebi_GaramgaebiUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		603A8F09B8C45DBBEFC21A29318BDA48 /* Pods_Garamgaebi_GaramgaebiUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Garamgaebi_GaramgaebiUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		61405C16712B74A1ECE47B79C72BB644 /* SnapKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SnapKit.debug.xcconfig; sourceTree = "<group>"; };
 		61BFC3279FDF739430F26565CC530AF9 /* URLSessionConfiguration+Alamofire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "URLSessionConfiguration+Alamofire.swift"; path = "Source/URLSessionConfiguration+Alamofire.swift"; sourceTree = "<group>"; };
 		62BAB8677C648D8C1403F638A9D7C714 /* Pods-Garamgaebi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Garamgaebi.release.xcconfig"; sourceTree = "<group>"; };
@@ -341,7 +341,7 @@
 		846EDA9B88EAE92FAC759EC6EBFCBBBC /* ResponseSerialization.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ResponseSerialization.swift; path = Source/ResponseSerialization.swift; sourceTree = "<group>"; };
 		872D7EFA572ECEE8EF993C27196E16DD /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
 		8A3F86CFF746BB219F43745B0D0424DB /* AFError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFError.swift; path = Source/AFError.swift; sourceTree = "<group>"; };
-		8A73C6A2BE3F569F97FAE53D3DB00C2D /* Pods-Garamgaebi */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-Garamgaebi"; path = Pods_Garamgaebi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A73C6A2BE3F569F97FAE53D3DB00C2D /* Pods_Garamgaebi.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Garamgaebi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B5B8142CEDF1491CC90A16CB2FA832A /* Typealiases.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Typealiases.swift; path = Sources/Typealiases.swift; sourceTree = "<group>"; };
 		9001310BD25974100938661FAF954C48 /* Alamofire.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Alamofire.modulemap; sourceTree = "<group>"; };
 		91AB0F41760764563B6563D21E3BC58A /* ImageModifier.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageModifier.swift; path = Sources/Networking/ImageModifier.swift; sourceTree = "<group>"; };
@@ -362,7 +362,7 @@
 		9A619DB0ADFBA1537C125945795BF896 /* Placeholder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Placeholder.swift; path = Sources/Image/Placeholder.swift; sourceTree = "<group>"; };
 		9BF877707E046E04E9BE095D33D42A04 /* ConstraintLayoutGuide.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintLayoutGuide.swift; path = Sources/ConstraintLayoutGuide.swift; sourceTree = "<group>"; };
 		9C4ACD5C17D2B2DFA51E047FE66ACF47 /* RedirectHandler.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RedirectHandler.swift; path = Source/RedirectHandler.swift; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9F576D7857E7EFB97FD9A74FA004A135 /* Then.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Then.modulemap; sourceTree = "<group>"; };
 		9FF187E46A63F5F27599AA68F50783CE /* ConstraintDescription.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintDescription.swift; path = Sources/ConstraintDescription.swift; sourceTree = "<group>"; };
 		9FFFA87CE591DA146A795397401FBF22 /* ConstraintPriority.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintPriority.swift; path = Sources/ConstraintPriority.swift; sourceTree = "<group>"; };
@@ -514,7 +514,6 @@
 				4CFC292C4DDD8E0024AD814EF9CB2332 /* Then.swift */,
 				965B3DA5271A3FFB5C19D83CED4461F8 /* Support Files */,
 			);
-			name = Then;
 			path = Then;
 			sourceTree = "<group>";
 		};
@@ -575,7 +574,6 @@
 				2284718722291A5A6382672A4C97CD0D /* UILayoutSupport+Extensions.swift */,
 				2474964B97651DA73B86471AED423699 /* Support Files */,
 			);
-			name = SnapKit;
 			path = SnapKit;
 			sourceTree = "<group>";
 		};
@@ -660,7 +658,6 @@
 				4EB4D7C884B2FCBE960F4022CB1A0489 /* WKInterfaceImage+Kingfisher.swift */,
 				5069D26788B0A0738BDF6663795BB4ED /* Support Files */,
 			);
-			name = Kingfisher;
 			path = Kingfisher;
 			sourceTree = "<group>";
 		};
@@ -715,7 +712,6 @@
 				21C284257E9BFA34FB9F0B28376A577D /* Validation.swift */,
 				ED2EEE7766BF3112C6D978858BFFBC39 /* Support Files */,
 			);
-			name = Alamofire;
 			path = Alamofire;
 			sourceTree = "<group>";
 		};
@@ -724,9 +720,9 @@
 			children = (
 				5D797E9A5C5782CE845840781FA1CC81 /* Alamofire */,
 				C3F44C782D64D7EB20B61CE3844EBFAD /* Kingfisher */,
-				8A73C6A2BE3F569F97FAE53D3DB00C2D /* Pods-Garamgaebi */,
-				603A8F09B8C45DBBEFC21A29318BDA48 /* Pods-Garamgaebi-GaramgaebiUITests */,
-				56F0C462F508C14EBAA60B9BA08912B0 /* Pods-GaramgaebiTests */,
+				8A73C6A2BE3F569F97FAE53D3DB00C2D /* Pods_Garamgaebi.framework */,
+				603A8F09B8C45DBBEFC21A29318BDA48 /* Pods_Garamgaebi_GaramgaebiUITests.framework */,
+				56F0C462F508C14EBAA60B9BA08912B0 /* Pods_GaramgaebiTests.framework */,
 				979486118B3E90C08386079D57962701 /* SnapKit */,
 				9317E4947CA2FE1B5D5999034C09CCA7 /* Then */,
 			);
@@ -941,7 +937,7 @@
 			);
 			name = "Pods-GaramgaebiTests";
 			productName = Pods_GaramgaebiTests;
-			productReference = 56F0C462F508C14EBAA60B9BA08912B0 /* Pods-GaramgaebiTests */;
+			productReference = 56F0C462F508C14EBAA60B9BA08912B0 /* Pods_GaramgaebiTests.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		76E51C54B7DAF9BD42470FC78C5BB940 /* Pods-Garamgaebi-GaramgaebiUITests */ = {
@@ -963,7 +959,7 @@
 			);
 			name = "Pods-Garamgaebi-GaramgaebiUITests";
 			productName = Pods_Garamgaebi_GaramgaebiUITests;
-			productReference = 603A8F09B8C45DBBEFC21A29318BDA48 /* Pods-Garamgaebi-GaramgaebiUITests */;
+			productReference = 603A8F09B8C45DBBEFC21A29318BDA48 /* Pods_Garamgaebi_GaramgaebiUITests.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		B08BBC28C86FBD70F08BEACE8792E652 /* Pods-Garamgaebi */ = {
@@ -985,7 +981,7 @@
 			);
 			name = "Pods-Garamgaebi";
 			productName = Pods_Garamgaebi;
-			productReference = 8A73C6A2BE3F569F97FAE53D3DB00C2D /* Pods-Garamgaebi */;
+			productReference = 8A73C6A2BE3F569F97FAE53D3DB00C2D /* Pods_Garamgaebi.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		C17AEFC79E770A2906EFAAB1A3757406 /* Then */ = {
@@ -1395,7 +1391,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Target Support Files/Pods-Garamgaebi-GaramgaebiUITests/Pods-Garamgaebi-GaramgaebiUITests-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1433,7 +1429,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Target Support Files/Pods-Garamgaebi/Pods-Garamgaebi-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1613,7 +1609,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1676,7 +1672,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1809,7 +1805,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Target Support Files/Pods-GaramgaebiTests/Pods-GaramgaebiTests-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1882,7 +1878,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Target Support Files/Pods-Garamgaebi/Pods-Garamgaebi-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1919,7 +1915,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Target Support Files/Pods-Garamgaebi-GaramgaebiUITests/Pods-Garamgaebi-GaramgaebiUITests-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1992,7 +1988,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Target Support Files/Pods-GaramgaebiTests/Pods-GaramgaebiTests-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
