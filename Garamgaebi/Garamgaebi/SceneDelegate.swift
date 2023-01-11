@@ -27,7 +27,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             items[0].image = UIImage(systemName: "house")
             items[0].title = "홈"
 
-            items[1].selectedImage = UIImage(systemName: "􀉫")
+            items[1].selectedImage = UIImage(systemName: "person.2")
             items[1].image = UIImage(systemName: "person.2")
             items[1].title = "모아보기"
             
@@ -39,7 +39,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = scene as? UIWindowScene else { return }
                 self.window = UIWindow(windowScene: windowScene)
                 
-                let rootViewController = tabBarController
+                //let rootViewController = tabBarController
+                let rootViewController = OnboardingVC()
+                //let rootViewController = LoginVC()
+                //let rootViewController = EmailAuthVC()
+                //let rootViewController = NickNameVC()
                 self.window?.rootViewController = rootViewController
                 self.window?.makeKeyAndVisible()
         
