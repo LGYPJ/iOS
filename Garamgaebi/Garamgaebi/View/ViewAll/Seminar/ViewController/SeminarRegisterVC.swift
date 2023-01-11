@@ -22,15 +22,7 @@ class SeminarRegisterVC: UIViewController {
 		
 		return view
 	}()
-	
-//	lazy var collectionView: UICollectionView = {
-//		let layout = UICollectionViewFlowLayout()
-//		layout.scrollDirection = .vertical
-//
-//		let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-//
-//		return collectionView
-//	}()
+
 
 	lazy var registerButton: UIButton = {
 		let button = UIButton()
@@ -47,8 +39,6 @@ class SeminarRegisterVC: UIViewController {
 		configureNavigationBarShadow()
 		configureViews()
     }
-
-    
 
 }
 
@@ -96,16 +86,13 @@ extension SeminarRegisterVC {
 			$0.edges.equalToSuperview()
 		}
 		
-		
 		registerButton.snp.makeConstraints {
 			$0.bottom.equalToSuperview().inset(26)
 			$0.leading.trailing.equalToSuperview().inset(20)
 			$0.height.equalTo(48)
 		}
-
 	}
-	
-	
+
 	// 뒤로가기 버튼 did tap
 	@objc private func didTapBackBarButton() {
 		self.navigationController?.popViewController(animated: true)

@@ -137,7 +137,7 @@ class SeminarRegisterContentView: UIView {
 	
 	lazy var separator: UIView = {
 		let view = UIView()
-		view.backgroundColor = UIColor(hex: 0xAEAEAE)
+		view.backgroundColor = .mainLightBlue
 		return view
 	}()
 	
@@ -240,12 +240,12 @@ class SeminarRegisterContentView: UIView {
 extension SeminarRegisterContentView {
 	private func configureViews() {
 		// addSubview
-		[seminarNameLabel, seminarInfoStackView, separator, nameTextField, nicknameTextField, numberTextField, nameLabel, nicknameLabel, numberLabel, descriptionTextView]
+		[seminarNameLabel, seminarInfoStackView, separator,  nameTextField, nicknameTextField, numberTextField, nameLabel, nicknameLabel, numberLabel, descriptionTextView]
 			.forEach {self.addSubview($0)}
 		
 		// layout
 		seminarNameLabel.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(25)
+			$0.top.equalToSuperview().offset(5.5)
 			$0.leading.equalToSuperview().inset(16)
 		}
 		
@@ -257,25 +257,25 @@ extension SeminarRegisterContentView {
 		separator.snp.makeConstraints {
 			$0.width.equalToSuperview()
 			$0.leading.trailing.equalToSuperview()
-			$0.height.equalTo(0.5)
-			$0.top.equalTo(seminarInfoStackView.snp.bottom).offset(26)
+			$0.height.equalTo(8)
+			$0.top.equalTo(seminarInfoStackView.snp.bottom).offset(13.5)
 		}
 		
 		nameTextField.snp.makeConstraints {
-			$0.top.equalTo(separator.snp.bottom).offset(26)
-			$0.leading.trailing.equalToSuperview().inset(30)
+			$0.top.equalTo(separator.snp.bottom).offset(43)
+			$0.leading.trailing.equalToSuperview().inset(23)
 			$0.height.equalTo(40)
 		}
 		
 		nicknameTextField.snp.makeConstraints {
 			$0.top.equalTo(nameTextField.snp.bottom).offset(26)
-			$0.leading.trailing.equalToSuperview().inset(30)
+			$0.leading.trailing.equalToSuperview().inset(23)
 			$0.height.equalTo(40)
 		}
 		
 		numberTextField.snp.makeConstraints {
 			$0.top.equalTo(nicknameTextField.snp.bottom).offset(26)
-			$0.leading.trailing.equalToSuperview().inset(30)
+			$0.leading.trailing.equalToSuperview().inset(23)
 			$0.height.equalTo(40)
 		}
 		
@@ -297,7 +297,7 @@ extension SeminarRegisterContentView {
 		
 		descriptionTextView.snp.makeConstraints {
 			$0.top.equalTo(numberTextField.snp.bottom).offset(23)
-			$0.leading.trailing.equalToSuperview().inset(30)
+			$0.leading.trailing.equalToSuperview().inset(23)
 			$0.bottom.equalToSuperview().offset(-10)
 		}
 	}
