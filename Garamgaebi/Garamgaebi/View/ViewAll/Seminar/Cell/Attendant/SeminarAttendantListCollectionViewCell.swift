@@ -1,0 +1,62 @@
+//
+//  SeminarAttendantListCollectionViewCell.swift
+//  Garamgaebi
+//
+//  Created by 정현우 on 2023/01/10.
+//
+
+import UIKit
+import SnapKit
+
+class SeminarAttendantListCollectionViewCell: UICollectionViewCell {
+	
+    static let identifier = "SeminarAttendantListCollectionViewCell"
+	
+	let imageSize = 44.0
+	
+	lazy var profileImageView: UIImageView = {
+		let imageView = UIImageView()
+		imageView.image = UIImage(systemName: "person.circle")
+		imageView.layer.cornerRadius = imageSize/2
+		imageView.clipsToBounds = true
+		
+		return imageView
+	}()
+	
+	lazy var userNameLabel: UILabel = {
+		let label = UILabel()
+		label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
+		label.textColor = .black
+		
+		return label
+	}()
+	
+	override init(frame: CGRect) {
+		super.init(frame: frame)
+		configureViews()
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+}
+
+extension SeminarAttendantListCollectionViewCell {
+	private func configureViews() {
+		contentView.backgroundColor = .white
+		[profileImageView, userNameLabel]
+			.forEach {contentView.addSubview($0)}
+		
+		profileImageView.snp.makeConstraints {
+			$0.width.equalTo(imageSize)
+			$0.height.equalTo(imageSize)
+			$0.centerX.equalToSuperview()
+			$0.top.equalToSuperview()
+		}
+		
+		userNameLabel.snp.makeConstraints {
+			$0.top.equalTo(profileImageView.snp.bottom).offset(2)
+			$0.centerX.equalToSuperview()
+		}
+	}
+}
