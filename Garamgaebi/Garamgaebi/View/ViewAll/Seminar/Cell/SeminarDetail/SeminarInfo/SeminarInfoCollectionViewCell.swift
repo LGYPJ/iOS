@@ -160,8 +160,6 @@ class SeminarInfoCollectionViewCell: UICollectionViewCell {
 		super.init(frame: frame)
 		configureViews()
 		configureDummyData()
-
-		
 	}
 
 	

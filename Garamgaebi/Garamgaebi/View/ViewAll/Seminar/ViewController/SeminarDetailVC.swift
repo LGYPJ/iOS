@@ -8,6 +8,8 @@
 import UIKit
 import SnapKit
 
+// TODO: 전체화면 스크롤 collectionview로 구현했던 것들 scrollview로 리팩토링하기
+
 class SeminarDetailVC: UIViewController {
 	
 	lazy var collectionView: UICollectionView = {
@@ -27,8 +29,11 @@ class SeminarDetailVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		configureNavigationBar()
+		configureNavigationBarShadow()
 		configureCollectionView()
 		configureViews()
+		
+		
     }
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
@@ -45,7 +50,21 @@ extension SeminarDetailVC {
 		self.navigationItem.title = "세미나"
 		let backBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: nil)
 		self.navigationItem.leftBarButtonItem = backBarButtonItem
+		self.navigationItem.leftBarButtonItem?.action  = #selector(didTapBackBarButton)
 		backBarButtonItem.tintColor = .black
+	}
+	
+	// navigation bar shadow 설정
+	private func configureNavigationBarShadow() {
+		let navigationBarAppearance = UINavigationBarAppearance()
+		navigationBarAppearance.configureWithOpaqueBackground()
+
+		navigationController?.navigationBar.tintColor = .clear
+
+		navigationItem.scrollEdgeAppearance = navigationBarAppearance
+		navigationItem.standardAppearance = navigationBarAppearance
+		navigationItem.compactAppearance = navigationBarAppearance
+		navigationController?.setNeedsStatusBarAppearanceUpdate()
 	}
 	
 	private func configureCollectionView() {
@@ -69,6 +88,16 @@ extension SeminarDetailVC {
 		}
 	}
 	
+	// 뒤로가기 버튼 did tap
+	@objc private func didTapBackBarButton() {
+		self.navigationController?.popViewController(animated: true)
+	}
+	
+	// 신청하기 버튼 did tap
+	@objc private func didTapRegisterButton() {
+		self.navigationController?.pushViewController(SeminarRegisterVC(), animated: true)
+	}
+	
 
 }
 // MARK: collectionview
@@ -84,7 +113,7 @@ extension SeminarDetailVC: UICollectionViewDelegate, UICollectionViewDataSource,
 		switch indexPath.section {
 		case 0:
 			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SeminarInfoCollectionViewCell.identifier, for: indexPath) as? SeminarInfoCollectionViewCell else {return UICollectionViewCell()}
-			
+			cell.registerButton.addTarget(self, action: #selector(didTapRegisterButton), for: .touchUpInside)
 			return cell
 		case 1:
 			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SeminarAttendantCollectionViewCell.identifier, for: indexPath) as? SeminarAttendantCollectionViewCell else {return UICollectionViewCell()}

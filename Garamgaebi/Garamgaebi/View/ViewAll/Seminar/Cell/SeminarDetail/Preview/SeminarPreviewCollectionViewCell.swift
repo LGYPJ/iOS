@@ -28,6 +28,7 @@ class SeminarPreviewCollectionViewCell: UICollectionViewCell {
 		
 		let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
 //		collectionView.showsVerticalScrollIndicator = false
+		collectionView.isScrollEnabled = false
 		
 		return collectionView
 	}()
