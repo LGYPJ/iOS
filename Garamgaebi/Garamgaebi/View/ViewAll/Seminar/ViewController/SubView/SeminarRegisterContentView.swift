@@ -9,10 +9,18 @@ import UIKit
 import SnapKit
 
 class SeminarRegisterContentView: UIView {
+	
+	lazy var seminarInfoView: UIView = {
+		let view = UIView()
+		view.backgroundColor = .mainLightBlue
+		view.layer.cornerRadius = 12
+		
+		return view
+	}()
 
 	lazy var seminarNameLabel: UILabel = {
 		let label = UILabel()
-		label.font = UIFont.NotoSansKR(type: .Bold, size: 24)
+		label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
 		label.textColor = .black
 		
 		return label
@@ -135,78 +143,83 @@ class SeminarRegisterContentView: UIView {
 		return stackView
 	}()
 	
-	lazy var separator: UIView = {
-		let view = UIView()
-		view.backgroundColor = .mainLightBlue
-		return view
-	}()
+//	lazy var separator: UIView = {
+//		let view = UIView()
+//		view.backgroundColor = .mainLightBlue
+//		return view
+//	}()
 	
 	lazy var nameTextField: UITextField = {
 		let textField = UITextField()
-		textField.layer.borderColor = UIColor(hex: 0xAEAEAE).cgColor
+		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
 		textField.layer.cornerRadius = 10
 		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 0))
 		textField.leftViewMode = .always
+		textField.placeholder = "이름을 입력해주세요"
 
 		return textField
 	}()
 	
 	lazy var nicknameTextField: UITextField = {
 		let textField = UITextField()
-		textField.layer.borderColor = UIColor(hex: 0xAEAEAE).cgColor
+		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
 		textField.layer.cornerRadius = 10
 		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 0))
 		textField.leftViewMode = .always
+		textField.placeholder = "닉네임을 입력해주세요"
 		
 		return textField
 	}()
 	
 	lazy var numberTextField: UITextField = {
 		let textField = UITextField()
-		textField.layer.borderColor = UIColor(hex: 0xAEAEAE).cgColor
+		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
 		textField.layer.cornerRadius = 10
 		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 0))
 		textField.leftViewMode = .always
+		textField.placeholder = "전화번호를 입력해주세요"
 		
 		return textField
 	}()
 	
-	lazy var nameLabel: UILabel = {
-		let label = UILabel()
-		label.text = "이름"
-		label.textColor = .black
-		label.font = UIFont.NotoSansKR(type: .Medium, size: 14)
-		
-		return label
-	}()
-	
-	lazy var nicknameLabel: UILabel = {
-		let label = UILabel()
-		label.text = "닉네임"
-		label.textColor = .black
-		label.font = UIFont.NotoSansKR(type: .Medium, size: 14)
-		
-		return label
-	}()
-	
-	lazy var numberLabel: UILabel = {
-		let label = UILabel()
-		label.text = "전화번호"
-		label.textColor = .black
-		label.font = UIFont.NotoSansKR(type: .Medium, size: 14)
-		
-		return label
-	}()
+//	lazy var nameLabel: UILabel = {
+//		let label = UILabel()
+//		label.text = "이름"
+//		label.textColor = .black
+//		label.font = UIFont.NotoSansKR(type: .Medium, size: 14)
+//
+//		return label
+//	}()
+//
+//	lazy var nicknameLabel: UILabel = {
+//		let label = UILabel()
+//		label.text = "닉네임"
+//		label.textColor = .black
+//		label.font = UIFont.NotoSansKR(type: .Medium, size: 14)
+//
+//		return label
+//	}()
+//
+//	lazy var numberLabel: UILabel = {
+//		let label = UILabel()
+//		label.text = "전화번호"
+//		label.textColor = .black
+//		label.font = UIFont.NotoSansKR(type: .Medium, size: 14)
+//
+//		return label
+//	}()
 	
 	lazy var descriptionTextView: UITextView = {
 		let textView = UITextView()
 //		textView.layer.borderWidth = 0
 		textView.font = UIFont.NotoSansKR(type: .Medium, size: 14)
 		textView.textColor = .black
-		textView.backgroundColor = .white
+		textView.backgroundColor = UIColor(hex: 0xF5F5F5)
+		textView.layer.cornerRadius = 12
+		textView.textContainerInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
 		textView.isEditable = false
 		textView.isScrollEnabled = false
 		
@@ -226,6 +239,8 @@ class SeminarRegisterContentView: UIView {
 	
 	// TODO: API연동 후 삭제
 	func configureDummyData() {
+//		descriptionTextView.isHidden = true
+//		costStackView.isHidden = true
 		seminarNameLabel.text = "2차 세미나"
 		dateInfoLabel.text = "2023-02-10 오후 6시"
 		locationInfoLabel.text = "가천대학교 비전타워 B201"
@@ -240,8 +255,16 @@ class SeminarRegisterContentView: UIView {
 extension SeminarRegisterContentView {
 	private func configureViews() {
 		// addSubview
-		[seminarNameLabel, seminarInfoStackView, separator,  nameTextField, nicknameTextField, numberTextField, nameLabel, nicknameLabel, numberLabel, descriptionTextView]
+		[seminarInfoView,  nameTextField, nicknameTextField, numberTextField, descriptionTextView]
 			.forEach {self.addSubview($0)}
+		seminarInfoView.snp.makeConstraints {
+			$0.top.equalTo(self.safeAreaLayoutGuide).offset(16)
+			$0.leading.trailing.equalToSuperview().inset(16)
+//			$0.height.equalTo(150)
+		}
+		
+		[seminarNameLabel, seminarInfoStackView]
+			.forEach {seminarInfoView.addSubview($0)}
 		
 		// layout
 		seminarNameLabel.snp.makeConstraints {
@@ -252,53 +275,54 @@ extension SeminarRegisterContentView {
 		seminarInfoStackView.snp.makeConstraints {
 			$0.leading.equalToSuperview().inset(16)
 			$0.top.equalTo(seminarNameLabel.snp.bottom).offset(8)
+			$0.bottom.equalToSuperview().inset(12)
 		}
 		
-		separator.snp.makeConstraints {
-			$0.width.equalToSuperview()
-			$0.leading.trailing.equalToSuperview()
-			$0.height.equalTo(8)
-			$0.top.equalTo(seminarInfoStackView.snp.bottom).offset(13.5)
-		}
+//		separator.snp.makeConstraints {
+//			$0.width.equalToSuperview()
+//			$0.leading.trailing.equalToSuperview()
+//			$0.height.equalTo(8)
+//			$0.top.equalTo(seminarInfoStackView.snp.bottom).offset(13.5)
+//		}
 		
 		nameTextField.snp.makeConstraints {
-			$0.top.equalTo(separator.snp.bottom).offset(43)
-			$0.leading.trailing.equalToSuperview().inset(23)
-			$0.height.equalTo(40)
+			$0.top.equalTo(seminarInfoView.snp.bottom).offset(24)
+			$0.leading.trailing.equalToSuperview().inset(16)
+			$0.height.equalTo(48)
 		}
 		
 		nicknameTextField.snp.makeConstraints {
-			$0.top.equalTo(nameTextField.snp.bottom).offset(26)
-			$0.leading.trailing.equalToSuperview().inset(23)
-			$0.height.equalTo(40)
+			$0.top.equalTo(nameTextField.snp.bottom).offset(12)
+			$0.leading.trailing.equalToSuperview().inset(16)
+			$0.height.equalTo(48)
 		}
 		
 		numberTextField.snp.makeConstraints {
-			$0.top.equalTo(nicknameTextField.snp.bottom).offset(26)
-			$0.leading.trailing.equalToSuperview().inset(23)
-			$0.height.equalTo(40)
+			$0.top.equalTo(nicknameTextField.snp.bottom).offset(12)
+			$0.leading.trailing.equalToSuperview().inset(16)
+			$0.height.equalTo(48)
 		}
 		
-		nameLabel.snp.makeConstraints {
-			$0.centerY.equalTo(nameTextField.snp.top)
-			$0.leading.equalTo(nameTextField).offset(17)
-		}
-		
-		nicknameLabel.snp.makeConstraints {
-			$0.centerY.equalTo(nicknameTextField.snp.top)
-			$0.leading.equalTo(nicknameTextField).offset(17)
-		}
-		
-		numberLabel.snp.makeConstraints {
-			$0.centerY.equalTo(numberTextField.snp.top)
-			$0.leading.equalTo(numberTextField).offset(17)
-		}
+//		nameLabel.snp.makeConstraints {
+//			$0.centerY.equalTo(nameTextField.snp.top)
+//			$0.leading.equalTo(nameTextField).offset(17)
+//		}
+//
+//		nicknameLabel.snp.makeConstraints {
+//			$0.centerY.equalTo(nicknameTextField.snp.top)
+//			$0.leading.equalTo(nicknameTextField).offset(17)
+//		}
+//
+//		numberLabel.snp.makeConstraints {
+//			$0.centerY.equalTo(numberTextField.snp.top)
+//			$0.leading.equalTo(numberTextField).offset(17)
+//		}
 		
 		
 		descriptionTextView.snp.makeConstraints {
 			$0.top.equalTo(numberTextField.snp.bottom).offset(23)
 			$0.leading.trailing.equalToSuperview().inset(23)
-			$0.bottom.equalToSuperview().offset(-10)
+			$0.bottom.equalToSuperview()
 		}
 	}
 }

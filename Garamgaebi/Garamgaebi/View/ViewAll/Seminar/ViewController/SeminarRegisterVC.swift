@@ -78,7 +78,7 @@ extension SeminarRegisterVC {
 		scrollView.snp.makeConstraints {
 			$0.top.equalTo(view.safeAreaLayoutGuide)
 			$0.leading.trailing.equalToSuperview()
-			$0.bottom.equalTo(registerButton.snp.top).offset(15)
+			$0.bottom.equalTo(registerButton.snp.top).offset(-15)
 		}
 		
 		contentView.snp.makeConstraints {

@@ -14,7 +14,7 @@ class SeminarInfoCollectionViewCell: UICollectionViewCell {
 	
 	lazy var seminarNameLabel: UILabel = {
 		let label = UILabel()
-		label.font = UIFont.NotoSansKR(type: .Bold, size: 24)
+		label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
 		label.textColor = .black
 		
 		return label
