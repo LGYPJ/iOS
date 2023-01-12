@@ -31,6 +31,11 @@ class EmailAuthVC: UIViewController {
     
     // MARK: - Subviews
     
+    lazy var pagingImage: UIImageView = {
+        let view = UIImageView(image: UIImage(named: "PagingImage1"))
+        return view
+    }()
+    
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "가천대생 인증"
@@ -151,6 +156,7 @@ class EmailAuthVC: UIViewController {
         view.addSubview(authNumberSendButton)
         view.addSubview(emailTextField)
         view.addSubview(authNumberTextField)
+        view.addSubview(pagingImage)
         
         /* Labels */
         [titleLabel,descriptionLabel].map {
@@ -163,10 +169,18 @@ class EmailAuthVC: UIViewController {
     
     func configLayouts() {
 
+        //pagingImage
+        pagingImage.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(16)
+            make.width.equalTo(96)
+            make.height.equalTo(24)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(28)
+        }
+        
         //titleLabel
         titleLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(54)
+            make.top.equalTo(pagingImage.snp.bottom).offset(16)
         }
         
         //descriptionLabel
