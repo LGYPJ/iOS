@@ -1,18 +1,19 @@
 //
-//  NickNameVC.swift
+//  EmailVC.swift
 //  Garamgaebi
 //
-//  Created by 홍승완 on 2023/01/11.
+//  Created by 홍승완 on 2023/01/12.
 //
 
 import UIKit
+import SnapKit
 
-class NickNameVC: UIViewController {
+class EmailVC: UIViewController {
     
     // MARK: - Propertys
-    var userNickName = String()
-    var isValidNickName = false {
-        didSet { 
+    var userEmail = String()
+    var isValidEmail = false {
+        didSet {
             self.validateUserInfo()
         }
     }
@@ -20,13 +21,13 @@ class NickNameVC: UIViewController {
     // MARK: - Subviews
     
     lazy var pagingImage: UIImageView = {
-        let view = UIImageView(image: UIImage(named: "PagingImage2"))
+        let view = UIImageView(image: UIImage(named: "PagingImage3"))
         return view
     }()
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "닉네임"
+        label.text = "이메일"
         label.textColor = .black
         label.font = UIFont.NotoSansKR(type: .Bold, size: 22)
         return label
@@ -34,18 +35,18 @@ class NickNameVC: UIViewController {
     
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = "가람개비에서 사용할\n당신의 닉네임을 설정해주세요"
+        label.text = "프로필에 기재할\n이메일 주소를 알려주세요"
         label.numberOfLines = 0
         label.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         label.textColor = UIColor(hex: 0x8A8A8A)
         return label
     }()
     
-    lazy var nickNameTextField: UITextField = {
+    lazy var emailTextField: UITextField = {
         let textField = UITextField()
         
         textField.addLeftPadding()
-        textField.placeholder = "닉네임을 입력해주세요 (최대 8글자)"
+        textField.placeholder = "이메일 주소를 입력해주세요"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
         textField.textColor = .black
@@ -61,11 +62,9 @@ class NickNameVC: UIViewController {
         return textField
     }()
     
-    lazy var nickNameValidLabel: UILabel = {
+    lazy var emailValidLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
-        //label.text = "최대 8글자까지 작성이 가능합니다!"
-        //label.text = "사용 가능하지 않은 닉네임입니다."
         label.textColor = UIColor(hex: 0xFF0000)
         label.isHidden = true
         return label
@@ -99,12 +98,12 @@ class NickNameVC: UIViewController {
     
     func addSubViews() {
         /* Buttons */
-        view.addSubview(nickNameTextField)
+        view.addSubview(emailTextField)
         view.addSubview(pagingImage)
         view.addSubview(nextButton)
         
         /* Labels */
-        [titleLabel,descriptionLabel,nickNameValidLabel].map {
+        [titleLabel,descriptionLabel,emailValidLabel].map {
             view.addSubview($0)
         }
  
@@ -134,14 +133,14 @@ class NickNameVC: UIViewController {
         }
         
         // emailTextField
-        nickNameTextField.snp.makeConstraints { make in
+        emailTextField.snp.makeConstraints { make in
             make.top.equalTo(descriptionLabel.snp.bottom).offset(36)
             make.height.equalTo(48)
             make.left.right.equalToSuperview().inset(16)
         }
         // nickNameValidLabel
-        nickNameValidLabel.snp.makeConstraints { make in
-            make.top.equalTo(nickNameTextField.snp.bottom).offset(4)
+        emailValidLabel.snp.makeConstraints { make in
+            make.top.equalTo(emailTextField.snp.bottom).offset(4)
             make.height.equalTo(17)
             make.left.equalToSuperview().inset(16)
         }
@@ -170,21 +169,20 @@ class NickNameVC: UIViewController {
     // MARK: - ValidUserInfo
     
     func validateUserInfo() {
-        if isValidNickName {
+        if isValidEmail {
             self.nextButton.isEnabled = true
             UIView.animate(withDuration: 0.33) {
                 self.nextButton.backgroundColor = .mainBlue
             }
-            self.nickNameValidLabel.text = "사용 가능한 닉네임입니다"
-            self.nickNameValidLabel.textColor = .mainBlue
+            self.emailValidLabel.text = "사용 가능한 이메일입니다"
+            self.emailValidLabel.textColor = .mainBlue
         } else {
             self.nextButton.isEnabled = false
             UIView.animate(withDuration: 0.33) {
                 self.nextButton.backgroundColor = .mainGray
             }
-            self.nickNameValidLabel.text = "사용 가능하지 않은 닉네임입니다."
-            //self.nickNameValidLabel.text = "최대 8글자까지 작성이 가능합니다!"
-            self.nickNameValidLabel.textColor = .red
+            self.emailValidLabel.text = "이메일 형식이 올바르지 않습니다!"
+            self.emailValidLabel.textColor = UIColor(hex: 0xFF0000)
         }
         
     }
@@ -194,7 +192,7 @@ class NickNameVC: UIViewController {
         sender.layer.borderColor = UIColor(hex: 0x000000).withAlphaComponent(0.8).cgColor
         sender.layer.borderWidth = 1
         
-        self.nickNameValidLabel.isHidden = false
+        self.emailValidLabel.isHidden = false
 
     }
     
@@ -210,9 +208,9 @@ class NickNameVC: UIViewController {
         let text = sender.text ?? ""
         
         switch sender {
-        case nickNameTextField:
-            self.isValidNickName = text.isValidNickName()
-            self.userNickName = text
+        case emailTextField:
+            self.isValidEmail = text.isValidEmail()
+            self.userEmail = text
         
         default:
             fatalError("Missing TextField...")
@@ -224,10 +222,10 @@ class NickNameVC: UIViewController {
 extension String {
     
     // id 정규표현식 5~13자
-    func isValidNickName() -> Bool {
-        let nickRegEx = "[가-힣A-Za-z0-9]{2,8}"
-        let nickTest = NSPredicate(format: "SELF MATCHES %@", nickRegEx)
+    func isValidEmail() -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
         
-        return nickTest.evaluate(with: self)
+        return emailTest.evaluate(with: self)
     }
 }
