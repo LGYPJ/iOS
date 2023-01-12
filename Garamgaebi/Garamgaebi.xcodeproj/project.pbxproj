@@ -18,7 +18,6 @@
 		2C0538F8296E4C8C005AACA9 /* SeminarRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0538F7296E4C8C005AACA9 /* SeminarRegisterVC.swift */; };
 		2C6CE688296D644300E88E35 /* SeminarDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6CE687296D644300E88E35 /* SeminarDetailVC.swift */; };
 		2CDD94CF296E9A9C004B8D56 /* SeminarRegisterContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94CE296E9A9C004B8D56 /* SeminarRegisterContentView.swift */; };
-		2CDD94D2296EBC4F004B8D56 /* SeminarPopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94D1296EBC4F004B8D56 /* SeminarPopUpVC.swift */; };
 		609A53D2296AB47300BBD338 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53D1296AB47300BBD338 /* AppDelegate.swift */; };
 		609A53D4296AB47300BBD338 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53D3296AB47300BBD338 /* SceneDelegate.swift */; };
 		609A53DB296AB47400BBD338 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 609A53DA296AB47400BBD338 /* Assets.xcassets */; };
@@ -67,7 +66,6 @@
 		2C0538F7296E4C8C005AACA9 /* SeminarRegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarRegisterVC.swift; sourceTree = "<group>"; };
 		2C6CE687296D644300E88E35 /* SeminarDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarDetailVC.swift; sourceTree = "<group>"; };
 		2CDD94CE296E9A9C004B8D56 /* SeminarRegisterContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarRegisterContentView.swift; sourceTree = "<group>"; };
-		2CDD94D1296EBC4F004B8D56 /* SeminarPopUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarPopUpVC.swift; sourceTree = "<group>"; };
 		4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Garamgaebi_GaramgaebiUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5393A75B600780926B72C170 /* Pods-GaramgaebiTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaramgaebiTests.release.xcconfig"; path = "Target Support Files/Pods-GaramgaebiTests/Pods-GaramgaebiTests.release.xcconfig"; sourceTree = "<group>"; };
 		595E523818BF61B8A2004DDC /* Pods-Garamgaebi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Garamgaebi.release.xcconfig"; path = "Target Support Files/Pods-Garamgaebi/Pods-Garamgaebi.release.xcconfig"; sourceTree = "<group>"; };
@@ -134,7 +132,6 @@
 			children = (
 				2C6CE687296D644300E88E35 /* SeminarDetailVC.swift */,
 				2C0538F7296E4C8C005AACA9 /* SeminarRegisterVC.swift */,
-				2CDD94D1296EBC4F004B8D56 /* SeminarPopUpVC.swift */,
 				2CDD94CD296E9A78004B8D56 /* SubView */,
 			);
 			path = ViewController;
@@ -594,7 +591,6 @@
 				2C0538F8296E4C8C005AACA9 /* SeminarRegisterVC.swift in Sources */,
 				2C0538F4296DB1FF005AACA9 /* SeminarPreviewListCollectionViewCell.swift in Sources */,
 				60F91407296D445800626C40 /* UIColor+.swift in Sources */,
-				2CDD94D2296EBC4F004B8D56 /* SeminarPopUpVC.swift in Sources */,
 				2C0538ED296DA890005AACA9 /* SeminarAttendantListCollectionViewCell.swift in Sources */,
 				2C6CE688296D644300E88E35 /* SeminarDetailVC.swift in Sources */,
 			);

@@ -12,7 +12,7 @@ class SeminarHeaderView: UICollectionReusableView {
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
-		backgroundColor = .mainLightBlue
+		backgroundColor = .mainGray
 	}
 	
 	required init?(coder: NSCoder) {

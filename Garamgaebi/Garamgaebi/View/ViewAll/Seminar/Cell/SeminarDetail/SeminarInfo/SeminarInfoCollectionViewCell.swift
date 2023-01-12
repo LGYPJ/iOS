@@ -190,26 +190,26 @@ extension SeminarInfoCollectionViewCell {
 		
 		// layout
 		seminarNameLabel.snp.makeConstraints {
-			$0.top.equalToSuperview().offset(5.5)
+			$0.top.equalToSuperview().offset(16)
 			$0.leading.equalToSuperview().inset(16)
 		}
 		
 		shareImageView.snp.makeConstraints {
-			$0.leading.equalTo(seminarNameLabel.snp.trailing).offset(12)
+			$0.leading.equalTo(seminarNameLabel.snp.trailing).offset(8)
 			$0.centerY.equalTo(seminarNameLabel)
-			$0.width.equalTo(18)
-			$0.height.equalTo(20)
+			$0.width.equalTo(16.5)
+			$0.height.equalTo(18.3)
 		}
 		
 		seminarInfoStackView.snp.makeConstraints {
-			$0.leading.equalToSuperview().inset(16)
-			$0.top.equalTo(seminarNameLabel.snp.bottom).offset(8)
+			$0.leading.equalTo(seminarNameLabel)
+			$0.top.equalTo(seminarNameLabel.snp.bottom).offset(2)
 		}
 		
 		registerButton.snp.makeConstraints {
 			$0.width.equalTo(84)
 			$0.height.equalTo(84)
-			$0.top.equalToSuperview().offset(28)
+			$0.centerY.equalToSuperview()
 			$0.trailing.equalToSuperview().inset(16)
 		}
 	}

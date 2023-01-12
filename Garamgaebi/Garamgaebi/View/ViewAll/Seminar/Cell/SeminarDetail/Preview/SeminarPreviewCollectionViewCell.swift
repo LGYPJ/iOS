@@ -15,7 +15,7 @@ class SeminarPreviewCollectionViewCell: UICollectionViewCell {
 	lazy var titleLabel: UILabel = {
 		let label = UILabel()
 		label.text = "발표 미리보기"
-		label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
+		label.font = UIFont.NotoSansKR(type: .Bold, size: 18)
 		label.textColor = .black
 		
 		return label
@@ -68,12 +68,12 @@ extension SeminarPreviewCollectionViewCell {
 			.forEach {contentView.addSubview($0)}
 		
 		titleLabel.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(14)
+			$0.top.equalToSuperview().inset(16)
 			$0.leading.equalToSuperview().inset(16)
 		}
 		
 		collectionView.snp.makeConstraints {
-			$0.top.equalTo(titleLabel.snp.bottom).offset(22)
+			$0.top.equalTo(titleLabel.snp.bottom).offset(12)
 			$0.leading.equalToSuperview().inset(16)
 			$0.trailing.equalToSuperview().inset(16)
 			// 스크롤 가능하게 구현하려면 height를 cellItem*100 + (cellItem-1)*14

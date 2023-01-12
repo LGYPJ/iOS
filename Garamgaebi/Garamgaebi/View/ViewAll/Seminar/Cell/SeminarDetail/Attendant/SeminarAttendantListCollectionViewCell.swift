@@ -16,8 +16,8 @@ class SeminarAttendantListCollectionViewCell: UICollectionViewCell {
 	
 	lazy var profileImageView: UIImageView = {
 		let imageView = UIImageView()
-		imageView.image = UIImage(systemName: "person.circle")
 		imageView.layer.cornerRadius = imageSize/2
+		imageView.tintColor = .mainGray
 		imageView.clipsToBounds = true
 		
 		return imageView
@@ -55,7 +55,7 @@ extension SeminarAttendantListCollectionViewCell {
 		}
 		
 		userNameLabel.snp.makeConstraints {
-			$0.top.equalTo(profileImageView.snp.bottom).offset(2)
+			$0.top.equalTo(profileImageView.snp.bottom)
 			$0.centerX.equalToSuperview()
 		}
 	}

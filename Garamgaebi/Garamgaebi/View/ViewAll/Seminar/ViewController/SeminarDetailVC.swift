@@ -8,8 +8,6 @@
 import UIKit
 import SnapKit
 
-// TODO: 전체화면 스크롤 collectionview로 구현했던 것들 scrollview로 리팩토링하기
-
 class SeminarDetailVC: UIViewController {
 	
 	lazy var collectionView: UICollectionView = {
@@ -19,8 +17,8 @@ class SeminarDetailVC: UIViewController {
 		collectionView.backgroundColor = .white
 		collectionView.isScrollEnabled = true
 		collectionView.isUserInteractionEnabled = true
-		
-		
+
+
 		return collectionView
 	}()
 	
@@ -156,7 +154,7 @@ extension SeminarDetailVC: UICollectionViewDelegate, UICollectionViewDataSource,
 		let width = view.frame.size.width
 		switch section {
 		case 1, 2:
-			return CGSize(width: width, height: 8)
+			return CGSize(width: width, height: 1)
 		default:
 			return CGSize(width: 0, height: 0)
 		}

@@ -15,7 +15,7 @@ class SeminarAttendantCollectionViewCell: UICollectionViewCell {
 	lazy var attendantLabel: UILabel = {
 		let label = UILabel()
 		label.text = "참석자"
-		label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
+		label.font = UIFont.NotoSansKR(type: .Bold, size: 18)
 		label.textColor = .black
 
 		return label
@@ -70,7 +70,7 @@ extension SeminarAttendantCollectionViewCell {
 		
 		attendantLabel.snp.makeConstraints {
 			$0.leading.equalToSuperview().inset(16)
-			$0.top.equalToSuperview().inset(14)
+			$0.top.equalToSuperview().inset(16)
 		}
 		
 		attendantCountLabel.snp.makeConstraints {
@@ -79,10 +79,11 @@ extension SeminarAttendantCollectionViewCell {
 		}
 		
 		collectionView.snp.makeConstraints {
-			$0.top.equalTo(attendantLabel.snp.bottom).offset(10)
-			$0.height.equalTo(65)
+			$0.top.equalTo(attendantLabel.snp.bottom).offset(13)
+//			$0.height.equalTo(68)
 			$0.leading.equalToSuperview().inset(16)
 			$0.trailing.equalToSuperview()
+			$0.bottom.equalToSuperview().inset(16)
 		}
 	}
 	
@@ -101,7 +102,7 @@ extension SeminarAttendantCollectionViewCell: UICollectionViewDelegate, UICollec
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SeminarAttendantListCollectionViewCell.identifier, for: indexPath) as? SeminarAttendantListCollectionViewCell else {return UICollectionViewCell()}
 		cell.userNameLabel.text = dummyUserNameArr[indexPath.row]
-		
+		cell.profileImageView.image = UIImage(systemName: "person.fill")
 		return cell
 	}
 	
