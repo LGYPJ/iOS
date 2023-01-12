@@ -40,10 +40,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 self.window = UIWindow(windowScene: windowScene)
                 
                 //let rootViewController = tabBarController
-                let rootViewController = OnboardingVC()
+                //let rootViewController = OnboardingVC()
                 //let rootViewController = LoginVC()
                 //let rootViewController = EmailAuthVC()
-                //let rootViewController = NickNameVC()
+                let rootViewController = NickNameVC()
                 self.window?.rootViewController = rootViewController
                 self.window?.makeKeyAndVisible()
         
