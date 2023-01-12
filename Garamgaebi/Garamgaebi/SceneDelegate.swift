@@ -44,7 +44,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 //let rootViewController = LoginVC()
                 //let rootViewController = EmailAuthVC()
                 //let rootViewController = NickNameVC()
-                let rootViewController = EmailVC()
+                //let rootViewController = EmailVC()
+                let rootViewController = OrganizationVC()
                 self.window?.rootViewController = rootViewController
                 self.window?.makeKeyAndVisible()
         

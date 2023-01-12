@@ -159,7 +159,7 @@ class EmailVC: UIViewController {
     @objc
     private func nextButtonTapped(_ sender: Any) {
         // EmailVC로 화면전환
-        let nextVC = EmailVC()
+        let nextVC = OrganizationVC()
         nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
         nextVC.modalPresentationStyle = .fullScreen
         present(nextVC, animated: true)
