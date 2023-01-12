@@ -42,6 +42,9 @@ class OnboardingVC: UIViewController {
         if #available(iOS 14.0, *) {
             view.backgroundStyle = .minimal // .minimal
         }
+        view.numberOfPages = onboardingData.count
+        view.setIndicatorImage(UIImage(named: "BluePoint"), forPage: 0)
+        view.setIndicatorImage(UIImage(named: "WhitePoint"), forPage: 1)
         view.isUserInteractionEnabled = false
         return view
     }()
@@ -51,6 +54,13 @@ class OnboardingVC: UIViewController {
     var currentPage: Int = 0 {
         didSet {
             pageControl.currentPage = currentPage
+            for page in 0..<pageControl.numberOfPages {
+                if page == currentPage {
+                    pageControl.setIndicatorImage(UIImage(named: "BluePoint"), forPage: page)
+                } else {
+                    pageControl.setIndicatorImage(UIImage(named: "WhitePoint"), forPage: page)
+                }
+            }
             if currentPage == onboardingData.count - 1 {
                 nextButton.setTitle("시작하기", for: .normal)
             } else {
