@@ -18,6 +18,7 @@
 		2C0538F8296E4C8C005AACA9 /* SeminarRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0538F7296E4C8C005AACA9 /* SeminarRegisterVC.swift */; };
 		2C6CE688296D644300E88E35 /* SeminarDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6CE687296D644300E88E35 /* SeminarDetailVC.swift */; };
 		2CDD94CF296E9A9C004B8D56 /* SeminarRegisterContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94CE296E9A9C004B8D56 /* SeminarRegisterContentView.swift */; };
+		2CDD94D9296FDB88004B8D56 /* RegisterCancelVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94D8296FDB88004B8D56 /* RegisterCancelVC.swift */; };
 		609A53D2296AB47300BBD338 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53D1296AB47300BBD338 /* AppDelegate.swift */; };
 		609A53D4296AB47300BBD338 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53D3296AB47300BBD338 /* SceneDelegate.swift */; };
 		609A53DB296AB47400BBD338 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 609A53DA296AB47400BBD338 /* Assets.xcassets */; };
@@ -66,6 +67,7 @@
 		2C0538F7296E4C8C005AACA9 /* SeminarRegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarRegisterVC.swift; sourceTree = "<group>"; };
 		2C6CE687296D644300E88E35 /* SeminarDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarDetailVC.swift; sourceTree = "<group>"; };
 		2CDD94CE296E9A9C004B8D56 /* SeminarRegisterContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarRegisterContentView.swift; sourceTree = "<group>"; };
+		2CDD94D8296FDB88004B8D56 /* RegisterCancelVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterCancelVC.swift; sourceTree = "<group>"; };
 		4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Garamgaebi_GaramgaebiUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5393A75B600780926B72C170 /* Pods-GaramgaebiTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaramgaebiTests.release.xcconfig"; path = "Target Support Files/Pods-GaramgaebiTests/Pods-GaramgaebiTests.release.xcconfig"; sourceTree = "<group>"; };
 		595E523818BF61B8A2004DDC /* Pods-Garamgaebi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Garamgaebi.release.xcconfig"; path = "Target Support Files/Pods-Garamgaebi/Pods-Garamgaebi.release.xcconfig"; sourceTree = "<group>"; };
@@ -199,6 +201,14 @@
 			path = SubView;
 			sourceTree = "<group>";
 		};
+		2CDD94D7296FDA87004B8D56 /* RegisterCancel */ = {
+			isa = PBXGroup;
+			children = (
+				2CDD94D8296FDB88004B8D56 /* RegisterCancelVC.swift */,
+			);
+			path = RegisterCancel;
+			sourceTree = "<group>";
+		};
 		609A53C5296AB47300BBD338 = {
 			isa = PBXGroup;
 			children = (
@@ -265,6 +275,7 @@
 			isa = PBXGroup;
 			children = (
 				60F91400296D2F3D00626C40 /* ViewAllVC.swift */,
+				2CDD94D7296FDA87004B8D56 /* RegisterCancel */,
 				2C6CE686296D642600E88E35 /* Seminar */,
 			);
 			path = ViewAll;
@@ -583,6 +594,7 @@
 				60F91401296D2F3D00626C40 /* ViewAllVC.swift in Sources */,
 				2C0538E7296D7B11005AACA9 /* SeminarInfoCollectionViewCell.swift in Sources */,
 				60F91409296D446100626C40 /* UIFont+.swift in Sources */,
+				2CDD94D9296FDB88004B8D56 /* RegisterCancelVC.swift in Sources */,
 				2C0538E9296D7F2A005AACA9 /* SeminarAttendantCollectionViewCell.swift in Sources */,
 				2C0538F6296E47A0005AACA9 /* SeminarHeaderView.swift in Sources */,
 				2CDD94CF296E9A9C004B8D56 /* SeminarRegisterContentView.swift in Sources */,

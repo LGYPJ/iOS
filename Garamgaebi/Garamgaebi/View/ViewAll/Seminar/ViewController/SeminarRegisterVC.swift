@@ -87,8 +87,8 @@ extension SeminarRegisterVC {
 		}
 		
 		registerButton.snp.makeConstraints {
-			$0.bottom.equalToSuperview().inset(26)
-			$0.leading.trailing.equalToSuperview().inset(20)
+			$0.bottom.equalTo(view.safeAreaLayoutGuide).offset(14)
+			$0.leading.trailing.equalToSuperview().inset(16)
 			$0.height.equalTo(48)
 		}
 	}

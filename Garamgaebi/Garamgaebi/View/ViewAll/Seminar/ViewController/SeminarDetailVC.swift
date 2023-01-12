@@ -57,8 +57,6 @@ extension SeminarDetailVC {
 		let navigationBarAppearance = UINavigationBarAppearance()
 		navigationBarAppearance.configureWithOpaqueBackground()
 
-		navigationController?.navigationBar.tintColor = .clear
-
 		navigationItem.scrollEdgeAppearance = navigationBarAppearance
 		navigationItem.standardAppearance = navigationBarAppearance
 		navigationItem.compactAppearance = navigationBarAppearance
