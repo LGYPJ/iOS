@@ -41,7 +41,7 @@ class OrganizationVC: UIViewController {
         button.setTitleColor(.mainBlue, for: .normal)
         button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         button.layer.cornerRadius = 12
-        button.backgroundColor = .mainLightBlue
+        button.backgroundColor = UIColor(hex: 0xE3F2FF)
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
         return button
@@ -129,9 +129,9 @@ class OrganizationVC: UIViewController {
         var nextVC = UIViewController()
         switch sender {
         case presentCareerButton:
-            nextVC = OrganizationVC()
+            nextVC = RegisterInputCareerVC()
         case presentEducationButton:
-            nextVC = OrganizationVC()
+            nextVC = RegisterInputEducationVC()
         default:
             fatalError("Missing TextField...")
         }

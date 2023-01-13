@@ -17,6 +17,8 @@
 		6038243F296D96CC00E12CC2 /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60382439296D6C6600E12CC2 /* OnboardingVC.swift */; };
 		6055D84129700C9500C86D53 /* EmailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D84029700C9500C86D53 /* EmailVC.swift */; };
 		6055D8432970183500C86D53 /* OrganizationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D8422970183400C86D53 /* OrganizationVC.swift */; };
+		6055D84529701F5700C86D53 /* RegisterInputCareerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D84429701F5700C86D53 /* RegisterInputCareerVC.swift */; };
+		6055D84729701F6B00C86D53 /* RegisterInputEducationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D84629701F6B00C86D53 /* RegisterInputEducationVC.swift */; };
 		609A53D2296AB47300BBD338 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53D1296AB47300BBD338 /* AppDelegate.swift */; };
 		609A53D4296AB47300BBD338 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53D3296AB47300BBD338 /* SceneDelegate.swift */; };
 		609A53DB296AB47400BBD338 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 609A53DA296AB47400BBD338 /* Assets.xcassets */; };
@@ -67,6 +69,8 @@
 		6038243D296D80FB00E12CC2 /* OnboardingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCollectionViewCell.swift; sourceTree = "<group>"; };
 		6055D84029700C9500C86D53 /* EmailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailVC.swift; sourceTree = "<group>"; };
 		6055D8422970183400C86D53 /* OrganizationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationVC.swift; sourceTree = "<group>"; };
+		6055D84429701F5700C86D53 /* RegisterInputCareerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterInputCareerVC.swift; sourceTree = "<group>"; };
+		6055D84629701F6B00C86D53 /* RegisterInputEducationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterInputEducationVC.swift; sourceTree = "<group>"; };
 		609A53CE296AB47300BBD338 /* Garamgaebi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Garamgaebi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		609A53D1296AB47300BBD338 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		609A53D3296AB47300BBD338 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -136,6 +140,8 @@
 				60093A8E296EC92200F76783 /* NickNameVC.swift */,
 				6055D84029700C9500C86D53 /* EmailVC.swift */,
 				6055D8422970183400C86D53 /* OrganizationVC.swift */,
+				6055D84429701F5700C86D53 /* RegisterInputCareerVC.swift */,
+				6055D84629701F6B00C86D53 /* RegisterInputEducationVC.swift */,
 			);
 			path = Register;
 			sourceTree = "<group>";
@@ -518,12 +524,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6055D84729701F6B00C86D53 /* RegisterInputEducationVC.swift in Sources */,
 				60093A8B296E7EFB00F76783 /* LoginVC.swift in Sources */,
 				6038243C296D7E3F00E12CC2 /* OnboardingDataModel.swift in Sources */,
 				60093A8F296EC92200F76783 /* NickNameVC.swift in Sources */,
 				6055D84129700C9500C86D53 /* EmailVC.swift in Sources */,
 				60F91403296D2F4800626C40 /* ProfileVC.swift in Sources */,
 				60F913FF296D2F2C00626C40 /* HomeVC.swift in Sources */,
+				6055D84529701F5700C86D53 /* RegisterInputCareerVC.swift in Sources */,
 				60F91401296D2F3D00626C40 /* ViewAllVC.swift in Sources */,
 				60F91409296D446100626C40 /* UIFont+.swift in Sources */,
 				609A53D2296AB47300BBD338 /* AppDelegate.swift in Sources */,

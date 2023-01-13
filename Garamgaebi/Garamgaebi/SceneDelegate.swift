@@ -46,6 +46,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 //let rootViewController = NickNameVC()
                 //let rootViewController = EmailVC()
                 let rootViewController = OrganizationVC()
+                //let rootViewController = RegisterInputCareerVC()
+                //let rootViewController = RegisterInputEducationVC()
                 self.window?.rootViewController = rootViewController
                 self.window?.makeKeyAndVisible()
         
