@@ -1,5 +1,5 @@
 //
-//  SeminarPreviewListCollectionViewCell.swift
+//  EventPreviewCollectionViewCell.swift
 //  Garamgaebi
 //
 //  Created by 정현우 on 2023/01/10.
@@ -8,9 +8,9 @@
 import UIKit
 import SnapKit
 
-class SeminarPreviewListCollectionViewCell: UICollectionViewCell {
+class EventPreviewCollectionViewCell: UICollectionViewCell {
 	
-	static let identifier = "SeminarPreviewListCollectionViewCell"
+	static let identifier = "EventPreviewCollectionViewCell"
 	
 	lazy var titleLabel: UILabel = {
 		let label = UILabel()
@@ -58,7 +58,7 @@ class SeminarPreviewListCollectionViewCell: UICollectionViewCell {
     
 }
 
-extension SeminarPreviewListCollectionViewCell {
+extension EventPreviewCollectionViewCell {
 	private func configureViews() {
 		contentView.backgroundColor = .mainLightBlue
 		contentView.layer.cornerRadius = 8

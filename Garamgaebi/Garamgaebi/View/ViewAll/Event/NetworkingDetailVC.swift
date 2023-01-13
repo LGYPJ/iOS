@@ -29,6 +29,11 @@ class NetworkingDetailVC: UIViewController {
 		
 		
     }
+	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		self.tabBarController?.tabBar.isHidden = true
+	}
     
 
     
@@ -64,6 +69,7 @@ extension NetworkingDetailVC {
 	}
 	
 	private func configureViews() {
+		view.backgroundColor = .white
 		view.addSubview(tableView)
 		
 		tableView.snp.makeConstraints {
@@ -75,11 +81,6 @@ extension NetworkingDetailVC {
 	// 뒤로가기 버튼 did tap
 	@objc private func didTapBackBarButton() {
 		self.navigationController?.popViewController(animated: true)
-	}
-	
-	// 신청하기 버튼 did tap
-	@objc private func didTapRegisterButton() {
-		self.navigationController?.pushViewController(SeminarRegisterVC(), animated: true)
 	}
 
 
@@ -94,6 +95,7 @@ extension NetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 		switch indexPath.row {
 		case 0:
 			guard let cell = tableView.dequeueReusableCell(withIdentifier: EventInfoTableViewCell.identifier, for: indexPath) as? EventInfoTableViewCell else {return UITableViewCell()}
+			cell.eventNameLabel.text = "3차 네트워킹"
 			
 			return cell
 		case 1:

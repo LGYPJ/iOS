@@ -64,7 +64,7 @@ class NetworkingGameVC: UIViewController {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-
+		self.tabBarController?.tabBar.isHidden = true
 		cardCollectionView.isHidden = true
 		startButton.isHidden = false
 		nextButton.alpha = 0

@@ -1,24 +1,37 @@
 //
-//  SeminarRegisterContentView.swift
+//  EventRegisterVC.swift
 //  Garamgaebi
 //
-//  Created by 정현우 on 2023/01/11.
+//  Created by 정현우 on 2023/01/13.
 //
 
 import UIKit
 import SnapKit
 
-class SeminarRegisterContentView: UIView {
+class EventRegisterVC: UIViewController {
 	
-	lazy var seminarInfoView: UIView = {
+	lazy var scrollView: UIScrollView = {
+		let scrollView = UIScrollView()
+		
+		scrollView.isScrollEnabled = true
+		return scrollView
+	}()
+	// 스크롤 뷰 내의 content를 표시할 view(필수임)
+	lazy var contentView: UIView = {
+		let view = UIView()
+		
+		return view
+	}()
+	
+	lazy var eventInfoBackgroundView: UIView = {
 		let view = UIView()
 		view.backgroundColor = .mainLightBlue
 		view.layer.cornerRadius = 12
 		
 		return view
 	}()
-
-	lazy var seminarNameLabel: UILabel = {
+	
+	lazy var eventNameLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
 		label.textColor = .black
@@ -134,7 +147,7 @@ class SeminarRegisterContentView: UIView {
 		return stackView
 	}()
 
-	lazy var seminarInfoStackView: UIStackView = {
+	lazy var eventInfoStackView: UIStackView = {
 		let stackView = UIStackView()
 		[dateStackView, locationStackView, costStackView, deadlineStackView]
 			.forEach {stackView.addArrangedSubview($0)}
@@ -142,12 +155,6 @@ class SeminarRegisterContentView: UIView {
 		stackView.alignment = .leading
 		return stackView
 	}()
-	
-//	lazy var separator: UIView = {
-//		let view = UIView()
-//		view.backgroundColor = .mainLightBlue
-//		return view
-//	}()
 	
 	lazy var nameTextField: UITextField = {
 		let textField = UITextField()
@@ -191,33 +198,6 @@ class SeminarRegisterContentView: UIView {
 		return textField
 	}()
 	
-//	lazy var nameLabel: UILabel = {
-//		let label = UILabel()
-//		label.text = "이름"
-//		label.textColor = .black
-//		label.font = UIFont.NotoSansKR(type: .Medium, size: 14)
-//
-//		return label
-//	}()
-//
-//	lazy var nicknameLabel: UILabel = {
-//		let label = UILabel()
-//		label.text = "닉네임"
-//		label.textColor = .black
-//		label.font = UIFont.NotoSansKR(type: .Medium, size: 14)
-//
-//		return label
-//	}()
-//
-//	lazy var numberLabel: UILabel = {
-//		let label = UILabel()
-//		label.text = "전화번호"
-//		label.textColor = .black
-//		label.font = UIFont.NotoSansKR(type: .Medium, size: 14)
-//
-//		return label
-//	}()
-	
 	lazy var descriptionTextView: UITextView = {
 		let textView = UITextView()
 //		textView.layer.borderWidth = 0
@@ -232,22 +212,34 @@ class SeminarRegisterContentView: UIView {
 		return textView
 	}()
 	
-	override init(frame: CGRect) {
-		super.init(frame: frame)
-		
+	lazy var registerButton: UIButton = {
+		let button = UIButton()
+		button.setTitle("신청하기", for: .normal)
+		button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 18)
+		button.backgroundColor = UIColor.mainBlue
+		button.layer.cornerRadius = 10
+		return button
+	}()
+	
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+		configureNavigationBar()
+		configureNavigationBarShadow()
 		configureViews()
 		configureDummyData()
-	}
+    }
 	
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		self.tabBarController?.tabBar.isHidden = true
 	}
 	
 	// TODO: API연동 후 삭제
 	func configureDummyData() {
 //		descriptionTextView.isHidden = true
 //		costStackView.isHidden = true
-		seminarNameLabel.text = "2차 세미나"
+		eventNameLabel.text = "2차 세미나"
 		dateInfoLabel.text = "2023-02-10 오후 6시"
 		locationInfoLabel.text = "가천대학교 비전타워 B201"
 		costInfoLabel.text = "10000원"
@@ -255,44 +247,62 @@ class SeminarRegisterContentView: UIView {
 		
 		descriptionTextView.text = "카카오뱅크 3333-22-5500352\n입금자명을 닉네임/이름(예시: 찹도/민세림)으로 해주셔야 합니다.\n\n신청 확정은 신청 마감 이후에 일괄 처리됩니다.\n신청취소는 일주일 전까지 가능합니다.(이후로는 취소 불가)\n환불은 모임 당일부터 7일 이내에 순차적으로 진행됩니다.\n\n입금이 완료되지 않으면 신청이 자동적으로 취소됩니다."
 	}
-	
 }
 
-extension SeminarRegisterContentView {
+extension EventRegisterVC {
+	// navigation bar 구성
+	private func configureNavigationBar() {
+		self.navigationItem.title = "세미나"
+		let backBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: nil)
+		self.navigationItem.leftBarButtonItem = backBarButtonItem
+		self.navigationItem.leftBarButtonItem?.action  = #selector(didTapBackBarButton)
+		backBarButtonItem.tintColor = .black
+	}
+	
+	// navigation bar shadow 설정
+	private func configureNavigationBarShadow() {
+		let navigationBarAppearance = UINavigationBarAppearance()
+		navigationBarAppearance.configureWithOpaqueBackground()
+
+		navigationItem.scrollEdgeAppearance = navigationBarAppearance
+		navigationItem.standardAppearance = navigationBarAppearance
+		navigationItem.compactAppearance = navigationBarAppearance
+		navigationController?.setNeedsStatusBarAppearanceUpdate()
+	}
+	
 	private func configureViews() {
-		// addSubview
-		[seminarInfoView,  nameTextField, nicknameTextField, numberTextField, descriptionTextView]
-			.forEach {self.addSubview($0)}
-		seminarInfoView.snp.makeConstraints {
-			$0.top.equalTo(self.safeAreaLayoutGuide).offset(16)
+		view.backgroundColor = .white
+		[scrollView, registerButton]
+			.forEach {view.addSubview($0)}
+		
+		scrollView.snp.makeConstraints {
+			$0.top.equalTo(view.safeAreaLayoutGuide)
+			$0.leading.trailing.equalToSuperview()
+			$0.bottom.equalTo(registerButton.snp.top).offset(-15)
+		}
+		registerButton.snp.makeConstraints {
+			$0.bottom.equalTo(view.safeAreaLayoutGuide).offset(14)
 			$0.leading.trailing.equalToSuperview().inset(16)
-//			$0.height.equalTo(150)
+			$0.height.equalTo(48)
 		}
 		
-		[seminarNameLabel, seminarInfoStackView]
-			.forEach {seminarInfoView.addSubview($0)}
+		[contentView]
+			.forEach {scrollView.addSubview($0)}
 		
-		// layout
-		seminarNameLabel.snp.makeConstraints {
-			$0.top.equalToSuperview().offset(5.5)
-			$0.leading.equalToSuperview().inset(16)
+		contentView.snp.makeConstraints {
+			$0.width.equalToSuperview()
+			$0.edges.equalToSuperview()
 		}
 		
-		seminarInfoStackView.snp.makeConstraints {
-			$0.leading.equalToSuperview().inset(16)
-			$0.top.equalTo(seminarNameLabel.snp.bottom).offset(8)
-			$0.bottom.equalToSuperview().inset(12)
-		}
+		[eventInfoBackgroundView, nameTextField, nicknameTextField, numberTextField, descriptionTextView]
+			.forEach {contentView.addSubview($0)}
 		
-//		separator.snp.makeConstraints {
-//			$0.width.equalToSuperview()
-//			$0.leading.trailing.equalToSuperview()
-//			$0.height.equalTo(8)
-//			$0.top.equalTo(seminarInfoStackView.snp.bottom).offset(13.5)
-//		}
+		eventInfoBackgroundView.snp.makeConstraints {
+			$0.top.leading.trailing.equalToSuperview().inset(16)
+		}
 		
 		nameTextField.snp.makeConstraints {
-			$0.top.equalTo(seminarInfoView.snp.bottom).offset(24)
+			$0.top.equalTo(eventInfoBackgroundView.snp.bottom).offset(24)
 			$0.leading.trailing.equalToSuperview().inset(16)
 			$0.height.equalTo(48)
 		}
@@ -309,27 +319,31 @@ extension SeminarRegisterContentView {
 			$0.height.equalTo(48)
 		}
 		
-//		nameLabel.snp.makeConstraints {
-//			$0.centerY.equalTo(nameTextField.snp.top)
-//			$0.leading.equalTo(nameTextField).offset(17)
-//		}
-//
-//		nicknameLabel.snp.makeConstraints {
-//			$0.centerY.equalTo(nicknameTextField.snp.top)
-//			$0.leading.equalTo(nicknameTextField).offset(17)
-//		}
-//
-//		numberLabel.snp.makeConstraints {
-//			$0.centerY.equalTo(numberTextField.snp.top)
-//			$0.leading.equalTo(numberTextField).offset(17)
-//		}
-		
-		
 		descriptionTextView.snp.makeConstraints {
 			$0.top.equalTo(numberTextField.snp.bottom).offset(23)
 			$0.leading.trailing.equalToSuperview().inset(18)
 			$0.bottom.equalToSuperview()
 		}
+		
+		
+		[eventNameLabel,eventInfoStackView]
+			.forEach {eventInfoBackgroundView.addSubview($0)}
+		
+		eventNameLabel.snp.makeConstraints {
+			$0.top.equalToSuperview().offset(5.5)
+			$0.leading.equalToSuperview().inset(16)
+		}
+		
+		eventInfoStackView.snp.makeConstraints {
+			$0.leading.equalToSuperview().inset(16)
+			$0.top.equalTo(eventNameLabel.snp.bottom).offset(8)
+			$0.bottom.equalToSuperview().inset(12)
+		}
+		
+	}
+	
+	// 뒤로가기 버튼 did tap
+	@objc private func didTapBackBarButton() {
+		self.navigationController?.popViewController(animated: true)
 	}
 }
-

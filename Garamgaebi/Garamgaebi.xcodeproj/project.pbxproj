@@ -9,24 +9,18 @@
 /* Begin PBXBuildFile section */
 		07387C389AB3203B5F1B6292 /* Pods_Garamgaebi_GaramgaebiUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */; };
 		2A5DAD14EE12541BAE988EB7 /* Pods_Garamgaebi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8CB1AB7E398B75581977FAF /* Pods_Garamgaebi.framework */; };
-		2C0538E7296D7B11005AACA9 /* SeminarInfoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0538E6296D7B11005AACA9 /* SeminarInfoCollectionViewCell.swift */; };
-		2C0538E9296D7F2A005AACA9 /* SeminarAttendantCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0538E8296D7F2A005AACA9 /* SeminarAttendantCollectionViewCell.swift */; };
-		2C0538ED296DA890005AACA9 /* SeminarAttendantListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0538EC296DA890005AACA9 /* SeminarAttendantListCollectionViewCell.swift */; };
-		2C0538F2296DAE10005AACA9 /* SeminarPreviewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0538F1296DAE10005AACA9 /* SeminarPreviewCollectionViewCell.swift */; };
-		2C0538F4296DB1FF005AACA9 /* SeminarPreviewListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0538F3296DB1FF005AACA9 /* SeminarPreviewListCollectionViewCell.swift */; };
-		2C0538F6296E47A0005AACA9 /* SeminarHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0538F5296E47A0005AACA9 /* SeminarHeaderView.swift */; };
-		2C0538F8296E4C8C005AACA9 /* SeminarRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0538F7296E4C8C005AACA9 /* SeminarRegisterVC.swift */; };
-		2C6CE688296D644300E88E35 /* SeminarDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6CE687296D644300E88E35 /* SeminarDetailVC.swift */; };
-		2CDD94CF296E9A9C004B8D56 /* SeminarRegisterContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94CE296E9A9C004B8D56 /* SeminarRegisterContentView.swift */; };
+		2C0538F4296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0538F3296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift */; };
 		2CDD94D9296FDB88004B8D56 /* RegisterCancelVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94D8296FDB88004B8D56 /* RegisterCancelVC.swift */; };
 		2CDD94DE29700E71004B8D56 /* NetworkingDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94DD29700E71004B8D56 /* NetworkingDetailVC.swift */; };
-		2CDD94E129701858004B8D56 /* IceBreakingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94E029701858004B8D56 /* IceBreakingCollectionViewCell.swift */; };
 		2CDD94E329711EB3004B8D56 /* NetworkingGameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94E229711EB3004B8D56 /* NetworkingGameVC.swift */; };
 		2CDD94E529712E8E004B8D56 /* CardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94E429712E8E004B8D56 /* CardCollectionViewCell.swift */; };
 		2CDD94E8297173E8004B8D56 /* EventInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94E7297173E8004B8D56 /* EventInfoTableViewCell.swift */; };
 		2CDD94EA29718369004B8D56 /* EventAttendantTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94E929718369004B8D56 /* EventAttendantTableViewCell.swift */; };
 		2CDD94EC29718548004B8D56 /* EventAttendantCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94EB29718548004B8D56 /* EventAttendantCollectionViewCell.swift */; };
 		2CDD94EE297185A7004B8D56 /* EventIceBreakingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94ED297185A7004B8D56 /* EventIceBreakingTableViewCell.swift */; };
+		2CDD94F2297191F1004B8D56 /* SeminarDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94F1297191F1004B8D56 /* SeminarDetailVC.swift */; };
+		2CDD94F4297192E9004B8D56 /* EventPreviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94F3297192E9004B8D56 /* EventPreviewTableViewCell.swift */; };
+		2CDD94F62971952E004B8D56 /* EventRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94F52971952E004B8D56 /* EventRegisterVC.swift */; };
 		609A53D2296AB47300BBD338 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53D1296AB47300BBD338 /* AppDelegate.swift */; };
 		609A53D4296AB47300BBD338 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53D3296AB47300BBD338 /* SceneDelegate.swift */; };
 		609A53DB296AB47400BBD338 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 609A53DA296AB47400BBD338 /* Assets.xcassets */; };
@@ -66,24 +60,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2C0538E6296D7B11005AACA9 /* SeminarInfoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarInfoCollectionViewCell.swift; sourceTree = "<group>"; };
-		2C0538E8296D7F2A005AACA9 /* SeminarAttendantCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarAttendantCollectionViewCell.swift; sourceTree = "<group>"; };
-		2C0538EC296DA890005AACA9 /* SeminarAttendantListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarAttendantListCollectionViewCell.swift; sourceTree = "<group>"; };
-		2C0538F1296DAE10005AACA9 /* SeminarPreviewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarPreviewCollectionViewCell.swift; sourceTree = "<group>"; };
-		2C0538F3296DB1FF005AACA9 /* SeminarPreviewListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarPreviewListCollectionViewCell.swift; sourceTree = "<group>"; };
-		2C0538F5296E47A0005AACA9 /* SeminarHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarHeaderView.swift; sourceTree = "<group>"; };
-		2C0538F7296E4C8C005AACA9 /* SeminarRegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarRegisterVC.swift; sourceTree = "<group>"; };
-		2C6CE687296D644300E88E35 /* SeminarDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarDetailVC.swift; sourceTree = "<group>"; };
-		2CDD94CE296E9A9C004B8D56 /* SeminarRegisterContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarRegisterContentView.swift; sourceTree = "<group>"; };
+		2C0538F3296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPreviewCollectionViewCell.swift; sourceTree = "<group>"; };
 		2CDD94D8296FDB88004B8D56 /* RegisterCancelVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterCancelVC.swift; sourceTree = "<group>"; };
 		2CDD94DD29700E71004B8D56 /* NetworkingDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingDetailVC.swift; sourceTree = "<group>"; };
-		2CDD94E029701858004B8D56 /* IceBreakingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IceBreakingCollectionViewCell.swift; sourceTree = "<group>"; };
 		2CDD94E229711EB3004B8D56 /* NetworkingGameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingGameVC.swift; sourceTree = "<group>"; };
 		2CDD94E429712E8E004B8D56 /* CardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCollectionViewCell.swift; sourceTree = "<group>"; };
 		2CDD94E7297173E8004B8D56 /* EventInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInfoTableViewCell.swift; sourceTree = "<group>"; };
 		2CDD94E929718369004B8D56 /* EventAttendantTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAttendantTableViewCell.swift; sourceTree = "<group>"; };
 		2CDD94EB29718548004B8D56 /* EventAttendantCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAttendantCollectionViewCell.swift; sourceTree = "<group>"; };
 		2CDD94ED297185A7004B8D56 /* EventIceBreakingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventIceBreakingTableViewCell.swift; sourceTree = "<group>"; };
+		2CDD94F1297191F1004B8D56 /* SeminarDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarDetailVC.swift; sourceTree = "<group>"; };
+		2CDD94F3297192E9004B8D56 /* EventPreviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPreviewTableViewCell.swift; sourceTree = "<group>"; };
+		2CDD94F52971952E004B8D56 /* EventRegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventRegisterVC.swift; sourceTree = "<group>"; };
 		4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Garamgaebi_GaramgaebiUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5393A75B600780926B72C170 /* Pods-GaramgaebiTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaramgaebiTests.release.xcconfig"; path = "Target Support Files/Pods-GaramgaebiTests/Pods-GaramgaebiTests.release.xcconfig"; sourceTree = "<group>"; };
 		595E523818BF61B8A2004DDC /* Pods-Garamgaebi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Garamgaebi.release.xcconfig"; path = "Target Support Files/Pods-Garamgaebi/Pods-Garamgaebi.release.xcconfig"; sourceTree = "<group>"; };
@@ -145,121 +133,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2C0538E4296D7A8D005AACA9 /* ViewController */ = {
-			isa = PBXGroup;
-			children = (
-				2C6CE687296D644300E88E35 /* SeminarDetailVC.swift */,
-				2C0538F7296E4C8C005AACA9 /* SeminarRegisterVC.swift */,
-				2CDD94CD296E9A78004B8D56 /* SubView */,
-			);
-			path = ViewController;
-			sourceTree = "<group>";
-		};
-		2C0538E5296D7A96005AACA9 /* Cell */ = {
-			isa = PBXGroup;
-			children = (
-				2C0538F9296E81B2005AACA9 /* SeminarDetail */,
-			);
-			path = Cell;
-			sourceTree = "<group>";
-		};
-		2C0538EE296DAD7A005AACA9 /* SeminarInfo */ = {
-			isa = PBXGroup;
-			children = (
-				2C0538E6296D7B11005AACA9 /* SeminarInfoCollectionViewCell.swift */,
-			);
-			path = SeminarInfo;
-			sourceTree = "<group>";
-		};
-		2C0538EF296DAD89005AACA9 /* Attendant */ = {
-			isa = PBXGroup;
-			children = (
-				2C0538E8296D7F2A005AACA9 /* SeminarAttendantCollectionViewCell.swift */,
-				2C0538EC296DA890005AACA9 /* SeminarAttendantListCollectionViewCell.swift */,
-			);
-			path = Attendant;
-			sourceTree = "<group>";
-		};
-		2C0538F0296DADB5005AACA9 /* Preview */ = {
-			isa = PBXGroup;
-			children = (
-				2C0538F1296DAE10005AACA9 /* SeminarPreviewCollectionViewCell.swift */,
-				2C0538F3296DB1FF005AACA9 /* SeminarPreviewListCollectionViewCell.swift */,
-			);
-			path = Preview;
-			sourceTree = "<group>";
-		};
-		2C0538F9296E81B2005AACA9 /* SeminarDetail */ = {
-			isa = PBXGroup;
-			children = (
-				2C0538EE296DAD7A005AACA9 /* SeminarInfo */,
-				2C0538EF296DAD89005AACA9 /* Attendant */,
-				2C0538F0296DADB5005AACA9 /* Preview */,
-			);
-			path = SeminarDetail;
-			sourceTree = "<group>";
-		};
-		2C6CE686296D642600E88E35 /* Seminar */ = {
-			isa = PBXGroup;
-			children = (
-				2C0538E4296D7A8D005AACA9 /* ViewController */,
-				2C0538E5296D7A96005AACA9 /* Cell */,
-			);
-			path = Seminar;
-			sourceTree = "<group>";
-		};
-		2CDD94CD296E9A78004B8D56 /* SubView */ = {
-			isa = PBXGroup;
-			children = (
-				2C0538F5296E47A0005AACA9 /* SeminarHeaderView.swift */,
-				2CDD94CE296E9A9C004B8D56 /* SeminarRegisterContentView.swift */,
-			);
-			path = SubView;
-			sourceTree = "<group>";
-		};
-		2CDD94D7296FDA87004B8D56 /* RegisterCancel */ = {
+		2CDD94EF2971918D004B8D56 /* Event */ = {
 			isa = PBXGroup;
 			children = (
 				2CDD94D8296FDB88004B8D56 /* RegisterCancelVC.swift */,
-			);
-			path = RegisterCancel;
-			sourceTree = "<group>";
-		};
-		2CDD94DB29700C97004B8D56 /* Networking */ = {
-			isa = PBXGroup;
-			children = (
-				2CDD94DF297015F1004B8D56 /* Cell */,
-				2CDD94DC29700D62004B8D56 /* ViewController */,
-			);
-			path = Networking;
-			sourceTree = "<group>";
-		};
-		2CDD94DC29700D62004B8D56 /* ViewController */ = {
-			isa = PBXGroup;
-			children = (
+				2CDD94F1297191F1004B8D56 /* SeminarDetailVC.swift */,
 				2CDD94DD29700E71004B8D56 /* NetworkingDetailVC.swift */,
 				2CDD94E229711EB3004B8D56 /* NetworkingGameVC.swift */,
-				2CDD94E6297173A1004B8D56 /* Cell */,
+				2CDD94F52971952E004B8D56 /* EventRegisterVC.swift */,
+				2CDD94F0297191B0004B8D56 /* Cell */,
 			);
-			path = ViewController;
+			path = Event;
 			sourceTree = "<group>";
 		};
-		2CDD94DF297015F1004B8D56 /* Cell */ = {
-			isa = PBXGroup;
-			children = (
-				2CDD94E029701858004B8D56 /* IceBreakingCollectionViewCell.swift */,
-				2CDD94E429712E8E004B8D56 /* CardCollectionViewCell.swift */,
-			);
-			path = Cell;
-			sourceTree = "<group>";
-		};
-		2CDD94E6297173A1004B8D56 /* Cell */ = {
+		2CDD94F0297191B0004B8D56 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
 				2CDD94E7297173E8004B8D56 /* EventInfoTableViewCell.swift */,
 				2CDD94E929718369004B8D56 /* EventAttendantTableViewCell.swift */,
 				2CDD94EB29718548004B8D56 /* EventAttendantCollectionViewCell.swift */,
+				2CDD94F3297192E9004B8D56 /* EventPreviewTableViewCell.swift */,
+				2C0538F3296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift */,
 				2CDD94ED297185A7004B8D56 /* EventIceBreakingTableViewCell.swift */,
+				2CDD94E429712E8E004B8D56 /* CardCollectionViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -330,9 +226,7 @@
 			isa = PBXGroup;
 			children = (
 				60F91400296D2F3D00626C40 /* ViewAllVC.swift */,
-				2CDD94D7296FDA87004B8D56 /* RegisterCancel */,
-				2C6CE686296D642600E88E35 /* Seminar */,
-				2CDD94DB29700C97004B8D56 /* Networking */,
+				2CDD94EF2971918D004B8D56 /* Event */,
 			);
 			path = ViewAll;
 			sourceTree = "<group>";
@@ -645,30 +539,24 @@
 			buildActionMask = 2147483647;
 			files = (
 				60F91403296D2F4800626C40 /* ProfileVC.swift in Sources */,
-				2C0538F2296DAE10005AACA9 /* SeminarPreviewCollectionViewCell.swift in Sources */,
 				60F913FF296D2F2C00626C40 /* HomeVC.swift in Sources */,
 				60F91401296D2F3D00626C40 /* ViewAllVC.swift in Sources */,
 				2CDD94E529712E8E004B8D56 /* CardCollectionViewCell.swift in Sources */,
 				2CDD94E329711EB3004B8D56 /* NetworkingGameVC.swift in Sources */,
-				2C0538E7296D7B11005AACA9 /* SeminarInfoCollectionViewCell.swift in Sources */,
 				60F91409296D446100626C40 /* UIFont+.swift in Sources */,
 				2CDD94EE297185A7004B8D56 /* EventIceBreakingTableViewCell.swift in Sources */,
 				2CDD94D9296FDB88004B8D56 /* RegisterCancelVC.swift in Sources */,
-				2C0538E9296D7F2A005AACA9 /* SeminarAttendantCollectionViewCell.swift in Sources */,
-				2C0538F6296E47A0005AACA9 /* SeminarHeaderView.swift in Sources */,
-				2CDD94CF296E9A9C004B8D56 /* SeminarRegisterContentView.swift in Sources */,
-				2CDD94E129701858004B8D56 /* IceBreakingCollectionViewCell.swift in Sources */,
 				2CDD94EC29718548004B8D56 /* EventAttendantCollectionViewCell.swift in Sources */,
 				609A53D2296AB47300BBD338 /* AppDelegate.swift in Sources */,
 				609A53D4296AB47300BBD338 /* SceneDelegate.swift in Sources */,
-				2C0538F8296E4C8C005AACA9 /* SeminarRegisterVC.swift in Sources */,
-				2C0538F4296DB1FF005AACA9 /* SeminarPreviewListCollectionViewCell.swift in Sources */,
+				2C0538F4296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift in Sources */,
+				2CDD94F2297191F1004B8D56 /* SeminarDetailVC.swift in Sources */,
 				2CDD94EA29718369004B8D56 /* EventAttendantTableViewCell.swift in Sources */,
 				2CDD94E8297173E8004B8D56 /* EventInfoTableViewCell.swift in Sources */,
 				60F91407296D445800626C40 /* UIColor+.swift in Sources */,
 				2CDD94DE29700E71004B8D56 /* NetworkingDetailVC.swift in Sources */,
-				2C0538ED296DA890005AACA9 /* SeminarAttendantListCollectionViewCell.swift in Sources */,
-				2C6CE688296D644300E88E35 /* SeminarDetailVC.swift in Sources */,
+				2CDD94F62971952E004B8D56 /* EventRegisterVC.swift in Sources */,
+				2CDD94F4297192E9004B8D56 /* EventPreviewTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
