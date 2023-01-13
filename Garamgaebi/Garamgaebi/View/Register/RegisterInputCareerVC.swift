@@ -334,7 +334,7 @@ class RegisterInputCareerVC: UIViewController {
     
     @objc
     private func nextButtonTapped(_ sender: UIButton) {
-        var nextVC = OrganizationVC()
+        var nextVC = RegisterCompletedVC()
         nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
         nextVC.modalPresentationStyle = .fullScreen
         present(nextVC, animated: true)
