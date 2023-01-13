@@ -152,7 +152,7 @@ class RegisterInputCareerVC: UIViewController {
         let button = UIButton()
         button.setTitle("재직 중", for: .normal)
         button.setImage(UIImage(systemName: "square")?.withTintColor(UIColor(hex: 0xAEAEAE), renderingMode: .alwaysOriginal), for: .normal)
-        button.setImage(UIImage(systemName: "checkmark.square")?.withTintColor(UIColor(hex: 0x000000).withAlphaComponent(0.8), renderingMode: .alwaysOriginal), for: .selected)
+        button.setImage(UIImage(systemName: "checkmark.square")?.withRenderingMode(.automatic), for: .selected)
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -7)
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 7)
         button.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
@@ -313,15 +313,15 @@ class RegisterInputCareerVC: UIViewController {
         
         // saveUserProfileButton
         saveUserProfileButton.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(14)
-            make.right.equalToSuperview().inset(14)
+            make.left.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16)
             make.bottom.equalToSuperview().inset(48)
             make.height.equalTo(48)
         }
         
         //subDescriptionLabel
         subDescriptionLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(14)
+            make.left.equalTo(saveUserProfileButton.snp.left)
             make.bottom.equalTo(saveUserProfileButton.snp.top).offset(-8)
         }
         

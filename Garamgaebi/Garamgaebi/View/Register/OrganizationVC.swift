@@ -106,19 +106,19 @@ class OrganizationVC: UIViewController {
             make.top.equalTo(titleLabel.snp.bottom).offset(9)
         }
         
-        // presentEducationButton
-        presentEducationButton.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(14)
-            make.right.equalToSuperview().inset(14)
-            make.bottom.equalToSuperview().inset(48)
+        // presentCareerButton
+        presentCareerButton.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16)
+            make.bottom.equalTo(presentEducationButton.snp.top).inset(-14)
             make.height.equalTo(48)
         }
         
-        // presentCareerButton
-        presentCareerButton.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(14)
-            make.right.equalToSuperview().inset(14)
-            make.bottom.equalTo(presentEducationButton.snp.top).inset(-14)
+        // presentEducationButton
+        presentEducationButton.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16)
+            make.bottom.equalToSuperview().inset(48)
             make.height.equalTo(48)
         }
     }
