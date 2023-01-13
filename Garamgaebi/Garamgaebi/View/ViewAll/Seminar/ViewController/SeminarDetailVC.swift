@@ -110,6 +110,8 @@ extension SeminarDetailVC: UICollectionViewDelegate, UICollectionViewDataSource,
 		case 0:
 			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SeminarInfoCollectionViewCell.identifier, for: indexPath) as? SeminarInfoCollectionViewCell else {return UICollectionViewCell()}
 			cell.registerButton.addTarget(self, action: #selector(didTapRegisterButton), for: .touchUpInside)
+			cell.costStackView.isHidden = true
+			cell.seminarInfoStackView.sizeToFit()
 			return cell
 		case 1:
 			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SeminarAttendantCollectionViewCell.identifier, for: indexPath) as? SeminarAttendantCollectionViewCell else {return UICollectionViewCell()}

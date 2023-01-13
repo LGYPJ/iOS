@@ -23,6 +23,10 @@
 		2CDD94E129701858004B8D56 /* IceBreakingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94E029701858004B8D56 /* IceBreakingCollectionViewCell.swift */; };
 		2CDD94E329711EB3004B8D56 /* NetworkingGameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94E229711EB3004B8D56 /* NetworkingGameVC.swift */; };
 		2CDD94E529712E8E004B8D56 /* CardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94E429712E8E004B8D56 /* CardCollectionViewCell.swift */; };
+		2CDD94E8297173E8004B8D56 /* EventInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94E7297173E8004B8D56 /* EventInfoTableViewCell.swift */; };
+		2CDD94EA29718369004B8D56 /* EventAttendantTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94E929718369004B8D56 /* EventAttendantTableViewCell.swift */; };
+		2CDD94EC29718548004B8D56 /* EventAttendantCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94EB29718548004B8D56 /* EventAttendantCollectionViewCell.swift */; };
+		2CDD94EE297185A7004B8D56 /* EventIceBreakingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94ED297185A7004B8D56 /* EventIceBreakingTableViewCell.swift */; };
 		609A53D2296AB47300BBD338 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53D1296AB47300BBD338 /* AppDelegate.swift */; };
 		609A53D4296AB47300BBD338 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53D3296AB47300BBD338 /* SceneDelegate.swift */; };
 		609A53DB296AB47400BBD338 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 609A53DA296AB47400BBD338 /* Assets.xcassets */; };
@@ -76,6 +80,10 @@
 		2CDD94E029701858004B8D56 /* IceBreakingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IceBreakingCollectionViewCell.swift; sourceTree = "<group>"; };
 		2CDD94E229711EB3004B8D56 /* NetworkingGameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingGameVC.swift; sourceTree = "<group>"; };
 		2CDD94E429712E8E004B8D56 /* CardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCollectionViewCell.swift; sourceTree = "<group>"; };
+		2CDD94E7297173E8004B8D56 /* EventInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInfoTableViewCell.swift; sourceTree = "<group>"; };
+		2CDD94E929718369004B8D56 /* EventAttendantTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAttendantTableViewCell.swift; sourceTree = "<group>"; };
+		2CDD94EB29718548004B8D56 /* EventAttendantCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAttendantCollectionViewCell.swift; sourceTree = "<group>"; };
+		2CDD94ED297185A7004B8D56 /* EventIceBreakingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventIceBreakingTableViewCell.swift; sourceTree = "<group>"; };
 		4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Garamgaebi_GaramgaebiUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5393A75B600780926B72C170 /* Pods-GaramgaebiTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaramgaebiTests.release.xcconfig"; path = "Target Support Files/Pods-GaramgaebiTests/Pods-GaramgaebiTests.release.xcconfig"; sourceTree = "<group>"; };
 		595E523818BF61B8A2004DDC /* Pods-Garamgaebi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Garamgaebi.release.xcconfig"; path = "Target Support Files/Pods-Garamgaebi/Pods-Garamgaebi.release.xcconfig"; sourceTree = "<group>"; };
@@ -231,6 +239,7 @@
 			children = (
 				2CDD94DD29700E71004B8D56 /* NetworkingDetailVC.swift */,
 				2CDD94E229711EB3004B8D56 /* NetworkingGameVC.swift */,
+				2CDD94E6297173A1004B8D56 /* Cell */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -240,6 +249,17 @@
 			children = (
 				2CDD94E029701858004B8D56 /* IceBreakingCollectionViewCell.swift */,
 				2CDD94E429712E8E004B8D56 /* CardCollectionViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		2CDD94E6297173A1004B8D56 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				2CDD94E7297173E8004B8D56 /* EventInfoTableViewCell.swift */,
+				2CDD94E929718369004B8D56 /* EventAttendantTableViewCell.swift */,
+				2CDD94EB29718548004B8D56 /* EventAttendantCollectionViewCell.swift */,
+				2CDD94ED297185A7004B8D56 /* EventIceBreakingTableViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -632,15 +652,19 @@
 				2CDD94E329711EB3004B8D56 /* NetworkingGameVC.swift in Sources */,
 				2C0538E7296D7B11005AACA9 /* SeminarInfoCollectionViewCell.swift in Sources */,
 				60F91409296D446100626C40 /* UIFont+.swift in Sources */,
+				2CDD94EE297185A7004B8D56 /* EventIceBreakingTableViewCell.swift in Sources */,
 				2CDD94D9296FDB88004B8D56 /* RegisterCancelVC.swift in Sources */,
 				2C0538E9296D7F2A005AACA9 /* SeminarAttendantCollectionViewCell.swift in Sources */,
 				2C0538F6296E47A0005AACA9 /* SeminarHeaderView.swift in Sources */,
 				2CDD94CF296E9A9C004B8D56 /* SeminarRegisterContentView.swift in Sources */,
 				2CDD94E129701858004B8D56 /* IceBreakingCollectionViewCell.swift in Sources */,
+				2CDD94EC29718548004B8D56 /* EventAttendantCollectionViewCell.swift in Sources */,
 				609A53D2296AB47300BBD338 /* AppDelegate.swift in Sources */,
 				609A53D4296AB47300BBD338 /* SceneDelegate.swift in Sources */,
 				2C0538F8296E4C8C005AACA9 /* SeminarRegisterVC.swift in Sources */,
 				2C0538F4296DB1FF005AACA9 /* SeminarPreviewListCollectionViewCell.swift in Sources */,
+				2CDD94EA29718369004B8D56 /* EventAttendantTableViewCell.swift in Sources */,
+				2CDD94E8297173E8004B8D56 /* EventInfoTableViewCell.swift in Sources */,
 				60F91407296D445800626C40 /* UIColor+.swift in Sources */,
 				2CDD94DE29700E71004B8D56 /* NetworkingDetailVC.swift in Sources */,
 				2C0538ED296DA890005AACA9 /* SeminarAttendantListCollectionViewCell.swift in Sources */,
