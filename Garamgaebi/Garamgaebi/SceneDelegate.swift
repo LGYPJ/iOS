@@ -13,39 +13,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        
-        let firstVC = UINavigationController(rootViewController: HomeVC())
-        let secondVC = UINavigationController(rootViewController: ViewAllVC())
-        let thirdVC = UINavigationController(rootViewController: ProfileVC())
-        
-        let tabBarController = UITabBarController()
-        tabBarController.view.backgroundColor = .white
-        tabBarController.setViewControllers([firstVC, secondVC, thirdVC], animated: true)
-        
-        if let items = tabBarController.tabBar.items {
-            items[0].selectedImage = UIImage(systemName: "house")
-            items[0].image = UIImage(systemName: "house")
-            items[0].title = "홈"
-            
-            items[1].selectedImage = UIImage(systemName: "person.2")
-            items[1].image = UIImage(systemName: "person.2")
-            items[1].title = "모아보기"
-            
-            items[2].selectedImage = UIImage(systemName: "person.circle")
-            items[2].image = UIImage(systemName: "person")
-            items[2].title = "내 프로필"
-        }
-        
+
         guard let windowScene = scene as? UIWindowScene else { return }
         self.window = UIWindow(windowScene: windowScene)
         
-        //let rootViewController = tabBarController
+        let rootViewController = TabBarController()
         //let rootViewController = OnboardingVC()
         //let rootViewController = LoginVC()
         //let rootViewController = EmailAuthVC()
         //let rootViewController = NickNameVC()
         //let rootViewController = EmailVC()
-        let rootViewController = OrganizationVC()
+        //let rootViewController = OrganizationVC()
         //let rootViewController = RegisterInputCareerVC()
         //let rootViewController = RegisterInputEducationVC()
         //let rootViewController = RegisterCompletedVC()
