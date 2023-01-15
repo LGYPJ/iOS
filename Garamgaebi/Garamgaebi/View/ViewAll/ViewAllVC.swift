@@ -30,6 +30,7 @@ class ViewAllVC: UIViewController {
     
     lazy var segmentedControl: UISegmentedControl = {
         let control = UnderlineSegmentedControl(items: ["세미나","네트워킹","내 모임"])
+        control.selectedSegmentIndex = 0
         control.addTarget(self, action: #selector(didChangeValue(segment:)), for: .valueChanged)
         return control
     }()
