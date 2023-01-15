@@ -147,7 +147,7 @@ class RegisterCancelVC: UIViewController {
 		let textField = UITextField()
 		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
-		textField.layer.cornerRadius = 10
+		textField.layer.cornerRadius = 12
 		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
 		textField.leftViewMode = .always
 //		textField.placeholder = "이름을 입력해주세요"
@@ -161,7 +161,7 @@ class RegisterCancelVC: UIViewController {
 		let textField = UITextField()
 		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
-		textField.layer.cornerRadius = 10
+		textField.layer.cornerRadius = 12
 		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
 		textField.leftViewMode = .always
 //		textField.placeholder = "닉네임을 입력해주세요"
@@ -174,7 +174,7 @@ class RegisterCancelVC: UIViewController {
 		let textField = UITextField()
 		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
-		textField.layer.cornerRadius = 10
+		textField.layer.cornerRadius = 12
 		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
 		textField.leftViewMode = .always
 //		textField.placeholder = "전화번호를 입력해주세요"
@@ -188,8 +188,57 @@ class RegisterCancelVC: UIViewController {
 		button.setTitle("취소하기", for: .normal)
 		button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
 		button.backgroundColor = UIColor.mainBlue
-		button.layer.cornerRadius = 10
+		button.layer.cornerRadius = 12
 		return button
+	}()
+	
+	lazy var bankButton: UIButton = {
+		let button = UIButton()
+		button.setTitle("은행", for: .normal)
+		button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
+		button.backgroundColor = .white
+		button.setTitleColor(.mainGray, for: .normal)
+		button.contentHorizontalAlignment = .left
+		// TODO: titleEdgeInsets은 iOS 15부터 deprecated됨 수정 예정
+		button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
+		
+		
+		button.layer.borderWidth = 1
+		button.layer.borderColor = UIColor.mainGray.cgColor
+		button.layer.cornerRadius = 12
+		
+		return button
+	}()
+	
+	lazy var downImageView: UIImageView = {
+		let imageView = UIImageView()
+		imageView.image = UIImage(systemName: "chevron.down")
+		imageView.tintColor = .black
+		
+		return imageView
+	}()
+	
+	lazy var accountTextField: UITextField = {
+		let textField = UITextField()
+		textField.layer.borderColor = UIColor.mainGray.cgColor
+		textField.layer.borderWidth = 1
+		textField.layer.cornerRadius = 12
+		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
+		textField.leftViewMode = .always
+		textField.attributedPlaceholder = NSAttributedString(string: "계좌번호를 입력해주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
+		
+		return textField
+	}()
+	
+	lazy var accountStackView: UIStackView = {
+		let stackView = UIStackView()
+		stackView.axis = .horizontal
+		[bankButton, accountTextField]
+			.forEach {stackView.addArrangedSubview($0)}
+		stackView.spacing = 8
+		stackView.distribution = .fill
+		
+		return stackView
 	}()
 
 	
@@ -245,7 +294,7 @@ extension RegisterCancelVC {
 	
 	private func configureViews() {
 		view.backgroundColor = .white
-		[seminarInfoView, nameTextField, nicknameTextField, numberTextField, cancelButton]
+		[seminarInfoView, nameTextField, nicknameTextField, numberTextField, accountStackView, cancelButton]
 			.forEach {view.addSubview($0)}
 		
 		[seminarNameLabel, seminarInfoStackView]
@@ -285,9 +334,28 @@ extension RegisterCancelVC {
 			$0.height.equalTo(48)
 		}
 		
+		accountStackView.snp.makeConstraints {
+			$0.leading.trailing.equalToSuperview().inset(16)
+			$0.top.equalTo(numberTextField.snp.bottom).offset(24)
+			$0.height.equalTo(48)
+		}
+		
+		bankButton.snp.makeConstraints {
+			$0.width.equalTo(100)
+		}
+		bankButton.addSubview(downImageView)
+
+		downImageView.snp.makeConstraints {
+			$0.width.equalTo(18)
+			$0.height.equalTo(18)
+			$0.trailing.equalToSuperview().inset(12)
+			$0.centerY.equalToSuperview()
+		}
+		
+		
 		cancelButton.snp.makeConstraints {
 			$0.bottom.equalToSuperview().inset(48)
-			$0.leading.trailing.equalToSuperview().inset(16)
+			$0.leading.trailing.equalToSuperview().inset(12)
 			$0.height.equalTo(48)
 
 		}
@@ -298,6 +366,12 @@ extension RegisterCancelVC {
 	
 	private func configureButtonTarget() {
 		cancelButton.addTarget(self, action: #selector(didTapRegisterCancelButton), for: .touchUpInside)
+		bankButton.addTarget(self, action: #selector(didTapBankTextField), for: .touchUpInside)
+	}
+	
+	// 은행 텍스트 필드 tap
+	@objc private func didTapBankTextField() {
+		//TODO: 은행 리스트 뷰 modal로 띄우기
 	}
 	
 	// 취소 완료 alert
@@ -315,3 +389,4 @@ extension RegisterCancelVC {
 	}
 
 }
+
