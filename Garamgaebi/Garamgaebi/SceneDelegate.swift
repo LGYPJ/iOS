@@ -18,6 +18,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window = UIWindow(windowScene: windowScene)
         
         let rootViewController = TabBarController()
+        //let rootViewController = HomeVC()
+        //let rootViewController = HomeNotificationVC()
         //let rootViewController = OnboardingVC()
         //let rootViewController = LoginVC()
         //let rootViewController = EmailAuthVC()

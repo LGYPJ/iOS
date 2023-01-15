@@ -38,8 +38,7 @@ class HomeVC: UIViewController {
         button.setImage(UIImage(named: "NotificationIcon"), for: .normal)
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         button.clipsToBounds = true
-        
-        //button.addTarget(self, action: #selector(presentNotificationView), for: .touchUpInside)
+        button.addTarget(self, action: #selector(pushNextView), for: .touchUpInside)
         
         return button
     }()
@@ -67,9 +66,7 @@ class HomeVC: UIViewController {
         configureTableView()
         addSubViews()
         configLayouts()
-        
-        
-        
+   
     }
     
     
@@ -113,6 +110,16 @@ class HomeVC: UIViewController {
             make.top.equalTo(headerView.snp.bottom)
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview()
+        }
+    }
+    
+    @objc private func pushNextView(_ sender: UIButton) {
+        switch sender {
+        case notificationViewButton:
+            self.navigationController?.pushViewController(HomeNotificationVC(), animated: true)
+            
+        default:
+            print("error")
         }
     }
     
