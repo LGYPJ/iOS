@@ -186,7 +186,7 @@ class RegisterCancelVC: UIViewController {
 	lazy var registerButton: UIButton = {
 		let button = UIButton()
 		button.setTitle("신청하기", for: .normal)
-		button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 18)
+		button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
 		button.backgroundColor = UIColor.mainBlue
 		button.layer.cornerRadius = 10
 		return button
@@ -285,7 +285,7 @@ extension RegisterCancelVC {
 		}
 		
 		registerButton.snp.makeConstraints {
-			$0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-14)
+			$0.bottom.equalToSuperview().inset(48)
 			$0.leading.trailing.equalToSuperview().inset(16)
 			$0.height.equalTo(48)
 

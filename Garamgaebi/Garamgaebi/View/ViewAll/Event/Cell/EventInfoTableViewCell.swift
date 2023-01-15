@@ -154,7 +154,8 @@ class EventInfoTableViewCell: UITableViewCell {
 		button.layer.cornerRadius = 12
 		button.layer.borderWidth = 1
 		button.layer.borderColor = UIColor.mainBlue.cgColor
-
+		button.isUserInteractionEnabled = true
+		
 		return button
 	}()
 	
@@ -184,7 +185,7 @@ class EventInfoTableViewCell: UITableViewCell {
 extension EventInfoTableViewCell {
 	private func configureViews() {
 		[eventNameLabel, shareImageView, eventInfoStackView, registerButton]
-			.forEach {addSubview($0)}
+			.forEach {contentView.addSubview($0)}
 		
 		eventNameLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(16)
@@ -212,4 +213,5 @@ extension EventInfoTableViewCell {
 			
 		}
 	}
+	
 }

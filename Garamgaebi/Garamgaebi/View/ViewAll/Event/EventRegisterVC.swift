@@ -156,6 +156,15 @@ class EventRegisterVC: UIViewController {
 		return stackView
 	}()
 	
+	lazy var nameTitleLabel: UILabel = {
+		let label = UILabel()
+		label.text = "이름"
+		label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+		label.textColor = .black
+		
+		return label
+	}()
+	
 	lazy var nameTextField: UITextField = {
 		let textField = UITextField()
 		textField.layer.borderColor = UIColor.mainGray.cgColor
@@ -170,6 +179,15 @@ class EventRegisterVC: UIViewController {
 		return textField
 	}()
 	
+	lazy var nicknameTitleLabel: UILabel = {
+		let label = UILabel()
+		label.text = "닉네임"
+		label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+		label.textColor = .black
+		
+		return label
+	}()
+	
 	lazy var nicknameTextField: UITextField = {
 		let textField = UITextField()
 		textField.layer.borderColor = UIColor.mainGray.cgColor
@@ -182,6 +200,15 @@ class EventRegisterVC: UIViewController {
 
 		
 		return textField
+	}()
+	
+	lazy var numberTitleLabel: UILabel = {
+		let label = UILabel()
+		label.text = "전화번호"
+		label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+		label.textColor = .black
+		
+		return label
 	}()
 	
 	lazy var numberTextField: UITextField = {
@@ -215,7 +242,7 @@ class EventRegisterVC: UIViewController {
 	lazy var registerButton: UIButton = {
 		let button = UIButton()
 		button.setTitle("신청하기", for: .normal)
-		button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 18)
+		button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
 		button.backgroundColor = UIColor.mainBlue
 		button.layer.cornerRadius = 10
 		return button
@@ -246,13 +273,15 @@ class EventRegisterVC: UIViewController {
 		deadlineInfoLabel.text = "2023-01-09 오후 6시"
 		
 		descriptionTextView.text = "카카오뱅크 3333-22-5500352\n입금자명을 닉네임/이름(예시: 찹도/민세림)으로 해주셔야 합니다.\n\n신청 확정은 신청 마감 이후에 일괄 처리됩니다.\n신청취소는 일주일 전까지 가능합니다.(이후로는 취소 불가)\n환불은 모임 당일부터 7일 이내에 순차적으로 진행됩니다.\n\n입금이 완료되지 않으면 신청이 자동적으로 취소됩니다."
+		
+		navigationItem.title = "신청하기"
 	}
 }
 
 extension EventRegisterVC {
 	// navigation bar 구성
 	private func configureNavigationBar() {
-		self.navigationItem.title = "세미나"
+//		self.navigationItem.title = ""
 		let backBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: nil)
 		self.navigationItem.leftBarButtonItem = backBarButtonItem
 		self.navigationItem.leftBarButtonItem?.action  = #selector(didTapBackBarButton)
@@ -281,7 +310,7 @@ extension EventRegisterVC {
 			$0.bottom.equalTo(registerButton.snp.top).offset(-15)
 		}
 		registerButton.snp.makeConstraints {
-			$0.bottom.equalTo(view.safeAreaLayoutGuide).offset(14)
+			$0.bottom.equalToSuperview().inset(48)
 			$0.leading.trailing.equalToSuperview().inset(16)
 			$0.height.equalTo(48)
 		}
@@ -294,33 +323,48 @@ extension EventRegisterVC {
 			$0.edges.equalToSuperview()
 		}
 		
-		[eventInfoBackgroundView, nameTextField, nicknameTextField, numberTextField, descriptionTextView]
+		[eventInfoBackgroundView, nameTitleLabel, nameTextField, nicknameTitleLabel, nicknameTextField, numberTitleLabel, numberTextField, descriptionTextView]
 			.forEach {contentView.addSubview($0)}
 		
 		eventInfoBackgroundView.snp.makeConstraints {
 			$0.top.leading.trailing.equalToSuperview().inset(16)
 		}
 		
+		nameTitleLabel.snp.makeConstraints {
+			$0.top.equalTo(eventInfoBackgroundView.snp.bottom).offset(32)
+			$0.leading.equalToSuperview().inset(16)
+		}
+		
 		nameTextField.snp.makeConstraints {
-			$0.top.equalTo(eventInfoBackgroundView.snp.bottom).offset(24)
+			$0.top.equalTo(nameTitleLabel.snp.bottom).offset(8)
 			$0.leading.trailing.equalToSuperview().inset(16)
 			$0.height.equalTo(48)
+		}
+		
+		nicknameTitleLabel.snp.makeConstraints {
+			$0.top.equalTo(nameTextField.snp.bottom).offset(16)
+			$0.leading.equalToSuperview().inset(16)
 		}
 		
 		nicknameTextField.snp.makeConstraints {
-			$0.top.equalTo(nameTextField.snp.bottom).offset(12)
+			$0.top.equalTo(nicknameTitleLabel.snp.bottom).offset(8)
 			$0.leading.trailing.equalToSuperview().inset(16)
 			$0.height.equalTo(48)
 		}
 		
+		numberTitleLabel.snp.makeConstraints {
+			$0.top.equalTo(nicknameTextField.snp.bottom).offset(16)
+			$0.leading.equalToSuperview().inset(16)
+		}
+		
 		numberTextField.snp.makeConstraints {
-			$0.top.equalTo(nicknameTextField.snp.bottom).offset(12)
+			$0.top.equalTo(numberTitleLabel.snp.bottom).offset(8)
 			$0.leading.trailing.equalToSuperview().inset(16)
 			$0.height.equalTo(48)
 		}
 		
 		descriptionTextView.snp.makeConstraints {
-			$0.top.equalTo(numberTextField.snp.bottom).offset(23)
+			$0.top.equalTo(numberTextField.snp.bottom).offset(44)
 			$0.leading.trailing.equalToSuperview().inset(18)
 			$0.bottom.equalToSuperview()
 		}

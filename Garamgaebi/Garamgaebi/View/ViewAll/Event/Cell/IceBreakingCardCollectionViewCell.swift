@@ -1,5 +1,5 @@
 //
-//  CardCollectionViewCell.swift
+//  IceBreakingCardCollectionViewCell.swift
 //  Garamgaebi
 //
 //  Created by 정현우 on 2023/01/13.
@@ -8,9 +8,9 @@
 import UIKit
 import SnapKit
 
-class CardCollectionViewCell: UICollectionViewCell {
+class IceBreakingCardCollectionViewCell: UICollectionViewCell {
 	
-	static let identifier = "CardCollectionViewCell"
+	static let identifier = "IceBreakingCardCollectionViewCell"
 	
 	lazy var titleLabel: UILabel = {
 		let label = UILabel()
@@ -31,8 +31,13 @@ class CardCollectionViewCell: UICollectionViewCell {
 	
 }
 
-extension CardCollectionViewCell {
+extension IceBreakingCardCollectionViewCell {
 	private func configureView() {
+		contentView.layer.borderColor = UIColor.mainBlue.cgColor
+		contentView.layer.borderWidth = 2
+		contentView.layer.cornerRadius = 20
+		
+		contentView.backgroundColor = .white
 		[titleLabel]
 			.forEach {contentView.addSubview($0)}
 		

@@ -82,6 +82,9 @@ extension NetworkingDetailVC {
 	@objc private func didTapBackBarButton() {
 		self.navigationController?.popViewController(animated: true)
 	}
+	@objc private func didTapRegisterButton() {
+		navigationController?.pushViewController(EventRegisterVC(), animated: true)
+	}
 
 
 }
@@ -96,6 +99,7 @@ extension NetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 		case 0:
 			guard let cell = tableView.dequeueReusableCell(withIdentifier: EventInfoTableViewCell.identifier, for: indexPath) as? EventInfoTableViewCell else {return UITableViewCell()}
 			cell.eventNameLabel.text = "3차 네트워킹"
+			cell.registerButton.addTarget(self, action: #selector(didTapRegisterButton), for: .touchUpInside)
 			
 			return cell
 		case 1:

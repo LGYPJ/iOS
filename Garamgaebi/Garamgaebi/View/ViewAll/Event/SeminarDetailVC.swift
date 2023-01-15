@@ -29,6 +29,7 @@ class SeminarDetailVC: UIViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		self.tabBarController?.tabBar.isHidden = true
+		
 	}
     
 
@@ -80,6 +81,12 @@ extension SeminarDetailVC {
 		self.navigationController?.popViewController(animated: true)
 	}
 	
+	@objc private func didTapRegisterButton() {
+		navigationController?.pushViewController(EventRegisterVC(), animated: true)
+	}
+	
+	
+	
 	
 }
 
@@ -93,6 +100,7 @@ extension SeminarDetailVC: UITableViewDelegate, UITableViewDataSource {
 		case 0:
 			guard let cell = tableView.dequeueReusableCell(withIdentifier: EventInfoTableViewCell.identifier, for: indexPath) as? EventInfoTableViewCell else {return UITableViewCell()}
 			cell.eventNameLabel.text = "2차 세미나"
+			cell.registerButton.addTarget(self, action: #selector(didTapRegisterButton), for: .touchUpInside)
 			
 			return cell
 		case 1:
@@ -107,4 +115,5 @@ extension SeminarDetailVC: UITableViewDelegate, UITableViewDataSource {
 			return UITableViewCell()
 		}
 	}
+	
 }
