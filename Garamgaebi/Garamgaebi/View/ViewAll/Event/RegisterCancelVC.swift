@@ -183,9 +183,9 @@ class RegisterCancelVC: UIViewController {
 		return textField
 	}()
 	
-	lazy var registerButton: UIButton = {
+	lazy var cancelButton: UIButton = {
 		let button = UIButton()
-		button.setTitle("신청하기", for: .normal)
+		button.setTitle("취소하기", for: .normal)
 		button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
 		button.backgroundColor = UIColor.mainBlue
 		button.layer.cornerRadius = 10
@@ -200,6 +200,7 @@ class RegisterCancelVC: UIViewController {
 		configureNavigationBarShadow()
 		configureViews()
 		configureDummyData()
+		configureButtonTarget()
         
     }
 	override func viewWillAppear(_ animated: Bool) {
@@ -244,7 +245,7 @@ extension RegisterCancelVC {
 	
 	private func configureViews() {
 		view.backgroundColor = .white
-		[seminarInfoView, nameTextField, nicknameTextField, numberTextField, registerButton]
+		[seminarInfoView, nameTextField, nicknameTextField, numberTextField, cancelButton]
 			.forEach {view.addSubview($0)}
 		
 		[seminarNameLabel, seminarInfoStackView]
@@ -284,7 +285,7 @@ extension RegisterCancelVC {
 			$0.height.equalTo(48)
 		}
 		
-		registerButton.snp.makeConstraints {
+		cancelButton.snp.makeConstraints {
 			$0.bottom.equalToSuperview().inset(48)
 			$0.leading.trailing.equalToSuperview().inset(16)
 			$0.height.equalTo(48)
@@ -293,6 +294,19 @@ extension RegisterCancelVC {
 
 		
 		
+	}
+	
+	private func configureButtonTarget() {
+		cancelButton.addTarget(self, action: #selector(didTapRegisterCancelButton), for: .touchUpInside)
+	}
+	
+	// 취소 완료 alert
+	@objc private func didTapRegisterCancelButton() {
+		let sheet = UIAlertController(title: nil, message: "신청 취소가 완료되었습니다.", preferredStyle: .alert)
+		let closeAction = UIAlertAction(title: "닫기", style: .cancel)
+		sheet.addAction(closeAction)
+		
+		present(sheet, animated: true)
 	}
 	
 	// 뒤로가기 버튼 did tap
