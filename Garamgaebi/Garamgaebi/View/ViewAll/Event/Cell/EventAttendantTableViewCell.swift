@@ -43,12 +43,33 @@ class EventAttendantTableViewCell: UITableViewCell {
 		
 		return collectionView
 	}()
+	
+	lazy var noAttentdantBackgroundView: UIView = {
+		let view = UIView()
+		view.backgroundColor = .white
+		view.layer.borderColor = UIColor.mainGray.cgColor
+		view.layer.borderWidth = 1
+		view.layer.cornerRadius = 12
+		
+		return view
+	}()
+	
+	lazy var noAttendantTitleLabel: UILabel = {
+		let label = UILabel()
+		label.text = "아직 참석자가 없습니다.\n첫 참석자가 되어주세요!"
+		label.numberOfLines = 2
+		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+		label.textColor = .mainGray
+		
+		return label
+	}()
 
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		configureViews()
 		configureDummyData()
 		configureCollectionView()
+		configureZeroAttentdant()
 	}
 	
 	required init?(coder: NSCoder) {
@@ -67,7 +88,7 @@ class EventAttendantTableViewCell: UITableViewCell {
 
 extension EventAttendantTableViewCell {
 	private func configureViews() {
-		[attendantLabel, attendantCountLabel, collectionView]
+		[attendantLabel, attendantCountLabel, collectionView, noAttentdantBackgroundView]
 			.forEach {contentView.addSubview($0)}
 		
 		attendantLabel.snp.makeConstraints {
@@ -89,12 +110,33 @@ extension EventAttendantTableViewCell {
 			$0.trailing.equalToSuperview()
 			$0.bottom.equalToSuperview().inset(16)
 		}
+		
+		noAttentdantBackgroundView.snp.makeConstraints {
+			$0.edges.equalTo(collectionView)
+		}
+		
+		noAttentdantBackgroundView.addSubview(noAttendantTitleLabel)
+		noAttendantTitleLabel.snp.makeConstraints {
+			$0.center.equalToSuperview()
+		}
 	}
 	
 	private func configureCollectionView() {
 		collectionView.delegate = self
 		collectionView.dataSource = self
 		collectionView.register(EventAttendantCollectionViewCell.self, forCellWithReuseIdentifier: EventAttendantCollectionViewCell.identifier)
+	}
+	
+	private func configureZeroAttentdant() {
+		// TODO: API 통신 후 수정
+//		dummyUserNameArr = []
+		if dummyUserNameArr.count == 0 {
+			collectionView.isHidden = true
+			noAttentdantBackgroundView.isHidden = false
+		} else {
+			collectionView.isHidden = false
+			noAttentdantBackgroundView.isHidden = true
+		}
 	}
 }
 
@@ -106,6 +148,7 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EventAttendantCollectionViewCell.identifier, for: indexPath) as? EventAttendantCollectionViewCell else {return UICollectionViewCell()}
 		cell.userNameLabel.text = dummyUserNameArr[indexPath.row]
+		
 		if indexPath.row == 0{
 			cell.profileImageView.image = UIImage(named: "ExProfileImage")
 		} else {
