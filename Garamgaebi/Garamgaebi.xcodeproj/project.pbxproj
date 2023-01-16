@@ -10,6 +10,7 @@
 		07387C389AB3203B5F1B6292 /* Pods_Garamgaebi_GaramgaebiUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */; };
 		2A5DAD14EE12541BAE988EB7 /* Pods_Garamgaebi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8CB1AB7E398B75581977FAF /* Pods_Garamgaebi.framework */; };
 		460C0C2B296D855800FF5085 /* ProfileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460C0C2A296D855800FF5085 /* ProfileEditVC.swift */; };
+		46828A4229752EF80037AB8C /* ProfileInputEducationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46828A4129752EF80037AB8C /* ProfileInputEducationVC.swift */; };
 		46876C6729732053000BA1B6 /* ProfileWithdrawalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46876C6629732053000BA1B6 /* ProfileWithdrawalVC.swift */; };
 		46876C692973D7E3000BA1B6 /* ProfileInputCareerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46876C682973D7E3000BA1B6 /* ProfileInputCareerVC.swift */; };
 		46B4780B29700FEE002186A3 /* ProfileServiceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B4780A29700FEE002186A3 /* ProfileServiceVC.swift */; };
@@ -54,6 +55,7 @@
 /* Begin PBXFileReference section */
 		4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Garamgaebi_GaramgaebiUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		460C0C2A296D855800FF5085 /* ProfileEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditVC.swift; sourceTree = "<group>"; };
+		46828A4129752EF80037AB8C /* ProfileInputEducationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInputEducationVC.swift; sourceTree = "<group>"; };
 		46876C6629732053000BA1B6 /* ProfileWithdrawalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileWithdrawalVC.swift; sourceTree = "<group>"; };
 		46876C682973D7E3000BA1B6 /* ProfileInputCareerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInputCareerVC.swift; sourceTree = "<group>"; };
 		46B4780A29700FEE002186A3 /* ProfileServiceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileServiceVC.swift; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 				46B4780A29700FEE002186A3 /* ProfileServiceVC.swift */,
 				46876C6629732053000BA1B6 /* ProfileWithdrawalVC.swift */,
 				46876C682973D7E3000BA1B6 /* ProfileInputCareerVC.swift */,
+				46828A4129752EF80037AB8C /* ProfileInputEducationVC.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -508,6 +511,7 @@
 				609A53D2296AB47300BBD338 /* AppDelegate.swift in Sources */,
 				609A53D4296AB47300BBD338 /* SceneDelegate.swift in Sources */,
 				460C0C2B296D855800FF5085 /* ProfileEditVC.swift in Sources */,
+				46828A4229752EF80037AB8C /* ProfileInputEducationVC.swift in Sources */,
 				60F91407296D445800626C40 /* UIColor+.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
