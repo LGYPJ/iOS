@@ -85,8 +85,13 @@ extension NetworkingDetailVC {
 	@objc private func didTapBackBarButton() {
 		self.navigationController?.popViewController(animated: true)
 	}
+	// 네트워킹 신청 did tap
 	@objc private func didTapRegisterButton() {
 		navigationController?.pushViewController(EventRegisterVC(), animated: true)
+	}
+	// 게임 참가하기 did tap
+	@objc private func didTapEntranceButton() {
+		self.navigationController?.pushViewController(NetworkingGameVC(), animated: true)
 	}
 
 
@@ -111,6 +116,7 @@ extension NetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 			return cell
 		case 2:
 			guard let cell = tableView.dequeueReusableCell(withIdentifier: EventIceBreakingTableViewCell.identifier, for: indexPath) as? EventIceBreakingTableViewCell else {return UITableViewCell()}
+			cell.entranceButton.addTarget(self, action: #selector(didTapEntranceButton), for: .touchUpInside)
 			
 			return cell
 		default:

@@ -38,6 +38,23 @@ class EventIceBreakingTableViewCell: UITableViewCell {
 		
 		return imageView
 	}()
+	
+	lazy var entranceButton: UIButton = {
+		let button = UIButton()
+		button.setTitle("참가하기", for: .normal)
+		button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
+		button.setImage(UIImage(systemName: "chevron.right.circle"), for: .normal)
+		button.backgroundColor = .white
+		button.setTitleColor(.mainBlue, for: .normal)
+		button.tintColor = .mainBlue
+		// TODO: iOS 15이후 deprecated
+		button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0)
+		// 이미지와 타이틀 위치 변경
+		button.semanticContentAttribute = .forceRightToLeft
+		button.contentVerticalAlignment = .bottom
+		
+		return button
+	}()
 
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -53,7 +70,7 @@ class EventIceBreakingTableViewCell: UITableViewCell {
 
 extension EventIceBreakingTableViewCell {
 	private func configureViews() {
-		[icebreakingLabel, descriptionLabel, contentImageView]
+		[icebreakingLabel, descriptionLabel, contentImageView, entranceButton]
 			.forEach {contentView.addSubview($0)}
 		
 		icebreakingLabel.snp.makeConstraints {
@@ -71,6 +88,10 @@ extension EventIceBreakingTableViewCell {
 			$0.leading.trailing.equalToSuperview()
 			$0.height.equalTo(contentImageView.snp.width)
 			$0.bottom.equalToSuperview()
+		}
+		entranceButton.snp.makeConstraints {
+			$0.top.equalToSuperview()
+			$0.trailing.equalToSuperview().inset(16)
 		}
 	}
 }
