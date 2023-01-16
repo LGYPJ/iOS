@@ -35,16 +35,54 @@ class ViewAllVC: UIViewController {
         return control
     }()
     
-    lazy var firstView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .mainGray
-        return view
+    
+    private let vc1: UIViewController = {
+        let vc = ViewAllSeminarVC()
+        return vc
     }()
-
+    private let vc2: UIViewController = {
+        let vc = UIViewController()
+        vc.view.backgroundColor = .mainBlue
+        return vc
+    }()
+    private let vc3: UIViewController = {
+        let vc = UIViewController()
+        vc.view.backgroundColor = .mainLightBlue
+        return vc
+    }()
+    
+    private lazy var pageViewController: UIPageViewController = {
+        let vc = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        vc.setViewControllers([self.dataViewControllers[0]], direction: .forward, animated: true)
+        vc.delegate = self
+        vc.dataSource = self
+        vc.view.clipsToBounds = true
+        vc.view.sizeToFit()
+        return vc
+    }()
+    
+    var dataViewControllers: [UIViewController] {
+        [self.vc1, self.vc2, self.vc3]
+    }
+    
+    var currentPage: Int = 0 {
+        didSet {
+            // from segmentedControl -> pageViewController 업데이트
+            //print(oldValue, self.currentPage)
+            let direction: UIPageViewController.NavigationDirection = oldValue <= self.currentPage ? .forward : .reverse
+            self.pageViewController.setViewControllers(
+                [dataViewControllers[self.currentPage]],
+                direction: direction,
+                animated: true,
+                completion: nil
+            )
+        }
+    }
+    
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         configureViews()
         //        configureTableView()
         addSubViews()
@@ -58,7 +96,7 @@ class ViewAllVC: UIViewController {
         view.addSubview(headerView)
         headerView.addSubview(titleLabel)
         view.addSubview(segmentedControl)
-        view.addSubview(firstView)
+        view.addSubview(pageViewController.view)
     }
     
     func configLayouts() {
@@ -83,11 +121,13 @@ class ViewAllVC: UIViewController {
             make.height.equalTo(36)
         }
         
-        firstView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
+        pageViewController.view.snp.makeConstraints { make in
+            make.left.equalTo(view.safeAreaLayoutGuide.snp.left)
+            make.right.equalTo(view.safeAreaLayoutGuide.snp.right)
             make.top.equalTo(segmentedControl.snp.bottom)
             make.bottom.equalToSuperview()
         }
+        
     }
     
     @objc private func pushNextView(_ sender: UIButton) {
@@ -101,17 +141,7 @@ class ViewAllVC: UIViewController {
     }
     
     @objc private func didChangeValue(segment: UISegmentedControl) {
-        switch segment.selectedSegmentIndex {
-        case 0:
-            firstView.backgroundColor = .mainGray
-        case 1:
-            firstView.backgroundColor = .mainLightBlue
-        case 2:
-            firstView.backgroundColor = .mainLightGray
-
-        default:
-            print("fatal error")
-        }
+        self.currentPage = segment.selectedSegmentIndex
     }
 }
 
@@ -119,5 +149,42 @@ extension ViewAllVC {
     private func configureViews() {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = .systemBackground
+    }
+}
+
+
+extension ViewAllVC: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+    func pageViewController(
+        _ pageViewController: UIPageViewController,
+        viewControllerBefore viewController: UIViewController
+    ) -> UIViewController? {
+        guard
+            let index = self.dataViewControllers.firstIndex(of: viewController),
+            index - 1 >= 0
+        else { return nil }
+        return self.dataViewControllers[index - 1]
+    }
+    func pageViewController(
+        _ pageViewController: UIPageViewController,
+        viewControllerAfter viewController: UIViewController
+    ) -> UIViewController? {
+        guard
+            let index = self.dataViewControllers.firstIndex(of: viewController),
+            index + 1 < self.dataViewControllers.count
+        else { return nil }
+        return self.dataViewControllers[index + 1]
+    }
+    func pageViewController(
+        _ pageViewController: UIPageViewController,
+        didFinishAnimating finished: Bool,
+        previousViewControllers: [UIViewController],
+        transitionCompleted completed: Bool
+    ) {
+        guard
+            let viewController = pageViewController.viewControllers?[0],
+            let index = self.dataViewControllers.firstIndex(of: viewController)
+        else { return }
+        self.currentPage = index
+        self.segmentedControl.selectedSegmentIndex = index
     }
 }
