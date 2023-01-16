@@ -131,7 +131,7 @@ class ProfileVC: UIViewController {
         super.viewWillDisappear(animated)
         
         navigationController?.navigationBar.isHidden = false
-        tabBarController?.tabBar.isHidden = true
+        // tabBarController?.tabBar.isHidden = true
         
     }
     
@@ -209,7 +209,7 @@ class ProfileVC: UIViewController {
             $0.width.equalTo(134)
         }
         /// 버튼 클릭
-        addSnsBtn.addTarget(self,action: #selector(self.didTapServiceBtn(_:)), for: .touchUpInside)
+        addSnsBtn.addTarget(self,action: #selector(self.didTapSnsBtn(_:)), for: .touchUpInside)
         
         addCareerBtn.snp.makeConstraints { /// 경력 추가 버튼
             $0.top.equalTo(addSnsBtn.snp.bottom).offset(5)
@@ -227,7 +227,7 @@ class ProfileVC: UIViewController {
             $0.width.equalTo(addSnsBtn.snp.width)
         }
         /// 버튼 클릭
-        addEduBtn.addTarget(self,action: #selector(self.didTapServiceBtn(_:)), for: .touchUpInside)
+        addEduBtn.addTarget(self,action: #selector(self.didTapEduBtn(_:)), for: .touchUpInside)
     }
     
     
@@ -250,9 +250,9 @@ class ProfileVC: UIViewController {
     @objc private func didTapSnsBtn(_ sender : UIButton) {
         print("SNS 추가 버튼 클릭")
         
-        // 화면 전환
-        let nextVC = ProfileEditVC()
-        navigationController?.pushViewController(nextVC, animated: true)
+//        // 화면 전환
+//        let nextVC = ProfileEditVC()
+//        navigationController?.pushViewController(nextVC, animated: true)
     }
     
     @objc private func didTapCareerBtn(_ sender : UIButton) {
@@ -267,7 +267,7 @@ class ProfileVC: UIViewController {
         print("교육 추가 버튼 클릭")
         
         // 화면 전환
-        let nextVC = ProfileInputCareerVC()
+        let nextVC = ProfileInputEducationVC()
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
