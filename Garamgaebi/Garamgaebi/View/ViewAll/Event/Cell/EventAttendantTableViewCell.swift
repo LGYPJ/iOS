@@ -32,9 +32,14 @@ class EventAttendantTableViewCell: UITableViewCell {
 	lazy var collectionView: UICollectionView = {
 		let layout = UICollectionViewFlowLayout()
 		layout.scrollDirection = .horizontal
-		layout.minimumLineSpacing = 24
+		layout.minimumLineSpacing = 20
+		layout.sectionInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
+		
 		let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
 		collectionView.showsHorizontalScrollIndicator = false
+//		collectionView.layer.borderColor = UIColor.mainGray.withAlphaComponent(0.8).cgColor
+//		collectionView.layer.borderWidth = 1
+//		collectionView.layer.cornerRadius = 12
 		
 		return collectionView
 	}()
@@ -66,7 +71,8 @@ extension EventAttendantTableViewCell {
 			.forEach {contentView.addSubview($0)}
 		
 		attendantLabel.snp.makeConstraints {
-			$0.leading.equalToSuperview().inset(16)
+//			$0.leading.equalToSuperview().inset(16)
+			$0.leading.equalToSuperview()
 			$0.top.equalToSuperview().inset(16)
 		}
 		
@@ -77,8 +83,9 @@ extension EventAttendantTableViewCell {
 		
 		collectionView.snp.makeConstraints {
 			$0.top.equalTo(attendantLabel.snp.bottom).offset(13)
-			$0.height.equalTo(68)
-			$0.leading.equalToSuperview().inset(16)
+			$0.height.equalTo(85)
+//			$0.leading.equalToSuperview().inset(16)
+			$0.leading.equalToSuperview()
 			$0.trailing.equalToSuperview()
 			$0.bottom.equalToSuperview().inset(16)
 		}
@@ -99,12 +106,17 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EventAttendantCollectionViewCell.identifier, for: indexPath) as? EventAttendantCollectionViewCell else {return UICollectionViewCell()}
 		cell.userNameLabel.text = dummyUserNameArr[indexPath.row]
-		cell.profileImageView.image = UIImage(systemName: "person.fill")
+		if indexPath.row == 0{
+			cell.profileImageView.image = UIImage(named: "ExProfileImage")
+		} else {
+			cell.profileImageView.image = UIImage(systemName: "person.circle")
+		}
+		
 		return cell
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-		return CGSize(width: 44, height: 65)
+		return CGSize(width: 44, height: 85)
 	}
 	
 	

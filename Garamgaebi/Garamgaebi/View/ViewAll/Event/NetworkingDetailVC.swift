@@ -12,8 +12,9 @@ class NetworkingDetailVC: UIViewController {
 	
 	lazy var tableView: UITableView = {
 		let tableView = UITableView()
-		tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+//		tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 		tableView.allowsSelection = false
+		tableView.separatorStyle = .none
 		
 		return tableView
 	}()
@@ -73,7 +74,9 @@ extension NetworkingDetailVC {
 		view.addSubview(tableView)
 		
 		tableView.snp.makeConstraints {
-			$0.edges.equalTo(view.safeAreaLayoutGuide)
+//			$0.edges.equalTo(view.safeAreaLayoutGuide)
+			$0.top.equalTo(view.safeAreaLayoutGuide).inset(16)
+			$0.leading.trailing.bottom.equalToSuperview().inset(16)
 		}
 	}
 	

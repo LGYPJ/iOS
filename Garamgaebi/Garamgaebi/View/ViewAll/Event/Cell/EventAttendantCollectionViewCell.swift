@@ -51,7 +51,7 @@ extension EventAttendantCollectionViewCell {
 			$0.width.equalTo(imageSize)
 			$0.height.equalTo(imageSize)
 			$0.centerX.equalToSuperview()
-			$0.top.equalToSuperview()
+			$0.top.equalToSuperview().inset(12)
 		}
 		
 		userNameLabel.snp.makeConstraints {

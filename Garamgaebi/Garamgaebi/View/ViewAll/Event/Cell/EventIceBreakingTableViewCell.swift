@@ -57,8 +57,8 @@ extension EventIceBreakingTableViewCell {
 			.forEach {contentView.addSubview($0)}
 		
 		icebreakingLabel.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(16)
-			$0.leading.equalToSuperview().inset(16)
+			$0.top.equalToSuperview()
+			$0.leading.equalToSuperview()
 		}
 		
 		descriptionLabel.snp.makeConstraints {
@@ -68,7 +68,7 @@ extension EventIceBreakingTableViewCell {
 		
 		contentImageView.snp.makeConstraints {
 			$0.top.equalTo(descriptionLabel.snp.bottom).offset(25)
-			$0.leading.trailing.equalToSuperview().inset(16)
+			$0.leading.trailing.equalToSuperview()
 			$0.height.equalTo(contentImageView.snp.width)
 			$0.bottom.equalToSuperview()
 		}

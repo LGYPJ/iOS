@@ -65,14 +65,14 @@ extension EventPreviewTableViewCell {
 			.forEach {contentView.addSubview($0)}
 		
 		titleLabel.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(16)
-			$0.leading.equalToSuperview().inset(16)
+			$0.top.equalToSuperview()
+			$0.leading.equalToSuperview()
 		}
 		
 		collectionView.snp.makeConstraints {
 			$0.top.equalTo(titleLabel.snp.bottom).offset(12)
-			$0.leading.equalToSuperview().inset(16)
-			$0.trailing.equalToSuperview().inset(16)
+			$0.leading.equalToSuperview()
+			$0.trailing.equalToSuperview()
 			$0.bottom.equalToSuperview().inset(6)
 			// 스크롤 가능하게 구현하려면 height를 cellItem*100 + (cellItem-1)*14
 			$0.height.equalTo(3*104 + 2*12)
@@ -101,8 +101,8 @@ extension EventPreviewTableViewCell: UICollectionViewDelegate, UICollectionViewD
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-		let width = contentView.frame.size.width - (16 * 2)
-		return CGSize(width: width, height: 104)
+		let width = contentView.frame.size.width
+		return CGSize(width: width, height: 80)
 	}
 	
 	
