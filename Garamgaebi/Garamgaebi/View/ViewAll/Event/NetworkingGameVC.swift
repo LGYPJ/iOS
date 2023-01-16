@@ -14,6 +14,7 @@ class NetworkingGameVC: UIViewController {
 		let layout = UICollectionViewFlowLayout()
 		layout.scrollDirection = .vertical
 		layout.minimumInteritemSpacing = 16
+		layout.minimumLineSpacing = 16
 		let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
 		
 		return collectionView
@@ -59,7 +60,9 @@ extension NetworkingGameVC {
 		view.addSubview(collectionView)
 		collectionView.snp.makeConstraints {
 			$0.top.equalTo(view.safeAreaLayoutGuide).inset(16)
-			$0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+//			$0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+			$0.leading.trailing.equalToSuperview().inset(16)
+			$0.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
 		}
 	}
 	
@@ -78,7 +81,7 @@ extension NetworkingGameVC {
 
 extension NetworkingGameVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		3
+		return 8
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -89,8 +92,9 @@ extension NetworkingGameVC: UICollectionViewDelegate, UICollectionViewDataSource
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-		let width = view.frame.width - 32
-		return CGSize(width: width, height: 73)
+		let width = (collectionView.frame.width - 16) / 2
+		let height = (collectionView.frame.height - (16*3)) / 4
+		return CGSize(width: width, height: height)
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
