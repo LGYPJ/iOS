@@ -105,6 +105,13 @@ extension EventPreviewTableViewCell: UICollectionViewDelegate, UICollectionViewD
 		return CGSize(width: width, height: 80)
 	}
 	
+	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		let vc = SeminarPreviewPopUpVC()
+		vc.modalPresentationStyle = .overFullScreen
+		
+		self.window?.rootViewController?.present(vc, animated: false)
+	}
+	
 	
 	
 	

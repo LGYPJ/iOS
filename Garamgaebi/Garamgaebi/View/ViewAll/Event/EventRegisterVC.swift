@@ -25,7 +25,7 @@ class EventRegisterVC: UIViewController {
 	
 	lazy var eventInfoBackgroundView: UIView = {
 		let view = UIView()
-		view.backgroundColor = .mainLightBlue
+		view.backgroundColor = UIColor(hex: 0xEBF0FF)
 		view.layer.cornerRadius = 12
 		
 		return view
@@ -331,7 +331,7 @@ extension EventRegisterVC {
 		}
 		
 		nameTitleLabel.snp.makeConstraints {
-			$0.top.equalTo(eventInfoBackgroundView.snp.bottom).offset(32)
+			$0.top.equalTo(eventInfoBackgroundView.snp.bottom).offset(24)
 			$0.leading.equalToSuperview().inset(16)
 		}
 		
