@@ -41,7 +41,7 @@ class ViewAllVC: UIViewController {
         return vc
     }()
     private let vc2: UIViewController = {
-        let vc = UIViewController()
+        let vc = ViewAllNetworkingVC()
         vc.view.backgroundColor = .mainBlue
         return vc
     }()
