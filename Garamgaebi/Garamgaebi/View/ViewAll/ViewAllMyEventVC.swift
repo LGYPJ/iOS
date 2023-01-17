@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewAllMyEventVC: UIViewController {
+class ViewAllMyEventVC: UIViewController, ViewAllMyEventTableViewCellProtocol {
 
     private let dataList = ViewAllMyEventDataModel.list
     private let sections: [String] = ["예정된 모임", "지난 모임"]
@@ -41,6 +41,7 @@ class ViewAllMyEventVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         dataDistribute()
+        
     }
     
     // MARK: - Functions
@@ -130,8 +131,15 @@ extension ViewAllMyEventVC: UITableViewDataSource, UITableViewDelegate {
         return baseHeight + edgeInset
     }
     
+    func pushNextView(_ target: UIViewController) {
+        present(target, animated: true)
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ViewAllMyEventTableViewCell.identifier, for: indexPath) as? ViewAllMyEventTableViewCell else {return UITableViewCell()}
+        
+        // ViewAllMyEventTableViewCellProtocol 때문에 사용
+        cell.delegate = self
         
         switch indexPath.section {
         case 0:

@@ -7,11 +7,17 @@
 
 import UIKit
 
+protocol ViewAllMyEventTableViewCellProtocol {
+    func pushNextView(_ target : UIViewController)
+}
+
 class ViewAllMyEventTableViewCell: UITableViewCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    var delegate: ViewAllMyEventTableViewCellProtocol?
     
     // MARK: - Properties
     static let identifier = String(describing: ViewAllMyEventTableViewCell.self)
@@ -45,7 +51,6 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
         label.text = "2차 세미나"
         label.font = UIFont.NotoSansKR(type: .Bold, size: 18)
         label.textColor = UIColor(hex: 0x000000,alpha: 0.8)
-        label.backgroundColor = .mainLightBlue
         return label
     }()
     
@@ -54,7 +59,6 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
         label.text = "가천대학교 비전타워 B201"
         label.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         label.textColor = UIColor(hex: 0x000000,alpha: 0.8)
-        label.backgroundColor = .mainLightBlue
         return label
     }()
     
@@ -64,8 +68,33 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         button.clipsToBounds = true
         button.tintColor = UIColor(hex: 0x1C1B1F)
-        button.backgroundColor = .mainYellow
-        button.addTarget(self, action: #selector(didTapSettingButton), for: .touchUpInside)
+        //button.addTarget(self, action: #selector(didTapSettingButton), for: .touchUpInside)
+        
+        let detail = UIAction(
+            title: "상세보기",
+            image: UIImage(named: "searchIcon")?.withTintColor(UIColor(hex: 0x1C1B1F)),
+            handler: { _ in
+                self.delegate?.pushNextView(ViewAllMyEventVC()) // 임시 VC
+                print("상세보기 클릭됨")
+            }
+        )
+        
+        let cancel = UIAction(
+            title: "신청취소",
+            image: UIImage(named: "deleteIcon")?.withTintColor(UIColor(hex: 0x1C1B1F)),
+            handler: { _ in
+                self.delegate?.pushNextView(ViewAllMyEventVC()) // 임시 VC
+                print("신청취소 클릭됨")
+            }
+        )
+
+        
+        button.showsMenuAsPrimaryAction = true
+        button.menu = UIMenu(
+                             identifier: nil,
+                             options: .displayInline, // .destructive
+                             children: [detail, cancel])
+        
         return button
     }()
     
@@ -145,11 +174,9 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
         locationInfoLabel.text = item.location
         
         if item.state != "마감" {
-            settingButton.isEnabled = true
             settingButton.isHidden = false
             dateTimeView.backgroundColor = .mainLightBlue
         } else {
-            settingButton.isEnabled = false
             settingButton.isHidden = true
         }
     }
