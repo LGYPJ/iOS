@@ -27,6 +27,8 @@
 		2CDD94FE2973BAB9004B8D56 /* CustomFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94FD2973BAB9004B8D56 /* CustomFlowLayout.swift */; };
 		2CDD950029750BC9004B8D56 /* SeminarPreviewPopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94FF29750BC9004B8D56 /* SeminarPreviewPopUpVC.swift */; };
 		2CDD9502297551C4004B8D56 /* IceBreakingStartCardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD9501297551C4004B8D56 /* IceBreakingStartCardCollectionViewCell.swift */; };
+		2CDD9504297573BF004B8D56 /* RegisterCancelBankPopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD9503297573BF004B8D56 /* RegisterCancelBankPopUpVC.swift */; };
+		2CDD9509297657FE004B8D56 /* BankListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD9508297657FE004B8D56 /* BankListCollectionViewCell.swift */; };
 		609A53D2296AB47300BBD338 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53D1296AB47300BBD338 /* AppDelegate.swift */; };
 		609A53D4296AB47300BBD338 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53D3296AB47300BBD338 /* SceneDelegate.swift */; };
 		609A53DB296AB47400BBD338 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 609A53DA296AB47400BBD338 /* Assets.xcassets */; };
@@ -84,6 +86,8 @@
 		2CDD94FD2973BAB9004B8D56 /* CustomFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFlowLayout.swift; sourceTree = "<group>"; };
 		2CDD94FF29750BC9004B8D56 /* SeminarPreviewPopUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarPreviewPopUpVC.swift; sourceTree = "<group>"; };
 		2CDD9501297551C4004B8D56 /* IceBreakingStartCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IceBreakingStartCardCollectionViewCell.swift; sourceTree = "<group>"; };
+		2CDD9503297573BF004B8D56 /* RegisterCancelBankPopUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterCancelBankPopUpVC.swift; sourceTree = "<group>"; };
+		2CDD9508297657FE004B8D56 /* BankListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankListCollectionViewCell.swift; sourceTree = "<group>"; };
 		4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Garamgaebi_GaramgaebiUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5393A75B600780926B72C170 /* Pods-GaramgaebiTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaramgaebiTests.release.xcconfig"; path = "Target Support Files/Pods-GaramgaebiTests/Pods-GaramgaebiTests.release.xcconfig"; sourceTree = "<group>"; };
 		595E523818BF61B8A2004DDC /* Pods-Garamgaebi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Garamgaebi.release.xcconfig"; path = "Target Support Files/Pods-Garamgaebi/Pods-Garamgaebi.release.xcconfig"; sourceTree = "<group>"; };
@@ -155,6 +159,7 @@
 				2CDD94E229711EB3004B8D56 /* NetworkingGameRoomVC.swift */,
 				2CDD94F52971952E004B8D56 /* EventRegisterVC.swift */,
 				2CDD94D8296FDB88004B8D56 /* RegisterCancelVC.swift */,
+				2CDD9503297573BF004B8D56 /* RegisterCancelBankPopUpVC.swift */,
 				2CDD94F0297191B0004B8D56 /* Cell */,
 			);
 			path = Event;
@@ -173,6 +178,7 @@
 				2CDD94FB2972DE9F004B8D56 /* IceBreakingUserCollectionViewCell.swift */,
 				2CDD9501297551C4004B8D56 /* IceBreakingStartCardCollectionViewCell.swift */,
 				2CDD94E429712E8E004B8D56 /* IceBreakingCardCollectionViewCell.swift */,
+				2CDD9508297657FE004B8D56 /* BankListCollectionViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -560,6 +566,7 @@
 				60F913FF296D2F2C00626C40 /* HomeVC.swift in Sources */,
 				2CDD94FC2972DE9F004B8D56 /* IceBreakingUserCollectionViewCell.swift in Sources */,
 				60F91401296D2F3D00626C40 /* ViewAllVC.swift in Sources */,
+				2CDD9509297657FE004B8D56 /* BankListCollectionViewCell.swift in Sources */,
 				2CDD94E529712E8E004B8D56 /* IceBreakingCardCollectionViewCell.swift in Sources */,
 				2CDD9502297551C4004B8D56 /* IceBreakingStartCardCollectionViewCell.swift in Sources */,
 				2CDD94FE2973BAB9004B8D56 /* CustomFlowLayout.swift in Sources */,
@@ -576,6 +583,7 @@
 				2CDD94FA29728908004B8D56 /* IceBreakingRoomCollectionViewCell.swift in Sources */,
 				2CDD94EA29718369004B8D56 /* EventAttendantTableViewCell.swift in Sources */,
 				2CDD94E8297173E8004B8D56 /* EventInfoTableViewCell.swift in Sources */,
+				2CDD9504297573BF004B8D56 /* RegisterCancelBankPopUpVC.swift in Sources */,
 				60F91407296D445800626C40 /* UIColor+.swift in Sources */,
 				2CDD950029750BC9004B8D56 /* SeminarPreviewPopUpVC.swift in Sources */,
 				2CDD94DE29700E71004B8D56 /* NetworkingDetailVC.swift in Sources */,
