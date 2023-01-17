@@ -36,19 +36,17 @@ class ViewAllVC: UIViewController {
     }()
     
     
-    private let vc1: UIViewController = {
-        let vc = ViewAllSeminarVC()
-        return vc
+    private let seminarView: UIViewController = {
+        let seminarView = ViewAllSeminarVC()
+        return seminarView
     }()
-    private let vc2: UIViewController = {
-        let vc = ViewAllNetworkingVC()
-        vc.view.backgroundColor = .mainBlue
-        return vc
+    private let networkingView: UIViewController = {
+        let networkingView = ViewAllNetworkingVC()
+        return networkingView
     }()
-    private let vc3: UIViewController = {
-        let vc = UIViewController()
-        vc.view.backgroundColor = .mainLightBlue
-        return vc
+    private let myEventView: UIViewController = {
+        let myEventView = ViewAllMyEventVC()
+        return myEventView
     }()
     
     private lazy var pageViewController: UIPageViewController = {
@@ -62,7 +60,7 @@ class ViewAllVC: UIViewController {
     }()
     
     var dataViewControllers: [UIViewController] {
-        [self.vc1, self.vc2, self.vc3]
+        [self.seminarView, self.networkingView, self.myEventView]
     }
     
     var currentPage: Int = 0 {
@@ -84,7 +82,6 @@ class ViewAllVC: UIViewController {
         super.viewDidLoad()
         
         configureViews()
-        //        configureTableView()
         addSubViews()
         configLayouts()
         
@@ -114,6 +111,7 @@ class ViewAllVC: UIViewController {
             make.centerY.equalToSuperview()
         }
         
+        // segmentedControl
         segmentedControl.snp.makeConstraints { make in
             make.left.equalToSuperview()
             make.right.equalToSuperview()
@@ -121,6 +119,7 @@ class ViewAllVC: UIViewController {
             make.height.equalTo(36)
         }
         
+        // pageViewController
         pageViewController.view.snp.makeConstraints { make in
             make.left.equalTo(view.safeAreaLayoutGuide.snp.left)
             make.right.equalTo(view.safeAreaLayoutGuide.snp.right)
