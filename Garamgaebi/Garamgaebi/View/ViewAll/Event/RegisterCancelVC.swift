@@ -217,13 +217,7 @@ class RegisterCancelVC: UIViewController {
 		
 		return button
 	}()
-	
-//	lazy var bankDetailImageView: UIImageView = {
-//		let imageView = UIImageView()
-//		imageView.image = UIImage(systemName: "chevron.down")?.withTintColor(.black, renderingMode: .alwaysOriginal)
-//
-//		return imageView
-//	}()
+
 	
 	lazy var downImageView: UIImageView = {
 		let imageView = UIImageView()
@@ -264,12 +258,15 @@ class RegisterCancelVC: UIViewController {
 		configureNavigationBarShadow()
 		configureViews()
 		configureDummyData()
-		configureButtonTarget()
+		configureAddTarget()
         
     }
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		self.tabBarController?.tabBar.isHidden = true
+		
+		cancelButton.isEnabled = false
+		cancelButton.backgroundColor = .mainGray
 	}
 
 	
@@ -356,7 +353,7 @@ extension RegisterCancelVC: sendBankNameProtocol {
 		}
 		
 		bankButton.snp.makeConstraints {
-			$0.width.equalTo(100)
+			$0.width.equalTo(120)
 		}
 //		bankButton.addSubview(downImageView)
 //
@@ -379,13 +376,15 @@ extension RegisterCancelVC: sendBankNameProtocol {
 		
 	}
 	
-	private func configureButtonTarget() {
+	private func configureAddTarget() {
 		cancelButton.addTarget(self, action: #selector(didTapRegisterCancelButton), for: .touchUpInside)
-		bankButton.addTarget(self, action: #selector(didTapBankButton), for: .touchUpInside)
+		bankButton.addTarget(self, action: #selector(didTapbankButton), for: .touchUpInside)
+		accountTextField.addTarget(self, action: #selector(textFieldDidChange(textField:)), for: .editingChanged)
+
 	}
 	
 	// 은행 텍스트 필드 tap
-	@objc private func didTapBankButton() {
+	@objc private func didTapbankButton() {
 		let vc = RegisterCancelBankPopUpVC()
 		vc.delegate = self
 		self.present(vc, animated: true)
@@ -405,9 +404,22 @@ extension RegisterCancelVC: sendBankNameProtocol {
 		self.navigationController?.popViewController(animated: true)
 	}
 	
+	@objc private func textFieldDidChange(textField: UITextField) {
+		if textField.text == "" || bankButton.currentTitle == "은행"  {
+			cancelButton.isEnabled = false
+			cancelButton.backgroundColor = .mainGray
+		} else {
+			cancelButton.isEnabled = true
+			cancelButton.backgroundColor = .mainBlue
+		}
+		
+	}
+	
 	func sendBankName(name: String) {
 		bankButton.setTitle(name, for: .normal)
 		bankButton.setTitleColor(.black, for: .normal)
+
+		textFieldDidChange(textField: accountTextField)
 	}
 
 }

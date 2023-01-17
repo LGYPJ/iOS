@@ -26,6 +26,17 @@ class BankListCollectionViewCell: UICollectionViewCell {
 		return label
 	}()
 	
+	lazy var stackView: UIStackView = {
+		let stackView = UIStackView()
+		[imageView, nameLabel]
+			.forEach {stackView.addArrangedSubview($0)}
+		stackView.spacing = 4
+		stackView.axis = .vertical
+		stackView.alignment = .center
+		
+		return stackView
+	}()
+	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		
@@ -43,18 +54,17 @@ extension BankListCollectionViewCell {
 	private func configureViews() {
 		contentView.backgroundColor = UIColor(hex: 0xF9F9F9)
 		contentView.layer.cornerRadius = 8
-		[imageView, nameLabel]
-			.forEach {contentView.addSubview($0)}
-		
+		contentView.addSubview(stackView)
+		stackView.snp.makeConstraints {
+			$0.center.equalToSuperview()
+		}
 		imageView.snp.makeConstraints {
 			$0.width.height.equalTo(32)
-			$0.centerX.equalToSuperview()
-			$0.top.equalToSuperview().inset(16)
+			$0.top.equalToSuperview()
 		}
 		
 		nameLabel.snp.makeConstraints {
-			$0.centerX.equalToSuperview()
-			$0.top.equalTo(imageView.snp.bottom).offset(4)
+			$0.width.equalToSuperview()
 		}
 	}
 }
