@@ -8,27 +8,26 @@
 import UIKit
 
 struct HomeUserDataModel {
-//    var title: String
-//    var subTitle: String
-//
-//    init(title: String, subTitle: String) {
-//        self.title = title
-//        self.subTitle = subTitle
-//    }
+
+    // 이미지 뭘로 받을지 모름
+    //var profileImage: UIImage
+    var nickName: String
+    var company: String
+    var postion: String
     
-    var image: UIImage
-    init(image: UIImage) {
-        self.image = image
+    init(nickName: String, company: String, postion: String) {
+        self.nickName = nickName
+        self.company = company
+        self.postion = postion
     }
     
 }
 
 extension HomeUserDataModel {
     static let list = [
-        HomeUserDataModel(image: UIImage(named: "PopUpIcon")!),
-        HomeUserDataModel(image: UIImage(named: "PopUpIcon")!),
-        HomeUserDataModel(image: UIImage(named: "PopUpIcon")!),
-        HomeUserDataModel(image: UIImage(named: "PopUpIcon")!),
-        HomeUserDataModel(image: UIImage(named: "PopUpIcon")!),
+        HomeUserDataModel(nickName: "네온", company: "가천대학교", postion: "산업디자인학과"),
+        HomeUserDataModel(nickName: "네온", company: "데브시스터즈", postion: "프론트엔드 개발자"),
+        HomeUserDataModel(nickName: "네온", company: "데브시스터즈", postion: "프론트엔드 개발자"),
+        HomeUserDataModel(nickName: "네온", company: "데브시스터즈", postion: "프론트엔드 개발자"),
     ]
 }

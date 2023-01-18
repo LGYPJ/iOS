@@ -86,28 +86,50 @@ class HomeUserInfoTableViewCell: UITableViewCell {
 }
 
 extension HomeUserInfoTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    fileprivate var sectionInsets: UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+    }
+    
+    fileprivate var itemsPerRow: CGFloat {
+        return 1
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dataList.count
     }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let availableWidth = collectionView.bounds.width/390*120
+        let widthPerItem = availableWidth / itemsPerRow
+        let heightPerItem = widthPerItem/120*184
+        
+        return CGSize(width: widthPerItem, height: heightPerItem)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        return sectionInsets
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 12.0
+    }
+    
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeUserColectionViewCell.identifier, for: indexPath) as? HomeUserColectionViewCell else {
             return UICollectionViewCell()
         }
         
-        cell.backgroundColor = .mainGray
-        //cell.imageView = UIImageView(image: dataList[indexPath.row].image)
-        cell.imageView.sizeToFit()
-        
+        cell.configure(dataList[indexPath.row])
         
         return cell
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        //return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
-        return CGSize(width: 120, height: 184)
-        
-        //셀사이즈
-        //        return CGSize(width: 334, height: 140)
-    }
+
 }
