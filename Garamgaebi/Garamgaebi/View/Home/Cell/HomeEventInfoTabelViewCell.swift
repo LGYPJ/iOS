@@ -132,7 +132,12 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         view.clipsToBounds = true
         view.register(HomeEventCollectionViewCell.self, forCellWithReuseIdentifier: HomeEventCollectionViewCell.identifier)
 
-        
+        return view
+    }()
+    
+    lazy var interSpcace: UIView = {
+        let view = UIView()
+        view.backgroundColor = .mainLightGray
         return view
     }()
     
@@ -158,6 +163,8 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         self.contentView.addSubview(networkingViewAllButton)
         self.contentView.addSubview(networkingViewAllStack)
         self.contentView.addSubview(networkingCollectionView)
+        
+        self.contentView.addSubview(interSpcace)
         configSubViewLayouts()
         
     }
@@ -201,8 +208,13 @@ class HomeEventInfoTableViewCell: UITableViewCell {
             make.top.equalTo(networkingViewAllStack.snp.bottom).offset(12)
             make.centerX.equalToSuperview()
             make.width.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-16)
             make.height.equalTo(140)
+        }
+        
+        interSpcace.snp.makeConstraints { make in
+            make.top.equalTo(networkingCollectionView.snp.bottom).offset(16)
+            make.left.right.equalToSuperview()
+            make.height.equalTo(8)
         }
     }
     

@@ -51,6 +51,11 @@ class HomeUserInfoTableViewCell: UITableViewCell {
         return view
     }()
     
+    lazy var interSpcace: UIView = {
+        let view = UIView()
+        view.backgroundColor = .mainLightGray
+        return view
+    }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -61,7 +66,7 @@ class HomeUserInfoTableViewCell: UITableViewCell {
         
         self.contentView.addSubview(collectionView)
         
-        
+        self.contentView.addSubview(interSpcace)
         configSubViewLayouts()
         
     }
@@ -78,8 +83,12 @@ class HomeUserInfoTableViewCell: UITableViewCell {
             make.width.equalToSuperview()
             make.height.equalTo(184)
         }
-        
-        
+                
+        interSpcace.snp.makeConstraints { make in
+            make.top.equalTo(collectionView.snp.bottom).offset(16)
+            make.left.right.equalToSuperview()
+            make.height.equalTo(8)
+        }
     }
     
     

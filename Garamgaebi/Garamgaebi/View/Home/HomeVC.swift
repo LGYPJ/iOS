@@ -45,7 +45,7 @@ class HomeVC: UIViewController {
     
     lazy var tableView: UITableView = {
         let view = UITableView()
-        view.allowsSelection = true
+        view.allowsSelection = false
         view.backgroundColor = .systemBackground
         view.separatorStyle = .none
         view.bounces = true
@@ -171,9 +171,9 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 0:
-            return HomeEventInfoTableViewCell.cellHeight
+            return HomeEventInfoTableViewCell.cellHeight + 16.0
         case 1:
-            return HomeUserInfoTableViewCell.cellHeight
+            return HomeUserInfoTableViewCell.cellHeight + 8.0
         case 2:
             return HomeMyEventInfoTableViewCell.cellHeight
         default:

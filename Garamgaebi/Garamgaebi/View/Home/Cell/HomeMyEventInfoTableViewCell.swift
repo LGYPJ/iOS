@@ -42,8 +42,7 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
         
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
-        //view.contentInset = UIEdgeInsets(top: 0, left: 16, bottom: 16, right: 16)
-        //view.backgroundColor = .magenta
+        view.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
         view.clipsToBounds = true
         view.register(HomeMyEventColectionViewCell.self, forCellWithReuseIdentifier: HomeMyEventColectionViewCell.identifier)
         
@@ -58,24 +57,23 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
         
         self.contentView.addSubview(titleLabel)
         self.contentView.addSubview(collectionView)
-     
         configSubViewLayouts()
  
-        // 부모 셀 높이 가변설정 (모임이 하나이상 존재할때)
-        // 26 16 16 80*n 8*(n-1) 16
-        HomeMyEventInfoTableViewCell.cellHeight = 66.0 + 88.0*Double(dataList.count) 
+        // 부모 셀 높이 가변설정 (모임이 하나이상 존재할때)        
+        HomeMyEventInfoTableViewCell.cellHeight = 54.0 + 88.0 * Double(dataList.count) - 8.0 + 16.0
     }
     
     func configSubViewLayouts() {
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(16)
+            make.top.equalToSuperview().offset(16)
             make.left.equalToSuperview().inset(16)
+            make.height.equalTo(26)
         }
 
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(12)
             make.left.right.equalToSuperview()
-            make.bottom.equalToSuperview().inset(16)
+            make.bottom.equalToSuperview()//.offset(-16)
         }
     }
 }
@@ -89,11 +87,15 @@ extension HomeMyEventInfoTableViewCell: UICollectionViewDataSource, UICollection
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeMyEventColectionViewCell.identifier, for: indexPath) as? HomeMyEventColectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.backgroundColor = .mainGray
+        cell.configure(dataList[indexPath.row])
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.layer.frame.width-32, height: 80)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 8
     }
 }
