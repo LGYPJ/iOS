@@ -14,6 +14,9 @@
 		46876C6729732053000BA1B6 /* ProfileWithdrawalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46876C6629732053000BA1B6 /* ProfileWithdrawalVC.swift */; };
 		46876C692973D7E3000BA1B6 /* ProfileInputCareerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46876C682973D7E3000BA1B6 /* ProfileInputCareerVC.swift */; };
 		46B4780B29700FEE002186A3 /* ProfileServiceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B4780A29700FEE002186A3 /* ProfileServiceVC.swift */; };
+		46C18D232978662000A05CBF /* ProfileSnsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C18D222978662000A05CBF /* ProfileSnsCollectionViewCell.swift */; };
+		46C18D25297866E600A05CBF /* ProfileDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C18D24297866E600A05CBF /* ProfileDataModel.swift */; };
+		46C18D272978882000A05CBF /* ProfileInputSNSVCViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C18D262978882000A05CBF /* ProfileInputSNSVCViewController.swift */; };
 		609A53D2296AB47300BBD338 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53D1296AB47300BBD338 /* AppDelegate.swift */; };
 		609A53D4296AB47300BBD338 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53D3296AB47300BBD338 /* SceneDelegate.swift */; };
 		609A53DB296AB47400BBD338 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 609A53DA296AB47400BBD338 /* Assets.xcassets */; };
@@ -59,6 +62,9 @@
 		46876C6629732053000BA1B6 /* ProfileWithdrawalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileWithdrawalVC.swift; sourceTree = "<group>"; };
 		46876C682973D7E3000BA1B6 /* ProfileInputCareerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInputCareerVC.swift; sourceTree = "<group>"; };
 		46B4780A29700FEE002186A3 /* ProfileServiceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileServiceVC.swift; sourceTree = "<group>"; };
+		46C18D222978662000A05CBF /* ProfileSnsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSnsCollectionViewCell.swift; sourceTree = "<group>"; };
+		46C18D24297866E600A05CBF /* ProfileDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDataModel.swift; sourceTree = "<group>"; };
+		46C18D262978882000A05CBF /* ProfileInputSNSVCViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProfileInputSNSVCViewController.swift; path = Garamgaebi/View/Profile/ProfileInputSNSVCViewController.swift; sourceTree = SOURCE_ROOT; };
 		5393A75B600780926B72C170 /* Pods-GaramgaebiTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaramgaebiTests.release.xcconfig"; path = "Target Support Files/Pods-GaramgaebiTests/Pods-GaramgaebiTests.release.xcconfig"; sourceTree = "<group>"; };
 		595E523818BF61B8A2004DDC /* Pods-Garamgaebi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Garamgaebi.release.xcconfig"; path = "Target Support Files/Pods-Garamgaebi/Pods-Garamgaebi.release.xcconfig"; sourceTree = "<group>"; };
 		609A53CE296AB47300BBD338 /* Garamgaebi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Garamgaebi.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -119,6 +125,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		461D867B2977E764009835F1 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				46C18D222978662000A05CBF /* ProfileSnsCollectionViewCell.swift */,
+				46C18D262978882000A05CBF /* ProfileInputSNSVCViewController.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		461D867C2977E778009835F1 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				46C18D24297866E600A05CBF /* ProfileDataModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		609A53C5296AB47300BBD338 = {
 			isa = PBXGroup;
 			children = (
@@ -192,6 +215,8 @@
 		60F913FD296D2F0600626C40 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				461D867C2977E778009835F1 /* Model */,
+				461D867B2977E764009835F1 /* Cell */,
 				60F91402296D2F4800626C40 /* ProfileVC.swift */,
 				460C0C2A296D855800FF5085 /* ProfileEditVC.swift */,
 				46B4780A29700FEE002186A3 /* ProfileServiceVC.swift */,
@@ -504,10 +529,13 @@
 				60F91403296D2F4800626C40 /* ProfileVC.swift in Sources */,
 				46876C6729732053000BA1B6 /* ProfileWithdrawalVC.swift in Sources */,
 				60F913FF296D2F2C00626C40 /* HomeVC.swift in Sources */,
+				46C18D272978882000A05CBF /* ProfileInputSNSVCViewController.swift in Sources */,
+				46C18D25297866E600A05CBF /* ProfileDataModel.swift in Sources */,
 				46876C692973D7E3000BA1B6 /* ProfileInputCareerVC.swift in Sources */,
 				46B4780B29700FEE002186A3 /* ProfileServiceVC.swift in Sources */,
 				60F91401296D2F3D00626C40 /* ViewAllVC.swift in Sources */,
 				60F91409296D446100626C40 /* UIFont+.swift in Sources */,
+				46C18D232978662000A05CBF /* ProfileSnsCollectionViewCell.swift in Sources */,
 				609A53D2296AB47300BBD338 /* AppDelegate.swift in Sources */,
 				609A53D4296AB47300BBD338 /* SceneDelegate.swift in Sources */,
 				460C0C2B296D855800FF5085 /* ProfileEditVC.swift in Sources */,

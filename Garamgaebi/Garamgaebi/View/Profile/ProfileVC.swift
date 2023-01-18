@@ -12,6 +12,10 @@ import Then
 
 class ProfileVC: UIViewController {
     
+    // MARK: - Properties
+    //    private var snsCollectionView: ProfileSnsCollectionViewCell
+    //    private let dataSource = ProfileSnsDataModel.data
+    
     // MARK: - Subviews
     let scrollView = UIScrollView()
     
@@ -69,9 +73,7 @@ class ProfileVC: UIViewController {
         $0.textContainerInset = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 16.0, right: 12.0)
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14) // .systemFont(ofSize: 18)
         $0.textColor = .black
-//        $0.isEditable = false
         $0.isUserInteractionEnabled = false
-//        $0.numberOfLines = 0
     }
     
     let profileEditBtn = UIButton().then {
@@ -81,6 +83,44 @@ class ProfileVC: UIViewController {
         $0.backgroundColor = .mainLightBlue
         $0.layer.cornerRadius = 10
     }
+    
+    // 하단 버튼
+    // SNS
+    let snsTopRadiusView = UIView().then {
+        $0.layer.borderColor = UIColor.mainGray.cgColor
+        $0.layer.borderWidth = 1
+        $0.layer.cornerRadius = 12
+        
+        $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        $0.layer.backgroundColor = UIColor.systemGray6.cgColor
+    }
+    let snsTitleLabel = UILabel().then {
+        $0.text = "SNS"
+        $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+    }
+    let snsDefaultLabel = UILabel().then {
+        $0.text = "유저들과 소통을 위해서 SNS 주소를 남겨주세요!"
+        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        $0.numberOfLines = 0
+//        $0.isHidden = true
+    }
+    let snsBottomRadiusView = UIView().then {
+        $0.layer.borderColor = UIColor.mainGray.cgColor
+        $0.layer.borderWidth = 1
+        $0.layer.cornerRadius = 12
+        
+        $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMaxYCorner]
+    }
+    
+    var snsCollectionView: UICollectionView = {
+        var layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 0
+        layout.scrollDirection = .vertical
+        layout.sectionInset = .zero
+        
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        return cv
+    }()
     
     let addSnsBtn = UIButton().then {
         $0.setTitle("SNS 추가", for: .normal)
@@ -94,6 +134,45 @@ class ProfileVC: UIViewController {
         $0.layer.cornerRadius = 12
     }
     
+    // 경력
+    let careerTopRadiusView = UIView().then {
+        $0.layer.borderColor = UIColor.mainGray.cgColor
+        $0.layer.borderWidth = 1
+        $0.layer.cornerRadius = 12
+        
+        $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        $0.layer.backgroundColor = UIColor.systemGray6.cgColor
+    }
+    let careerTitleLabel = UILabel().then {
+        $0.text = "경력"
+        $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+    }
+    let careerDefaultLabel = UILabel().then {
+        $0.text = "지금 하고 있거나\n이전에 한 일을 알려주세요"
+        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        $0.textAlignment = .center
+        $0.numberOfLines = 0
+//        $0.isHidden = true
+    }
+    let careerBottomRadiusView = UIView().then {
+        $0.layer.borderColor = UIColor.mainGray.cgColor
+        $0.layer.borderWidth = 1
+        $0.layer.cornerRadius = 12
+        
+        $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMaxYCorner]
+    }
+    
+    var careerCollectionView: UICollectionView = {
+        var layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 0
+        layout.scrollDirection = .vertical
+        layout.sectionInset = .zero
+        
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+//         cv.backgroundColor = .green
+        return cv
+    }()
+    
     let addCareerBtn = UIButton().then {
         $0.setTitle("경력 추가", for: .normal)
         $0.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
@@ -105,6 +184,44 @@ class ProfileVC: UIViewController {
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 12
     }
+    
+    // 교육
+    let eduTopRadiusView = UIView().then {
+        $0.layer.borderColor = UIColor.mainGray.cgColor
+        $0.layer.borderWidth = 1
+        $0.layer.cornerRadius = 12
+        
+        $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        $0.layer.backgroundColor = UIColor.systemGray6.cgColor
+    }
+    let eduTitleLabel = UILabel().then {
+        $0.text = "교육"
+        $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+    }
+    let eduDefaultLabel = UILabel().then {
+        $0.text = "지금 다니고 있거나 이전에 다녔던\n학교, 부트캠프 등 교육기관을 입력해주세요"
+        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        $0.textAlignment = .center
+        $0.numberOfLines = 0
+//        $0.isHidden = true
+    }
+    let eduBottomRadiusView = UIView().then {
+        $0.layer.borderColor = UIColor.mainGray.cgColor
+        $0.layer.borderWidth = 1
+        $0.layer.cornerRadius = 12
+        
+        $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMaxYCorner]
+    }
+    
+    var eduCollectionView: UICollectionView = {
+        var layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 0
+        layout.scrollDirection = .vertical
+        layout.sectionInset = .zero
+        
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        return cv
+    }()
     
     let addEduBtn = UIButton().then {
         let button = UIButton()
@@ -123,6 +240,7 @@ class ProfileVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        registerCollectionView()
         configureLayouts()
         configureDummyData()
     }
@@ -152,16 +270,23 @@ class ProfileVC: UIViewController {
         
         scrollView.addSubview(contentView)
         
+        // scroll - profile
         [profileImageView, profileStackView, introduceTextField, profileEditBtn]
             .forEach {scrollView.addSubview($0)}
         
-        [addSnsBtn, addCareerBtn, addEduBtn].forEach {scrollView.addSubview($0)}
+        // scroll - add
+        [snsTopRadiusView, snsTitleLabel, snsDefaultLabel, snsBottomRadiusView,
+         careerTopRadiusView, careerTitleLabel, careerDefaultLabel, careerBottomRadiusView, careerCollectionView, addCareerBtn,
+         eduTopRadiusView, eduTitleLabel, eduDefaultLabel, eduBottomRadiusView, eduCollectionView, addEduBtn].forEach {scrollView.addSubview($0)}
+        
+        // view - sns
+        [snsCollectionView, addSnsBtn].forEach { snsBottomRadiusView.addSubview($0) }
+        
         
         
         // layer
         // title bar
         profileTitleLabel.snp.makeConstraints { /// 프로필 타이틀
-//            $0.top.equalTo(scrollView.snp.top)
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.leading.equalTo(21)
             $0.height.equalTo(70)
@@ -185,7 +310,6 @@ class ProfileVC: UIViewController {
         
         // scrollView
         scrollView.snp.makeConstraints {
-//            $0.edges.equalToSuperview()
             $0.top.equalTo(profileTitleLabel.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-10)
@@ -193,7 +317,6 @@ class ProfileVC: UIViewController {
         
         // contentView
         contentView.snp.makeConstraints {
-//            $0.edges.equalTo(scrollView)
             $0.top.bottom.leading.trailing.equalTo(scrollView)
             $0.width.equalTo(scrollView)
         }
@@ -202,7 +325,6 @@ class ProfileVC: UIViewController {
             $0.width.equalTo(100)
             $0.height.equalTo(profileImageView.snp.width)
             $0.top.equalTo(contentView).offset(16)
-            //$0.top.equalTo(profileTitleLabel.snp.bottom).offset(27)
             $0.leading.equalTo(16)
         }
         
@@ -226,35 +348,125 @@ class ProfileVC: UIViewController {
         /// 버튼 클릭
         profileEditBtn.addTarget(self,action: #selector(self.editButtonDidTap(_:)), for: .touchUpInside)
         
+        
+        // 하단
+        // SNS
+        snsTopRadiusView.snp.makeConstraints {
+            $0.top.equalTo(profileEditBtn.snp.bottom).offset(16)
+            $0.leading.trailing.equalTo(profileEditBtn)
+            $0.height.equalTo(47)
+        }
+        snsTitleLabel.snp.makeConstraints {
+            $0.centerY.equalTo(snsTopRadiusView)
+            $0.leading.trailing.equalTo(snsTopRadiusView).offset(12)
+        }
+        snsBottomRadiusView.snp.makeConstraints {
+            let height = snsDefaultLabel.frame.height + addSnsBtn.frame.height + 120
+            $0.top.equalTo(snsTopRadiusView.snp.bottom).offset(-1)
+            $0.leading.trailing.equalTo(snsTopRadiusView)
+            $0.height.equalTo(height)
+        }
+        snsDefaultLabel.snp.makeConstraints {
+            $0.top.equalTo(snsBottomRadiusView).offset(12)
+            $0.centerX.equalTo(snsBottomRadiusView)
+            //            $0.leading.trailing.equalTo(snsBottomRadiusView)
+        }
+//        snsCollectionView.snp.makeConstraints {
+//            $0.top.equalTo(snsDefaultLabel.snp.bottom)
+//            $0.leading.trailing.equalTo(snsBottomRadiusView)
+//            $0.bottom.equalTo(addSnsBtn).offset(-12)
+//        }
+        
         addSnsBtn.snp.makeConstraints { /// SNS 추가 버튼
-            $0.top.equalTo(profileEditBtn.snp.bottom).offset(100)
-            $0.centerX.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(snsDefaultLabel.snp.bottom).offset(12)
+            $0.bottom.equalTo(snsBottomRadiusView).offset(-16)
+            $0.centerX.equalTo(snsBottomRadiusView)
             $0.height.equalTo(48)
             $0.width.equalTo(134)
         }
         /// 버튼 클릭
         addSnsBtn.addTarget(self,action: #selector(self.snsButtonDidTap(_:)), for: .touchUpInside)
         
+        
+        // Career
+        careerTopRadiusView.snp.makeConstraints {
+            $0.top.equalTo(snsBottomRadiusView.snp.bottom).offset(16)
+            $0.leading.trailing.equalTo(snsTopRadiusView)
+            $0.height.equalTo(47)
+        }
+        careerTitleLabel.snp.makeConstraints {
+            $0.centerY.equalTo(careerTopRadiusView)
+            $0.leading.trailing.equalTo(careerTopRadiusView).offset(12)
+        }
+        careerBottomRadiusView.snp.makeConstraints {
+            let height = careerDefaultLabel.frame.height + addCareerBtn.frame.height + 150
+            $0.top.equalTo(careerTopRadiusView.snp.bottom).offset(-1)
+            $0.leading.trailing.equalTo(careerTopRadiusView)
+            $0.height.equalTo(height)
+        }
+        careerDefaultLabel.snp.makeConstraints {
+            $0.top.equalTo(careerBottomRadiusView).offset(12)
+            $0.centerX.equalTo(careerBottomRadiusView)
+        }
+//        careerCollectionView.snp.makeConstraints {
+//            $0.top.equalTo(careerBottomRadiusView)
+//            $0.leading.trailing.equalTo(careerBottomRadiusView)
+//            $0.bottom.equalTo(addCareerBtn).offset(-12)
+//        }
+        
         addCareerBtn.snp.makeConstraints { /// 경력 추가 버튼
-            $0.top.equalTo(addSnsBtn.snp.bottom).offset(100)
-            $0.centerX.equalTo(view.safeAreaLayoutGuide)
-            $0.height.equalTo(addSnsBtn.snp.height)
-            $0.width.equalTo(addSnsBtn.snp.width)
+            $0.top.equalTo(careerDefaultLabel.snp.bottom).offset(12)
+            $0.bottom.equalTo(careerBottomRadiusView).offset(-16)
+            $0.centerX.equalTo(careerBottomRadiusView)
+            $0.height.equalTo(48)
+            $0.width.equalTo(134)
         }
         /// 버튼 클릭
         addCareerBtn.addTarget(self,action: #selector(self.careerButtonDidTap(_:)), for: .touchUpInside)
         
+        
+        // 교육
+        eduTopRadiusView.snp.makeConstraints {
+            $0.top.equalTo(careerBottomRadiusView.snp.bottom).offset(16)
+            $0.leading.trailing.equalTo(careerBottomRadiusView)
+            $0.height.equalTo(47)
+        }
+        eduTitleLabel.snp.makeConstraints {
+            $0.centerY.equalTo(eduTopRadiusView)
+            $0.leading.trailing.equalTo(eduTopRadiusView).offset(12)
+        }
+        eduBottomRadiusView.snp.makeConstraints {
+            let height = eduDefaultLabel.frame.height + addEduBtn.frame.height + 150
+            $0.top.equalTo(eduTopRadiusView.snp.bottom).offset(-1)
+            $0.leading.trailing.equalTo(eduTopRadiusView)
+            $0.bottom.equalTo(scrollView).offset(-16)
+            $0.height.equalTo(height)
+        }
+        eduDefaultLabel.snp.makeConstraints {
+            $0.top.equalTo(eduBottomRadiusView).offset(12)
+            $0.centerX.equalTo(eduBottomRadiusView)
+        }
+//        eduCollectionView.snp.makeConstraints {
+//            $0.top.equalTo(eduBottomRadiusView)
+//            $0.leading.trailing.equalTo(eduBottomRadiusView)
+//            $0.bottom.equalTo(addEduBtn).offset(-12)
+//        }
+        
         addEduBtn.snp.makeConstraints { /// 교육 추가 버튼
-            $0.top.equalTo(addCareerBtn.snp.bottom).offset(100)
-            $0.centerX.equalTo(view.safeAreaLayoutGuide)
-            $0.height.equalTo(addSnsBtn.snp.height)
-            $0.width.equalTo(addSnsBtn.snp.width)
-            $0.bottom.equalTo(contentView)
+            $0.top.equalTo(eduDefaultLabel.snp.bottom).offset(12)
+            $0.bottom.equalTo(eduBottomRadiusView).offset(-16)
+            $0.centerX.equalTo(eduBottomRadiusView)
+            $0.height.equalTo(48)
+            $0.width.equalTo(134)
         }
         /// 버튼 클릭
         addEduBtn.addTarget(self,action: #selector(self.educationButtonDidTap(_:)), for: .touchUpInside)
     }
     
+    // 컬렉션뷰 등록
+    private func registerCollectionView() {
+        snsCollectionView.register(ProfileSnsCollectionViewCell.self, forCellWithReuseIdentifier: ProfileSnsCollectionViewCell.identifier)
+    }
     
     @objc private func serviceButtonDidTap(_ sender : UIButton) {
         print("고객센터 버튼 클릭")
@@ -275,9 +487,9 @@ class ProfileVC: UIViewController {
     @objc private func snsButtonDidTap(_ sender : UIButton) {
         print("SNS 추가 버튼 클릭")
         
-//        // 화면 전환
-//        let nextVC = ProfileEditVC()
-//        navigationController?.pushViewController(nextVC, animated: true)
+        //        // 화면 전환
+        //        let nextVC = ProfileEditVC()
+        //        navigationController?.pushViewController(nextVC, animated: true)
     }
     
     @objc private func careerButtonDidTap(_ sender : UIButton) {
@@ -304,5 +516,27 @@ class ProfileVC: UIViewController {
         emailLabel.text = "umc@gmail.com"
         introduceTextField.text = "자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소."
     }
+    
+}
+
+// MARK: - Extension
+extension ProfileVC: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    
+    // numberOfItemInSection
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 2
+    }
+    
+    // numberOfItemInSection
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = snsCollectionView.dequeueReusableCell(withReuseIdentifier: ProfileSnsCollectionViewCell.identifier, for: indexPath) as? ProfileSnsCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        
+        cell.snsLabel.text = "www.naver.com"
+        
+        return cell
+    }
+    
     
 }
