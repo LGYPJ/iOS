@@ -46,7 +46,7 @@ class HomeVC: UIViewController {
     lazy var tableView: UITableView = {
         let view = UITableView()
         view.allowsSelection = true
-        view.backgroundColor = .clear
+        view.backgroundColor = .systemBackground
         view.separatorStyle = .none
         view.bounces = true
         view.showsVerticalScrollIndicator = false
@@ -186,7 +186,6 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         switch indexPath.row {
         case 0:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeEventInfoTableViewCell.identifier, for: indexPath) as? HomeEventInfoTableViewCell else {return UITableViewCell()}
-            cell.backgroundColor = .mainLightGray
             return cell
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeUserInfoTableViewCell.identifier, for: indexPath) as? HomeUserInfoTableViewCell else {return UITableViewCell()}

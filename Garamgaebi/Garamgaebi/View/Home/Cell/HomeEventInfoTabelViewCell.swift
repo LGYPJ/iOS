@@ -16,8 +16,16 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     // MARK: - Properties
     static let identifier = String(describing: HomeEventInfoTableViewCell.self)
     static let cellHeight = 428.0
-    let dataList = EventDataModel.list
+    static let dataList = HomeEventDataModel.list.filter { data in
+        return data.state != "마감"
+    }
     
+    let seminarList = HomeEventInfoTableViewCell.dataList.filter {
+        $0.programType == "세미나"
+    }
+    let networkingList = HomeEventInfoTableViewCell.dataList.filter {
+        $0.programType == "네트워킹"
+    }
     
     lazy var seminarTitleLabel: UILabel = {
         let label = UILabel()
@@ -96,9 +104,6 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     private let collectionViewFlowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        //layout.minimumLineSpacing = 18.0
-        layout.minimumInteritemSpacing = 0
-        //layout.itemSize = .init(width: 300, height: cellHeight)
         return layout
     }()
     
@@ -133,13 +138,14 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
         self.seminarCollectionView.dataSource = self
         self.seminarCollectionView.delegate = self
-        self.seminarCollectionView.tag = 1
+        self.seminarCollectionView.tag = 0
         
         self.networkingCollectionView.dataSource = self
         self.networkingCollectionView.delegate = self
-        self.networkingCollectionView.tag = 2
+        self.networkingCollectionView.tag = 1
         
         self.contentView.addSubview(seminarTitleLabel)
         self.contentView.addSubview(seminarPopUpButton)
@@ -204,38 +210,83 @@ class HomeEventInfoTableViewCell: UITableViewCell {
 }
 
 extension HomeEventInfoTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    fileprivate var sectionInsets: UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+    }
+    
+    fileprivate var itemsPerRow: CGFloat {
+        return 1
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView.tag == 1{
-            return dataList.count
+//        switch section {
+//        case 0:
+//            print("section 개수: \(seminarList.count)")
+//            return seminarList.count
+//        case 1:
+//            print("section 개수: \(networkingList.count)")
+//            return networkingList.count
+//        default:
+//            print(fatalError())
+//            return 0
+//        }
+        if collectionView.tag == 0{
+//            print("seminarList -> \(seminarList.count)")
+            return seminarList.count
         }
-        else {
-            return dataList.count
+        else if collectionView.tag == 1 {
+//            print("networkingList -> \(networkingList.count)")
+            return networkingList.count
         }
+        print(fatalError("error"))
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let availableWidth = collectionView.bounds.width/390*334
+        let widthPerItem = availableWidth / itemsPerRow
+        let heightPerItem = widthPerItem/334*140
+        
+        return CGSize(width: widthPerItem, height: heightPerItem)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        return sectionInsets
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 12.0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeEventCollectionViewCell.identifier, for: indexPath) as? HomeEventCollectionViewCell else {
             return UICollectionViewCell()
         }
-        if collectionView.tag == 1{
-            print("asdasd")
-            cell.backgroundColor = .mainGray
-            //cell.imageView = UIImageView(image: dataList[indexPath.row].image)
-            cell.imageView.sizeToFit()
+        
+        switch collectionView.tag {
+        case 0:
+            cell.configure(seminarList[indexPath.row])
+        case 1:
+            cell.configure(networkingList[indexPath.row])
+        default:
+            print("dataList Count Error")
         }
-        else if collectionView.tag == 2{
-            cell.backgroundColor = .mainGray
-            //cell.imageView = UIImageView(image: dataList[indexPath.row].image)
-            cell.imageView.sizeToFit()
-        }
+        
+//        if collectionView.tag == 1{
+////            cell.configure(seminarList[indexPath.row])
+//            cell.configure(seminarList[indexPath.row])
+//        }
+//        else if collectionView.tag == 2{
+//            cell.configure(networkingList[indexPath.row])
+//        }
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        //return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
-        return CGSize(width: 334, height: 140)
-        
-        //셀사이즈
-        //        return CGSize(width: 334, height: 140)
-    }
 }
