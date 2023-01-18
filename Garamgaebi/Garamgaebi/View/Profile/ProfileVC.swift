@@ -102,7 +102,7 @@ class ProfileVC: UIViewController {
         $0.text = "유저들과 소통을 위해서 SNS 주소를 남겨주세요!"
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.numberOfLines = 0
-//        $0.isHidden = true
+        //        $0.isHidden = true
     }
     let snsBottomRadiusView = UIView().then {
         $0.layer.borderColor = UIColor.mainGray.cgColor
@@ -152,7 +152,7 @@ class ProfileVC: UIViewController {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.textAlignment = .center
         $0.numberOfLines = 0
-//        $0.isHidden = true
+        //        $0.isHidden = true
     }
     let careerBottomRadiusView = UIView().then {
         $0.layer.borderColor = UIColor.mainGray.cgColor
@@ -169,7 +169,7 @@ class ProfileVC: UIViewController {
         layout.sectionInset = .zero
         
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-//         cv.backgroundColor = .green
+        //         cv.backgroundColor = .green
         return cv
     }()
     
@@ -203,7 +203,7 @@ class ProfileVC: UIViewController {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.textAlignment = .center
         $0.numberOfLines = 0
-//        $0.isHidden = true
+        //        $0.isHidden = true
     }
     let eduBottomRadiusView = UIView().then {
         $0.layer.borderColor = UIColor.mainGray.cgColor
@@ -371,11 +371,11 @@ class ProfileVC: UIViewController {
             $0.centerX.equalTo(snsBottomRadiusView)
             //            $0.leading.trailing.equalTo(snsBottomRadiusView)
         }
-//        snsCollectionView.snp.makeConstraints {
-//            $0.top.equalTo(snsDefaultLabel.snp.bottom)
-//            $0.leading.trailing.equalTo(snsBottomRadiusView)
-//            $0.bottom.equalTo(addSnsBtn).offset(-12)
-//        }
+        //        snsCollectionView.snp.makeConstraints {
+        //            $0.top.equalTo(snsDefaultLabel.snp.bottom)
+        //            $0.leading.trailing.equalTo(snsBottomRadiusView)
+        //            $0.bottom.equalTo(addSnsBtn).offset(-12)
+        //        }
         
         addSnsBtn.snp.makeConstraints { /// SNS 추가 버튼
             $0.top.equalTo(snsDefaultLabel.snp.bottom).offset(12)
@@ -408,11 +408,11 @@ class ProfileVC: UIViewController {
             $0.top.equalTo(careerBottomRadiusView).offset(12)
             $0.centerX.equalTo(careerBottomRadiusView)
         }
-//        careerCollectionView.snp.makeConstraints {
-//            $0.top.equalTo(careerBottomRadiusView)
-//            $0.leading.trailing.equalTo(careerBottomRadiusView)
-//            $0.bottom.equalTo(addCareerBtn).offset(-12)
-//        }
+        //        careerCollectionView.snp.makeConstraints {
+        //            $0.top.equalTo(careerBottomRadiusView)
+        //            $0.leading.trailing.equalTo(careerBottomRadiusView)
+        //            $0.bottom.equalTo(addCareerBtn).offset(-12)
+        //        }
         
         addCareerBtn.snp.makeConstraints { /// 경력 추가 버튼
             $0.top.equalTo(careerDefaultLabel.snp.bottom).offset(12)
@@ -446,11 +446,11 @@ class ProfileVC: UIViewController {
             $0.top.equalTo(eduBottomRadiusView).offset(12)
             $0.centerX.equalTo(eduBottomRadiusView)
         }
-//        eduCollectionView.snp.makeConstraints {
-//            $0.top.equalTo(eduBottomRadiusView)
-//            $0.leading.trailing.equalTo(eduBottomRadiusView)
-//            $0.bottom.equalTo(addEduBtn).offset(-12)
-//        }
+        //        eduCollectionView.snp.makeConstraints {
+        //            $0.top.equalTo(eduBottomRadiusView)
+        //            $0.leading.trailing.equalTo(eduBottomRadiusView)
+        //            $0.bottom.equalTo(addEduBtn).offset(-12)
+        //        }
         
         addEduBtn.snp.makeConstraints { /// 교육 추가 버튼
             $0.top.equalTo(eduDefaultLabel.snp.bottom).offset(12)
@@ -487,9 +487,9 @@ class ProfileVC: UIViewController {
     @objc private func snsButtonDidTap(_ sender : UIButton) {
         print("SNS 추가 버튼 클릭")
         
-        //        // 화면 전환
-        //        let nextVC = ProfileEditVC()
-        //        navigationController?.pushViewController(nextVC, animated: true)
+        // 화면 전환
+        let nextVC = ProfileInputSNSVC()
+        navigationController?.pushViewController(nextVC, animated: true)
     }
     
     @objc private func careerButtonDidTap(_ sender : UIButton) {
