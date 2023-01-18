@@ -252,11 +252,15 @@ extension NetworkingGameRoomVC: UICollectionViewDelegate, UICollectionViewDataSo
 	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		if collectionView == cardCollectionView && indexPath.section == 0 {
-			UIView.transition(with: cardCollectionView, duration: 0.5, options: .transitionFlipFromRight, animations: { [weak self] in
+			guard let cell = collectionView.cellForItem(at: indexPath) as? IceBreakingStartCardCollectionViewCell  else {return}
+			UIView.transition(with: cell.contentView, duration: 0.3, options: .transitionFlipFromLeft, animations: {
+				cell.contentView.alpha = 0
+				cell.titleLabel.alpha = 0
+			}, completion: { [weak self] _ in
+				self?.cardCollectionView.scrollToItem(at: IndexPath(row: self!.currentIndex, section: 1), at: .centeredHorizontally, animated: false)
 				self?.nextButton.alpha = 1
 				self?.nextButton.isHidden = false
-			}, completion: nil)
-			cardCollectionView.scrollToItem(at: IndexPath(row: currentIndex, section: 1), at: .centeredHorizontally, animated: true)
+			})
 		}
 	}
 }
