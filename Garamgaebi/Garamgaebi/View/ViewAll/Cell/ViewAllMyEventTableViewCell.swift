@@ -114,6 +114,7 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16))
     }
     
     func configSubViewLayouts() {
