@@ -21,9 +21,8 @@ class ProfileInputEducationVC: UIViewController {
     lazy var institutionTextField: UITextField = {
         let textField = UITextField()
         
-//        textField.addLeftPadding()
+        textField.addLeftPadding()
         textField.placeholder = "교육기관을 입력해주세요"
-//        textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
         textField.textColor = .black
         textField.font = UIFont.NotoSansKR(type: .Regular, size: 14)
@@ -50,6 +49,7 @@ class ProfileInputEducationVC: UIViewController {
     lazy var majorTextField: UITextField = {
         let textField = UITextField()
 
+        textField.addLeftPadding()
         textField.placeholder = "전공/과정을 입력해주세요 (예: 웹 개발 과정)"
         textField.layer.cornerRadius = 12
         textField.textColor = .black
@@ -77,9 +77,9 @@ class ProfileInputEducationVC: UIViewController {
     lazy var startDateTextField: UITextField = {
         let textField = UITextField()
 
-        // textField.addLeftPadding()
+        textField.addLeftPadding()
         textField.placeholder = "시작년월"
-        // textField.setPlaceholderColor(.mainGray)
+//        textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
         textField.textColor = .black
         textField.autocapitalizationType = .none
@@ -91,6 +91,14 @@ class ProfileInputEducationVC: UIViewController {
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
 
         return textField
+    }()
+    
+    lazy var startDateImageView: UIImageView = {
+        let imageView = UIImageView()
+        
+        imageView.image = UIImage(named: "CalendarMonth")
+        
+        return imageView
     }()
 
     lazy var betweenTildLabel: UIButton = {
@@ -105,7 +113,7 @@ class ProfileInputEducationVC: UIViewController {
     lazy var endDateTextField: UITextField = {
         let textField = UITextField()
 
-        // textField.addLeftPadding()
+         textField.addLeftPadding()
         textField.placeholder = "종료년월"
         //textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
@@ -121,7 +129,15 @@ class ProfileInputEducationVC: UIViewController {
 
         return textField
     }()
-
+    
+    lazy var endDateImageView: UIImageView = {
+        let imageView = UIImageView()
+        
+        imageView.image = UIImage(named: "CalendarMonth")
+        
+        return imageView
+    }()
+    
     lazy var checkIsLearningButton: UIButton = {
         let button = UIButton()
         button.setTitle("교육 중", for: .normal)
@@ -145,7 +161,7 @@ class ProfileInputEducationVC: UIViewController {
         button.layer.cornerRadius = 12
         button.backgroundColor = .mainBlue
         button.clipsToBounds = true
-        button.addTarget(self, action: #selector(didTapSaveBtn), for: .touchUpInside)
+        button.addTarget(self, action: #selector(saveButtonDidTap), for: .touchUpInside)
         return button
     }()
 
@@ -178,7 +194,12 @@ class ProfileInputEducationVC: UIViewController {
 
 
         /* Labels */
-        [subtitleInstitutionLabel,subtitleMajorLabel,subtitleLearningDateLabel].map {
+        [subtitleInstitutionLabel,subtitleMajorLabel,subtitleLearningDateLabel].forEach {
+            view.addSubview($0)
+        }
+        
+        /* ImageViews */
+        [startDateImageView, endDateImageView].forEach {
             view.addSubview($0)
         }
     }
@@ -232,6 +253,12 @@ class ProfileInputEducationVC: UIViewController {
             make.left.equalTo(subtitleInstitutionLabel.snp.left)
             make.right.equalTo(betweenTildLabel.snp.left)
         }
+        
+        // startDateImageView
+        startDateImageView.snp.makeConstraints { make in
+            make.centerY.equalTo(startDateTextField)
+            make.trailing.equalTo(startDateTextField).offset(-12)
+        }
 
         // endDateTextField
         endDateTextField.snp.makeConstraints { make in
@@ -239,6 +266,12 @@ class ProfileInputEducationVC: UIViewController {
             make.height.equalTo(48)
             make.left.equalTo(betweenTildLabel.snp.right)
             make.right.equalToSuperview().inset(16)
+        }
+        
+        // endDateImageView
+        endDateImageView.snp.makeConstraints { make in
+            make.centerY.equalTo(endDateTextField)
+            make.trailing.equalTo(endDateTextField).offset(-12)
         }
 
         //checkIsWorkingButton
@@ -257,7 +290,7 @@ class ProfileInputEducationVC: UIViewController {
         }
     }
 
-    @objc private func didTapSaveBtn(_ sender: UIButton) {
+    @objc private func saveButtonDidTap(_ sender: UIButton) {
         print("저장하기 버튼 클릭")
         self.navigationController?.popViewController(animated: true)
     }
@@ -288,7 +321,7 @@ class ProfileInputEducationVC: UIViewController {
         self.navigationItem.title = "교육"
         let backBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: nil)
         self.navigationItem.leftBarButtonItem = backBarButtonItem
-        self.navigationItem.leftBarButtonItem?.action  = #selector(didTapBackBarButton)
+        self.navigationItem.leftBarButtonItem?.action  = #selector(backBarButtonDidTap)
         backBarButtonItem.tintColor = .black
         self.navigationController?.navigationBar.tintColor = .black
     }
@@ -307,7 +340,7 @@ class ProfileInputEducationVC: UIViewController {
     }
     
     // 뒤로가기 버튼 did tap
-    @objc private func didTapBackBarButton() {
+    @objc private func backBarButtonDidTap() {
         print("뒤로가기 버튼 클릭")
         self.navigationController?.popViewController(animated: true)
     }
