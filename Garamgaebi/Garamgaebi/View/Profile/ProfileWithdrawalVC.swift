@@ -169,7 +169,7 @@ class ProfileWithdrawalVC: UIViewController {
             $0.trailing.equalTo(emailTextField)
             $0.height.equalTo(45)
         }
-        
+        sendBtn.addTarget(self, action: #selector(withdrawalButtonDidTap), for: .touchUpInside)
         
     }
     
@@ -180,7 +180,7 @@ class ProfileWithdrawalVC: UIViewController {
         self.navigationItem.title = "회원 탈퇴"
         let backBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: nil)
         self.navigationItem.leftBarButtonItem = backBarButtonItem
-        self.navigationItem.leftBarButtonItem?.action  = #selector(didTapBackBarButton)
+        self.navigationItem.leftBarButtonItem?.action  = #selector(backBarButtonDidTap)
         backBarButtonItem.tintColor = .black
         self.navigationController?.navigationBar.tintColor = .black
     }
@@ -199,13 +199,13 @@ class ProfileWithdrawalVC: UIViewController {
     }
     
     
-    @objc private func didTapBackBarButton() {
+    @objc private func backBarButtonDidTap() {
         print("뒤로가기 버튼 클릭")
         self.navigationController?.popViewController(animated: false)
     }
     
     // 회원탈퇴 버튼 did tap
-    @objc private func didTapWithdrawalButton() {
+    @objc private func withdrawalButtonDidTap() {
         print("회원탈퇴 버튼 클릭")
         
         self.navigationController?.popViewController(animated: false)

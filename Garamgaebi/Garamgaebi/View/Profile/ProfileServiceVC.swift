@@ -82,6 +82,7 @@ class ProfileServiceVC: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .white
+        tabBarController?.tabBar.isHidden = true
         
         configureLayouts()
         configureNavigationBar()
@@ -106,12 +107,14 @@ class ProfileServiceVC: UIViewController {
             $0.top.equalTo(noticeLabel.snp.bottom).offset(16)
             $0.leading.equalTo(noticeLabel.snp.leading)
             $0.trailing.equalTo(noticeLabel.snp.trailing)
+            $0.height.equalTo(45)
         }
         
         questionTypeTextField.snp.makeConstraints { /// 질문 유형 선택
             $0.top.equalTo(emailTextField.snp.bottom).offset(12)
             $0.leading.equalTo(emailTextField.snp.leading)
             $0.trailing.equalTo(emailTextField.snp.trailing)
+            $0.height.equalTo(45)
         }
         
         typeSelectBtn.snp.makeConstraints { /// 유형 선택 화살표
@@ -141,50 +144,21 @@ class ProfileServiceVC: UIViewController {
             $0.top.equalTo(agreemsgLabel.snp.bottom).offset(40)
             $0.leading.equalTo(emailTextField)
             $0.trailing.equalTo(emailTextField)
+            $0.height.equalTo(45)
         }
         
         withdrawalLabel.snp.makeConstraints { /// 회원탈퇴
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-50)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-30)
             $0.centerX.equalToSuperview()
         }
-        withdrawalLabel.addTarget(self, action: #selector(didTapWithdrawalButton), for: .touchUpInside)
+        withdrawalLabel.addTarget(self, action: #selector(withdrawalButtonDidTap), for: .touchUpInside)
         
         
     }
     
-    
-    
-    // navigation bar 구성
-    private func configureNavigationBar() {
-        self.navigationItem.title = "고객센터"
-        let backBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: nil)
-        self.navigationItem.leftBarButtonItem = backBarButtonItem
-        self.navigationItem.leftBarButtonItem?.action  = #selector(didTapBackBarButton)
-        backBarButtonItem.tintColor = .black
-        self.navigationController?.navigationBar.tintColor = .black
-    }
-    
-    // navigation bar shadow 설정
-    private func configureNavigationBarShadow() {
-        let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.configureWithOpaqueBackground()
-
-        navigationController?.navigationBar.tintColor = .clear
-
-        navigationItem.scrollEdgeAppearance = navigationBarAppearance
-        navigationItem.standardAppearance = navigationBarAppearance
-        navigationItem.compactAppearance = navigationBarAppearance
-        navigationController?.setNeedsStatusBarAppearanceUpdate()
-    }
-    
-    
-    @objc private func didTapBackBarButton() {
-        print("뒤로가기 버튼 클릭")
-        self.navigationController?.popViewController(animated: true)
-    }
     
     // 회원탈퇴 버튼 did tap
-    @objc private func didTapWithdrawalButton() {
+    @objc private func withdrawalButtonDidTap() {
         print("회원탈퇴 버튼 클릭")
         
         // 화면 전환
@@ -202,7 +176,36 @@ class ProfileServiceVC: UIViewController {
             sender.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
         }
     }
+    
+    // TODO: NavigationBar
+    // navigation bar 구성
+    private func configureNavigationBar() {
+        self.navigationItem.title = "고객센터"
+        let backBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: nil)
+        self.navigationItem.leftBarButtonItem = backBarButtonItem
+        self.navigationItem.leftBarButtonItem?.action  = #selector(backBarButtonDidTap)
+        backBarButtonItem.tintColor = .black
+        self.navigationController?.navigationBar.tintColor = .black
+    }
+    
+    // navigation bar shadow 설정
+    private func configureNavigationBarShadow() {
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
 
+        navigationController?.navigationBar.tintColor = .clear
+
+        navigationItem.scrollEdgeAppearance = navigationBarAppearance
+        navigationItem.standardAppearance = navigationBarAppearance
+        navigationItem.compactAppearance = navigationBarAppearance
+        navigationController?.setNeedsStatusBarAppearanceUpdate()
+    }
+
+    // 뒤로가기 버튼 did tap
+    @objc private func backBarButtonDidTap() {
+        print("뒤로가기 버튼 클릭")
+        self.navigationController?.popViewController(animated: true)
+    }
 }
 
 extension ProfileServiceVC: UITextViewDelegate {
@@ -216,7 +219,8 @@ extension ProfileServiceVC: UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             textView.text = textViewPlaceHolder
-            textView.textColor = .mainGray
+            textView.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+            textView.textColor = .systemGray5
             //updateCountLabel(characterCount: 0)
         }
     }
