@@ -48,7 +48,7 @@ class EventPreviewTableViewCell: UITableViewCell {
 	var dummyUserArr: [String] = []
 	var dummyBelongArr: [String] = []
 	func configureDummyData() {
-		["docker에 대해 알아보자", "iOS에 대해 알아보자", "Android에 대해 알아보자"]
+		["UICollectionView에 대해 알아보자", "iOS에 대해 알아보자", "Android에 대해 알아보자"]
 			.forEach {dummyTitleArr.append($0)}
 		["애플", "승콩", "로건"]
 			.forEach {dummyUserArr.append($0)}

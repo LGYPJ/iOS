@@ -22,6 +22,8 @@ class EventPreviewCollectionViewCell: UICollectionViewCell {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 18)
 		label.textColor = .black
+		label.numberOfLines = 2
+		label.lineBreakMode = .byCharWrapping
 		
 		return label
 	}()
@@ -49,6 +51,36 @@ class EventPreviewCollectionViewCell: UICollectionViewCell {
 		return button
 	}()
 	
+	// horizontalStackView내의 이름과 소속을 왼쪽 정렬하기 위한 빈 뷰
+	lazy var emptyView: UIView = {
+		let view = UIView()
+		view.backgroundColor = .clear
+		
+		return view
+	}()
+	
+	lazy var horizontalStackView: UIStackView = {
+		let stackView = UIStackView()
+		[userLabel, belongLabel, emptyView]
+			.forEach {stackView.addArrangedSubview($0)}
+		stackView.axis = .horizontal
+		stackView.spacing = 3
+
+		
+		
+		return stackView
+	}()
+	
+	lazy var verticalStackView: UIStackView = {
+		let stackView = UIStackView()
+		[titleLabel, horizontalStackView]
+			.forEach {stackView.addArrangedSubview($0)}
+		stackView.axis = .vertical
+		stackView.spacing = 3
+		
+		return stackView
+	}()
+	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		configureViews()
@@ -70,8 +102,8 @@ class EventPreviewCollectionViewCell: UICollectionViewCell {
 
 extension EventPreviewCollectionViewCell {
 	private func configureViews() {
-		contentView.backgroundColor = .white
-		[profileImageView, titleLabel, userLabel, belongLabel, detailButton]
+		contentView.backgroundColor = UIColor(hex: 0xF9F9F9)
+		[profileImageView, verticalStackView, detailButton]
 			.forEach {contentView.addSubview($0)}
 		
 		profileImageView.snp.makeConstraints {
@@ -79,21 +111,12 @@ extension EventPreviewCollectionViewCell {
 			$0.top.leading.equalToSuperview()
 		}
 		
-		titleLabel.snp.makeConstraints {
+		verticalStackView.snp.makeConstraints {
+			$0.centerY.equalToSuperview()
 			$0.leading.equalTo(profileImageView.snp.trailing).offset(12)
-			$0.top.equalToSuperview().inset(19.5)
+			$0.trailing.equalTo(detailButton.snp.leading).offset(-22)
 		}
-		
-		userLabel.snp.makeConstraints {
-			$0.leading.equalTo(titleLabel)
-			$0.top.equalTo(titleLabel.snp.bottom).offset(3)
-		}
-		
-		belongLabel.snp.makeConstraints {
-			$0.centerY.equalTo(userLabel)
-			$0.leading.equalTo(userLabel.snp.trailing).offset(3)
-			$0.bottom.equalToSuperview().inset(19.5)
-		}
+
 		
 		detailButton.snp.makeConstraints {
 			$0.width.equalTo(8)

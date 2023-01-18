@@ -212,7 +212,7 @@ extension EventInfoTableViewCell {
 		registerButton.snp.makeConstraints {
 			$0.centerY.equalToSuperview()
 			$0.width.equalTo(84)
-			$0.height.equalTo(36)
+			$0.height.equalTo(84)
 			$0.trailing.equalToSuperview().inset(16)
 			
 		}

@@ -16,6 +16,8 @@ class SeminarDetailVC: UIViewController {
 		tableView.allowsSelection = false
 		tableView.separatorStyle = .none
 		tableView.showsVerticalScrollIndicator = false
+		// tableView.height < view.height 인 경우에 스크롤 안되게
+		tableView.alwaysBounceVertical = false
 		
 		return tableView
 	}()

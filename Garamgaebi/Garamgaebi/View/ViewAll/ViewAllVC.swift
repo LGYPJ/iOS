@@ -16,7 +16,7 @@ class ViewAllVC: UIViewController {
     
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(true)
-		self.navigationController?.pushViewController(RegisterCancelVC(), animated: true)
+		self.navigationController?.pushViewController(SeminarDetailVC(), animated: true)
 	}
     
 }
