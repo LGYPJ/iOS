@@ -84,26 +84,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2C0538F3296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPreviewCollectionViewCell.swift; sourceTree = "<group>"; };
-		2CDD94D8296FDB88004B8D56 /* RegisterCancelVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterCancelVC.swift; sourceTree = "<group>"; };
-		2CDD94DD29700E71004B8D56 /* NetworkingDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingDetailVC.swift; sourceTree = "<group>"; };
-		2CDD94E229711EB3004B8D56 /* NetworkingGameRoomVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingGameRoomVC.swift; sourceTree = "<group>"; };
-		2CDD94E429712E8E004B8D56 /* IceBreakingCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IceBreakingCardCollectionViewCell.swift; sourceTree = "<group>"; };
-		2CDD94E7297173E8004B8D56 /* EventInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInfoTableViewCell.swift; sourceTree = "<group>"; };
-		2CDD94E929718369004B8D56 /* EventAttendantTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAttendantTableViewCell.swift; sourceTree = "<group>"; };
-		2CDD94EB29718548004B8D56 /* EventAttendantCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAttendantCollectionViewCell.swift; sourceTree = "<group>"; };
-		2CDD94ED297185A7004B8D56 /* EventIceBreakingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventIceBreakingTableViewCell.swift; sourceTree = "<group>"; };
-		2CDD94F1297191F1004B8D56 /* SeminarDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarDetailVC.swift; sourceTree = "<group>"; };
-		2CDD94F3297192E9004B8D56 /* EventPreviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPreviewTableViewCell.swift; sourceTree = "<group>"; };
-		2CDD94F52971952E004B8D56 /* EventRegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventRegisterVC.swift; sourceTree = "<group>"; };
-		2CDD94F72971A388004B8D56 /* NetworkingGameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingGameVC.swift; sourceTree = "<group>"; };
-		2CDD94F929728908004B8D56 /* IceBreakingRoomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IceBreakingRoomCollectionViewCell.swift; sourceTree = "<group>"; };
-		2CDD94FB2972DE9F004B8D56 /* IceBreakingUserCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IceBreakingUserCollectionViewCell.swift; sourceTree = "<group>"; };
-		2CDD94FD2973BAB9004B8D56 /* CustomFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFlowLayout.swift; sourceTree = "<group>"; };
-		2CDD94FF29750BC9004B8D56 /* SeminarPreviewPopUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarPreviewPopUpVC.swift; sourceTree = "<group>"; };
-		2CDD9501297551C4004B8D56 /* IceBreakingStartCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IceBreakingStartCardCollectionViewCell.swift; sourceTree = "<group>"; };
-		2CDD9503297573BF004B8D56 /* RegisterCancelBankPopUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterCancelBankPopUpVC.swift; sourceTree = "<group>"; };
-		2CDD9508297657FE004B8D56 /* BankListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankListCollectionViewCell.swift; sourceTree = "<group>"; };
 		4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Garamgaebi_GaramgaebiUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5393A75B600780926B72C170 /* Pods-GaramgaebiTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaramgaebiTests.release.xcconfig"; path = "Target Support Files/Pods-GaramgaebiTests/Pods-GaramgaebiTests.release.xcconfig"; sourceTree = "<group>"; };
 		595E523818BF61B8A2004DDC /* Pods-Garamgaebi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Garamgaebi.release.xcconfig"; path = "Target Support Files/Pods-Garamgaebi/Pods-Garamgaebi.release.xcconfig"; sourceTree = "<group>"; };
@@ -261,7 +241,6 @@
 				60F9140A296D465E00626C40 /* Fonts */,
 				609A53D1296AB47300BBD338 /* AppDelegate.swift */,
 				609A53D3296AB47300BBD338 /* SceneDelegate.swift */,
-				2CDD94FD2973BAB9004B8D56 /* CustomFlowLayout.swift */,
 				60F91405296D440F00626C40 /* Extension */,
 				60F91404296D34CD00626C40 /* View */,
 				609A53DA296AB47400BBD338 /* Assets.xcassets */,
@@ -675,12 +654,6 @@
 				60F913FF296D2F2C00626C40 /* HomeVC.swift in Sources */,
 				6055D84529701F5700C86D53 /* RegisterInputCareerVC.swift in Sources */,
 				60F91401296D2F3D00626C40 /* ViewAllVC.swift in Sources */,
-				2CDD9509297657FE004B8D56 /* BankListCollectionViewCell.swift in Sources */,
-				2CDD94E529712E8E004B8D56 /* IceBreakingCardCollectionViewCell.swift in Sources */,
-				2CDD9502297551C4004B8D56 /* IceBreakingStartCardCollectionViewCell.swift in Sources */,
-				2CDD94FE2973BAB9004B8D56 /* CustomFlowLayout.swift in Sources */,
-				2CDD94F82971A389004B8D56 /* NetworkingGameVC.swift in Sources */,
-				2CDD94E329711EB3004B8D56 /* NetworkingGameRoomVC.swift in Sources */,
 				60F91409296D446100626C40 /* UIFont+.swift in Sources */,
 				6018232829726BF600160EF4 /* TabBarController.swift in Sources */,
 				609A53D2296AB47300BBD338 /* AppDelegate.swift in Sources */,
