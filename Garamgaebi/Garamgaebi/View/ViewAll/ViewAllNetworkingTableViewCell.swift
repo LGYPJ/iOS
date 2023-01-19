@@ -128,7 +128,7 @@ class ViewAllNetworkingTableViewCell: UITableViewCell {
         case "오픈":
             contentView.backgroundColor = UIColor(hex: 0x356EFF, alpha: 0.8)
             stateInfoLabel.text = item.state
-            [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,stateInfoLabel].map {
+            [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,stateInfoLabel].forEach {
                 $0.textColor = .white
             }
         case "오픈예정":

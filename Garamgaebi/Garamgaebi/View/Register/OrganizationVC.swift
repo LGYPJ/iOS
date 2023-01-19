@@ -78,7 +78,7 @@ class OrganizationVC: UIViewController {
         view.addSubview(presentCareerButton)
         
         /* Labels */
-        [titleLabel,descriptionLabel].map {
+        [titleLabel,descriptionLabel].forEach {
             view.addSubview($0)
         }
     }

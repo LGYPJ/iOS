@@ -162,14 +162,14 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
         case "오픈":
             contentView.backgroundColor = UIColor(hex: 0x356EFF, alpha: 0.8)
             stateInfoLabel.setTitle("이번 달", for: .normal)
-            [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,dDayInfoLabel].map {
+            [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,dDayInfoLabel].forEach {
                 $0.textColor = .white
             }
             
         case "오픈예정":
             contentView.backgroundColor = UIColor(hex: 0x356EFF, alpha: 0.1)
             stateInfoLabel.setTitle("예정된", for: .normal)
-            [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,dDayInfoLabel].map {
+            [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,dDayInfoLabel].forEach {
                 $0.textColor = UIColor(hex: 0x000000, alpha: 0.8)
             }
         default:

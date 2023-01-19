@@ -103,7 +103,7 @@ class EmailVC: UIViewController {
         view.addSubview(nextButton)
         
         /* Labels */
-        [titleLabel,descriptionLabel,emailValidLabel].map {
+        [titleLabel,descriptionLabel,emailValidLabel].forEach {
             view.addSubview($0)
         }
  

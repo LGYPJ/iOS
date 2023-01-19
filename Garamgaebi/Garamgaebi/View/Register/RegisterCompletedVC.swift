@@ -108,7 +108,7 @@ class RegisterCompletedVC: UIViewController {
 
         
         /* Labels */
-        [titleLabel,descriptionLabel].map {
+        [titleLabel,descriptionLabel].forEach {
             view.addSubview($0)
         }
     }

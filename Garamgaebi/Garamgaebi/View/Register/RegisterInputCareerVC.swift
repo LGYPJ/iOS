@@ -220,7 +220,7 @@ class RegisterInputCareerVC: UIViewController {
         
 
         /* Labels */
-        [titleLabel,descriptionLabel,subtitleCompanyLabel,subtitlePositionLabel,subtitleWorkingDateLabel,subDescriptionLabel].map {
+        [titleLabel,descriptionLabel,subtitleCompanyLabel,subtitlePositionLabel,subtitleWorkingDateLabel,subDescriptionLabel].forEach {
             view.addSubview($0)
         }
     }

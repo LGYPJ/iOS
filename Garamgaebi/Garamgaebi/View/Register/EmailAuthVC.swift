@@ -159,7 +159,7 @@ class EmailAuthVC: UIViewController {
         view.addSubview(pagingImage)
         
         /* Labels */
-        [titleLabel,descriptionLabel].map {
+        [titleLabel,descriptionLabel].forEach {
             view.addSubview($0)
         }
         

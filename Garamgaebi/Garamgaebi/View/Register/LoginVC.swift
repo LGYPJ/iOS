@@ -74,7 +74,7 @@ class LoginVC: UIViewController {
         view.addSubview(appleLoginButton)
         
         /* Labels */
-        [titleLabel,subTitleLabel,descriptionLabel].map {
+        [titleLabel,subTitleLabel,descriptionLabel].forEach {
             view.addSubview($0)
         }
     }

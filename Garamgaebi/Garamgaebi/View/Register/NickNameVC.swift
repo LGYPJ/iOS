@@ -104,7 +104,7 @@ class NickNameVC: UIViewController {
         view.addSubview(nextButton)
         
         /* Labels */
-        [titleLabel,descriptionLabel,nickNameValidLabel].map {
+        [titleLabel,descriptionLabel,nickNameValidLabel].forEach {
             view.addSubview($0)
         }
  

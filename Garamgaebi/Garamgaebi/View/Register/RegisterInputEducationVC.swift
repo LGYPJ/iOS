@@ -157,7 +157,7 @@ class RegisterInputEducationVC: UIViewController {
         view.addSubview(inputCareerButton)
         
         /* Labels */
-        [titleLabel,descriptionLabel,subtitleInstitutionLabel,subtitleMajorLabel,subDescriptionLabel].map {
+        [titleLabel,descriptionLabel,subtitleInstitutionLabel,subtitleMajorLabel,subDescriptionLabel].forEach {
             view.addSubview($0)
         }
     }
