@@ -181,20 +181,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6018232D2972B62500160EF4 /* Cell */ = {
-			isa = PBXGroup;
-			children = (
-				601823322972DDCA00160EF4 /* HomeEventInfoTabelViewCell.swift */,
-				601823342972F04500160EF4 /* HomeEventCollectionViewCell.swift */,
-				60BD04F12973A3EC00F4B433 /* HomeUserInfoTableViewCell.swift */,
-				60BD04EF2973A25D00F4B433 /* HomeUserColectionViewCell.swift */,
-				60BD04F52973AD2600F4B433 /* HomeMyEventInfoTableViewCell.swift */,
-				60BD04F72973C37C00F4B433 /* HomeMyEventColectionViewCell.swift */,
-				60BD04FE2973EBE600F4B433 /* HomeNotificationTableViewCell.swift */,
-			);
-			path = Cell;
-			sourceTree = "<group>";
-		};
 		60382438296D66E500E12CC2 /* Register */ = {
 			isa = PBXGroup;
 			children = (
@@ -267,42 +253,20 @@
 			path = GaramgaebiUITests;
 			sourceTree = "<group>";
 		};
-		60AA6BC629751F39002878B6 /* Cell */ = {
-			isa = PBXGroup;
-			children = (
-				60AA6BC729751F66002878B6 /* ViewAllSeminarTableViewCell.swift */,
-				60EDD40629765C6800600807 /* ViewAllNetworkingTableViewCell.swift */,
-				60EDD40A2976611800600807 /* ViewAllMyEventTableViewCell.swift */,
-			);
-			path = Cell;
-			sourceTree = "<group>";
-		};
-		60AA6BC929752380002878B6 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				60AA6BCA29752422002878B6 /* ViewAllSeminarDataModel.swift */,
-				60EDD40229765BE100600807 /* ViewAllNetworkingDataModel.swift */,
-				60EDD40C2976620B00600807 /* ViewAllMyEventDataModel.swift */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		60BD04FB2973CB6F00F4B433 /* Model */ = {
+		60F913FB296D2EFA00626C40 /* Home */ = {
 			isa = PBXGroup;
 			children = (
 				601823362972FAD800160EF4 /* HomeEventDataModel.swift */,
 				60BD04F32973A47E00F4B433 /* HomeUserDataModel.swift */,
 				60BD04F92973C55D00F4B433 /* HomeMyEventDataModel.swift */,
 				60BD05002973F6C900F4B433 /* HomeNotificationDataModel.swift */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		60F913FB296D2EFA00626C40 /* Home */ = {
-			isa = PBXGroup;
-			children = (
-				60BD04FB2973CB6F00F4B433 /* Model */,
-				6018232D2972B62500160EF4 /* Cell */,
+				601823322972DDCA00160EF4 /* HomeEventInfoTabelViewCell.swift */,
+				601823342972F04500160EF4 /* HomeEventCollectionViewCell.swift */,
+				60BD04F12973A3EC00F4B433 /* HomeUserInfoTableViewCell.swift */,
+				60BD04EF2973A25D00F4B433 /* HomeUserColectionViewCell.swift */,
+				60BD04F52973AD2600F4B433 /* HomeMyEventInfoTableViewCell.swift */,
+				60BD04F72973C37C00F4B433 /* HomeMyEventColectionViewCell.swift */,
+				60BD04FE2973EBE600F4B433 /* HomeNotificationTableViewCell.swift */,
 				60F913FE296D2F2C00626C40 /* HomeVC.swift */,
 				60BD04FC2973D6BE00F4B433 /* HomeNotificationVC.swift */,
 			);
@@ -312,8 +276,12 @@
 		60F913FC296D2F0000626C40 /* ViewAll */ = {
 			isa = PBXGroup;
 			children = (
-				60AA6BC929752380002878B6 /* Model */,
-				60AA6BC629751F39002878B6 /* Cell */,
+				60AA6BCA29752422002878B6 /* ViewAllSeminarDataModel.swift */,
+				60EDD40229765BE100600807 /* ViewAllNetworkingDataModel.swift */,
+				60EDD40C2976620B00600807 /* ViewAllMyEventDataModel.swift */,
+				60AA6BC729751F66002878B6 /* ViewAllSeminarTableViewCell.swift */,
+				60EDD40629765C6800600807 /* ViewAllNetworkingTableViewCell.swift */,
+				60EDD40A2976611800600807 /* ViewAllMyEventTableViewCell.swift */,
 				60F91400296D2F3D00626C40 /* ViewAllVC.swift */,
 				60BD05022974187700F4B433 /* UnderlineSegmentedControl.swift */,
 				60AA6BC429751D1F002878B6 /* ViewAllSeminarVC.swift */,
