@@ -125,22 +125,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		461D867B2977E764009835F1 /* Cell */ = {
-			isa = PBXGroup;
-			children = (
-				46C18D222978662000A05CBF /* ProfileSnsCollectionViewCell.swift */,
-			);
-			path = Cell;
-			sourceTree = "<group>";
-		};
-		461D867C2977E778009835F1 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				46C18D24297866E600A05CBF /* ProfileDataModel.swift */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
 		609A53C5296AB47300BBD338 = {
 			isa = PBXGroup;
 			children = (
@@ -214,8 +198,6 @@
 		60F913FD296D2F0600626C40 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				461D867C2977E778009835F1 /* Model */,
-				461D867B2977E764009835F1 /* Cell */,
 				60F91402296D2F4800626C40 /* ProfileVC.swift */,
 				460C0C2A296D855800FF5085 /* ProfileEditVC.swift */,
 				46B4780A29700FEE002186A3 /* ProfileServiceVC.swift */,
@@ -223,6 +205,8 @@
 				46876C682973D7E3000BA1B6 /* ProfileInputCareerVC.swift */,
 				46828A4129752EF80037AB8C /* ProfileInputEducationVC.swift */,
 				46C18D2829788A7600A05CBF /* ProfileInputSNSVC.swift */,
+				46C18D24297866E600A05CBF /* ProfileDataModel.swift */,
+				46C18D222978662000A05CBF /* ProfileSnsCollectionViewCell.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
