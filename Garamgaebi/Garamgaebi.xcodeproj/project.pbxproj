@@ -9,6 +9,14 @@
 /* Begin PBXBuildFile section */
 		07387C389AB3203B5F1B6292 /* Pods_Garamgaebi_GaramgaebiUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */; };
 		2A5DAD14EE12541BAE988EB7 /* Pods_Garamgaebi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8CB1AB7E398B75581977FAF /* Pods_Garamgaebi.framework */; };
+		460C0C2B296D855800FF5085 /* ProfileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460C0C2A296D855800FF5085 /* ProfileEditVC.swift */; };
+		46828A4229752EF80037AB8C /* ProfileInputEducationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46828A4129752EF80037AB8C /* ProfileInputEducationVC.swift */; };
+		46876C6729732053000BA1B6 /* ProfileWithdrawalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46876C6629732053000BA1B6 /* ProfileWithdrawalVC.swift */; };
+		46876C692973D7E3000BA1B6 /* ProfileInputCareerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46876C682973D7E3000BA1B6 /* ProfileInputCareerVC.swift */; };
+		46B4780B29700FEE002186A3 /* ProfileServiceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B4780A29700FEE002186A3 /* ProfileServiceVC.swift */; };
+		46C18D232978662000A05CBF /* ProfileSnsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C18D222978662000A05CBF /* ProfileSnsCollectionViewCell.swift */; };
+		46C18D25297866E600A05CBF /* ProfileDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C18D24297866E600A05CBF /* ProfileDataModel.swift */; };
+		46C18D2929788A7600A05CBF /* ProfileInputSNSVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C18D2829788A7600A05CBF /* ProfileInputSNSVC.swift */; };
 		60093A8B296E7EFB00F76783 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60093A8A296E7EFB00F76783 /* LoginVC.swift */; };
 		60093A8D296E90FD00F76783 /* EmailAuthVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60093A8C296E90FD00F76783 /* EmailAuthVC.swift */; };
 		60093A8F296EC92200F76783 /* NickNameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60093A8E296EC92200F76783 /* NickNameVC.swift */; };
@@ -85,6 +93,14 @@
 
 /* Begin PBXFileReference section */
 		4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Garamgaebi_GaramgaebiUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		460C0C2A296D855800FF5085 /* ProfileEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditVC.swift; sourceTree = "<group>"; };
+		46828A4129752EF80037AB8C /* ProfileInputEducationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInputEducationVC.swift; sourceTree = "<group>"; };
+		46876C6629732053000BA1B6 /* ProfileWithdrawalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileWithdrawalVC.swift; sourceTree = "<group>"; };
+		46876C682973D7E3000BA1B6 /* ProfileInputCareerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInputCareerVC.swift; sourceTree = "<group>"; };
+		46B4780A29700FEE002186A3 /* ProfileServiceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileServiceVC.swift; sourceTree = "<group>"; };
+		46C18D222978662000A05CBF /* ProfileSnsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSnsCollectionViewCell.swift; sourceTree = "<group>"; };
+		46C18D24297866E600A05CBF /* ProfileDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDataModel.swift; sourceTree = "<group>"; };
+		46C18D2829788A7600A05CBF /* ProfileInputSNSVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInputSNSVC.swift; sourceTree = "<group>"; };
 		5393A75B600780926B72C170 /* Pods-GaramgaebiTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaramgaebiTests.release.xcconfig"; path = "Target Support Files/Pods-GaramgaebiTests/Pods-GaramgaebiTests.release.xcconfig"; sourceTree = "<group>"; };
 		595E523818BF61B8A2004DDC /* Pods-Garamgaebi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Garamgaebi.release.xcconfig"; path = "Target Support Files/Pods-Garamgaebi/Pods-Garamgaebi.release.xcconfig"; sourceTree = "<group>"; };
 		60093A8A296E7EFB00F76783 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
@@ -296,6 +312,14 @@
 			isa = PBXGroup;
 			children = (
 				60F91402296D2F4800626C40 /* ProfileVC.swift */,
+				460C0C2A296D855800FF5085 /* ProfileEditVC.swift */,
+				46B4780A29700FEE002186A3 /* ProfileServiceVC.swift */,
+				46876C6629732053000BA1B6 /* ProfileWithdrawalVC.swift */,
+				46876C682973D7E3000BA1B6 /* ProfileInputCareerVC.swift */,
+				46828A4129752EF80037AB8C /* ProfileInputEducationVC.swift */,
+				46C18D2829788A7600A05CBF /* ProfileInputSNSVC.swift */,
+				46C18D24297866E600A05CBF /* ProfileDataModel.swift */,
+				46C18D222978662000A05CBF /* ProfileSnsCollectionViewCell.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -618,6 +642,14 @@
 				6055D84129700C9500C86D53 /* EmailVC.swift in Sources */,
 				60AA6BCB29752422002878B6 /* ViewAllSeminarDataModel.swift in Sources */,
 				60F91403296D2F4800626C40 /* ProfileVC.swift in Sources */,
+				46876C6729732053000BA1B6 /* ProfileWithdrawalVC.swift in Sources */,
+				46C18D25297866E600A05CBF /* ProfileDataModel.swift in Sources */,
+				46876C692973D7E3000BA1B6 /* ProfileInputCareerVC.swift in Sources */,
+				46B4780B29700FEE002186A3 /* ProfileServiceVC.swift in Sources */,
+				46C18D232978662000A05CBF /* ProfileSnsCollectionViewCell.swift in Sources */,
+				46C18D2929788A7600A05CBF /* ProfileInputSNSVC.swift in Sources */,
+				460C0C2B296D855800FF5085 /* ProfileEditVC.swift in Sources */,
+				46828A4229752EF80037AB8C /* ProfileInputEducationVC.swift in Sources */,
 				60EDD4092976606400600807 /* ViewAllMyEventVC.swift in Sources */,
 				60F913FF296D2F2C00626C40 /* HomeVC.swift in Sources */,
 				6055D84529701F5700C86D53 /* RegisterInputCareerVC.swift in Sources */,
