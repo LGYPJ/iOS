@@ -149,40 +149,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2CDD94EF2971918D004B8D56 /* Event */ = {
-			isa = PBXGroup;
-			children = (
-				2CDD94F1297191F1004B8D56 /* SeminarDetailVC.swift */,
-				2CDD94FF29750BC9004B8D56 /* SeminarPreviewPopUpVC.swift */,
-				2CDD94DD29700E71004B8D56 /* NetworkingDetailVC.swift */,
-				2CDD94F72971A388004B8D56 /* NetworkingGameVC.swift */,
-				2CDD94E229711EB3004B8D56 /* NetworkingGameRoomVC.swift */,
-				2CDD94F52971952E004B8D56 /* EventRegisterVC.swift */,
-				2CDD94D8296FDB88004B8D56 /* RegisterCancelVC.swift */,
-				2CDD9503297573BF004B8D56 /* RegisterCancelBankPopUpVC.swift */,
-				2CDD94F0297191B0004B8D56 /* Cell */,
-			);
-			path = Event;
-			sourceTree = "<group>";
-		};
-		2CDD94F0297191B0004B8D56 /* Cell */ = {
-			isa = PBXGroup;
-			children = (
-				2CDD94E7297173E8004B8D56 /* EventInfoTableViewCell.swift */,
-				2CDD94E929718369004B8D56 /* EventAttendantTableViewCell.swift */,
-				2CDD94EB29718548004B8D56 /* EventAttendantCollectionViewCell.swift */,
-				2CDD94F3297192E9004B8D56 /* EventPreviewTableViewCell.swift */,
-				2C0538F3296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift */,
-				2CDD94ED297185A7004B8D56 /* EventIceBreakingTableViewCell.swift */,
-				2CDD94F929728908004B8D56 /* IceBreakingRoomCollectionViewCell.swift */,
-				2CDD94FB2972DE9F004B8D56 /* IceBreakingUserCollectionViewCell.swift */,
-				2CDD9501297551C4004B8D56 /* IceBreakingStartCardCollectionViewCell.swift */,
-				2CDD94E429712E8E004B8D56 /* IceBreakingCardCollectionViewCell.swift */,
-				2CDD9508297657FE004B8D56 /* BankListCollectionViewCell.swift */,
-			);
-			path = Cell;
-			sourceTree = "<group>";
-		};
 		609A53C5296AB47300BBD338 = {
 			isa = PBXGroup;
 			children = (
@@ -250,7 +216,25 @@
 			isa = PBXGroup;
 			children = (
 				60F91400296D2F3D00626C40 /* ViewAllVC.swift */,
-				2CDD94EF2971918D004B8D56 /* Event */,
+				2CDD94F1297191F1004B8D56 /* SeminarDetailVC.swift */,
+				2CDD94FF29750BC9004B8D56 /* SeminarPreviewPopUpVC.swift */,
+				2CDD94DD29700E71004B8D56 /* NetworkingDetailVC.swift */,
+				2CDD94F72971A388004B8D56 /* NetworkingGameVC.swift */,
+				2CDD94E229711EB3004B8D56 /* NetworkingGameRoomVC.swift */,
+				2CDD94F52971952E004B8D56 /* EventRegisterVC.swift */,
+				2CDD94D8296FDB88004B8D56 /* RegisterCancelVC.swift */,
+				2CDD9503297573BF004B8D56 /* RegisterCancelBankPopUpVC.swift */,
+				2CDD94E7297173E8004B8D56 /* EventInfoTableViewCell.swift */,
+				2CDD94E929718369004B8D56 /* EventAttendantTableViewCell.swift */,
+				2CDD94EB29718548004B8D56 /* EventAttendantCollectionViewCell.swift */,
+				2CDD94F3297192E9004B8D56 /* EventPreviewTableViewCell.swift */,
+				2C0538F3296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift */,
+				2CDD94ED297185A7004B8D56 /* EventIceBreakingTableViewCell.swift */,
+				2CDD94F929728908004B8D56 /* IceBreakingRoomCollectionViewCell.swift */,
+				2CDD94FB2972DE9F004B8D56 /* IceBreakingUserCollectionViewCell.swift */,
+				2CDD9501297551C4004B8D56 /* IceBreakingStartCardCollectionViewCell.swift */,
+				2CDD94E429712E8E004B8D56 /* IceBreakingCardCollectionViewCell.swift */,
+				2CDD9508297657FE004B8D56 /* BankListCollectionViewCell.swift */,
 			);
 			path = ViewAll;
 			sourceTree = "<group>";
