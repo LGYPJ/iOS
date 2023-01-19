@@ -80,6 +80,7 @@ class ViewAllVC: UIViewController {
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+
         
         configureViews()
         addSubViews()
@@ -186,4 +187,5 @@ extension ViewAllVC: UIPageViewControllerDataSource, UIPageViewControllerDelegat
         self.currentPage = index
         self.segmentedControl.selectedSegmentIndex = index
     }
+
 }
