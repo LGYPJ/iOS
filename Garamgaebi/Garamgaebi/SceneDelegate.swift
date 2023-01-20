@@ -18,6 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window = UIWindow(windowScene: windowScene)
         
         let rootViewController = TabBarController()
+        //let rootViewController = EventApplyCancelVC()
         //let rootViewController = HomeVC()
         //let rootViewController = HomeNotificationVC()
         //let rootViewController = OnboardingVC()
