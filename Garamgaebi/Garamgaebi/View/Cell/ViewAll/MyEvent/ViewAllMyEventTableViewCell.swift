@@ -74,7 +74,8 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
             title: "상세보기",
             image: UIImage(named: "searchIcon")?.withTintColor(UIColor(hex: 0x1C1B1F)),
             handler: { _ in
-                self.delegate?.pushNextView(EventSeminarDetailVC()) // 임시 VC
+                //self.delegate?.pushNextView(EventSeminarDetailVC()) // 임시 VC
+                NotificationCenter.default.post(name: Notification.Name("pushEventDetailVC"), object: nil)
                 print("상세보기 클릭됨")
             }
         )

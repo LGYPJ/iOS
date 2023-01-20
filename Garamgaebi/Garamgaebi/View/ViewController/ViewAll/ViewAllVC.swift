@@ -84,7 +84,14 @@ class ViewAllVC: UIViewController {
         addSubViews()
         configLayouts()
         
+//        NotificationCenter.default.addObserver(self, selector: #selector(pushDetailVC), name: Notification.Name("didTapRegisterButton"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(pushDetailVC), name: Notification.Name("pushEventDetailVC"), object: nil)
     }
+    
+    @objc func pushDetailVC() {
+        self.navigationController?.pushViewController(EventSeminarDetailVC(), animated: true)
+    }
+    
     
     // MARK: - Functions
     
