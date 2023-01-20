@@ -7,17 +7,11 @@
 
 import UIKit
 
-protocol ViewAllMyEventTableViewCellProtocol {
-    func pushNextView(_ target : UIViewController)
-}
-
 class ViewAllMyEventTableViewCell: UITableViewCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    var delegate: ViewAllMyEventTableViewCellProtocol?
     
     // MARK: - Properties
     static let identifier = String(describing: ViewAllMyEventTableViewCell.self)
@@ -74,7 +68,6 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
             title: "상세보기",
             image: UIImage(named: "searchIcon")?.withTintColor(UIColor(hex: 0x1C1B1F)),
             handler: { _ in
-                //self.delegate?.pushNextView(EventSeminarDetailVC()) // 임시 VC
                 NotificationCenter.default.post(name: Notification.Name("pushEventDetailVC"), object: nil)
                 print("상세보기 클릭됨")
             }
@@ -84,7 +77,6 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
             title: "신청취소",
             image: UIImage(named: "deleteIcon")?.withTintColor(UIColor(hex: 0x1C1B1F)),
             handler: { _ in
-                //self.delegate?.pushNextView(ViewAllMyEventVC()) // 임시 VC
                 NotificationCenter.default.post(name: Notification.Name("pushEventApplyCancelVC"), object: nil)
                 print("신청취소 클릭됨")
             }

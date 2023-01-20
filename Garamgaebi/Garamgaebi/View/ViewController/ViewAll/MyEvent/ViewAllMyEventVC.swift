@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewAllMyEventVC: UIViewController, ViewAllMyEventTableViewCellProtocol {
+class ViewAllMyEventVC: UIViewController {
 
     private let dataList = ViewAllMyEventDataModel.list
     private let sections: [String] = ["예정된 모임", "지난 모임"]
@@ -137,9 +137,6 @@ extension ViewAllMyEventVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ViewAllMyEventTableViewCell.identifier, for: indexPath) as? ViewAllMyEventTableViewCell else {return UITableViewCell()}
-        
-        // ViewAllMyEventTableViewCellProtocol 때문에 사용
-        cell.delegate = self
         
         switch indexPath.section {
         case 0:
