@@ -17,23 +17,36 @@ class ProfileVC: UIViewController {
     //    private let dataSource = ProfileSnsDataModel.data
     
     // MARK: - Subviews
+    
+    // MARK: - Subviews
+    lazy var headerView: UIView = {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 71))
+        view.backgroundColor = .systemBackground
+        view.layer.addBorder([.bottom], color: .mainGray, width: 1)
+        return view
+    }()
+    
+    lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "내 프로필"
+        label.textColor = .black.withAlphaComponent(0.8)
+        label.font = UIFont.NotoSansKR(type: .Bold, size: 24)
+        return label
+    }()
+    
+    lazy var notificationViewButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "NotificationIcon"), for: .normal)
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        button.clipsToBounds = true
+        button.addTarget(self, action: #selector(serviceButtonDidTap), for: .touchUpInside)
+        
+        return button
+    }()
+    
     let scrollView = UIScrollView()
     
     let contentView = UIView()
-    
-    let profileTitleLabel = UILabel().then {
-        $0.text = "내 프로필"
-        $0.font = UIFont.NotoSansKR(type: .Bold, size: 24)
-    }
-    
-    let serviceBtn = UIButton().then {
-        $0.setImage(UIImage(named: "HeadsetMic"), for: .normal)
-        $0.tintColor = .black
-    }
-    
-    let separateLine = UIView().then {
-        $0.backgroundColor = .mainGray
-    }
     
     let profileImageView = UIImageView().then {
         $0.layer.cornerRadius = 50
@@ -252,19 +265,14 @@ class ProfileVC: UIViewController {
         tabBarController?.tabBar.isHidden = false
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        navigationController?.navigationBar.isHidden = false
-    }
-    
     
     // MARK: - Functions
     func configureLayouts() {
         
-        // addSubview
-        [profileTitleLabel, serviceBtn, separateLine]
-            .forEach { view.addSubview($0)}
+        // addSubview - HeaderView
+        view.addSubview(headerView)
+        headerView.addSubview(titleLabel)
+        headerView.addSubview(notificationViewButton)
         
         view.addSubview(scrollView)
         
@@ -285,32 +293,30 @@ class ProfileVC: UIViewController {
         
         
         // layer
-        // title bar
-        profileTitleLabel.snp.makeConstraints { /// 프로필 타이틀
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.leading.equalTo(21)
-            $0.height.equalTo(70)
+        // HeaderView
+        //headerView
+        headerView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.height.equalTo(71)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
         }
         
-        serviceBtn.snp.makeConstraints { /// 고객센터
-            $0.centerY.equalTo(profileTitleLabel)
-            $0.trailing.equalTo(-21)
-            $0.height.equalTo(24)
-            $0.width.equalTo(serviceBtn.snp.height)
+        // titleLabel
+        titleLabel.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(16)
+            make.centerY.equalToSuperview()
         }
-        /// 버튼 클릭
-        serviceBtn.addTarget(self,action: #selector(self.serviceButtonDidTap(_:)), for: .touchUpInside)
         
-        separateLine.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(profileTitleLabel.snp.bottom)
-            $0.height.equalTo(1)
+        // notificationViewButton
+        notificationViewButton.snp.makeConstraints { make in
+            make.right.equalToSuperview().inset(16)
+            make.centerY.equalToSuperview()
         }
         
         
         // scrollView
         scrollView.snp.makeConstraints {
-            $0.top.equalTo(profileTitleLabel.snp.bottom)
+            $0.top.equalTo(headerView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-10)
         }

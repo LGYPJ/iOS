@@ -84,7 +84,8 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
             title: "신청취소",
             image: UIImage(named: "deleteIcon")?.withTintColor(UIColor(hex: 0x1C1B1F)),
             handler: { _ in
-                self.delegate?.pushNextView(ViewAllMyEventVC()) // 임시 VC
+                //self.delegate?.pushNextView(ViewAllMyEventVC()) // 임시 VC
+                NotificationCenter.default.post(name: Notification.Name("pushEventApplyCancelVC"), object: nil)
                 print("신청취소 클릭됨")
             }
         )

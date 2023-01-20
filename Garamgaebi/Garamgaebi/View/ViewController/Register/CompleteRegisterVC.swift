@@ -160,7 +160,7 @@ class CompleteRegisterVC: UIViewController {
     
     @objc
     private func presentHomeButtonTapped(_ sender: UIButton) {
-        var nextVC = CompleteRegisterVC()
+        var nextVC = TabBarController()
         nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
         nextVC.modalPresentationStyle = .fullScreen
         present(nextVC, animated: true)

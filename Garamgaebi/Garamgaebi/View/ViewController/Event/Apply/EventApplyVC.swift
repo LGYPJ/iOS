@@ -11,6 +11,34 @@ import SnapKit
 
 class EventApplyVC: UIViewController {
 	
+    // MARK: - Subviews
+    
+    lazy var headerView: UIView = {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 71))
+        view.backgroundColor = .systemBackground
+        view.layer.addBorder([.bottom], color: .mainGray, width: 1)
+        return view
+    }()
+    
+    lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "세미나"
+        label.textColor = UIColor(hex: 0x000000,alpha: 0.8)
+        label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
+        return label
+    }()
+    
+    lazy var backButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "arrowBackward"), for: .normal)
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        button.clipsToBounds = true
+        button.tintColor = UIColor(hex: 0x000000,alpha: 0.8)
+        button.addTarget(self, action: #selector(didTapBackBarButton), for: .touchUpInside)
+        
+        return button
+    }()
+    
 	lazy var scrollView: UIScrollView = {
 		let scrollView = UIScrollView()
 		
@@ -249,11 +277,12 @@ class EventApplyVC: UIViewController {
 		return button
 	}()
 	
-
+    
+    // MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-		configureNavigationBar()
-		configureNavigationBarShadow()
+		
 		configureViews()
 		configureDummyData()
     }
@@ -274,42 +303,51 @@ class EventApplyVC: UIViewController {
 		deadlineInfoLabel.text = "2023-01-09 오후 6시"
 		
 		descriptionTextView.text = "카카오뱅크 3333-22-5500352\n입금자명을 닉네임/이름(예시: 찹도/민세림)으로 해주셔야 합니다.\n\n신청 확정은 신청 마감 이후에 일괄 처리됩니다.\n신청취소는 일주일 전까지 가능합니다.(이후로는 취소 불가)\n환불은 모임 당일부터 7일 이내에 순차적으로 진행됩니다.\n\n입금이 완료되지 않으면 신청이 자동적으로 취소됩니다."
-		
-		navigationItem.title = "신청하기"
 	}
 }
 
 extension EventApplyVC {
-	// navigation bar 구성
-	private func configureNavigationBar() {
-//		self.navigationItem.title = ""
-		let backBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: nil)
-		self.navigationItem.leftBarButtonItem = backBarButtonItem
-		self.navigationItem.leftBarButtonItem?.action  = #selector(didTapBackBarButton)
-		backBarButtonItem.tintColor = .black
-	}
-	
-	// navigation bar shadow 설정
-	private func configureNavigationBarShadow() {
-		let navigationBarAppearance = UINavigationBarAppearance()
-		navigationBarAppearance.configureWithOpaqueBackground()
-
-		navigationItem.scrollEdgeAppearance = navigationBarAppearance
-		navigationItem.standardAppearance = navigationBarAppearance
-		navigationItem.compactAppearance = navigationBarAppearance
-		navigationController?.setNeedsStatusBarAppearanceUpdate()
-	}
 	
 	private func configureViews() {
 		view.backgroundColor = .white
-		[scrollView, registerButton]
+        
+        view.addSubview(headerView)
+        headerView.addSubview(titleLabel)
+        headerView.addSubview(backButton)
+        
+		[headerView, scrollView, registerButton]
 			.forEach {view.addSubview($0)}
+        
+        [titleLabel, backButton]
+            .forEach {headerView.addSubview($0)}
 		
+        //headerView
+        headerView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.height.equalTo(71)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+        }
+        
+        // titleLabel
+        titleLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+        
+        // backButton
+        backButton.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(16)
+            make.centerY.equalToSuperview()
+        }
+        
+        // scrollView
 		scrollView.snp.makeConstraints {
-			$0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(headerView.snp.bottom)
 			$0.leading.trailing.equalToSuperview()
 			$0.bottom.equalTo(registerButton.snp.top).offset(-15)
 		}
+        
+        // registerButton
 		registerButton.snp.makeConstraints {
 			$0.bottom.equalToSuperview().inset(48)
 			$0.leading.trailing.equalToSuperview().inset(16)
@@ -319,6 +357,7 @@ extension EventApplyVC {
 		[contentView]
 			.forEach {scrollView.addSubview($0)}
 		
+        // contentView
 		contentView.snp.makeConstraints {
 			$0.width.equalToSuperview()
 			$0.edges.equalToSuperview()
@@ -327,43 +366,51 @@ extension EventApplyVC {
 		[eventInfoBackgroundView, nameTitleLabel, nameTextField, nicknameTitleLabel, nicknameTextField, numberTitleLabel, numberTextField, descriptionTextView]
 			.forEach {contentView.addSubview($0)}
 		
+        // eventInfoBackgroundView
 		eventInfoBackgroundView.snp.makeConstraints {
 			$0.top.leading.trailing.equalToSuperview().inset(16)
 		}
 		
+        // nameTitleLabel
 		nameTitleLabel.snp.makeConstraints {
 			$0.top.equalTo(eventInfoBackgroundView.snp.bottom).offset(24)
 			$0.leading.equalToSuperview().inset(16)
 		}
 		
+        // nameTextField
 		nameTextField.snp.makeConstraints {
 			$0.top.equalTo(nameTitleLabel.snp.bottom).offset(8)
 			$0.leading.trailing.equalToSuperview().inset(16)
 			$0.height.equalTo(48)
 		}
 		
+        // nicknameTitleLabel
 		nicknameTitleLabel.snp.makeConstraints {
 			$0.top.equalTo(nameTextField.snp.bottom).offset(16)
 			$0.leading.equalToSuperview().inset(16)
 		}
 		
+        // nicknameTextField
 		nicknameTextField.snp.makeConstraints {
 			$0.top.equalTo(nicknameTitleLabel.snp.bottom).offset(8)
 			$0.leading.trailing.equalToSuperview().inset(16)
 			$0.height.equalTo(48)
 		}
 		
+        // numberTitleLabel
 		numberTitleLabel.snp.makeConstraints {
 			$0.top.equalTo(nicknameTextField.snp.bottom).offset(16)
 			$0.leading.equalToSuperview().inset(16)
 		}
 		
+        // numberTextField
 		numberTextField.snp.makeConstraints {
 			$0.top.equalTo(numberTitleLabel.snp.bottom).offset(8)
 			$0.leading.trailing.equalToSuperview().inset(16)
 			$0.height.equalTo(48)
 		}
 		
+        // descriptionTextView
 		descriptionTextView.snp.makeConstraints {
 			$0.top.equalTo(numberTextField.snp.bottom).offset(44)
 			$0.leading.trailing.equalToSuperview().inset(18)
@@ -374,11 +421,13 @@ extension EventApplyVC {
 		[eventNameLabel,eventInfoStackView]
 			.forEach {eventInfoBackgroundView.addSubview($0)}
 		
+        // eventNameLabel
 		eventNameLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().offset(5.5)
 			$0.leading.equalToSuperview().inset(16)
 		}
 		
+        // eventInfoStackView
 		eventInfoStackView.snp.makeConstraints {
 			$0.leading.equalToSuperview().inset(16)
 			$0.top.equalTo(eventNameLabel.snp.bottom).offset(8)

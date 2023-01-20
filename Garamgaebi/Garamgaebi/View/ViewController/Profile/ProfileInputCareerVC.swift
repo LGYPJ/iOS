@@ -12,6 +12,33 @@ import Then
 class ProfileInputCareerVC: UIViewController {
     
     // MARK: - Subviews
+    
+    lazy var headerView: UIView = {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 71))
+        view.backgroundColor = .systemBackground
+        view.layer.addBorder([.bottom], color: .mainGray, width: 1)
+        return view
+    }()
+    
+    lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "경력"
+        label.textColor = UIColor(hex: 0x000000,alpha: 0.8)
+        label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
+        return label
+    }()
+    
+    lazy var backButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "arrowBackward"), for: .normal)
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        button.clipsToBounds = true
+        button.tintColor = UIColor(hex: 0x000000,alpha: 0.8)
+        button.addTarget(self, action: #selector(didTapBackBarButton), for: .touchUpInside)
+        
+        return button
+    }()
+    
     lazy var subtitleCompanyLabel: UILabel = {
         let label = UILabel()
         label.text = "회사"
@@ -178,14 +205,19 @@ class ProfileInputCareerVC: UIViewController {
         
         addSubViews()
         configLayouts()
-        configureNavigationBar()
-        configureNavigationBarShadow()
+
     }
     
     
     // MARK: - Functions
     
     func addSubViews() {
+        
+        /* HeaderView */
+        view.addSubview(headerView)
+        [titleLabel, backButton]
+            .forEach {headerView.addSubview($0)}
+        
         /* Buttons */
         view.addSubview(companyTextField)
         view.addSubview(positionTextField)
@@ -194,7 +226,6 @@ class ProfileInputCareerVC: UIViewController {
         view.addSubview(betweenTildLabel)
         view.addSubview(checkIsWorkingButton)
         view.addSubview(saveUserProfileButton)
-        
         
         /* Labels */
         [subtitleCompanyLabel,subtitlePositionLabel,subtitleWorkingDateLabel].forEach {
@@ -208,11 +239,30 @@ class ProfileInputCareerVC: UIViewController {
     }
     
     func configLayouts() {
+
+        //headerView
+        headerView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.height.equalTo(71)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+        }
+        
+        // titleLabel
+        titleLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+        
+        // backButton
+        backButton.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(16)
+            make.centerY.equalToSuperview()
+        }
         
         // subtitleCompanyLabel
         subtitleCompanyLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(16)
+            make.top.equalTo(headerView.snp.bottom).offset(16)
         }
         
         // companyTextField
@@ -317,33 +367,9 @@ class ProfileInputCareerVC: UIViewController {
         sender.layer.borderColor = UIColor.mainGray.cgColor
         sender.layer.borderWidth = 1
     }
-    
-    // TODO: NavigationBar
-    // navigation bar 구성
-    private func configureNavigationBar() {
-        self.navigationItem.title = "경력"
-        let backBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: nil)
-        self.navigationItem.leftBarButtonItem = backBarButtonItem
-        self.navigationItem.leftBarButtonItem?.action  = #selector(backBarButtonDidTap)
-        backBarButtonItem.tintColor = .black
-        self.navigationController?.navigationBar.tintColor = .black
-    }
-    
-    // navigation bar shadow 설정
-    private func configureNavigationBarShadow() {
-        let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.configureWithOpaqueBackground()
-        
-        navigationController?.navigationBar.tintColor = .clear
-        
-        navigationItem.scrollEdgeAppearance = navigationBarAppearance
-        navigationItem.standardAppearance = navigationBarAppearance
-        navigationItem.compactAppearance = navigationBarAppearance
-        navigationController?.setNeedsStatusBarAppearanceUpdate()
-    }
-    
+
     // 뒤로가기 버튼 did tap
-    @objc private func backBarButtonDidTap() {
+    @objc private func didTapBackBarButton() {
         print("뒤로가기 버튼 클릭")
         self.navigationController?.popViewController(animated: true)
     }

@@ -10,6 +10,34 @@ import SnapKit
 
 class EventApplyCancelVC: UIViewController {
 	
+    // MARK: - Subviews
+    
+    lazy var headerView: UIView = {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 71))
+        view.backgroundColor = .systemBackground
+        view.layer.addBorder([.bottom], color: .mainGray, width: 1)
+        return view
+    }()
+    
+    lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "신청 취소"
+        label.textColor = UIColor(hex: 0x000000,alpha: 0.8)
+        label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
+        return label
+    }()
+    
+    lazy var backButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "arrowBackward"), for: .normal)
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        button.clipsToBounds = true
+        button.tintColor = UIColor(hex: 0x000000,alpha: 0.8)
+        button.addTarget(self, action: #selector(didTapBackBarButton), for: .touchUpInside)
+        
+        return button
+    }()
+    
 	lazy var seminarInfoView: UIView = {
 		let view = UIView()
 		view.backgroundColor = .mainLightBlue
@@ -250,12 +278,11 @@ class EventApplyCancelVC: UIViewController {
 		return stackView
 	}()
 
-	
+    // MARK: - Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-		configureNavigationBar()
-		configureNavigationBarShadow()
+        
 		configureViews()
 		configureDummyData()
 		configureAddTarget()
@@ -284,79 +311,91 @@ class EventApplyCancelVC: UIViewController {
 
 // MARK: functions
 extension EventApplyCancelVC: sendBankNameProtocol {
-	// navigation bar 구성
-	private func configureNavigationBar() {
-		self.navigationItem.title = "신청 취소"
-		let backBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: nil)
-		self.navigationItem.leftBarButtonItem = backBarButtonItem
-		self.navigationItem.leftBarButtonItem?.action  = #selector(didTapBackBarButton)
-		backBarButtonItem.tintColor = .black
-	}
-	
-	// navigation bar shadow 설정
-	private func configureNavigationBarShadow() {
-		let navigationBarAppearance = UINavigationBarAppearance()
-		navigationBarAppearance.configureWithOpaqueBackground()
-		
-		navigationItem.scrollEdgeAppearance = navigationBarAppearance
-		navigationItem.standardAppearance = navigationBarAppearance
-		navigationItem.compactAppearance = navigationBarAppearance
-		navigationController?.setNeedsStatusBarAppearanceUpdate()
-	}
 	
 	private func configureViews() {
 		view.backgroundColor = .white
-		[seminarInfoView, nameTextField, nicknameTextField, numberTextField, accountStackView, cancelButton, downImageView]
+		[headerView, seminarInfoView, nameTextField, nicknameTextField, numberTextField, accountStackView, cancelButton, downImageView]
 			.forEach {view.addSubview($0)}
-		
+        
+        //headerView
+        headerView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.height.equalTo(71)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+        }
+        
+        [titleLabel, backButton]
+            .forEach {headerView.addSubview($0)}
+        
+        // titleLabel
+        titleLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+        
+        // backButton
+        backButton.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(16)
+            make.centerY.equalToSuperview()
+        }
+        
+        
 		[seminarNameLabel, seminarInfoStackView]
 			.forEach {seminarInfoView.addSubview($0)}
 		
+        // seminarNameLabel
 		seminarNameLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().offset(12)
 			$0.leading.equalToSuperview().inset(16)
 		}
 		
+        // seminarInfoStackView
 		seminarInfoStackView.snp.makeConstraints {
 			$0.leading.equalToSuperview().inset(16)
 			$0.top.equalTo(seminarNameLabel.snp.bottom).offset(8)
 			$0.bottom.equalToSuperview().inset(12)
 		}
 		
+        // seminarInfoView
 		seminarInfoView.snp.makeConstraints {
-			$0.top.equalTo(view.safeAreaLayoutGuide).offset(16)
+            $0.top.equalTo(headerView.snp.bottom).offset(16)
 			$0.leading.trailing.equalToSuperview().inset(16)
 		}
 		
+        // nameTextField
 		nameTextField.snp.makeConstraints {
 			$0.leading.trailing.equalToSuperview().inset(16)
 			$0.top.equalTo(seminarInfoView.snp.bottom).offset(24)
 			$0.height.equalTo(48)
 		}
-		
+        
+        // nicknameTextField
 		nicknameTextField.snp.makeConstraints {
 			$0.leading.trailing.equalToSuperview().inset(16)
 			$0.top.equalTo(nameTextField.snp.bottom).offset(12)
 			$0.height.equalTo(48)
 		}
 
+        // numberTextField
 		numberTextField.snp.makeConstraints {
 			$0.leading.trailing.equalToSuperview().inset(16)
 			$0.top.equalTo(nicknameTextField.snp.bottom).offset(12)
 			$0.height.equalTo(48)
 		}
 		
+        // accountStackView
 		accountStackView.snp.makeConstraints {
 			$0.leading.trailing.equalToSuperview().inset(16)
 			$0.top.equalTo(numberTextField.snp.bottom).offset(24)
 			$0.height.equalTo(48)
 		}
 		
+        // bankButton
 		bankButton.snp.makeConstraints {
 			$0.width.equalTo(120)
 		}
-//		bankButton.addSubview(downImageView)
-//
+
+        // downImageView
 		downImageView.snp.makeConstraints {
 			$0.width.equalTo(18)
 			$0.height.equalTo(18)
@@ -364,7 +403,7 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 			$0.centerY.equalTo(bankButton)
 		}
 		
-		
+        // cancelButton
 		cancelButton.snp.makeConstraints {
 			$0.bottom.equalToSuperview().inset(48)
 			$0.leading.trailing.equalToSuperview().inset(12)

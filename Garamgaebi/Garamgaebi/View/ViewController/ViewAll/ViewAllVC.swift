@@ -84,12 +84,24 @@ class ViewAllVC: UIViewController {
         addSubViews()
         configLayouts()
         
-//        NotificationCenter.default.addObserver(self, selector: #selector(pushDetailVC), name: Notification.Name("didTapRegisterButton"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(pushDetailVC), name: Notification.Name("pushEventDetailVC"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(pushEventDetailVC), name: Notification.Name("pushEventDetailVC"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(pushApplyCancelVC), name: Notification.Name("pushEventApplyCancelVC"), object: nil)
+
     }
     
-    @objc func pushDetailVC() {
-        self.navigationController?.pushViewController(EventSeminarDetailVC(), animated: true)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = false
+    }
+    
+    @objc func pushEventDetailVC() {
+        //self.navigationController?.pushViewController(EventSeminarDetailVC(), animated: true)
+        self.navigationController?.pushViewController(EventNetworkingDetailVC(), animated: true)
+    }
+    
+    @objc func pushApplyCancelVC() {
+        //self.navigationController?.pushViewController(EventSeminarDetailVC(), animated: true)
+        self.navigationController?.pushViewController(EventApplyCancelVC(), animated: true)
     }
     
     
