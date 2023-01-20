@@ -10,6 +10,8 @@
 		07387C389AB3203B5F1B6292 /* Pods_Garamgaebi_GaramgaebiUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */; };
 		2A5DAD14EE12541BAE988EB7 /* Pods_Garamgaebi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8CB1AB7E398B75581977FAF /* Pods_Garamgaebi.framework */; };
 		2C0538F4296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0538F3296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift */; };
+		2C9E5611297A960900DF9E5A /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9E5610297A960900DF9E5A /* String+.swift */; };
+		2CBF6C72297A954E00940CBE /* UITextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBF6C71297A954E00940CBE /* UITextField+.swift */; };
 		2CDD94D9296FDB88004B8D56 /* EventApplyCancelVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94D8296FDB88004B8D56 /* EventApplyCancelVC.swift */; };
 		2CDD94DE29700E71004B8D56 /* EventNetworkingDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94DD29700E71004B8D56 /* EventNetworkingDetailVC.swift */; };
 		2CDD94E329711EB3004B8D56 /* IceBreakingRoomVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94E229711EB3004B8D56 /* IceBreakingRoomVC.swift */; };
@@ -113,6 +115,8 @@
 
 /* Begin PBXFileReference section */
 		2C0538F3296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPreviewCollectionViewCell.swift; sourceTree = "<group>"; };
+		2C9E5610297A960900DF9E5A /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
+		2CBF6C71297A954E00940CBE /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
 		2CDD94D8296FDB88004B8D56 /* EventApplyCancelVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventApplyCancelVC.swift; sourceTree = "<group>"; };
 		2CDD94DD29700E71004B8D56 /* EventNetworkingDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventNetworkingDetailVC.swift; sourceTree = "<group>"; };
 		2CDD94E229711EB3004B8D56 /* IceBreakingRoomVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IceBreakingRoomVC.swift; sourceTree = "<group>"; };
@@ -666,6 +670,8 @@
 				60F91406296D445800626C40 /* UIColor+.swift */,
 				60F91408296D446100626C40 /* UIFont+.swift */,
 				6018232929729DA400160EF4 /* CALayer+.swift */,
+				2CBF6C71297A954E00940CBE /* UITextField+.swift */,
+				2C9E5610297A960900DF9E5A /* String+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -965,6 +971,7 @@
 				60093A8F296EC92200F76783 /* InputNickNameVC.swift in Sources */,
 				6055D84129700C9500C86D53 /* InputEmailVC.swift in Sources */,
 				60AA6BCB29752422002878B6 /* ViewAllSeminarDataModel.swift in Sources */,
+				2CBF6C72297A954E00940CBE /* UITextField+.swift in Sources */,
 				60F91403296D2F4800626C40 /* ProfileVC.swift in Sources */,
 				46876C6729732053000BA1B6 /* ProfileWithdrawalVC.swift in Sources */,
 				46C18D25297866E600A05CBF /* ProfileDataModel.swift in Sources */,
@@ -1006,6 +1013,7 @@
 				2C0538F4296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift in Sources */,
 				2CDD94F2297191F1004B8D56 /* EventSeminarDetailVC.swift in Sources */,
 				2CDD94FA29728908004B8D56 /* IceBreakingRoomCollectionViewCell.swift in Sources */,
+				2C9E5611297A960900DF9E5A /* String+.swift in Sources */,
 				2CDD94EA29718369004B8D56 /* EventAttendantTableViewCell.swift in Sources */,
 				2CDD94E8297173E8004B8D56 /* EventInfoTableViewCell.swift in Sources */,
 				2CDD9504297573BF004B8D56 /* BankPopUpVC.swift in Sources */,
