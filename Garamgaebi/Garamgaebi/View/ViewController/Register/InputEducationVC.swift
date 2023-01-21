@@ -167,15 +167,15 @@ class InputEducationVC: UIViewController {
         //pagingImage
         pagingImage.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
-            make.width.equalTo(96)
-            make.height.equalTo(24)
+            make.width.equalTo(72)
+            make.height.equalTo(12)
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(28)
         }
         
         // titleLabel
         titleLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(16)
-            make.top.equalTo(pagingImage.snp.bottom).offset(16)
+            make.left.equalTo(pagingImage.snp.left)
+            make.top.equalTo(pagingImage.snp.bottom).offset(28)
         }
         
         // descriptionLabel
