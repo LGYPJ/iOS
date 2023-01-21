@@ -42,6 +42,14 @@ class InputEmailVC: UIViewController {
         return label
     }()
     
+    lazy var emailTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "이메일"
+        label.textColor = .mainBlack
+        label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        return label
+    }()
+    
     lazy var emailTextField: UITextField = {
         let textField = UITextField()
         
@@ -103,7 +111,7 @@ class InputEmailVC: UIViewController {
         view.addSubview(nextButton)
         
         /* Labels */
-        [titleLabel,descriptionLabel,emailValidLabel].forEach {
+        [titleLabel,descriptionLabel,emailTitleLabel,emailTextField,emailValidLabel].forEach {
             view.addSubview($0)
         }
  
@@ -132,13 +140,20 @@ class InputEmailVC: UIViewController {
             make.top.equalTo(titleLabel.snp.bottom).offset(9)
         }
         
+        // emailTitleLabel
+        emailTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(36)
+            make.left.equalTo(descriptionLabel.snp.left)
+        }
+        
         // emailTextField
         emailTextField.snp.makeConstraints { make in
-            make.top.equalTo(descriptionLabel.snp.bottom).offset(36)
+            make.top.equalTo(emailTitleLabel.snp.bottom).offset(8)
             make.height.equalTo(48)
             make.left.right.equalToSuperview().inset(16)
         }
-        // nickNameValidLabel
+        
+        // emailValidLabel
         emailValidLabel.snp.makeConstraints { make in
             make.top.equalTo(emailTextField.snp.bottom).offset(4)
             make.height.equalTo(17)
@@ -146,7 +161,6 @@ class InputEmailVC: UIViewController {
         }
         
         // nextButton
-        view.addSubview(nextButton)
         nextButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(14)
             make.right.equalToSuperview().inset(14)
@@ -171,18 +185,24 @@ class InputEmailVC: UIViewController {
     func validateUserInfo() {
         if isValidEmail {
             self.nextButton.isEnabled = true
+            self.emailTextField.layer.borderColor = UIColor.mainBlack.cgColor
+            self.emailTextField.layer.borderWidth = 1
             UIView.animate(withDuration: 0.33) {
                 self.nextButton.backgroundColor = .mainBlue
+//                self.emailValidLabel.isHidden = true
+                self.emailValidLabel.text = "사용 가능한 이메일입니다"
+                self.emailValidLabel.textColor = .mainBlue
             }
-            self.emailValidLabel.text = "사용 가능한 이메일입니다"
-            self.emailValidLabel.textColor = .mainBlue
         } else {
             self.nextButton.isEnabled = false
+            self.emailTextField.layer.borderColor = UIColor(hex: 0xFF0000).cgColor
+            self.emailTextField.layer.borderWidth = 1
+//            self.emailValidLabel.isHidden = true
             UIView.animate(withDuration: 0.33) {
                 self.nextButton.backgroundColor = .mainGray
+                self.emailValidLabel.text = "이메일 형식이 올바르지 않습니다"
+                self.emailValidLabel.textColor = UIColor(hex: 0xFF0000)
             }
-            self.emailValidLabel.text = "이메일 형식이 올바르지 않습니다!"
-            self.emailValidLabel.textColor = UIColor(hex: 0xFF0000)
         }
         
     }
