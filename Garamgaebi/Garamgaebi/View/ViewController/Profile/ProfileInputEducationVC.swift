@@ -9,8 +9,17 @@ import UIKit
 
 class ProfileInputEducationVC: UIViewController {
 
+    // MARK: - Properties
+    
+    private let yearArray = (1901...2023).reversed().map { String($0) }
+    private let monthArray = (1...12).map { String(format:"%02d", $0) }
+    private var yearValue =  String()
+    private var monthValue = String()
+    
+    
     // MARK: - Subviews
     
+    // 네비게이션바
     lazy var headerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 71))
         view.backgroundColor = .systemBackground
@@ -37,6 +46,41 @@ class ProfileInputEducationVC: UIViewController {
         return button
     }()
     
+    // 데이트 피커
+    private var toolbar: UIToolbar {
+        let toolBar = UIToolbar(frame: CGRect(x:0, y:0, width:100, height:35))
+        toolBar.tintColor = .mainBlack
+        toolBar.backgroundColor = .mainLightGray
+        
+        let exitBtn = UIBarButtonItem()
+        exitBtn.title = "확인"
+        exitBtn.target = self
+        exitBtn.action = #selector(pickerExit)
+        exitBtn.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.NotoSansKR(type: .Regular, size: 16)!], for: .normal)
+        
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        
+        toolBar.setItems([flexSpace,exitBtn], animated: true)
+        return toolBar
+    }
+    
+    lazy var startDatePickerView: UIPickerView = {
+        let picker = UIPickerView()
+        picker.tag = 0
+        picker.delegate = self
+        picker.dataSource = self
+        return picker
+    }()
+    
+    lazy var endDatePickerView: UIPickerView = {
+        let picker = UIPickerView()
+        picker.tag = 1
+        picker.delegate = self
+        picker.dataSource = self
+        return picker
+    }()
+    
+    // 내용
     lazy var subtitleInstitutionLabel: UILabel = {
         let label = UILabel()
         label.text = "교육 기관"
@@ -48,15 +92,8 @@ class ProfileInputEducationVC: UIViewController {
     lazy var institutionTextField: UITextField = {
         let textField = UITextField()
         
-        textField.addLeftPadding()
         textField.placeholder = "교육기관을 입력해주세요"
-        textField.layer.cornerRadius = 12
-        textField.textColor = .black
-        textField.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        textField.autocapitalizationType = .none
-        
-        textField.layer.borderColor = UIColor.mainGray.cgColor
-        textField.layer.borderWidth = 1
+        textField.basicTextField()
         
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
@@ -76,15 +113,8 @@ class ProfileInputEducationVC: UIViewController {
     lazy var majorTextField: UITextField = {
         let textField = UITextField()
 
-        textField.addLeftPadding()
         textField.placeholder = "전공/과정을 입력해주세요 (예: 웹 개발 과정)"
-        textField.layer.cornerRadius = 12
-        textField.textColor = .black
-        textField.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        textField.autocapitalizationType = .none
-
-        textField.layer.borderColor = UIColor.mainGray.cgColor
-        textField.layer.borderWidth = 1
+        textField.basicTextField()
 
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
@@ -104,29 +134,26 @@ class ProfileInputEducationVC: UIViewController {
     lazy var startDateTextField: UITextField = {
         let textField = UITextField()
 
-        textField.addLeftPadding()
+        let calenderImg = UIImageView(image: UIImage(named: "CalendarMonth"))
+        textField.addSubview(calenderImg)
+        calenderImg.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview().inset(14)
+            make.right.equalToSuperview().inset(15)
+            make.width.equalTo(18)
+        }
+        
         textField.placeholder = "시작년월"
-//        textField.setPlaceholderColor(.mainGray)
-        textField.layer.cornerRadius = 12
-        textField.textColor = .black
-        textField.autocapitalizationType = .none
-        textField.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        textField.layer.borderColor = UIColor.mainGray.cgColor
-        textField.layer.borderWidth = 1
+        textField.basicTextField()
 
+        textField.inputView = startDatePickerView
+        textField.inputAccessoryView = toolbar
+        
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
 
         return textField
     }()
     
-    lazy var startDateImageView: UIImageView = {
-        let imageView = UIImageView()
-        
-        imageView.image = UIImage(named: "CalendarMonth")
-        
-        return imageView
-    }()
 
     lazy var betweenTildLabel: UIButton = {
         let button = UIButton()
@@ -139,30 +166,25 @@ class ProfileInputEducationVC: UIViewController {
 
     lazy var endDateTextField: UITextField = {
         let textField = UITextField()
+        
+        let calenderImg = UIImageView(image: UIImage(named: "CalendarMonth"))
+        textField.addSubview(calenderImg)
+        calenderImg.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview().inset(14)
+            make.right.equalToSuperview().inset(15)
+            make.width.equalTo(18)
+        }
 
-         textField.addLeftPadding()
         textField.placeholder = "종료년월"
-        //textField.setPlaceholderColor(.mainGray)
-        textField.layer.cornerRadius = 12
-        textField.textColor = .black
-        textField.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        textField.autocapitalizationType = .none
-
-        textField.layer.borderColor = UIColor.mainGray.cgColor
-        textField.layer.borderWidth = 1
+        textField.basicTextField()
+        
+        textField.inputView = endDatePickerView
+        textField.inputAccessoryView = toolbar
 
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
 
         return textField
-    }()
-    
-    lazy var endDateImageView: UIImageView = {
-        let imageView = UIImageView()
-        
-        imageView.image = UIImage(named: "CalendarMonth")
-        
-        return imageView
     }()
     
     lazy var checkIsLearningButton: UIButton = {
@@ -172,7 +194,7 @@ class ProfileInputEducationVC: UIViewController {
         button.setImage(UIImage(systemName: "checkmark.square")?.withRenderingMode(.automatic), for: .selected)
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -7)
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 7)
-        button.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
+        button.setTitleColor(UIColor.mainGray, for: .normal)
         button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
 
         button.clipsToBounds = true
@@ -227,11 +249,6 @@ class ProfileInputEducationVC: UIViewController {
 
         /* Labels */
         [subtitleInstitutionLabel,subtitleMajorLabel,subtitleLearningDateLabel].forEach {
-            view.addSubview($0)
-        }
-        
-        /* ImageViews */
-        [startDateImageView, endDateImageView].forEach {
             view.addSubview($0)
         }
     }
@@ -304,12 +321,6 @@ class ProfileInputEducationVC: UIViewController {
             make.left.equalTo(subtitleInstitutionLabel.snp.left)
             make.right.equalTo(betweenTildLabel.snp.left)
         }
-        
-        // startDateImageView
-        startDateImageView.snp.makeConstraints { make in
-            make.centerY.equalTo(startDateTextField)
-            make.trailing.equalTo(startDateTextField).offset(-12)
-        }
 
         // endDateTextField
         endDateTextField.snp.makeConstraints { make in
@@ -317,12 +328,6 @@ class ProfileInputEducationVC: UIViewController {
             make.height.equalTo(48)
             make.left.equalTo(betweenTildLabel.snp.right)
             make.right.equalToSuperview().inset(16)
-        }
-        
-        // endDateImageView
-        endDateImageView.snp.makeConstraints { make in
-            make.centerY.equalTo(endDateTextField)
-            make.trailing.equalTo(endDateTextField).offset(-12)
         }
 
         //checkIsWorkingButton
@@ -371,5 +376,57 @@ class ProfileInputEducationVC: UIViewController {
         print("뒤로가기 버튼 클릭")
         self.navigationController?.popViewController(animated: true)
     }
+    
+    // 데이트 피커 나가기
+    @objc func pickerExit() {
+        self.view.endEditing(true)
+    }
 
+}
+
+extension ProfileInputEducationVC: UIPickerViewDataSource, UIPickerViewDelegate {
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 2
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        if component == 0 {
+            return yearArray.count
+        } else {
+            return monthArray.count
+        }
+        
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        if pickerView.tag == 0 {
+            if component == 0 {
+                yearValue = yearArray[row]
+                startDateTextField.text = "\(yearValue)/\(monthValue)"
+            } else {
+                monthValue = monthArray[row]
+                startDateTextField.text = "\(yearValue)/\(monthValue)"
+            }
+        }
+        else if pickerView.tag == 1 {
+            if component == 0 {
+                yearValue = yearArray[row]
+                endDateTextField.text = "\(yearValue)/\(monthValue)"
+            } else {
+                monthValue = monthArray[row]
+                endDateTextField.text = "\(yearValue)/\(monthValue)"
+            }
+        }
+        
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        if component == 0 {
+            return yearArray[row]
+        } else {
+            return monthArray[row]
+        }
+    }
 }
