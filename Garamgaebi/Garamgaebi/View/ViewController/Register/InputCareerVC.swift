@@ -10,8 +10,46 @@ import SnapKit
 
 class InputCareerVC: UIViewController {
     
+    private let yearArray = (1901...2023).reversed().map { String($0) }
+    private let monthArray = (1...12).map { String(format:"%02d", $0) }
+    private var yearValue =  String()
+    private var monthValue = String()
+    
     // MARK: - Subviews
+    
+    private var toolbar: UIToolbar {
+        let toolBar = UIToolbar(frame: CGRect(x:0, y:0, width:100, height:35))
+        toolBar.tintColor = .mainBlack
+        toolBar.backgroundColor = .mainLightGray
+        
+        let exitBtn = UIBarButtonItem()
+        exitBtn.title = "확인"
+        exitBtn.target = self
+        exitBtn.action = #selector(pickerExit)
+        exitBtn.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.NotoSansKR(type: .Regular, size: 16)!], for: .normal)
+        
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
+        toolBar.setItems([flexSpace,exitBtn], animated: true)
+        return toolBar
+    }
+    
+    lazy var startDatePickerView: UIPickerView = {
+        let picker = UIPickerView()
+        picker.tag = 0
+        picker.delegate = self
+        picker.dataSource = self
+        return picker
+    }()
+    
+    lazy var endDatePickerView: UIPickerView = {
+        let picker = UIPickerView()
+        picker.tag = 1
+        picker.delegate = self
+        picker.dataSource = self
+        return picker
+    }()
+    
     lazy var pagingImage: UIImageView = {
         let view = UIImageView(image: UIImage(named: "PagingImage4"))
         return view
@@ -86,7 +124,7 @@ class InputCareerVC: UIViewController {
         
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
-
+        
         
         return textField
     }()
@@ -102,6 +140,14 @@ class InputCareerVC: UIViewController {
     lazy var startDateTextField: UITextField = {
         let textField = UITextField()
         
+        let calenderImg = UIImageView(image: UIImage(named: "calendarIcon"))
+        textField.addSubview(calenderImg)
+        calenderImg.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview().inset(14)
+            make.right.equalToSuperview().inset(15)
+            make.width.equalTo(18)
+        }
+        
         textField.addLeftPadding()
         textField.placeholder = "시작년월"
         textField.setPlaceholderColor(.mainGray)
@@ -109,6 +155,9 @@ class InputCareerVC: UIViewController {
         textField.textColor = .black
         textField.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         textField.autocapitalizationType = .none
+        
+        textField.inputView = startDatePickerView
+        textField.inputAccessoryView = toolbar
         
         textField.layer.borderColor = UIColor.mainGray.cgColor
         textField.layer.borderWidth = 1
@@ -131,6 +180,14 @@ class InputCareerVC: UIViewController {
     lazy var endDateTextField: UITextField = {
         let textField = UITextField()
         
+        let calenderImg = UIImageView(image: UIImage(named: "calendarIcon"))
+        textField.addSubview(calenderImg)
+        calenderImg.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview().inset(14)
+            make.right.equalToSuperview().inset(15)
+            make.width.equalTo(18)
+        }
+        
         textField.addLeftPadding()
         textField.placeholder = "종료년월"
         textField.setPlaceholderColor(.mainGray)
@@ -138,6 +195,9 @@ class InputCareerVC: UIViewController {
         textField.textColor = .black
         textField.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         textField.autocapitalizationType = .none
+        
+        textField.inputView = endDatePickerView
+        textField.inputAccessoryView = toolbar
         
         textField.layer.borderColor = UIColor.mainGray.cgColor
         textField.layer.borderWidth = 1
@@ -223,6 +283,7 @@ class InputCareerVC: UIViewController {
         [titleLabel,descriptionLabel,subtitleCompanyLabel,subtitlePositionLabel,subtitleWorkingDateLabel,subDescriptionLabel].forEach {
             view.addSubview($0)
         }
+        
     }
     
     func configLayouts() {
@@ -290,21 +351,21 @@ class InputCareerVC: UIViewController {
         
         // startDateTextField
         startDateTextField.snp.makeConstraints { make in
-            make.top.equalTo(betweenTildLabel.snp.top)
+            make.centerY.equalTo(betweenTildLabel.snp.centerY)
             make.height.equalTo(48)
             make.left.equalTo(titleLabel.snp.left)
             make.right.equalTo(betweenTildLabel.snp.left)
         }
-    
+        
         // endDateTextField
         endDateTextField.snp.makeConstraints { make in
-            make.top.equalTo(betweenTildLabel.snp.top)
+            make.centerY.equalTo(betweenTildLabel.snp.centerY)
             make.height.equalTo(48)
             make.left.equalTo(betweenTildLabel.snp.right)
             make.right.equalToSuperview().inset(16)
         }
         
-        //checkIsWorkingButton
+        // checkIsWorkingButton
         checkIsWorkingButton.snp.makeConstraints { make in
             make.top.equalTo(betweenTildLabel.snp.bottom).offset(12)
             make.height.equalTo(23)
@@ -343,7 +404,7 @@ class InputCareerVC: UIViewController {
 
     @objc
     private func inputEducationButtonTapped(_ sender: UIButton) {
-        var nextVC = InputEducationVC()
+        let nextVC = InputEducationVC()
         nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
         nextVC.modalPresentationStyle = .fullScreen
         present(nextVC, animated: true)
@@ -371,5 +432,57 @@ class InputCareerVC: UIViewController {
         sender.layer.borderColor = UIColor.mainGray.cgColor
         sender.layer.borderWidth = 1
     }
+    
+    @objc
+    func pickerExit() {
+        self.view.endEditing(true)
+    }
 
+}
+
+extension InputCareerVC: UIPickerViewDataSource, UIPickerViewDelegate {
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 2
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        if component == 0 {
+            return yearArray.count
+        } else {
+            return monthArray.count
+        }
+        
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        if pickerView.tag == 0 {
+            if component == 0 {
+                yearValue = yearArray[row]
+                startDateTextField.text = "\(yearValue)/\(monthValue)"
+            } else {
+                monthValue = monthArray[row]
+                startDateTextField.text = "\(yearValue)/\(monthValue)"
+            }
+        }
+        else if pickerView.tag == 1 {
+            if component == 0 {
+                yearValue = yearArray[row]
+                endDateTextField.text = "\(yearValue)/\(monthValue)"
+            } else {
+                monthValue = monthArray[row]
+                endDateTextField.text = "\(yearValue)/\(monthValue)"
+            }
+        }
+        
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        if component == 0 {
+            return yearArray[row]
+        } else {
+            return monthArray[row]
+        }
+    }
 }
