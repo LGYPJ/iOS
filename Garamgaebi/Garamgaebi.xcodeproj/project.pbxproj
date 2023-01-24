@@ -34,6 +34,7 @@
 		460C0C2B296D855800FF5085 /* ProfileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460C0C2A296D855800FF5085 /* ProfileEditVC.swift */; };
 		462183F5297C51B800B9A035 /* ServiceBottomSheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462183F4297C51B800B9A035 /* ServiceBottomSheetVC.swift */; };
 		462C4D65297D34BD00F2E0C6 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462C4D64297D34BD00F2E0C6 /* UIButton+.swift */; };
+		46704AEA297F9D2B005E63EA /* ProfileCareerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46704AE9297F9D2B005E63EA /* ProfileCareerTableViewCell.swift */; };
 		46828A4229752EF80037AB8C /* ProfileInputEducationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46828A4129752EF80037AB8C /* ProfileInputEducationVC.swift */; };
 		46876C6729732053000BA1B6 /* ProfileWithdrawalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46876C6629732053000BA1B6 /* ProfileWithdrawalVC.swift */; };
 		46876C692973D7E3000BA1B6 /* ProfileInputCareerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46876C682973D7E3000BA1B6 /* ProfileInputCareerVC.swift */; };
@@ -142,6 +143,7 @@
 		460C0C2A296D855800FF5085 /* ProfileEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditVC.swift; sourceTree = "<group>"; };
 		462183F4297C51B800B9A035 /* ServiceBottomSheetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceBottomSheetVC.swift; sourceTree = "<group>"; };
 		462C4D64297D34BD00F2E0C6 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
+		46704AE9297F9D2B005E63EA /* ProfileCareerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCareerTableViewCell.swift; sourceTree = "<group>"; };
 		46828A4129752EF80037AB8C /* ProfileInputEducationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInputEducationVC.swift; sourceTree = "<group>"; };
 		46876C6629732053000BA1B6 /* ProfileWithdrawalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileWithdrawalVC.swift; sourceTree = "<group>"; };
 		46876C682973D7E3000BA1B6 /* ProfileInputCareerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInputCareerVC.swift; sourceTree = "<group>"; };
@@ -460,6 +462,7 @@
 			isa = PBXGroup;
 			children = (
 				46C18D222978662000A05CBF /* ProfileSnsCollectionViewCell.swift */,
+				46704AE9297F9D2B005E63EA /* ProfileCareerTableViewCell.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -1008,6 +1011,7 @@
 				60EDD40D2976620B00600807 /* ViewAllMyEventDataModel.swift in Sources */,
 				462183F5297C51B800B9A035 /* ServiceBottomSheetVC.swift in Sources */,
 				60093A8D296E90FD00F76783 /* SchoolEmailAuthVC.swift in Sources */,
+				46704AEA297F9D2B005E63EA /* ProfileCareerTableViewCell.swift in Sources */,
 				60BD04F62973AD2600F4B433 /* HomeMyEventInfoTableViewCell.swift in Sources */,
 				60AA6BCD29755621002878B6 /* CustomHeaderView.swift in Sources */,
 				60AA6BC829751F66002878B6 /* ViewAllSeminarTableViewCell.swift in Sources */,
