@@ -9,7 +9,46 @@ import UIKit
 import SnapKit
 
 class InputEducationVC: UIViewController {
+    
+    private let yearArray = (1901...2023).reversed().map { String($0) }
+    private let monthArray = (1...12).map { String(format:"%02d", $0) }
+    private var yearValue =  String()
+    private var monthValue = String()
+    
     // MARK: - Subviews
+    
+    private var toolbar: UIToolbar {
+        let toolBar = UIToolbar(frame: CGRect(x:0, y:0, width:100, height:35))
+        toolBar.tintColor = .mainBlack
+        toolBar.backgroundColor = .mainLightGray
+        
+        let exitBtn = UIBarButtonItem()
+        exitBtn.title = "확인"
+        exitBtn.target = self
+        exitBtn.action = #selector(pickerExit)
+        exitBtn.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.NotoSansKR(type: .Regular, size: 16)!], for: .normal)
+        
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+
+        toolBar.setItems([flexSpace,exitBtn], animated: true)
+        return toolBar
+    }
+    
+    lazy var startDatePickerView: UIPickerView = {
+        let picker = UIPickerView()
+        picker.tag = 0
+        picker.delegate = self
+        picker.dataSource = self
+        return picker
+    }()
+    
+    lazy var endDatePickerView: UIPickerView = {
+        let picker = UIPickerView()
+        picker.tag = 1
+        picker.delegate = self
+        picker.dataSource = self
+        return picker
+    }()
     
     lazy var pagingImage: UIImageView = {
         let view = UIImageView(image: UIImage(named: "PagingImage4"))
@@ -89,9 +128,88 @@ class InputEducationVC: UIViewController {
         return textField
     }()
     
+    lazy var subtitleLearningDateLabel: UILabel = {
+        let label = UILabel()
+        label.text = "교육 기간"
+        label.textColor = .black.withAlphaComponent(0.8)
+        label.font = UIFont.NotoSansKR(type: .Bold, size: 18)
+        return label
+    }()
+    
+    lazy var startDateTextField: UITextField = {
+        let textField = UITextField()
+        
+        let calenderImg = UIImageView(image: UIImage(named: "calendarIcon"))
+        textField.addSubview(calenderImg)
+        calenderImg.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview().inset(14)
+            make.right.equalToSuperview().inset(15)
+            make.width.equalTo(18)
+        }
+        
+        textField.addLeftPadding()
+        textField.placeholder = "시작년월"
+        textField.setPlaceholderColor(.mainGray)
+        textField.layer.cornerRadius = 12
+        textField.textColor = .black
+        textField.font = UIFont.NotoSansKR(type: .Regular, size: 16)
+        textField.autocapitalizationType = .none
+        
+        textField.inputView = startDatePickerView
+        textField.inputAccessoryView = toolbar
+        
+        textField.layer.borderColor = UIColor.mainGray.cgColor
+        textField.layer.borderWidth = 1
+        
+        textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+        textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+        
+        return textField
+    }()
+    
+    lazy var betweenTildLabel: UIButton = {
+        let button = UIButton()
+        button.setTitle("~", for: .normal)
+        button.setTitleColor(.mainGray, for: .normal)
+        button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
+        button.isEnabled = false
+        return button
+    }()
+    
+    lazy var endDateTextField: UITextField = {
+        let textField = UITextField()
+        
+        let calenderImg = UIImageView(image: UIImage(named: "calendarIcon"))
+        textField.addSubview(calenderImg)
+        calenderImg.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview().inset(14)
+            make.right.equalToSuperview().inset(15)
+            make.width.equalTo(18)
+        }
+        
+        textField.addLeftPadding()
+        textField.placeholder = "종료년월"
+        textField.setPlaceholderColor(.mainGray)
+        textField.layer.cornerRadius = 12
+        textField.textColor = .black
+        textField.font = UIFont.NotoSansKR(type: .Regular, size: 16)
+        textField.autocapitalizationType = .none
+        
+        textField.inputView = endDatePickerView
+        textField.inputAccessoryView = toolbar
+        
+        textField.layer.borderColor = UIColor.mainGray.cgColor
+        textField.layer.borderWidth = 1
+        
+        textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+        textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+        
+        return textField
+    }()
+    
     lazy var checkIsLearningButton: UIButton = {
         let button = UIButton()
-        button.setTitle("재학 중", for: .normal)
+        button.setTitle("교육 중", for: .normal)
         button.setImage(UIImage(systemName: "square")?.withTintColor(UIColor(hex: 0xAEAEAE), renderingMode: .alwaysOriginal), for: .normal)
         button.setImage(UIImage(systemName: "checkmark.square")?.withRenderingMode(.automatic), for: .selected)
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -7)
@@ -152,12 +270,15 @@ class InputEducationVC: UIViewController {
         view.addSubview(pagingImage)
         view.addSubview(institutionTextField)
         view.addSubview(majorTextField)
-        view.addSubview(saveUserProfileButton)
+        view.addSubview(startDateTextField)
+        view.addSubview(endDateTextField)
+        view.addSubview(betweenTildLabel)
         view.addSubview(checkIsLearningButton)
         view.addSubview(inputCareerButton)
+        view.addSubview(saveUserProfileButton)
         
         /* Labels */
-        [titleLabel,descriptionLabel,subtitleInstitutionLabel,subtitleMajorLabel,subDescriptionLabel].forEach {
+        [titleLabel,descriptionLabel,subtitleInstitutionLabel,subtitleMajorLabel,subDescriptionLabel, subtitleLearningDateLabel].forEach {
             view.addSubview($0)
         }
     }
@@ -167,15 +288,15 @@ class InputEducationVC: UIViewController {
         //pagingImage
         pagingImage.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
-            make.width.equalTo(96)
-            make.height.equalTo(24)
+            make.width.equalTo(72)
+            make.height.equalTo(12)
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(28)
         }
         
         // titleLabel
         titleLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(16)
-            make.top.equalTo(pagingImage.snp.bottom).offset(16)
+            make.left.equalTo(pagingImage.snp.left)
+            make.top.equalTo(pagingImage.snp.bottom).offset(28)
         }
         
         // descriptionLabel
@@ -211,11 +332,41 @@ class InputEducationVC: UIViewController {
             make.left.right.equalToSuperview().inset(16)
         }
         
-        //checkIsLearningButton
+        // subtitleLearningDateLabel
+        subtitleLearningDateLabel.snp.makeConstraints { make in
+            make.left.equalTo(titleLabel.snp.left)
+            make.top.equalTo(majorTextField.snp.bottom).offset(28)
+        }
+        
+        // betweenTildLabel
+        betweenTildLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.width.equalTo(38)
+            make.height.equalTo(48)
+            make.top.equalTo(subtitleLearningDateLabel.snp.bottom).offset(4)
+        }
+        
+        // startDateTextField
+        startDateTextField.snp.makeConstraints { make in
+            make.centerY.equalTo(betweenTildLabel.snp.centerY)
+            make.height.equalTo(48)
+            make.left.equalTo(titleLabel.snp.left)
+            make.right.equalTo(betweenTildLabel.snp.left)
+        }
+        
+        // endDateTextField
+        endDateTextField.snp.makeConstraints { make in
+            make.centerY.equalTo(betweenTildLabel.snp.centerY)
+            make.height.equalTo(48)
+            make.left.equalTo(betweenTildLabel.snp.right)
+            make.right.equalToSuperview().inset(16)
+        }
+        
+        // checkIsLearningButton
         checkIsLearningButton.snp.makeConstraints { make in
-            make.top.equalTo(majorTextField.snp.bottom).offset(12)
+            make.top.equalTo(betweenTildLabel.snp.bottom).offset(12)
             make.height.equalTo(23)
-            make.left.equalToSuperview().inset(16)
+            make.left.equalTo(titleLabel.snp.left)
         }
         
         // saveUserProfileButton
@@ -279,4 +430,55 @@ class InputEducationVC: UIViewController {
         sender.layer.borderWidth = 1
     }
 
+    @objc
+    func pickerExit() {
+        self.view.endEditing(true)
+    }
+}
+
+extension InputEducationVC: UIPickerViewDataSource, UIPickerViewDelegate {
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 2
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        if component == 0 {
+            return yearArray.count
+        } else {
+            return monthArray.count
+        }
+        
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        if pickerView.tag == 0 {
+            if component == 0 {
+                yearValue = yearArray[row]
+                startDateTextField.text = "\(yearValue)/\(monthValue)"
+            } else {
+                monthValue = monthArray[row]
+                startDateTextField.text = "\(yearValue)/\(monthValue)"
+            }
+        }
+        else if pickerView.tag == 1 {
+            if component == 0 {
+                yearValue = yearArray[row]
+                endDateTextField.text = "\(yearValue)/\(monthValue)"
+            } else {
+                monthValue = monthArray[row]
+                endDateTextField.text = "\(yearValue)/\(monthValue)"
+            }
+        }
+        
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        if component == 0 {
+            return yearArray[row]
+        } else {
+            return monthArray[row]
+        }
+    }
 }

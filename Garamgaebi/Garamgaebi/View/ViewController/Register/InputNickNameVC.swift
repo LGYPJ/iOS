@@ -41,11 +41,19 @@ class InputNickNameVC: UIViewController {
         return label
     }()
     
+    lazy var nickNameTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "닉네임"
+        label.textColor = .mainBlack
+        label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        return label
+    }()
+    
     lazy var nickNameTextField: UITextField = {
         let textField = UITextField()
         
         textField.addLeftPadding()
-        textField.placeholder = "닉네임을 입력해주세요 (최대 8글자)"
+        textField.placeholder = "닉네임을 입력해주세요"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
         textField.textColor = .black
@@ -64,8 +72,8 @@ class InputNickNameVC: UIViewController {
     lazy var nickNameValidLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
-        //label.text = "최대 8글자까지 작성이 가능합니다!"
-        //label.text = "사용 가능하지 않은 닉네임입니다."
+        //label.text = "사용 불가능한 닉네임입니다." -> 0xFF0000, 1.0
+        //label.text = "사용 가능한 닉네임입니다." -> .mainBlue
         label.textColor = UIColor(hex: 0xFF0000)
         label.isHidden = true
         return label
@@ -104,7 +112,7 @@ class InputNickNameVC: UIViewController {
         view.addSubview(nextButton)
         
         /* Labels */
-        [titleLabel,descriptionLabel,nickNameValidLabel].forEach {
+        [titleLabel,descriptionLabel,nickNameTitleLabel,nickNameValidLabel].forEach {
             view.addSubview($0)
         }
  
@@ -115,15 +123,15 @@ class InputNickNameVC: UIViewController {
         //pagingImage
         pagingImage.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
-            make.width.equalTo(96)
-            make.height.equalTo(24)
+            make.width.equalTo(72)
+            make.height.equalTo(12)
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(28)
         }
         
         // titleLabel
         titleLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(16)
-            make.top.equalTo(pagingImage.snp.bottom).offset(16)
+            make.left.equalTo(pagingImage.snp.left)
+            make.top.equalTo(pagingImage.snp.bottom).offset(28)
         }
         
         // descriptionLabel
@@ -132,13 +140,19 @@ class InputNickNameVC: UIViewController {
             make.right.equalToSuperview().offset(16)
             make.top.equalTo(titleLabel.snp.bottom).offset(9)
         }
-        
-        // emailTextField
-        nickNameTextField.snp.makeConstraints { make in
+        // nickNameTitleLabel
+        nickNameTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(descriptionLabel.snp.bottom).offset(36)
+            make.left.equalTo(descriptionLabel.snp.left)
+        }
+        
+        // nickNameTextField
+        nickNameTextField.snp.makeConstraints { make in
+            make.top.equalTo(nickNameTitleLabel.snp.bottom).offset(8)
             make.height.equalTo(48)
             make.left.right.equalToSuperview().inset(16)
         }
+        
         // nickNameValidLabel
         nickNameValidLabel.snp.makeConstraints { make in
             make.top.equalTo(nickNameTextField.snp.bottom).offset(4)
@@ -147,7 +161,6 @@ class InputNickNameVC: UIViewController {
         }
         
         // nextButton
-        view.addSubview(nextButton)
         nextButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(14)
             make.right.equalToSuperview().inset(14)
@@ -172,26 +185,29 @@ class InputNickNameVC: UIViewController {
     func validateUserInfo() {
         if isValidNickName {
             self.nextButton.isEnabled = true
+            self.nickNameTextField.layer.borderColor = UIColor.mainBlack.cgColor
+            self.nickNameTextField.layer.borderWidth = 1
             UIView.animate(withDuration: 0.33) {
                 self.nextButton.backgroundColor = .mainBlue
+                self.nickNameValidLabel.text = "사용 가능한 닉네임입니다"
+                self.nickNameValidLabel.textColor = .mainBlue
             }
-            self.nickNameValidLabel.text = "사용 가능한 닉네임입니다"
-            self.nickNameValidLabel.textColor = .mainBlue
         } else {
             self.nextButton.isEnabled = false
+            self.nickNameTextField.layer.borderColor = UIColor(hex: 0xFF0000).cgColor
+            self.nickNameTextField.layer.borderWidth = 1
             UIView.animate(withDuration: 0.33) {
                 self.nextButton.backgroundColor = .mainGray
+                self.nickNameValidLabel.text = "사용 불가능한 닉네임입니다."
+                self.nickNameValidLabel.textColor = UIColor(hex: 0xFF0000)
             }
-            self.nickNameValidLabel.text = "사용 가능하지 않은 닉네임입니다."
-            //self.nickNameValidLabel.text = "최대 8글자까지 작성이 가능합니다!"
-            self.nickNameValidLabel.textColor = .red
         }
         
     }
     
     @objc func textFieldActivated(_ sender: UITextField) {
         
-        sender.layer.borderColor = UIColor(hex: 0x000000).withAlphaComponent(0.8).cgColor
+        sender.layer.borderColor = UIColor.mainBlack.cgColor
         sender.layer.borderWidth = 1
         
         self.nickNameValidLabel.isHidden = false
@@ -225,7 +241,7 @@ extension String {
     
     // id 정규표현식 5~13자
     func isValidNickName() -> Bool {
-        let nickRegEx = "[가-힣A-Za-z0-9]{2,8}"
+        let nickRegEx = "[가-힣A-Za-z0-9]{1,8}"
         let nickTest = NSPredicate(format: "SELF MATCHES %@", nickRegEx)
         
         return nickTest.evaluate(with: self)
