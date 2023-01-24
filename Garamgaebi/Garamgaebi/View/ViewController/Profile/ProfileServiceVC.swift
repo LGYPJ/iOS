@@ -21,7 +21,7 @@ class ProfileServiceVC: UIViewController {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "고객센터"
-        label.textColor = UIColor(hex: 0x000000,alpha: 0.8)
+        label.textColor = UIColor.mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
         return label
     }()
@@ -31,7 +31,7 @@ class ProfileServiceVC: UIViewController {
         button.setImage(UIImage(named: "arrowBackward"), for: .normal)
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         button.clipsToBounds = true
-        button.tintColor = UIColor(hex: 0x000000,alpha: 0.8)
+        button.tintColor = UIColor.mainBlack
         button.addTarget(self, action: #selector(didTapBackBarButton), for: .touchUpInside)
         
         return button
@@ -40,32 +40,36 @@ class ProfileServiceVC: UIViewController {
     let noticeLabel = UILabel().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.numberOfLines = 0
+        $0.textColor = UIColor.mainBlack
         $0.text = "휴일을 제외한 평일에는 하루 이내에 답변을 드릴게요.\n혹시 하루가 지나도 답변이 오지 않으면, 스팸 메일함을 확인해주세요."
     }
     
     let emailTextField = UITextField().then {
-        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        $0.borderStyle = .roundedRect
-        $0.placeholder = "답변 받을 이메일을 입력해 주세요"
+        $0.placeholder = "답변 받을 이메일 주소"
+        $0.basicTextField()
+        
+        $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+        $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
     }
     
     let questionTypeTextField = UITextField().then {
-        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        $0.borderStyle = .roundedRect
         $0.placeholder = "질문 유형을 선택해주세요"
+        $0.basicTextField()
+        $0.isUserInteractionEnabled = false
     }
     let typeSelectBtn = UIButton().then {
         $0.setImage(UIImage(systemName: "chevron.down"), for: .normal)
-        $0.tintColor = .black
+        $0.tintColor = .mainBlack
+        $0.addTarget(self, action: #selector(showBottomSheet), for: .touchUpInside)
     }
     
     let textViewPlaceHolder = "내용을 적어주세요"
     lazy var contentTextField = UITextView().then {
-        $0.layer.borderWidth = 0.8
-        $0.layer.borderColor = UIColor.systemGray5.cgColor // UIColor.lightGray.withAlphaComponent(0.7).cgColor
-        $0.layer.cornerRadius = 8
-        // $0.textContainerInset = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 16.0, right: 12.0)
-        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14) // .systemFont(ofSize: 18)
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = UIColor.mainGray.cgColor
+        $0.layer.cornerRadius = 12
+        $0.textContainerInset = UIEdgeInsets(top: 10.0, left: 12.0, bottom: 16.0, right: 12.0)
+        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.text = textViewPlaceHolder
         $0.textColor = .mainGray
         $0.delegate = self // <-
@@ -168,7 +172,7 @@ class ProfileServiceVC: UIViewController {
         
         typeSelectBtn.snp.makeConstraints { /// 유형 선택 화살표
             $0.centerY.equalTo(questionTypeTextField)
-            $0.trailing.equalTo(questionTypeTextField.snp.trailing).inset(7)
+            $0.trailing.equalTo(questionTypeTextField).inset(10)
         }
         
         contentTextField.snp.makeConstraints { /// 내용 입력
@@ -205,6 +209,12 @@ class ProfileServiceVC: UIViewController {
         
     }
     
+    // 바텀시트 나타내기
+    @objc private func showBottomSheet() {
+        let bottomSheetVC = ServiceBottomSheetVC()
+        bottomSheetVC.modalPresentationStyle = .overFullScreen
+        self.present(bottomSheetVC, animated: false, completion: nil)
+    }
     
     // 회원탈퇴 버튼 did tap
     @objc private func withdrawalButtonDidTap() {
@@ -231,6 +241,17 @@ class ProfileServiceVC: UIViewController {
     @objc private func didTapBackBarButton() {
         print("뒤로가기 버튼 클릭")
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    // 텍스트 활성화
+    @objc func textFieldActivated(_ sender: UITextField) {
+        sender.layer.borderColor = UIColor.mainBlack.cgColor
+        sender.layer.borderWidth = 1
+    }
+    
+    @objc func textFieldInactivated(_ sender: UITextField) {
+        sender.layer.borderColor = UIColor.mainGray.cgColor
+        sender.layer.borderWidth = 1
     }
 }
 

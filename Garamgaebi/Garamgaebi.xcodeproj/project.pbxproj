@@ -32,6 +32,8 @@
 		2CDD9504297573BF004B8D56 /* BankPopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD9503297573BF004B8D56 /* BankPopUpVC.swift */; };
 		2CDD9509297657FE004B8D56 /* BankListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD9508297657FE004B8D56 /* BankListCollectionViewCell.swift */; };
 		460C0C2B296D855800FF5085 /* ProfileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460C0C2A296D855800FF5085 /* ProfileEditVC.swift */; };
+		462183F5297C51B800B9A035 /* ServiceBottomSheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462183F4297C51B800B9A035 /* ServiceBottomSheetVC.swift */; };
+		462C4D65297D34BD00F2E0C6 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462C4D64297D34BD00F2E0C6 /* UIButton+.swift */; };
 		46828A4229752EF80037AB8C /* ProfileInputEducationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46828A4129752EF80037AB8C /* ProfileInputEducationVC.swift */; };
 		46876C6729732053000BA1B6 /* ProfileWithdrawalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46876C6629732053000BA1B6 /* ProfileWithdrawalVC.swift */; };
 		46876C692973D7E3000BA1B6 /* ProfileInputCareerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46876C682973D7E3000BA1B6 /* ProfileInputCareerVC.swift */; };
@@ -138,6 +140,8 @@
 		2CDD9508297657FE004B8D56 /* BankListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankListCollectionViewCell.swift; sourceTree = "<group>"; };
 		4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Garamgaebi_GaramgaebiUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		460C0C2A296D855800FF5085 /* ProfileEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditVC.swift; sourceTree = "<group>"; };
+		462183F4297C51B800B9A035 /* ServiceBottomSheetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceBottomSheetVC.swift; sourceTree = "<group>"; };
+		462C4D64297D34BD00F2E0C6 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
 		46828A4129752EF80037AB8C /* ProfileInputEducationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInputEducationVC.swift; sourceTree = "<group>"; };
 		46876C6629732053000BA1B6 /* ProfileWithdrawalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileWithdrawalVC.swift; sourceTree = "<group>"; };
 		46876C682973D7E3000BA1B6 /* ProfileInputCareerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInputCareerVC.swift; sourceTree = "<group>"; };
@@ -651,6 +655,7 @@
 				46876C682973D7E3000BA1B6 /* ProfileInputCareerVC.swift */,
 				46828A4129752EF80037AB8C /* ProfileInputEducationVC.swift */,
 				46C18D2829788A7600A05CBF /* ProfileInputSNSVC.swift */,
+				462183F4297C51B800B9A035 /* ServiceBottomSheetVC.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -672,6 +677,7 @@
 				6018232929729DA400160EF4 /* CALayer+.swift */,
 				2CBF6C71297A954E00940CBE /* UITextField+.swift */,
 				2C9E5610297A960900DF9E5A /* String+.swift */,
+				462C4D64297D34BD00F2E0C6 /* UIButton+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -990,6 +996,7 @@
 				2CDD94E529712E8E004B8D56 /* IceBreakingCardCollectionViewCell.swift in Sources */,
 				2CDD9502297551C4004B8D56 /* IceBreakingStartCardCollectionViewCell.swift in Sources */,
 				2CDD94FE2973BAB9004B8D56 /* CustomFlowLayout.swift in Sources */,
+				462C4D65297D34BD00F2E0C6 /* UIButton+.swift in Sources */,
 				2CDD94F82971A389004B8D56 /* IceBreakingRoomListVC.swift in Sources */,
 				2CDD94E329711EB3004B8D56 /* IceBreakingRoomVC.swift in Sources */,
 				60F91409296D446100626C40 /* UIFont+.swift in Sources */,
@@ -999,6 +1006,7 @@
 				6018232829726BF600160EF4 /* TabBarController.swift in Sources */,
 				609A53D2296AB47300BBD338 /* AppDelegate.swift in Sources */,
 				60EDD40D2976620B00600807 /* ViewAllMyEventDataModel.swift in Sources */,
+				462183F5297C51B800B9A035 /* ServiceBottomSheetVC.swift in Sources */,
 				60093A8D296E90FD00F76783 /* SchoolEmailAuthVC.swift in Sources */,
 				60BD04F62973AD2600F4B433 /* HomeMyEventInfoTableViewCell.swift in Sources */,
 				60AA6BCD29755621002878B6 /* CustomHeaderView.swift in Sources */,
@@ -1198,6 +1206,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = QNLYL4GD4K;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Garamgaebi/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1228,6 +1237,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = QNLYL4GD4K;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Garamgaebi/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

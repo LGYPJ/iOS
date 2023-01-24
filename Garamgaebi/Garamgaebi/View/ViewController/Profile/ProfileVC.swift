@@ -36,7 +36,7 @@ class ProfileVC: UIViewController {
     
     lazy var notificationViewButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "NotificationIcon"), for: .normal)
+        button.setImage(UIImage(named: "HeadsetMic"), for: .normal)
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(serviceButtonDidTap), for: .touchUpInside)
@@ -137,14 +137,7 @@ class ProfileVC: UIViewController {
     
     let addSnsBtn = UIButton().then {
         $0.setTitle("SNS 추가", for: .normal)
-        $0.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
-        $0.setImage(UIImage(systemName: "plus"), for: .normal)
-        $0.imageEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 15)
-        $0.setTitleColor(.mainBlue, for: .normal)
-        $0.tintColor = .mainBlue
-        $0.layer.borderColor = UIColor.mainBlue.cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 12
+        $0.plusButton() // 버튼 디자인
     }
     
     // 경력
@@ -188,14 +181,7 @@ class ProfileVC: UIViewController {
     
     let addCareerBtn = UIButton().then {
         $0.setTitle("경력 추가", for: .normal)
-        $0.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
-        $0.setImage(UIImage(systemName: "plus"), for: .normal)
-        $0.imageEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 15)
-        $0.setTitleColor(.mainBlue, for: .normal)
-        $0.tintColor = .mainBlue
-        $0.layer.borderColor = UIColor.mainBlue.cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 12
+        $0.plusButton() // 버튼 디자인
     }
     
     // 교육
@@ -239,14 +225,7 @@ class ProfileVC: UIViewController {
     let addEduBtn = UIButton().then {
         let button = UIButton()
         $0.setTitle("교육 추가", for: .normal)
-        $0.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
-        $0.setImage(UIImage(systemName: "plus"), for: .normal)
-        $0.imageEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 15)
-        $0.setTitleColor(.mainBlue, for: .normal)
-        $0.tintColor = .mainBlue
-        $0.layer.borderColor = UIColor.mainBlue.cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 12
+        $0.plusButton() // 버튼 디자인
     }
     
     // MARK: - LifeCycles
@@ -545,4 +524,20 @@ extension ProfileVC: UICollectionViewDataSource, UICollectionViewDelegate, UICol
     }
     
     
+}
+
+// MARK: - UIButton Extension
+extension UIButton {
+    
+    // SNS, 경력, 교육 추가 버튼 디자인
+    func plusButton() {
+        self.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
+        self.setImage(UIImage(systemName: "plus"), for: .normal)
+        self.imageEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 15)
+        self.setTitleColor(.mainBlue, for: .normal)
+        self.tintColor = .mainBlue
+        self.layer.borderColor = UIColor.mainBlue.cgColor
+        self.layer.borderWidth = 1
+        self.layer.cornerRadius = 12
+    }
 }

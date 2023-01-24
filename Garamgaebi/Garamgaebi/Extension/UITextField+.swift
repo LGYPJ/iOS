@@ -23,5 +23,17 @@ extension UITextField {
 			].compactMapValues { $0 }
 		)
 	}
+    
+    func basicTextField() {
+        self.addLeftPadding()
+        
+        self.textColor = .mainBlack
+        self.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        self.autocapitalizationType = .none
+
+        self.layer.cornerRadius = 12
+        self.layer.borderColor = UIColor.mainGray.cgColor
+        self.layer.borderWidth = 1
+    }
 	
 }
