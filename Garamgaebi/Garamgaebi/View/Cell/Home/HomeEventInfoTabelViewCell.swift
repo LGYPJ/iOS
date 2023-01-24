@@ -101,16 +101,22 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         return stackView
     }()
     
-    private let collectionViewFlowLayout: UICollectionViewFlowLayout = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        return layout
-    }()
+//    private let collectionViewFlowLayout: UICollectionViewFlowLayout = {
+//        let layout = UICollectionViewFlowLayout()
+//        layout.scrollDirection = .horizontal
+//        return layout
+//    }()
     
     lazy var seminarCollectionView: UICollectionView = {
-        let view = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewFlowLayout)
-        view.isScrollEnabled = true
+        let layout: UICollectionViewFlowLayout = {
+            let layout = UICollectionViewFlowLayout()
+            layout.scrollDirection = .horizontal
+            return layout
+        }()
         
+        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+
+        view.isScrollEnabled = true
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
@@ -122,9 +128,15 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     }()
     
     lazy var networkingCollectionView: UICollectionView = {
-        let view = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewFlowLayout)
-        view.isScrollEnabled = true
+        let layout: UICollectionViewFlowLayout = {
+            let layout = UICollectionViewFlowLayout()
+            layout.scrollDirection = .horizontal
+            return layout
+        }()
         
+        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+
+        view.isScrollEnabled = true
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
@@ -232,6 +244,17 @@ extension HomeEventInfoTableViewCell: UICollectionViewDataSource, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        if collectionView == seminarCollectionView {
+            print("section0<<<<<<<<<")
+            return seminarList.count
+        }
+        
+        else {
+            print("<<<<<<<<<section1")
+            return networkingList.count
+        }
+        
 //        switch section {
 //        case 0:
 //            print("section 개수: \(seminarList.count)")
@@ -243,16 +266,18 @@ extension HomeEventInfoTableViewCell: UICollectionViewDataSource, UICollectionVi
 //            print(fatalError())
 //            return 0
 //        }
-        if collectionView.tag == 0{
-//            print("seminarList -> \(seminarList.count)")
-            return seminarList.count
-        }
-        else if collectionView.tag == 1 {
-//            print("networkingList -> \(networkingList.count)")
-            return networkingList.count
-        }
-        print(fatalError("error"))
-        return 0
+        
+//        if collectionView.tag == 0{
+////            print("seminarList -> \(seminarList.count)")
+//            return seminarList.count
+//        }
+//        else if collectionView.tag == 1 {
+////            print("networkingList -> \(networkingList.count)")
+//            return networkingList.count
+//        }
+//        print(fatalError("error"))
+        
+        //return 0
     }
     
     func collectionView(_ collectionView: UICollectionView,
