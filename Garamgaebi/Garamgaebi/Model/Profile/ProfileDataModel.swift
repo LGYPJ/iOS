@@ -41,6 +41,7 @@ struct ProfileCareerDataModel {
 extension ProfileCareerDataModel {
     static let list = [
         ProfileCareerDataModel(company: "우아한 형제들", position: "프론트엔드 프로그래머", startDate: "2020.04", endDate: "현재"),
+        ProfileCareerDataModel(company: "우아한 형제들", position: "프론트엔드 프로그래머", startDate: "2020.04", endDate: "2021.09"),
         ProfileCareerDataModel(company: "우아한 형제들", position: "프론트엔드 프로그래머", startDate: "2020.04", endDate: "2021.09")
     ]
 }

@@ -15,8 +15,8 @@ class ProfileVC: UIViewController {
     // MARK: - Properties
     //    private var snsCollectionView: ProfileSnsCollectionViewCell
     //    private let dataSource = ProfileSnsDataModel.data
-    
-    // MARK: - Subviews
+    let careerDataList = ProfileCareerDataModel.list
+    let educationDataList = ProfileEducationDataModel.list
     
     // MARK: - Subviews
     lazy var headerView: UIView = {
@@ -115,14 +115,14 @@ class ProfileVC: UIViewController {
         $0.text = "유저들과 소통을 위해서 SNS 주소를 남겨주세요!"
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.numberOfLines = 0
-        //        $0.isHidden = true
+//                $0.isHidden = true
     }
     let snsBottomRadiusView = UIView().then {
         $0.layer.borderColor = UIColor.mainGray.cgColor
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 12
         
-        $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMaxYCorner]
+        $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
     }
     
     var snsCollectionView: UICollectionView = {
@@ -137,7 +137,7 @@ class ProfileVC: UIViewController {
     
     let addSnsBtn = UIButton().then {
         $0.setTitle("SNS 추가", for: .normal)
-        $0.plusButton() // 버튼 디자인
+        $0.profilePlusButton() // 버튼 디자인
     }
     
     // 경력
@@ -158,30 +158,36 @@ class ProfileVC: UIViewController {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.textAlignment = .center
         $0.numberOfLines = 0
-        //        $0.isHidden = true
+//        $0.isHidden = true
     }
     let careerBottomRadiusView = UIView().then {
         $0.layer.borderColor = UIColor.mainGray.cgColor
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 12
         
-        $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMaxYCorner]
+        $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
     }
     
-    var careerCollectionView: UICollectionView = {
-        var layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 0
-        layout.scrollDirection = .vertical
-        layout.sectionInset = .zero
+    lazy var careerTableView: UITableView = {
+        let view = UITableView()
+
+        view.allowsSelection = true
+//        view.backgroundColor = .clear
+//        view.separatorStyle = .none
+        view.bounces = true
+        view.showsVerticalScrollIndicator = false
+        view.contentInset = .zero
         
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        //         cv.backgroundColor = .green
-        return cv
+        view.register(ProfileCareerTableViewCell.self, forCellReuseIdentifier: ProfileCareerTableViewCell.identifier)
+        view.delegate = self
+        view.dataSource = self
+
+        return view
     }()
     
     let addCareerBtn = UIButton().then {
         $0.setTitle("경력 추가", for: .normal)
-        $0.plusButton() // 버튼 디자인
+        $0.profilePlusButton() // 버튼 디자인
     }
     
     // 교육
@@ -209,23 +215,28 @@ class ProfileVC: UIViewController {
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 12
         
-        $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMaxYCorner]
+        $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
     }
     
-    var eduCollectionView: UICollectionView = {
-        var layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 0
-        layout.scrollDirection = .vertical
-        layout.sectionInset = .zero
+    lazy var eduTableView: UITableView = {
+        let view = UITableView()
+
+        view.allowsSelection = true
+        view.bounces = true
+        view.showsVerticalScrollIndicator = false
+        view.contentInset = .zero
         
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        return cv
+        view.register(ProfileCareerTableViewCell.self, forCellReuseIdentifier: ProfileCareerTableViewCell.identifier)
+        view.delegate = self
+        view.dataSource = self
+
+        return view
     }()
     
     let addEduBtn = UIButton().then {
         let button = UIButton()
         $0.setTitle("교육 추가", for: .normal)
-        $0.plusButton() // 버튼 디자인
+        $0.profilePlusButton() // 버튼 디자인
     }
     
     // MARK: - LifeCycles
@@ -263,17 +274,23 @@ class ProfileVC: UIViewController {
         
         // scroll - add
         [snsTopRadiusView, snsTitleLabel, snsDefaultLabel, snsBottomRadiusView,
-         careerTopRadiusView, careerTitleLabel, careerDefaultLabel, careerBottomRadiusView, careerCollectionView, addCareerBtn,
-         eduTopRadiusView, eduTitleLabel, eduDefaultLabel, eduBottomRadiusView, eduCollectionView, addEduBtn].forEach {scrollView.addSubview($0)}
+         careerTopRadiusView, careerTitleLabel, careerBottomRadiusView,
+         eduTopRadiusView, eduTitleLabel, eduBottomRadiusView].forEach {scrollView.addSubview($0)}
         
         // view - sns
         [snsCollectionView, addSnsBtn].forEach { snsBottomRadiusView.addSubview($0) }
+        
+        // view - career
+        [careerDefaultLabel, careerTableView, addCareerBtn].forEach { careerBottomRadiusView.addSubview($0) }
+        
+        // view - education
+        [eduDefaultLabel, eduTableView, addEduBtn].forEach {
+            eduBottomRadiusView.addSubview($0) }
         
         
         
         // layer
         // HeaderView
-        //headerView
         headerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(71)
@@ -384,25 +401,26 @@ class ProfileVC: UIViewController {
             $0.leading.trailing.equalTo(careerTopRadiusView).offset(12)
         }
         careerBottomRadiusView.snp.makeConstraints {
-            let height = careerDefaultLabel.frame.height + addCareerBtn.frame.height + 150
             $0.top.equalTo(careerTopRadiusView.snp.bottom).offset(-1)
             $0.leading.trailing.equalTo(careerTopRadiusView)
-            $0.height.equalTo(height)
+//            $0.height.equalTo(dataList.count * 65 + 72)
         }
-        careerDefaultLabel.snp.makeConstraints {
-            $0.top.equalTo(careerBottomRadiusView).offset(12)
-            $0.centerX.equalTo(careerBottomRadiusView)
+//        careerDefaultLabel.snp.makeConstraints {
+//            $0.top.equalToSuperview().inset(12)
+//            $0.leading.trailing.equalToSuperview()
+//            $0.bottom.equalTo(addCareerBtn.snp.top).offset(-12)
+//        }
+        careerTableView.backgroundColor = .mainPurple
+        careerTableView.snp.makeConstraints { /// 경력 테이블뷰
+            $0.top.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(addCareerBtn.snp.top).offset(-12)
+            $0.height.equalTo(careerDataList.count * 65)
         }
-        //        careerCollectionView.snp.makeConstraints {
-        //            $0.top.equalTo(careerBottomRadiusView)
-        //            $0.leading.trailing.equalTo(careerBottomRadiusView)
-        //            $0.bottom.equalTo(addCareerBtn).offset(-12)
-        //        }
         
         addCareerBtn.snp.makeConstraints { /// 경력 추가 버튼
-            $0.top.equalTo(careerDefaultLabel.snp.bottom).offset(12)
-            $0.bottom.equalTo(careerBottomRadiusView).offset(-16)
-            $0.centerX.equalTo(careerBottomRadiusView)
+            $0.bottom.equalToSuperview().inset(12)
+            $0.centerX.equalToSuperview()
             $0.height.equalTo(48)
             $0.width.equalTo(134)
         }
@@ -421,21 +439,21 @@ class ProfileVC: UIViewController {
             $0.leading.trailing.equalTo(eduTopRadiusView).offset(12)
         }
         eduBottomRadiusView.snp.makeConstraints {
-            let height = eduDefaultLabel.frame.height + addEduBtn.frame.height + 150
             $0.top.equalTo(eduTopRadiusView.snp.bottom).offset(-1)
             $0.leading.trailing.equalTo(eduTopRadiusView)
             $0.bottom.equalTo(scrollView).offset(-16)
-            $0.height.equalTo(height)
         }
-        eduDefaultLabel.snp.makeConstraints {
-            $0.top.equalTo(eduBottomRadiusView).offset(12)
-            $0.centerX.equalTo(eduBottomRadiusView)
+//        eduDefaultLabel.snp.makeConstraints {
+//            $0.top.equalToSuperview().inset(12)
+//            $0.leading.trailing.equalToSuperview()
+//            $0.bottom.equalTo(addEduBtn.snp.top).offset(-12)
+//        }
+        eduTableView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(addEduBtn.snp.top).offset(-12)
+            $0.height.equalTo(educationDataList.count * 65)
         }
-        //        eduCollectionView.snp.makeConstraints {
-        //            $0.top.equalTo(eduBottomRadiusView)
-        //            $0.leading.trailing.equalTo(eduBottomRadiusView)
-        //            $0.bottom.equalTo(addEduBtn).offset(-12)
-        //        }
         
         addEduBtn.snp.makeConstraints { /// 교육 추가 버튼
             $0.top.equalTo(eduDefaultLabel.snp.bottom).offset(12)
@@ -523,21 +541,34 @@ extension ProfileVC: UICollectionViewDataSource, UICollectionViewDelegate, UICol
         return cell
     }
     
-    
 }
 
-// MARK: - UIButton Extension
-extension UIButton {
-    
-    // SNS, 경력, 교육 추가 버튼 디자인
-    func plusButton() {
-        self.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
-        self.setImage(UIImage(systemName: "plus"), for: .normal)
-        self.imageEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 15)
-        self.setTitleColor(.mainBlue, for: .normal)
-        self.tintColor = .mainBlue
-        self.layer.borderColor = UIColor.mainBlue.cgColor
-        self.layer.borderWidth = 1
-        self.layer.cornerRadius = 12
+extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if tableView == careerTableView { return careerDataList.count }
+        else if tableView == eduTableView {
+            print("Education")
+            return educationDataList.count
+        }
+        else { return 0 }
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 65
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileCareerTableViewCell.identifier, for: indexPath) as? ProfileCareerTableViewCell else {return UITableViewCell()}
+
+        if tableView == careerTableView { cell.careerConfigure(careerDataList[indexPath.row])
+            print(">>>>>>")
+        }
+        else if tableView == eduTableView {
+            print("123")
+            cell.educationConfigure(educationDataList[indexPath.row]) }
+        
+        
+        return cell
+    }
+    
 }

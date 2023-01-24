@@ -7,6 +7,8 @@
 
 import UIKit
 
+import SnapKit
+
 extension UIButton {
     
     // 기본 버튼
@@ -14,9 +16,13 @@ extension UIButton {
         self.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         self.setTitleColor(.white, for: .normal)
         self.backgroundColor = .mainBlue
+        self.clipsToBounds = true
         
         self.layer.cornerRadius = 12
-        self.frame.size.height = 48
+        
+        self.snp.makeConstraints {
+            $0.height.equalTo(48)
+        }
     }
     
     // SNS, 경력, 교육 추가 버튼 디자인
@@ -26,9 +32,15 @@ extension UIButton {
         self.imageEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 15)
         self.setTitleColor(.mainBlue, for: .normal)
         self.tintColor = .mainBlue
+        
         self.layer.borderColor = UIColor.mainBlue.cgColor
         self.layer.borderWidth = 1
         self.layer.cornerRadius = 12
+        
+        self.snp.makeConstraints {
+            $0.height.equalTo(48)
+            $0.width.equalTo(134)
+        }
     }
     
 }
