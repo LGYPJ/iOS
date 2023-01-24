@@ -56,6 +56,8 @@
 		6055D8432970183500C86D53 /* InputOrganizationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D8422970183400C86D53 /* InputOrganizationVC.swift */; };
 		6055D84529701F5700C86D53 /* InputCareerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D84429701F5700C86D53 /* InputCareerVC.swift */; };
 		6055D84729701F6B00C86D53 /* InputEducationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D84629701F6B00C86D53 /* InputEducationVC.swift */; };
+		6082992C297FBDB000240036 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6082992B297FBDB000240036 /* HomeViewModel.swift */; };
+		6082992F297FC20C00240036 /* EventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6082992E297FC20C00240036 /* EventService.swift */; };
 		609A53D2296AB47300BBD338 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53D1296AB47300BBD338 /* AppDelegate.swift */; };
 		609A53D4296AB47300BBD338 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53D3296AB47300BBD338 /* SceneDelegate.swift */; };
 		609A53DB296AB47400BBD338 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 609A53DA296AB47400BBD338 /* Assets.xcassets */; };
@@ -166,6 +168,8 @@
 		6055D8422970183400C86D53 /* InputOrganizationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputOrganizationVC.swift; sourceTree = "<group>"; };
 		6055D84429701F5700C86D53 /* InputCareerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputCareerVC.swift; sourceTree = "<group>"; };
 		6055D84629701F6B00C86D53 /* InputEducationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputEducationVC.swift; sourceTree = "<group>"; };
+		6082992B297FBDB000240036 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		6082992E297FC20C00240036 /* EventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventService.swift; sourceTree = "<group>"; };
 		609A53CE296AB47300BBD338 /* Garamgaebi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Garamgaebi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		609A53D1296AB47300BBD338 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		609A53D3296AB47300BBD338 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -568,6 +572,22 @@
 			path = MyEvent;
 			sourceTree = "<group>";
 		};
+		60829927297FBCB300240036 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				6082992B297FBDB000240036 /* HomeViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		6082992D297FBDBB00240036 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				6082992E297FC20C00240036 /* EventService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
 		609A53C5296AB47300BBD338 = {
 			isa = PBXGroup;
 			children = (
@@ -599,6 +619,8 @@
 				60F91405296D440F00626C40 /* Extension */,
 				603215FD297A738400ACBB04 /* Model */,
 				60F91404296D34CD00626C40 /* View */,
+				60829927297FBCB300240036 /* ViewModel */,
+				6082992D297FBDBB00240036 /* Service */,
 				609A53DA296AB47400BBD338 /* Assets.xcassets */,
 				609A53DC296AB47400BBD338 /* LaunchScreen.storyboard */,
 				609A53DF296AB47400BBD338 /* Info.plist */,
@@ -663,8 +685,8 @@
 		60F91404296D34CD00626C40 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				6052F198297A612A0097B3F5 /* Cell */,
 				6052F197297A611F0097B3F5 /* ViewController */,
+				6052F198297A612A0097B3F5 /* Cell */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -968,6 +990,7 @@
 				60BD04F02973A25D00F4B433 /* HomeUserColectionViewCell.swift in Sources */,
 				60093A8B296E7EFB00F76783 /* LoginVC.swift in Sources */,
 				60BD04FF2973EBE600F4B433 /* HomeNotificationTableViewCell.swift in Sources */,
+				6082992F297FC20C00240036 /* EventService.swift in Sources */,
 				60BD04FA2973C55D00F4B433 /* HomeMyEventDataModel.swift in Sources */,
 				6038243C296D7E3F00E12CC2 /* OnboardingDataModel.swift in Sources */,
 				60BD04F22973A3EC00F4B433 /* HomeUserInfoTableViewCell.swift in Sources */,
@@ -981,6 +1004,7 @@
 				60F91403296D2F4800626C40 /* ProfileVC.swift in Sources */,
 				46876C6729732053000BA1B6 /* ProfileWithdrawalVC.swift in Sources */,
 				46C18D25297866E600A05CBF /* ProfileDataModel.swift in Sources */,
+				6082992C297FBDB000240036 /* HomeViewModel.swift in Sources */,
 				46876C692973D7E3000BA1B6 /* ProfileInputCareerVC.swift in Sources */,
 				46B4780B29700FEE002186A3 /* ProfileServiceVC.swift in Sources */,
 				46C18D232978662000A05CBF /* ProfileSnsCollectionViewCell.swift in Sources */,
