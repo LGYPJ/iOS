@@ -16,6 +16,7 @@ class ProfileVC: UIViewController {
     //    private var snsCollectionView: ProfileSnsCollectionViewCell
     //    private let dataSource = ProfileSnsDataModel.data
     let careerDataList = ProfileCareerDataModel.list
+    let educationDataList = ProfileEducationDataModel.list
     
     // MARK: - Subviews
     lazy var headerView: UIView = {
@@ -217,14 +218,19 @@ class ProfileVC: UIViewController {
         $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
     }
     
-    var eduCollectionView: UICollectionView = {
-        var layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 0
-        layout.scrollDirection = .vertical
-        layout.sectionInset = .zero
+    lazy var eduTableView: UITableView = {
+        let view = UITableView()
+
+        view.allowsSelection = true
+        view.bounces = true
+        view.showsVerticalScrollIndicator = false
+        view.contentInset = .zero
         
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        return cv
+        view.register(ProfileCareerTableViewCell.self, forCellReuseIdentifier: ProfileCareerTableViewCell.identifier)
+        view.delegate = self
+        view.dataSource = self
+
+        return view
     }()
     
     let addEduBtn = UIButton().then {
@@ -269,7 +275,7 @@ class ProfileVC: UIViewController {
         // scroll - add
         [snsTopRadiusView, snsTitleLabel, snsDefaultLabel, snsBottomRadiusView,
          careerTopRadiusView, careerTitleLabel, careerBottomRadiusView,
-         eduTopRadiusView, eduTitleLabel, eduDefaultLabel, eduBottomRadiusView, eduCollectionView, addEduBtn].forEach {scrollView.addSubview($0)}
+         eduTopRadiusView, eduTitleLabel, eduBottomRadiusView].forEach {scrollView.addSubview($0)}
         
         // view - sns
         [snsCollectionView, addSnsBtn].forEach { snsBottomRadiusView.addSubview($0) }
@@ -277,11 +283,14 @@ class ProfileVC: UIViewController {
         // view - career
         [careerDefaultLabel, careerTableView, addCareerBtn].forEach { careerBottomRadiusView.addSubview($0) }
         
+        // view - education
+        [eduDefaultLabel, eduTableView, addEduBtn].forEach {
+            eduBottomRadiusView.addSubview($0) }
+        
         
         
         // layer
         // HeaderView
-        //headerView
         headerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(71)
@@ -430,21 +439,21 @@ class ProfileVC: UIViewController {
             $0.leading.trailing.equalTo(eduTopRadiusView).offset(12)
         }
         eduBottomRadiusView.snp.makeConstraints {
-            let height = eduDefaultLabel.frame.height + addEduBtn.frame.height + 150
             $0.top.equalTo(eduTopRadiusView.snp.bottom).offset(-1)
             $0.leading.trailing.equalTo(eduTopRadiusView)
             $0.bottom.equalTo(scrollView).offset(-16)
-            $0.height.equalTo(height)
         }
-        eduDefaultLabel.snp.makeConstraints {
-            $0.top.equalTo(eduBottomRadiusView).offset(12)
-            $0.centerX.equalTo(eduBottomRadiusView)
+//        eduDefaultLabel.snp.makeConstraints {
+//            $0.top.equalToSuperview().inset(12)
+//            $0.leading.trailing.equalToSuperview()
+//            $0.bottom.equalTo(addEduBtn.snp.top).offset(-12)
+//        }
+        eduTableView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(addEduBtn.snp.top).offset(-12)
+            $0.height.equalTo(educationDataList.count * 65)
         }
-        //        eduCollectionView.snp.makeConstraints {
-        //            $0.top.equalTo(eduBottomRadiusView)
-        //            $0.leading.trailing.equalTo(eduBottomRadiusView)
-        //            $0.bottom.equalTo(addEduBtn).offset(-12)
-        //        }
         
         addEduBtn.snp.makeConstraints { /// 교육 추가 버튼
             $0.top.equalTo(eduDefaultLabel.snp.bottom).offset(12)
@@ -536,7 +545,12 @@ extension ProfileVC: UICollectionViewDataSource, UICollectionViewDelegate, UICol
 
 extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return careerDataList.count
+        if tableView == careerTableView { return careerDataList.count }
+        else if tableView == eduTableView {
+            print("Education")
+            return educationDataList.count
+        }
+        else { return 0 }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -546,7 +560,13 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileCareerTableViewCell.identifier, for: indexPath) as? ProfileCareerTableViewCell else {return UITableViewCell()}
 
-        cell.configure(careerDataList[indexPath.row])
+        if tableView == careerTableView { cell.careerConfigure(careerDataList[indexPath.row])
+            print(">>>>>>")
+        }
+        else if tableView == eduTableView {
+            print("123")
+            cell.educationConfigure(educationDataList[indexPath.row]) }
+        
         
         return cell
     }
