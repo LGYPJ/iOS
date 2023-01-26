@@ -12,6 +12,9 @@ PODS:
   - KakaoSDKUser (2.13.1):
     - KakaoSDKAuth (= 2.13.1)
   - Kingfisher (7.3.2)
+  - ReactorKit (3.2.0):
+    - RxSwift (~> 6.0)
+    - WeakMapTable (~> 1.1)
   - RxCocoa (6.5.0):
     - RxRelay (= 6.5.0)
     - RxSwift (= 6.5.0)
@@ -20,6 +23,7 @@ PODS:
   - RxSwift (6.5.0)
   - SnapKit (5.6.0)
   - Then (3.0.0)
+  - WeakMapTable (1.2.0)
 
 DEPENDENCIES:
   - Alamofire
@@ -27,6 +31,7 @@ DEPENDENCIES:
   - KakaoSDKCommon
   - KakaoSDKUser
   - Kingfisher (~> 7.0)
+  - ReactorKit
   - RxCocoa
   - RxSwift
   - SnapKit (~> 5.6.0)
@@ -39,11 +44,13 @@ SPEC REPOS:
     - KakaoSDKCommon
     - KakaoSDKUser
     - Kingfisher
+    - ReactorKit
     - RxCocoa
     - RxRelay
     - RxSwift
     - SnapKit
     - Then
+    - WeakMapTable
 
 SPEC CHECKSUMS:
   Alamofire: d368e1ff8a298e6dde360e35a3e68e6c610e7204
@@ -51,12 +58,14 @@ SPEC CHECKSUMS:
   KakaoSDKCommon: a16807e19984a0a208c3117c7ef117f101a9a128
   KakaoSDKUser: 92d34cf6af7b123c22a7ee44424332123e356901
   Kingfisher: 0086ad83719761ba9b2cdaf6ef4d5b4878cbae23
+  ReactorKit: e8b11d6b9c415405f381669b095c154a05b59eca
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
+  WeakMapTable: 05c694ce8439a7a9ebabb56187287a63c57673d6
 
-PODFILE CHECKSUM: 94d59d257078dac30a2ef545c5c6b1aa36650383
+PODFILE CHECKSUM: f9ea9cb5c068ce9023587b651b9b4dcb154c1e39
 
 COCOAPODS: 1.11.3
