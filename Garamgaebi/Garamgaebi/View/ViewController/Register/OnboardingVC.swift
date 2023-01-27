@@ -89,8 +89,8 @@ class OnboardingVC: UIViewController {
         /* nextButton */
         view.addSubview(nextButton)
         nextButton.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(14)
-            make.right.equalToSuperview().inset(14)
+            make.left.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16)
             make.bottom.equalToSuperview().inset(48)
             make.height.equalTo(48)
         }
@@ -98,7 +98,7 @@ class OnboardingVC: UIViewController {
         /* pageControl */
         view.addSubview(pageControl)
         pageControl.snp.makeConstraints { make in
-            make.bottom.equalTo(nextButton.snp.top).offset(-39)
+            make.bottom.equalTo(nextButton.snp.top).offset(-28)
             make.centerX.equalToSuperview()
         }
         
@@ -117,8 +117,8 @@ class OnboardingVC: UIViewController {
         
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.bottom.equalTo(pageControl.snp.top).offset(-139)
-            make.height.equalTo(100)
+            make.bottom.equalTo(pageControl.snp.top).offset(-123)
+            make.height.equalTo(350)
             make.width.equalToSuperview()
         }
         
@@ -127,9 +127,9 @@ class OnboardingVC: UIViewController {
     
     private func setOnboardingData() {
         onboardingData.append(contentsOf: [
-            OnboardingDataModel(title: "가천대생 개발자들의\n모임 참여를 보다 간편하게",
+            OnboardingDataModel(img: "Onboarding1", title: "가천대생 개발자들의\n모임 참여를 보다 간편하게",
                                 subTitle: "모임의 시작에서 끝까지 개가천선으로 확인해요"),
-            OnboardingDataModel(title: "활발한\n가천대생들의 네트워킹",
+            OnboardingDataModel(img: "Onboarding2", title: "활발한\n가천대생들의 네트워킹",
                                 subTitle: "프로필을 통해 선후배와 함께 소통해요")
         ])
     }
@@ -164,7 +164,7 @@ extension OnboardingVC: UICollectionViewDataSource, UICollectionViewDelegateFlow
         
         cell.titleLabel.text = onboardingData[indexPath.row].title
         cell.subTitleLabel.text = onboardingData[indexPath.row].subTitle
-        
+        cell.onboardingImage.image = UIImage(named: onboardingData[indexPath.row].img)
         return cell
     }
     
