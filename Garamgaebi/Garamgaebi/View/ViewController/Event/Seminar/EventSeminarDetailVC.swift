@@ -49,13 +49,32 @@ class EventSeminarDetailVC: UIViewController {
 		
 		return tableView
 	}()
+	
+	// MARK: Properties
+	var seminarId: Int
+	
+	var seminarInfo: SeminarDetailInfo = .init(name: "", date: "", location: "", fee: "", endDate: "", userButtonStatus: "") {
+		didSet {
+			tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+		}
+	}
 
     // MARK: - Life Cycle
-    
+	
+	init(seminarId: Int) {
+		self.seminarId = seminarId
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 		configureTableView()
 		configureViews()
+		fetchSeminarInfo()
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -124,6 +143,13 @@ extension EventSeminarDetailVC {
 		navigationController?.pushViewController(EventApplyVC(), animated: true)
 	}
 	
+	// MARK: fetch data
+	private func fetchSeminarInfo() {
+		SeminarDetailViewModel.requestSeminarDetailInfo(seminarId: self.seminarId, completion: {[weak self] result in
+			self?.seminarInfo = result
+		})
+	}
+	
 	
 	
 	
@@ -138,16 +164,24 @@ extension EventSeminarDetailVC: UITableViewDelegate, UITableViewDataSource {
 		switch indexPath.row {
 		case 0:
 			guard let cell = tableView.dequeueReusableCell(withIdentifier: EventInfoTableViewCell.identifier, for: indexPath) as? EventInfoTableViewCell else {return UITableViewCell()}
-			cell.eventNameLabel.text = "2차 세미나"
 			cell.registerButton.addTarget(self, action: #selector(didTapRegisterButton), for: .touchUpInside)
+			
+			cell.eventNameLabel.text = self.seminarInfo.name
+			cell.dateInfoLabel.text = self.seminarInfo.date
+			cell.locationInfoLabel.text = self.seminarInfo.location
+			cell.costInfoLabel.text = self.seminarInfo.fee
+			cell.deadlineInfoLabel.text = self.seminarInfo.endDate
+			cell.registerButton.setTitle(self.seminarInfo.userButtonStatus, for: .normal)
 			
 			return cell
 		case 1:
 			guard let cell = tableView.dequeueReusableCell(withIdentifier: EventAttendantTableViewCell.identifier, for: indexPath) as? EventAttendantTableViewCell else {return UITableViewCell()}
+			cell.seminarId = self.seminarId
 			
 			return cell
 		case 2:
 			guard let cell = tableView.dequeueReusableCell(withIdentifier: EventPreviewTableViewCell.identifier, for: indexPath) as? EventPreviewTableViewCell else {return UITableViewCell()}
+			cell.seminarId = self.seminarId
 			
 			return cell
 		default:

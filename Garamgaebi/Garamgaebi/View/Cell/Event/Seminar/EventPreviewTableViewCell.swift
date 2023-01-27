@@ -11,7 +11,7 @@ import SnapKit
 class EventPreviewTableViewCell: UITableViewCell {
 	
 	static let identifier = "EventPreviewTableViewCell"
-
+	
 	lazy var titleLabel: UILabel = {
 		let label = UILabel()
 		label.text = "발표 미리보기"
@@ -32,28 +32,28 @@ class EventPreviewTableViewCell: UITableViewCell {
 		return collectionView
 	}()
 	
+	// MARK: Properties
+	var seminarId: Int = 0 {
+		didSet {
+			print(seminarId)
+			fetchPreview()
+		}
+	}
+	
+	var previews: [SeminarDetailPreview] = [] {
+		didSet {
+			collectionView.reloadData()
+		}
+	}
+	
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
-		configureDummyData()
 		configureViews()
 		configureCollectionView()
 	}
 	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
-	}
-	
-	// TODO: API연동 후 삭제
-	var dummyTitleArr: [String] = []
-	var dummyUserArr: [String] = []
-	var dummyBelongArr: [String] = []
-	func configureDummyData() {
-		["UICollectionView에 대해 알아보자", "iOS에 대해 알아보자", "Android에 대해 알아보자"]
-			.forEach {dummyTitleArr.append($0)}
-		["애플", "승콩", "로건"]
-			.forEach {dummyUserArr.append($0)}
-		["재학생", "애플아카데미", "재학생"]
-			.forEach {dummyBelongArr.append($0)}
 	}
 	
 }
@@ -84,18 +84,27 @@ extension EventPreviewTableViewCell {
 		collectionView.dataSource = self
 		collectionView.register(EventPreviewCollectionViewCell.self, forCellWithReuseIdentifier: EventPreviewCollectionViewCell.identifier)
 	}
+	
+	private func fetchPreview() {
+		SeminarDetailViewModel.requestSeminarPreview(seminarId: self.seminarId, completion: { [weak self] result in
+			self?.previews = result
+		})
+	}
 }
 
 extension EventPreviewTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		return dummyTitleArr.count
+		return self.previews.count
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EventPreviewCollectionViewCell.identifier, for: indexPath) as? EventPreviewCollectionViewCell else {return UICollectionViewCell()}
-		cell.titleLabel.text = dummyTitleArr[indexPath.row]
-		cell.userLabel.text = dummyUserArr[indexPath.row]
-		cell.belongLabel.text = dummyBelongArr[indexPath.row]
+		
+		let cellData = self.previews[indexPath.row]
+		cell.profileImageView.image = UIImage(systemName: cellData.profileImage)?.withTintColor(.gray, renderingMode: .alwaysOriginal)
+		cell.titleLabel.text = cellData.previewTitle
+		cell.userLabel.text = cellData.nickname
+		cell.belongLabel.text = cellData.organization
 		
 		return cell
 	}

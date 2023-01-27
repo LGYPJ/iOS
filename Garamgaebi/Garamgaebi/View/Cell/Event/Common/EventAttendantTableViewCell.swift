@@ -63,26 +63,33 @@ class EventAttendantTableViewCell: UITableViewCell {
 		
 		return label
 	}()
+	
+	// MARK: Properties
+	var seminarId: Int = 0 {
+		didSet {
+			print(seminarId)
+			fetchAttendant()
+		}
+	}
+	var attendants: [SeminarDetailAttendant] = [] {
+		didSet {
+			configureZeroAttentdant()
+			collectionView.reloadData()
+		}
+	}
+	
 
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		configureViews()
-		configureDummyData()
 		configureCollectionView()
-		configureZeroAttentdant()
 	}
 	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	// TODO: API연동 후 삭제
-	var dummyUserNameArr: [String] = []
-	func configureDummyData() {
-		["승콩", "연현", "코코아", "찹도", "네온", "래리", "로건", "로니", "신디", "애플", "줄리아", "짱구"]
-			.forEach {dummyUserNameArr.append($0)}
-		attendantCountLabel.text = "\(dummyUserNameArr.count)명"
-	}
+
 	
 }
 
@@ -127,10 +134,14 @@ extension EventAttendantTableViewCell {
 		collectionView.register(EventAttendantCollectionViewCell.self, forCellWithReuseIdentifier: EventAttendantCollectionViewCell.identifier)
 	}
 	
+	private func fetchAttendant() {
+		SeminarDetailViewModel.requestSeminarAttendant(seminarId: self.seminarId, completion: {[weak self] result in
+			self?.attendants = result
+		})
+	}
+	
 	private func configureZeroAttentdant() {
-		// TODO: API 통신 후 수정
-//		dummyUserNameArr = []
-		if dummyUserNameArr.count == 0 {
+		if attendants.count == 0 {
 			collectionView.isHidden = true
 			noAttentdantBackgroundView.isHidden = false
 		} else {
@@ -142,18 +153,22 @@ extension EventAttendantTableViewCell {
 
 extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		return dummyUserNameArr.count
+		return self.attendants.count
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EventAttendantCollectionViewCell.identifier, for: indexPath) as? EventAttendantCollectionViewCell else {return UICollectionViewCell()}
-		cell.userNameLabel.text = dummyUserNameArr[indexPath.row]
 		
-		if indexPath.row == 0{
-			cell.profileImageView.image = UIImage(named: "ExProfileImage")
-		} else {
-			cell.profileImageView.image = UIImage(systemName: "person.circle")
-		}
+		let cellData = self.attendants[indexPath.row]
+		cell.profileImageView.image = UIImage(systemName: cellData.profileImage)
+		cell.userNameLabel.text = cellData.nickname
+		
+		
+//		if indexPath.row == 0{
+//			cell.profileImageView.image = UIImage(named: "ExProfileImage")
+//		} else {
+//			cell.profileImageView.image = UIImage(systemName: "person.circle")
+//		}
 		
 		return cell
 	}
