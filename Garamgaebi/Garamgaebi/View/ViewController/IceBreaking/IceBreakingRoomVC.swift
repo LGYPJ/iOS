@@ -262,7 +262,7 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 				return cell
 			case 1:
 				guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IceBreakingCardCollectionViewCell.identifier, for: indexPath) as? IceBreakingCardCollectionViewCell else {return UICollectionViewCell()}
-				cell.titleLabel.text = "\(indexPath.row+1)번째 cell 입니다"
+				cell.contentImageView.image = UIImage(named: "ExIceBreakingCardText")
 				
 				// 현재 셀, 앞 뒤 셀들만 보여지고 나머지는 숨김
 				if (currentIndex-1)...(currentIndex+1) ~= (indexPath.row) {
@@ -273,9 +273,9 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 				
 				// 현재 셀만 내용이 보이도록
 				if indexPath.row == currentIndex {
-					cell.titleLabel.isHidden = false
+					cell.contentImageView.isHidden = false
 				} else{
-					cell.titleLabel.isHidden = true
+					cell.contentImageView.isHidden = true
 				}
 				
 				return cell

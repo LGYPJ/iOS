@@ -12,11 +12,11 @@ class IceBreakingCardCollectionViewCell: UICollectionViewCell {
 	
 	static let identifier = "IceBreakingCardCollectionViewCell"
 	
-	lazy var titleLabel: UILabel = {
-		let label = UILabel()
-//		label.text = "가천대는 나에게 네모이다."
+	lazy var contentImageView: UIImageView = {
+		let imageView = UIImageView()
+		imageView.contentMode = .scaleAspectFit
 		
-		return label
+		return imageView
 	}()
 	
 	override init(frame: CGRect) {
@@ -38,10 +38,10 @@ extension IceBreakingCardCollectionViewCell {
 		contentView.layer.cornerRadius = 20
 		
 		contentView.backgroundColor = .white
-		[titleLabel]
+		[contentImageView]
 			.forEach {contentView.addSubview($0)}
 		
-		titleLabel.snp.makeConstraints {
+		contentImageView.snp.makeConstraints {
 			$0.center.equalToSuperview()
 		}
 	}
