@@ -38,6 +38,7 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     lazy var seminarPopUpButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "PopUpIcon"), for: .normal)
+        button.addTarget(self, action: #selector(presentPopUpView), for: .touchUpInside)
         return button
     }()
     
@@ -78,6 +79,7 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     lazy var networkingPopUpButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "PopUpIcon"), for: .normal)
+        button.addTarget(self, action: #selector(presentPopUpView), for: .touchUpInside)
         return button
     }()
     
@@ -103,12 +105,6 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         stackView.alignment = .center
         return stackView
     }()
-    
-//    private let collectionViewFlowLayout: UICollectionViewFlowLayout = {
-//        let layout = UICollectionViewFlowLayout()
-//        layout.scrollDirection = .horizontal
-//        return layout
-//    }()
     
     lazy var seminarCollectionView: UICollectionView = {
         let layout: UICollectionViewFlowLayout = {
@@ -233,6 +229,20 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         }
     }
     
+    @objc func presentPopUpView(_ sender: UIButton){
+        switch sender {
+        case seminarPopUpButton:
+            let vc = HomeSeminarPopUpVC()
+            vc.modalPresentationStyle = .overFullScreen
+            self.window?.rootViewController?.present(vc, animated: false)
+        case networkingPopUpButton:
+            let vc = HomeNetworkingPopUpVC()
+            vc.modalPresentationStyle = .overCurrentContext
+            self.window?.rootViewController?.present(vc, animated: false)
+        default:
+            fatalError("HomeInfoTableViewCell presentPopUpView error")
+        }
+    }
     
 }
 
@@ -249,12 +259,10 @@ extension HomeEventInfoTableViewCell: UICollectionViewDataSource, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         if collectionView == seminarCollectionView {
-            print("section0<<<<<<<<<")
             return seminarList.count
         }
         
         else {
-            print("<<<<<<<<<section1")
             return networkingList.count
         }
         
