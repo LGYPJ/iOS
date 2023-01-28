@@ -79,10 +79,10 @@ class ProfileVC: UIViewController {
     }()
     
     let introduceTextField = UITextView().then {
-        $0.layer.borderWidth = 0.8
+        $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray5.cgColor // UIColor.lightGray.withAlphaComponent(0.7).cgColor
-        $0.layer.cornerRadius = 8
-        $0.textContainerInset = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 16.0, right: 12.0)
+        $0.layer.cornerRadius = 12
+        $0.textContainerInset = UIEdgeInsets(top: 12.0, left: 12.0, bottom: 12.0, right: 12.0)
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14) // .systemFont(ofSize: 18)
         $0.textColor = .black
         $0.isUserInteractionEnabled = false
@@ -225,7 +225,7 @@ class ProfileVC: UIViewController {
     
     lazy var eduTableView: UITableView = {
         let view = UITableView()
-
+        
         view.allowsSelection = true
         view.bounces = true
         view.showsVerticalScrollIndicator = false
@@ -234,7 +234,7 @@ class ProfileVC: UIViewController {
         view.register(ProfileCareerTableViewCell.self, forCellReuseIdentifier: ProfileCareerTableViewCell.identifier)
         view.delegate = self
         view.dataSource = self
-
+        
         return view
     }()
     
@@ -347,7 +347,7 @@ class ProfileVC: UIViewController {
         }
         
         profileEditBtn.snp.makeConstraints { /// 프로필 편집 버튼
-            $0.top.equalTo(introduceTextField.snp.bottom).offset(19)
+            $0.top.equalTo(introduceTextField.snp.bottom).offset(16)
             $0.leading.trailing.equalTo(introduceTextField)
             $0.height.equalTo(48)
         }
@@ -481,6 +481,24 @@ class ProfileVC: UIViewController {
         
         // 화면 전환
         let nextVC = ProfileEditVC()
+        
+        // 다음 화면으로 넘길 텍스트
+        guard let nameString = nameLabel.text else { return }
+        guard let orgString = orgLabel.text else { return }
+        guard let emailString = emailLabel.text else { return }
+        guard let introduceString = introduceTextField.text else { return }
+        
+        // 값 넘기기
+        nextVC.nameTextField.text = nameString
+        nextVC.orgTextField.text = orgString
+        nextVC.emailTextField.text = emailString
+        
+        if (introduceTextField.text != nil) {
+            print("!nil")
+            nextVC.introduceTextField.text = introduceString
+            nextVC.introduceTextField.textColor = .mainBlack
+        }
+        
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
@@ -544,7 +562,7 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
+        
         if tableView == snsTableView {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileSNSTableViewCell.identifier, for: indexPath) as? ProfileSNSTableViewCell else { return UITableViewCell()}
             print(">>>>sns>>>>")
