@@ -24,7 +24,7 @@ class ProfileEditVC: UIViewController {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "프로필 편집"
-        label.textColor = UIColor(hex: 0x000000,alpha: 0.8)
+        label.textColor = UIColor.mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
         return label
     }()
@@ -34,7 +34,7 @@ class ProfileEditVC: UIViewController {
         button.setImage(UIImage(named: "arrowBackward"), for: .normal)
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         button.clipsToBounds = true
-        button.tintColor = UIColor(hex: 0x000000,alpha: 0.8)
+        button.tintColor = UIColor.mainBlack
         button.addTarget(self, action: #selector(didTapBackBarButton), for: .touchUpInside)
         
         return button
@@ -111,11 +111,8 @@ class ProfileEditVC: UIViewController {
     }
     
     let editDoneBtn = UIButton().then {
+        $0.basicButton()
         $0.setTitle("완료하기", for: .normal)
-        $0.setTitleColor(.white, for: .normal)
-        $0.tintColor = .mainBlue
-        $0.backgroundColor = .mainBlue
-        $0.layer.cornerRadius = 10
     }
     
     
@@ -231,7 +228,6 @@ class ProfileEditVC: UIViewController {
         editDoneBtn.snp.makeConstraints {
             $0.bottom.equalTo(-48)
             $0.leading.trailing.equalTo(emailTextField)
-            $0.height.equalTo(nameTextField)
         }
         editDoneBtn.addTarget(self, action: #selector(doneButtonDidTap), for: .touchUpInside)
     }
@@ -270,12 +266,10 @@ class ProfileEditVC: UIViewController {
     
     @objc func textFieldActivated(_ sender: UITextField) {
         sender.layer.borderColor = UIColor.mainBlack.cgColor
-        sender.layer.borderWidth = 1
     }
     
     @objc func textFieldInactivated(_ sender: UITextField) {
         sender.layer.borderColor = UIColor.mainGray.cgColor
-        sender.layer.borderWidth = 1
     }
     
     @objc func profileImageDidTap() {

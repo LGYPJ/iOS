@@ -89,11 +89,10 @@ class ProfileVC: UIViewController {
     }
     
     let profileEditBtn = UIButton().then {
+        $0.basicButton()
         $0.setTitle("내 프로필 편집하기", for: .normal)
         $0.setTitleColor(.mainBlue, for: .normal)
-        $0.tintColor = .mainLightBlue
         $0.backgroundColor = .mainLightBlue
-        $0.layer.cornerRadius = 10
     }
     
     // 하단 버튼
@@ -349,7 +348,6 @@ class ProfileVC: UIViewController {
         profileEditBtn.snp.makeConstraints { /// 프로필 편집 버튼
             $0.top.equalTo(introduceTextField.snp.bottom).offset(16)
             $0.leading.trailing.equalTo(introduceTextField)
-            $0.height.equalTo(48)
         }
         /// 버튼 클릭
         profileEditBtn.addTarget(self,action: #selector(self.editButtonDidTap(_:)), for: .touchUpInside)
@@ -385,8 +383,6 @@ class ProfileVC: UIViewController {
             $0.top.equalTo(snsDefaultLabel.snp.bottom).offset(12)
             $0.bottom.equalTo(snsBottomRadiusView).inset(12)
             $0.centerX.equalTo(snsBottomRadiusView)
-            $0.height.equalTo(48)
-            $0.width.equalTo(134)
         }
         /// 버튼 클릭
         addSnsBtn.addTarget(self,action: #selector(self.snsButtonDidTap(_:)), for: .touchUpInside)
@@ -423,8 +419,6 @@ class ProfileVC: UIViewController {
         addCareerBtn.snp.makeConstraints { /// 경력 추가 버튼
             $0.bottom.equalToSuperview().inset(12)
             $0.centerX.equalToSuperview()
-            $0.height.equalTo(48)
-            $0.width.equalTo(134)
         }
         /// 버튼 클릭
         addCareerBtn.addTarget(self,action: #selector(self.careerButtonDidTap(_:)), for: .touchUpInside)
@@ -461,8 +455,6 @@ class ProfileVC: UIViewController {
             $0.top.equalTo(eduDefaultLabel.snp.bottom).offset(12)
             $0.bottom.equalTo(eduBottomRadiusView).inset(12)
             $0.centerX.equalTo(eduBottomRadiusView)
-            $0.height.equalTo(48)
-            $0.width.equalTo(134)
         }
         /// 버튼 클릭
         addEduBtn.addTarget(self,action: #selector(self.educationButtonDidTap(_:)), for: .touchUpInside)

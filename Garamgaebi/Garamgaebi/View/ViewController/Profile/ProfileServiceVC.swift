@@ -45,16 +45,16 @@ class ProfileServiceVC: UIViewController {
     }
     
     let emailTextField = UITextField().then {
-        $0.placeholder = "답변 받을 이메일 주소"
         $0.basicTextField()
+        $0.placeholder = "답변 받을 이메일 주소"
         
         $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
     }
     
     let questionTypeTextField = UITextField().then {
-        $0.placeholder = "질문 유형을 선택해주세요"
         $0.basicTextField()
+        $0.placeholder = "질문 유형을 선택해주세요"
         $0.isUserInteractionEnabled = false
     }
     let typeSelectBtn = UIButton().then {
@@ -96,10 +96,8 @@ class ProfileServiceVC: UIViewController {
     }
     
     let sendBtn = UIButton().then {
+        $0.basicButton()
         $0.setTitle("보내기", for: .normal)
-        $0.backgroundColor = .mainBlue
-        $0.tintColor = .mainBlue
-        $0.layer.cornerRadius = 10
     }
     
     let withdrawalLabel = UIButton().then {
@@ -197,7 +195,6 @@ class ProfileServiceVC: UIViewController {
             $0.top.equalTo(agreemsgLabel.snp.bottom).offset(40)
             $0.leading.equalTo(emailTextField)
             $0.trailing.equalTo(emailTextField)
-            $0.height.equalTo(45)
         }
         
         withdrawalLabel.snp.makeConstraints { /// 회원탈퇴
@@ -230,9 +227,11 @@ class ProfileServiceVC: UIViewController {
         sender.isSelected.toggle()
         switch sender.isSelected {
         case true:
-            sender.setTitleColor(UIColor(hex: 0x000000).withAlphaComponent(0.8), for: .normal)
+            sender.setTitleColor(UIColor.mainBlack, for: .normal)
+            agreemsgLabel.textColor = .mainBlack
         case false:
             sender.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
+            agreemsgLabel.textColor = UIColor(hex: 0x8A8A8A)
         }
     }
     
@@ -246,12 +245,10 @@ class ProfileServiceVC: UIViewController {
     // 텍스트 활성화
     @objc func textFieldActivated(_ sender: UITextField) {
         sender.layer.borderColor = UIColor.mainBlack.cgColor
-        sender.layer.borderWidth = 1
     }
     
     @objc func textFieldInactivated(_ sender: UITextField) {
         sender.layer.borderColor = UIColor.mainGray.cgColor
-        sender.layer.borderWidth = 1
     }
 }
 
@@ -259,7 +256,7 @@ extension ProfileServiceVC: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == textViewPlaceHolder {
             textView.text = nil
-            textView.textColor = .black
+            textView.textColor = .mainBlack
         }
     }
 
@@ -267,7 +264,7 @@ extension ProfileServiceVC: UITextViewDelegate {
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             textView.text = textViewPlaceHolder
             textView.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-            textView.textColor = .systemGray5
+            textView.textColor = .mainGray
             //updateCountLabel(characterCount: 0)
         }
     }

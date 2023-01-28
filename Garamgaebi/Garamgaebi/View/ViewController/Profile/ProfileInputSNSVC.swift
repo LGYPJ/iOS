@@ -34,7 +34,7 @@ class ProfileInputSNSVC: UIViewController {
         button.setImage(UIImage(named: "arrowBackward"), for: .normal)
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         button.clipsToBounds = true
-        button.tintColor = UIColor(hex: 0x000000,alpha: 0.8)
+        button.tintColor = UIColor.mainBlack
         button.addTarget(self, action: #selector(didTapBackBarButton), for: .touchUpInside)
         
         return button
@@ -43,7 +43,7 @@ class ProfileInputSNSVC: UIViewController {
     lazy var subtitleLinkLabel: UILabel = {
         let label = UILabel()
         label.text = "링크"
-        label.textColor = .black.withAlphaComponent(0.8)
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
         return label
     }()
@@ -51,16 +51,8 @@ class ProfileInputSNSVC: UIViewController {
     lazy var linkTextField: UITextField = {
         let textField = UITextField()
         
-        textField.addLeftPadding()
+        textField.basicTextField()
         textField.placeholder = "https://"
-        //        textField.setPlaceholderColor(.mainGray)
-        textField.layer.cornerRadius = 12
-        textField.textColor = .black
-        textField.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        textField.autocapitalizationType = .none
-        
-        textField.layer.borderColor = UIColor.mainGray.cgColor
-        textField.layer.borderWidth = 1
         
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
@@ -71,7 +63,7 @@ class ProfileInputSNSVC: UIViewController {
     lazy var subtitleNameLabel : UILabel = {
         let label = UILabel()
         label.text = "이름"
-        label.textColor = .black.withAlphaComponent(0.8)
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
         
         return label
@@ -80,15 +72,8 @@ class ProfileInputSNSVC: UIViewController {
     lazy var nameTextField: UITextField = {
         let textField = UITextField()
         
-        textField.addLeftPadding()
+        textField.basicTextField()
         textField.placeholder = "표시할 이름을 입력해주세요 (예:블로그, 깃허브 등)"
-        textField.layer.cornerRadius = 12
-        textField.textColor = .black
-        textField.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        textField.autocapitalizationType = .none
-        
-        textField.layer.borderColor = UIColor.mainGray.cgColor
-        textField.layer.borderWidth = 1
         
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
@@ -99,12 +84,10 @@ class ProfileInputSNSVC: UIViewController {
     
     lazy var saveUserProfileButton: UIButton = {
         let button = UIButton()
+        
+        button.basicButton()
         button.setTitle("저장하기", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
-        button.layer.cornerRadius = 12
-        button.backgroundColor = .mainBlue
-        button.clipsToBounds = true
+        
         button.addTarget(self, action: #selector(saveButtonDidTap), for: .touchUpInside)
         return button
     }()
@@ -197,7 +180,6 @@ class ProfileInputSNSVC: UIViewController {
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
             make.bottom.equalToSuperview().inset(48)
-            make.height.equalTo(48)
         }
     }
     

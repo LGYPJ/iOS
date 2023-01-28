@@ -196,7 +196,7 @@ class ProfileInputCareerVC: UIViewController {
         button.setImage(UIImage(systemName: "checkmark.square")?.withRenderingMode(.automatic), for: .selected)
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -7)
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 7)
-        button.setTitleColor(UIColor.mainGray, for: .normal)
+        button.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
         button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         
         button.clipsToBounds = true
@@ -342,7 +342,6 @@ class ProfileInputCareerVC: UIViewController {
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
             make.bottom.equalToSuperview().inset(48)
-            make.height.equalTo(48)
         }
     }
     

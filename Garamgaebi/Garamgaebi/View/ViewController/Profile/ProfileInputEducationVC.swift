@@ -194,7 +194,7 @@ class ProfileInputEducationVC: UIViewController {
         button.setImage(UIImage(systemName: "checkmark.square")?.withRenderingMode(.automatic), for: .selected)
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -7)
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 7)
-        button.setTitleColor(UIColor.mainGray, for: .normal)
+        button.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
         button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
 
         button.clipsToBounds = true
@@ -204,12 +204,8 @@ class ProfileInputEducationVC: UIViewController {
 
     lazy var saveUserProfileButton: UIButton = {
         let button = UIButton()
+        button.basicButton()
         button.setTitle("저장하기", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
-        button.layer.cornerRadius = 12
-        button.backgroundColor = .mainBlue
-        button.clipsToBounds = true
         button.addTarget(self, action: #selector(saveButtonDidTap), for: .touchUpInside)
         return button
     }()
@@ -342,7 +338,6 @@ class ProfileInputEducationVC: UIViewController {
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
             make.bottom.equalToSuperview().inset(48)
-            make.height.equalTo(48)
         }
     }
 

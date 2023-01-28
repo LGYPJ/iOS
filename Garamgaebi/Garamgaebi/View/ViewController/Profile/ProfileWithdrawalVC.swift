@@ -21,7 +21,7 @@ class ProfileWithdrawalVC: UIViewController {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "회원 탈퇴"
-        label.textColor = UIColor(hex: 0x000000,alpha: 0.8)
+        label.textColor = UIColor.mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
         return label
     }()
@@ -31,7 +31,7 @@ class ProfileWithdrawalVC: UIViewController {
         button.setImage(UIImage(named: "arrowBackward"), for: .normal)
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         button.clipsToBounds = true
-        button.tintColor = UIColor(hex: 0x000000,alpha: 0.8)
+        button.tintColor = UIColor.mainBlack
         button.addTarget(self, action: #selector(didTapBackBarButton), for: .touchUpInside)
         
         return button
@@ -54,9 +54,8 @@ class ProfileWithdrawalVC: UIViewController {
     }
     
     let emailTextField = UITextField().then {
+        $0.basicTextField()
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        $0.borderStyle = .roundedRect
-        $0.backgroundColor = .systemGray5
         $0.text = "umc@gmail.com"
         $0.isUserInteractionEnabled = false
     }
@@ -67,8 +66,8 @@ class ProfileWithdrawalVC: UIViewController {
     }
     
     let reasonTypeTextField = UITextField().then {
+        $0.basicTextField()
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        $0.borderStyle = .roundedRect
         $0.placeholder = "탈퇴 사유를 선택해주세요"
     }
     let typeSelectBtn = UIButton().then {
@@ -78,9 +77,9 @@ class ProfileWithdrawalVC: UIViewController {
     
     let textViewPlaceHolder = "내용을 적어주세요"
     lazy var contentTextField = UITextView().then {
-        $0.layer.borderWidth = 0.8
-        $0.layer.borderColor = UIColor.systemGray5.cgColor // UIColor.lightGray.withAlphaComponent(0.7).cgColor
-        $0.layer.cornerRadius = 8
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = UIColor.mainGray.cgColor // UIColor.lightGray.withAlphaComponent(0.7).cgColor
+        $0.layer.cornerRadius = 12
         // $0.textContainerInset = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 16.0, right: 12.0)
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14) // .systemFont(ofSize: 18)
         $0.text = textViewPlaceHolder
@@ -109,10 +108,8 @@ class ProfileWithdrawalVC: UIViewController {
     }
     
     let sendBtn = UIButton().then {
+        $0.basicButton()
         $0.setTitle("탈퇴하기", for: .normal)
-        $0.backgroundColor = .mainBlue
-        $0.tintColor = .mainBlue
-        $0.layer.cornerRadius = 10
     }
 
     override func viewDidLoad() {
@@ -215,7 +212,6 @@ class ProfileWithdrawalVC: UIViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-30)
             $0.leading.equalTo(emailTextField)
             $0.trailing.equalTo(emailTextField)
-            $0.height.equalTo(45)
         }
         sendBtn.addTarget(self, action: #selector(withdrawalButtonDidTap), for: .touchUpInside)
         
@@ -237,10 +233,11 @@ class ProfileWithdrawalVC: UIViewController {
         sender.isSelected.toggle()
         switch sender.isSelected {
         case true:
-            sender.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
-            //sender.setTitleColor(UIColor(hex: 0x000000).withAlphaComponent(0.8), for: .normal)
+            sender.setTitleColor(UIColor.mainBlack, for: .normal)
+            agreemsgLabel.textColor = .mainBlack
         case false:
             sender.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
+            agreemsgLabel.textColor = UIColor(hex: 0x8A8A8A)
         }
     }
     
