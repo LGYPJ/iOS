@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import SnapKit
+import Then
 
 class ProfileServiceVC: UIViewController {
     
@@ -100,10 +102,16 @@ class ProfileServiceVC: UIViewController {
         $0.setTitle("보내기", for: .normal)
     }
     
+    let logoutLabel = UIButton().then {
+        $0.setTitle("로그아웃", for: .normal)
+        $0.titleLabel?.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        $0.setTitleColor(UIColor(hex: 0xAEAEAE), for: .normal)
+    }
+    
     let withdrawalLabel = UIButton().then {
         $0.setTitle("회원탈퇴", for: .normal)
-        $0.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        $0.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
+        $0.titleLabel?.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        $0.setTitleColor(UIColor(hex: 0xAEAEAE), for: .normal)
     }
     
     // MARK: - LifeCycles
@@ -121,7 +129,7 @@ class ProfileServiceVC: UIViewController {
     // MARK: - Functions
     private func configureLayouts() {
         // addSubview
-        [headerView, noticeLabel, emailTextField, questionTypeTextField, typeSelectBtn, contentTextField, agreeCheckBtn, agreemsgLabel, sendBtn, withdrawalLabel]
+        [headerView, noticeLabel, emailTextField, questionTypeTextField, typeSelectBtn, contentTextField, agreeCheckBtn, agreemsgLabel, sendBtn, logoutLabel, withdrawalLabel]
             .forEach {view.addSubview($0)}
         
         [titleLabel, backButton]
@@ -156,16 +164,14 @@ class ProfileServiceVC: UIViewController {
         
         emailTextField.snp.makeConstraints { /// 답변 받을 이메일 주소
             $0.top.equalTo(noticeLabel.snp.bottom).offset(16)
-            $0.leading.equalTo(noticeLabel.snp.leading)
-            $0.trailing.equalTo(noticeLabel.snp.trailing)
-            $0.height.equalTo(45)
+            $0.leading.trailing.equalTo(noticeLabel)
+            $0.height.equalTo(48)
         }
         
         questionTypeTextField.snp.makeConstraints { /// 질문 유형 선택
             $0.top.equalTo(emailTextField.snp.bottom).offset(12)
-            $0.leading.equalTo(emailTextField.snp.leading)
-            $0.trailing.equalTo(emailTextField.snp.trailing)
-            $0.height.equalTo(45)
+            $0.leading.trailing.equalTo(emailTextField)
+            $0.height.equalTo(48)
         }
         
         typeSelectBtn.snp.makeConstraints { /// 유형 선택 화살표
@@ -175,30 +181,31 @@ class ProfileServiceVC: UIViewController {
         
         contentTextField.snp.makeConstraints { /// 내용 입력
             $0.top.equalTo(questionTypeTextField.snp.bottom).offset(12)
-            $0.leading.equalTo(emailTextField.snp.leading)
-            $0.trailing.equalTo(emailTextField.snp.trailing)
+            $0.leading.trailing.equalTo(emailTextField)
             $0.height.equalTo(160)
         }
         
         agreeCheckBtn.snp.makeConstraints { /// 이메일 정보 제공 동의
-            $0.top.equalTo(contentTextField.snp.bottom).offset(12)
-            $0.leading.equalTo(emailTextField.snp.leading)
-            //$0.width.equalTo(150)
-            //$0.trailing.equalTo(emailTextField.snp.trailing)
+            $0.top.equalTo(contentTextField.snp.bottom).offset(8)
+            $0.leading.equalTo(emailTextField)
         }
         agreemsgLabel.snp.makeConstraints { /// 답변 필요
             $0.top.equalTo(agreeCheckBtn.snp.bottom)
-            $0.leading.equalTo(agreeCheckBtn.snp.leading).offset(20)
+            $0.leading.equalTo(agreeCheckBtn).offset(23)
         }
         
         sendBtn.snp.makeConstraints { /// 메일 보내기 버튼
             $0.top.equalTo(agreemsgLabel.snp.bottom).offset(40)
-            $0.leading.equalTo(emailTextField)
-            $0.trailing.equalTo(emailTextField)
+            $0.leading.trailing.equalTo(emailTextField)
+        }
+        
+        logoutLabel.snp.makeConstraints { /// 로그아웃
+            $0.bottom.equalTo(withdrawalLabel.snp.top)
+            $0.centerX.equalTo(withdrawalLabel)
         }
         
         withdrawalLabel.snp.makeConstraints { /// 회원탈퇴
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-30)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
             $0.centerX.equalToSuperview()
         }
         withdrawalLabel.addTarget(self, action: #selector(withdrawalButtonDidTap), for: .touchUpInside)

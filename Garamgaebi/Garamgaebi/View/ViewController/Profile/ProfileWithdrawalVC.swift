@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import SnapKit
+import Then
 
 class ProfileWithdrawalVC: UIViewController {
     
@@ -55,6 +57,7 @@ class ProfileWithdrawalVC: UIViewController {
     
     let emailTextField = UITextField().then {
         $0.basicTextField()
+        $0.backgroundColor = .mainGray
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.text = "umc@gmail.com"
         $0.isUserInteractionEnabled = false
@@ -152,37 +155,31 @@ class ProfileWithdrawalVC: UIViewController {
         
         noticeTitleLabel.snp.makeConstraints { /// 유의사항
             $0.top.equalTo(headerView.snp.bottom).offset(16)
-            $0.leading.equalTo(16)
-            $0.trailing.equalTo(-16)
+            $0.leading.trailing.equalToSuperview().inset(16)
         }
         noticeLabel.snp.makeConstraints { /// 안내
             $0.top.equalTo(noticeTitleLabel.snp.bottom).offset(10)
-            $0.leading.equalTo(noticeTitleLabel)
-            $0.trailing.equalTo(noticeTitleLabel)
+            $0.leading.trailing.equalTo(noticeTitleLabel)
         }
         
         emailTitleLabel.snp.makeConstraints { /// 계정 이메일
             $0.top.equalTo(noticeLabel.snp.bottom).offset(16)
-            $0.leading.equalTo(noticeLabel.snp.leading)
-            $0.trailing.equalTo(noticeLabel.snp.trailing)
+            $0.leading.trailing.equalTo(noticeLabel)
         }
         emailTextField.snp.makeConstraints { /// 탈퇴할 이메일 주소
-            $0.top.equalTo(emailTitleLabel.snp.bottom).offset(5)
-            $0.leading.equalTo(emailTitleLabel.snp.leading)
-            $0.trailing.equalTo(emailTitleLabel.snp.trailing)
-            $0.height.equalTo(45)
+            $0.top.equalTo(emailTitleLabel.snp.bottom).offset(8)
+            $0.leading.trailing.equalTo(emailTitleLabel)
+            $0.height.equalTo(48)
         }
         
         reasonTitleLabel.snp.makeConstraints { /// 탈퇴 사유
-            $0.top.equalTo(emailTextField.snp.bottom).offset(12)
-            $0.leading.equalTo(emailTextField.snp.leading)
-            $0.trailing.equalTo(emailTextField.snp.trailing)
+            $0.top.equalTo(emailTextField.snp.bottom).offset(16)
+            $0.leading.trailing.equalTo(emailTextField)
         }
         reasonTypeTextField.snp.makeConstraints { /// 탈퇴 사유 입력
-            $0.top.equalTo(reasonTitleLabel.snp.bottom).offset(12)
-            $0.leading.equalTo(reasonTitleLabel.snp.leading)
-            $0.trailing.equalTo(reasonTitleLabel.snp.trailing)
-            $0.height.equalTo(45)
+            $0.top.equalTo(reasonTitleLabel.snp.bottom).offset(8)
+            $0.leading.trailing.equalTo(reasonTitleLabel)
+            $0.height.equalTo(48)
         }
         
         typeSelectBtn.snp.makeConstraints { /// 유형 선택 화살표
@@ -191,27 +188,23 @@ class ProfileWithdrawalVC: UIViewController {
         }
         
         contentTextField.snp.makeConstraints { /// 내용 입력
-            $0.top.equalTo(reasonTypeTextField.snp.bottom).offset(12)
-            $0.leading.equalTo(emailTextField.snp.leading)
-            $0.trailing.equalTo(emailTextField.snp.trailing)
+            $0.top.equalTo(reasonTypeTextField.snp.bottom).offset(16)
+            $0.leading.trailing.equalTo(emailTextField)
             $0.height.equalTo(160)
         }
         
-        agreeCheckBtn.snp.makeConstraints { /// 이메일 정보 제공 동의
-            $0.top.equalTo(contentTextField.snp.bottom).offset(12)
+        agreeCheckBtn.snp.makeConstraints { /// 회원탈퇴 내용 숙지
+            $0.top.equalTo(contentTextField.snp.bottom).offset(8)
             $0.leading.equalTo(emailTextField.snp.leading)
-            //$0.width.equalTo(150)
-            //$0.trailing.equalTo(emailTextField.snp.trailing)
         }
-        agreemsgLabel.snp.makeConstraints { /// 답변 필요
+        agreemsgLabel.snp.makeConstraints { /// 회원탈퇴 신청
             $0.top.equalTo(agreeCheckBtn.snp.bottom)
-            $0.leading.equalTo(agreeCheckBtn.snp.leading).offset(20)
+            $0.leading.equalTo(agreeCheckBtn.snp.leading).offset(23)
         }
         
         sendBtn.snp.makeConstraints { /// 회원탈퇴 버튼
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-30)
-            $0.leading.equalTo(emailTextField)
-            $0.trailing.equalTo(emailTextField)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(39)
+            $0.leading.trailing.equalTo(emailTextField)
         }
         sendBtn.addTarget(self, action: #selector(withdrawalButtonDidTap), for: .touchUpInside)
         
