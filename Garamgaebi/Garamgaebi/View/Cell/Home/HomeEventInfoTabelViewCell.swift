@@ -46,21 +46,24 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         button.setTitle("세미나 모아보기", for: .normal)
         button.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
         button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+//        button.backgroundColor = .mainLightBlue
         return button
     }()
     lazy var seminarViewAllButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         button.setImage(UIImage(named: "arrowForward"), for: .normal)
         button.clipsToBounds = true
+//        button.backgroundColor = .mainBlue
         return button
     }()
     lazy var seminarViewAllStack: UIStackView = {
         let stackView = UIStackView()
         [seminarViewAllLabel,seminarViewAllButton]
             .forEach {stackView.addArrangedSubview($0)}
-        stackView.spacing = 0
+        stackView.spacing = 15
         stackView.axis = .horizontal
         stackView.alignment = .center
+//        stackView.backgroundColor = .mainGray
         return stackView
     }()
     
@@ -95,7 +98,7 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         let stackView = UIStackView()
         [networkingViewAllLabel,networkingViewAllButton]
             .forEach {stackView.addArrangedSubview($0)}
-        stackView.spacing = 0
+        stackView.spacing = 15
         stackView.axis = .horizontal
         stackView.alignment = .center
         return stackView
