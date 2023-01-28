@@ -73,7 +73,7 @@ class ServiceBottomSheetVC: UIViewController {
     
     // MARK: - Properties
     // 바텀 시트 높이
-    let bottomHeight: CGFloat = 359
+    let bottomHeight: CGFloat = 300
     
     // bottomSheet가 view의 상단에서 떨어진 거리
     private var bottomSheetViewTopConstraint: NSLayoutConstraint!
@@ -112,16 +112,18 @@ class ServiceBottomSheetVC: UIViewController {
     
     // 레이아웃 세팅
     private func configureLayout() {
-        dimmedBackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            dimmedBackView.topAnchor.constraint(equalTo: view.topAnchor),
-            dimmedBackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            dimmedBackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            dimmedBackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+//        dimmedBackView.translatesAutoresizingMaskIntoConstraints = false
+        dimmedBackView.snp.makeConstraints {
+            $0.top.bottom.leading.trailing.equalToSuperview()
+        }
         
         bottomSheetView.translatesAutoresizingMaskIntoConstraints = false
         let topConstant = view.safeAreaInsets.bottom + view.safeAreaLayoutGuide.layoutFrame.height
+//        bottomSheetView.snp.makeConstraints {
+//            $0.height.equalTo(bottomHeight)
+//            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(10)
+//            $0.bottom.equalToSuperview().inset(35)
+//        }
         bottomSheetViewTopConstraint = bottomSheetView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topConstant)
         NSLayoutConstraint.activate([
             bottomSheetView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
@@ -130,13 +132,12 @@ class ServiceBottomSheetVC: UIViewController {
             bottomSheetViewTopConstraint
         ])
         
-        dismissIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            dismissIndicatorView.widthAnchor.constraint(equalToConstant: 102),
-            dismissIndicatorView.heightAnchor.constraint(equalToConstant: 7),
-            dismissIndicatorView.topAnchor.constraint(equalTo: bottomSheetView.topAnchor, constant: 12),
-            dismissIndicatorView.centerXAnchor.constraint(equalTo: bottomSheetView.centerXAnchor)
-        ])
+        dismissIndicatorView.snp.makeConstraints {
+            $0.width.equalTo(60)
+            $0.height.equalTo(5)
+            $0.top.equalTo(bottomSheetView).inset(10)
+            $0.centerX.equalTo(bottomSheetView)
+        }
         
         // 바텀시트 내부
         // 타이틀
