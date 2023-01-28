@@ -13,8 +13,7 @@ import Then
 class ProfileVC: UIViewController {
     
     // MARK: - Properties
-    //    private var snsCollectionView: ProfileSnsCollectionViewCell
-    //    private let dataSource = ProfileSnsDataModel.data
+    let snsDataList = ProfileSnsDataModel.data
     let careerDataList = ProfileCareerDataModel.list
     let educationDataList = ProfileEducationDataModel.list
     
@@ -34,7 +33,7 @@ class ProfileVC: UIViewController {
         return label
     }()
     
-    lazy var notificationViewButton: UIButton = {
+    lazy var serviceButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "HeadsetMic"), for: .normal)
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -125,14 +124,19 @@ class ProfileVC: UIViewController {
         $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
     }
     
-    var snsCollectionView: UICollectionView = {
-        var layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 0
-        layout.scrollDirection = .vertical
-        layout.sectionInset = .zero
+    lazy var snsTableView: UITableView = {
+        let view = UITableView()
+
+        view.allowsSelection = true
+        view.bounces = true
+        view.showsVerticalScrollIndicator = false
+        view.contentInset = .zero
         
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        return cv
+        view.register(ProfileSNSTableViewCell.self, forCellReuseIdentifier: ProfileSNSTableViewCell.identifier)
+        view.delegate = self
+        view.dataSource = self
+
+        return view
     }()
     
     let addSnsBtn = UIButton().then {
@@ -173,7 +177,8 @@ class ProfileVC: UIViewController {
 
         view.allowsSelection = true
 //        view.backgroundColor = .clear
-//        view.separatorStyle = .none
+        view.separatorStyle = .singleLine
+        view.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
@@ -243,7 +248,6 @@ class ProfileVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        registerCollectionView()
         configureLayouts()
         configureDummyData()
     }
@@ -262,7 +266,7 @@ class ProfileVC: UIViewController {
         // addSubview - HeaderView
         view.addSubview(headerView)
         headerView.addSubview(titleLabel)
-        headerView.addSubview(notificationViewButton)
+        headerView.addSubview(serviceButton)
         
         view.addSubview(scrollView)
         
@@ -273,12 +277,12 @@ class ProfileVC: UIViewController {
             .forEach {scrollView.addSubview($0)}
         
         // scroll - add
-        [snsTopRadiusView, snsTitleLabel, snsDefaultLabel, snsBottomRadiusView,
+        [snsTopRadiusView, snsTitleLabel, snsBottomRadiusView,
          careerTopRadiusView, careerTitleLabel, careerBottomRadiusView,
          eduTopRadiusView, eduTitleLabel, eduBottomRadiusView].forEach {scrollView.addSubview($0)}
         
         // view - sns
-        [snsCollectionView, addSnsBtn].forEach { snsBottomRadiusView.addSubview($0) }
+        [snsDefaultLabel, snsTableView, addSnsBtn].forEach { snsBottomRadiusView.addSubview($0) }
         
         // view - career
         [careerDefaultLabel, careerTableView, addCareerBtn].forEach { careerBottomRadiusView.addSubview($0) }
@@ -303,8 +307,8 @@ class ProfileVC: UIViewController {
             make.centerY.equalToSuperview()
         }
         
-        // notificationViewButton
-        notificationViewButton.snp.makeConstraints { make in
+        // serviceButton
+        serviceButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(16)
             make.centerY.equalToSuperview()
         }
@@ -363,25 +367,23 @@ class ProfileVC: UIViewController {
             $0.leading.trailing.equalTo(snsTopRadiusView).offset(12)
         }
         snsBottomRadiusView.snp.makeConstraints {
-            let height = snsDefaultLabel.frame.height + addSnsBtn.frame.height + 120
             $0.top.equalTo(snsTopRadiusView.snp.bottom).offset(-1)
             $0.leading.trailing.equalTo(snsTopRadiusView)
-            $0.height.equalTo(height)
         }
-        snsDefaultLabel.snp.makeConstraints {
-            $0.top.equalTo(snsBottomRadiusView).offset(12)
-            $0.centerX.equalTo(snsBottomRadiusView)
-            //            $0.leading.trailing.equalTo(snsBottomRadiusView)
+//        snsDefaultLabel.snp.makeConstraints {
+//            $0.top.equalToSuperview().inset(12)
+//            $0.centerX.equalToSuperview()
+//            $0.bottom.equalTo(addSnsBtn.snp.top).offset(-12)
+//        }
+        snsTableView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(addSnsBtn.snp.top).offset(-12)
+            $0.height.equalTo(snsDataList.count * 41)
         }
-        //        snsCollectionView.snp.makeConstraints {
-        //            $0.top.equalTo(snsDefaultLabel.snp.bottom)
-        //            $0.leading.trailing.equalTo(snsBottomRadiusView)
-        //            $0.bottom.equalTo(addSnsBtn).offset(-12)
-        //        }
-        
         addSnsBtn.snp.makeConstraints { /// SNS 추가 버튼
             $0.top.equalTo(snsDefaultLabel.snp.bottom).offset(12)
-            $0.bottom.equalTo(snsBottomRadiusView).offset(-16)
+            $0.bottom.equalTo(snsBottomRadiusView).inset(12)
             $0.centerX.equalTo(snsBottomRadiusView)
             $0.height.equalTo(48)
             $0.width.equalTo(134)
@@ -457,18 +459,13 @@ class ProfileVC: UIViewController {
         
         addEduBtn.snp.makeConstraints { /// 교육 추가 버튼
             $0.top.equalTo(eduDefaultLabel.snp.bottom).offset(12)
-            $0.bottom.equalTo(eduBottomRadiusView).offset(-16)
+            $0.bottom.equalTo(eduBottomRadiusView).inset(12)
             $0.centerX.equalTo(eduBottomRadiusView)
             $0.height.equalTo(48)
             $0.width.equalTo(134)
         }
         /// 버튼 클릭
         addEduBtn.addTarget(self,action: #selector(self.educationButtonDidTap(_:)), for: .touchUpInside)
-    }
-    
-    // 컬렉션뷰 등록
-    private func registerCollectionView() {
-        snsCollectionView.register(ProfileSnsCollectionViewCell.self, forCellWithReuseIdentifier: ProfileSnsCollectionViewCell.identifier)
     }
     
     @objc private func serviceButtonDidTap(_ sender : UIButton) {
@@ -523,52 +520,53 @@ class ProfileVC: UIViewController {
 }
 
 // MARK: - Extension
-extension ProfileVC: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    
-    // numberOfItemInSection
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
-    }
-    
-    // numberOfItemInSection
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = snsCollectionView.dequeueReusableCell(withReuseIdentifier: ProfileSnsCollectionViewCell.identifier, for: indexPath) as? ProfileSnsCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        
-        cell.snsLabel.text = "www.naver.com"
-        
-        return cell
-    }
-    
-}
-
 extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView == careerTableView { return careerDataList.count }
+        if tableView == snsTableView {
+            print("SNS \(snsDataList.count)")
+            return snsDataList.count
+        }
+        else if tableView == careerTableView {
+            print("Career \(careerDataList.count)")
+            return careerDataList.count
+        }
         else if tableView == eduTableView {
-            print("Education")
+            print("Education \(educationDataList.count)")
             return educationDataList.count
         }
         else { return 0 }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 65
+        if tableView == snsTableView { return 41 }
+        else { return 65 }
     }
     
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileCareerTableViewCell.identifier, for: indexPath) as? ProfileCareerTableViewCell else {return UITableViewCell()}
 
-        if tableView == careerTableView { cell.careerConfigure(careerDataList[indexPath.row])
-            print(">>>>>>")
+        if tableView == snsTableView {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileSNSTableViewCell.identifier, for: indexPath) as? ProfileSNSTableViewCell else { return UITableViewCell()}
+            print(">>>>sns>>>>")
+            cell.snsConfigure(snsDataList[indexPath.row])
+            return cell
         }
-        else if tableView == eduTableView {
-            print("123")
-            cell.educationConfigure(educationDataList[indexPath.row]) }
+        else if tableView == careerTableView {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileCareerTableViewCell.identifier, for: indexPath) as? ProfileCareerTableViewCell else {return UITableViewCell()}
+            
+            cell.careerConfigure(careerDataList[indexPath.row])
+            print(">>>>career>>>>")
+            return cell
+        }
+        else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileCareerTableViewCell.identifier, for: indexPath) as? ProfileCareerTableViewCell else {return UITableViewCell()}
+            
+            cell.educationConfigure(educationDataList[indexPath.row])
+            print(">>>>education>>>>")
+            return cell
+        }
         
-        
-        return cell
+//        return cell
     }
     
 }
