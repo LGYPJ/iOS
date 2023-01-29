@@ -10,7 +10,12 @@ import UIKit
 class ViewAllVC: UIViewController {
     
     // MARK: - Variable
-    
+    var pageNumber = HomeEventInfoTableViewCell.viewAllpageIndex {
+        didSet {
+            segmentedControl.selectedSegmentIndex = pageNumber
+            currentPage = pageNumber
+        }
+    }
     
     
     // MARK: - Subviews
@@ -87,6 +92,8 @@ class ViewAllVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(pushEventDetailVC), name: Notification.Name("pushEventDetailVC"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(pushApplyCancelVC), name: Notification.Name("pushEventApplyCancelVC"), object: nil)
 
+        NotificationCenter.default.addObserver(self, selector: #selector(pushViewAllSeminar), name: Notification.Name("pushViewAllSeminar"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(pushViewAllNetworking), name: Notification.Name("pushViewAllNetworking"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -104,6 +111,18 @@ class ViewAllVC: UIViewController {
         self.navigationController?.pushViewController(EventApplyCancelVC(), animated: true)
     }
     
+    @objc func pushViewAllSeminar() {
+  
+        pageNumber = HomeEventInfoTableViewCell.viewAllpageIndex
+        self.tabBarController?.selectedIndex = 1
+
+    }
+    @objc func pushViewAllNetworking() {
+        pageNumber = HomeEventInfoTableViewCell.viewAllpageIndex
+        self.tabBarController?.selectedIndex = 1
+        
+//        self.navigationController?.pushViewController(vc, animated: true)
+    }
     
     // MARK: - Functions
     

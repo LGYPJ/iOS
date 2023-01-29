@@ -8,7 +8,7 @@
 import UIKit
 
 class HomeEventInfoTableViewCell: UITableViewCell {
-    
+    public static var viewAllpageIndex = 0
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -47,14 +47,14 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         button.setTitle("세미나 모아보기", for: .normal)
         button.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
         button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-//        button.backgroundColor = .mainLightBlue
+        button.addTarget(self, action: #selector(presentViewAll), for: .touchUpInside)
         return button
     }()
     lazy var seminarViewAllButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         button.setImage(UIImage(named: "arrowForward"), for: .normal)
         button.clipsToBounds = true
-//        button.backgroundColor = .mainBlue
+        button.addTarget(self, action: #selector(presentViewAll), for: .touchUpInside)
         return button
     }()
     lazy var seminarViewAllStack: UIStackView = {
@@ -88,12 +88,14 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         button.setTitle("네트워킹 모아보기", for: .normal)
         button.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
         button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        button.addTarget(self, action: #selector(presentViewAll), for: .touchUpInside)
         return button
     }()
     lazy var networkingViewAllButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         button.setImage(UIImage(named: "arrowForward"), for: .normal)
         button.clipsToBounds = true
+        button.addTarget(self, action: #selector(presentViewAll), for: .touchUpInside)
         return button
     }()
     lazy var networkingViewAllStack: UIStackView = {
@@ -229,7 +231,7 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         }
     }
     
-    @objc func presentPopUpView(_ sender: UIButton){
+    @objc func presentPopUpView(_ sender: UIButton) {
         switch sender {
         case seminarPopUpButton:
             let vc = HomeSeminarPopUpVC()
@@ -243,6 +245,34 @@ class HomeEventInfoTableViewCell: UITableViewCell {
             fatalError("HomeInfoTableViewCell presentPopUpView error")
         }
     }
+    
+    @objc func presentViewAll(_ sender: UIButton) {
+        switch sender {
+        case seminarViewAllButton, seminarViewAllLabel:
+            
+            HomeEventInfoTableViewCell.viewAllpageIndex = 0
+            NotificationCenter.default.post(name: Notification.Name("pushViewAll Seminar"), object: nil)
+            
+//            let vc = TabBarController()
+//            vc.selectedIndex = 1
+//            vc.modalPresentationStyle = .fullScreen
+//            self.window?.rootViewController?.dismiss(animated: false)
+//            self.window?.rootViewController?.present(vc, animated: false)
+            
+            //            self.window?.rootViewController?.present(vc, animated: false)
+            
+        case networkingViewAllButton, networkingViewAllLabel:
+
+            
+            HomeEventInfoTableViewCell.viewAllpageIndex = 1
+            NotificationCenter.default.post(name: Notification.Name("pushViewAllNetworking"), object: nil)
+//            self.window?.rootViewController?.present(vc, animated: false)
+            
+        default:
+            fatalError("HomeInfoTableViewCell presentViewAll error")
+        }
+    }
+    
     
 }
 
@@ -338,3 +368,4 @@ extension HomeEventInfoTableViewCell: UICollectionViewDataSource, UICollectionVi
     }
     
 }
+
