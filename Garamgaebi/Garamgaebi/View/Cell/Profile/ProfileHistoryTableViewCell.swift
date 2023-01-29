@@ -10,14 +10,14 @@ import UIKit
 import SnapKit
 import Then
 
-class ProfileCareerTableViewCell: UITableViewCell {
+class ProfileHistoryTableViewCell: UITableViewCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - Properties
-    static let identifier = String(describing: ProfileCareerTableViewCell.self)
+    static let identifier = String(describing: ProfileHistoryTableViewCell.self)
     
     lazy var companyLabel = UILabel().then {
         $0.text = "우아한 형제들"

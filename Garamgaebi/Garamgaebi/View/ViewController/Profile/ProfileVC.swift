@@ -127,6 +127,8 @@ class ProfileVC: UIViewController {
         let view = UITableView()
 
         view.allowsSelection = true
+        view.separatorStyle = .singleLine
+        view.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
@@ -182,7 +184,7 @@ class ProfileVC: UIViewController {
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
         
-        view.register(ProfileCareerTableViewCell.self, forCellReuseIdentifier: ProfileCareerTableViewCell.identifier)
+        view.register(ProfileHistoryTableViewCell.self, forCellReuseIdentifier: ProfileHistoryTableViewCell.identifier)
         view.delegate = self
         view.dataSource = self
 
@@ -226,11 +228,13 @@ class ProfileVC: UIViewController {
         let view = UITableView()
         
         view.allowsSelection = true
+        view.separatorStyle = .singleLine
+        view.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
         
-        view.register(ProfileCareerTableViewCell.self, forCellReuseIdentifier: ProfileCareerTableViewCell.identifier)
+        view.register(ProfileHistoryTableViewCell.self, forCellReuseIdentifier: ProfileHistoryTableViewCell.identifier)
         view.delegate = self
         view.dataSource = self
         
@@ -380,7 +384,6 @@ class ProfileVC: UIViewController {
             $0.height.equalTo(snsDataList.count * 41)
         }
         addSnsBtn.snp.makeConstraints { /// SNS 추가 버튼
-            $0.top.equalTo(snsDefaultLabel.snp.bottom).offset(12)
             $0.bottom.equalTo(snsBottomRadiusView).inset(12)
             $0.centerX.equalTo(snsBottomRadiusView)
         }
@@ -452,7 +455,6 @@ class ProfileVC: UIViewController {
         }
         
         addEduBtn.snp.makeConstraints { /// 교육 추가 버튼
-            $0.top.equalTo(eduDefaultLabel.snp.bottom).offset(12)
             $0.bottom.equalTo(eduBottomRadiusView).inset(12)
             $0.centerX.equalTo(eduBottomRadiusView)
         }
@@ -533,15 +535,12 @@ class ProfileVC: UIViewController {
 extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == snsTableView {
-            print("SNS \(snsDataList.count)")
             return snsDataList.count
         }
         else if tableView == careerTableView {
-            print("Career \(careerDataList.count)")
             return careerDataList.count
         }
         else if tableView == eduTableView {
-            print("Education \(educationDataList.count)")
             return educationDataList.count
         }
         else { return 0 }
@@ -557,26 +556,21 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
         
         if tableView == snsTableView {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileSNSTableViewCell.identifier, for: indexPath) as? ProfileSNSTableViewCell else { return UITableViewCell()}
-            print(">>>>sns>>>>")
             cell.snsConfigure(snsDataList[indexPath.row])
             return cell
         }
         else if tableView == careerTableView {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileCareerTableViewCell.identifier, for: indexPath) as? ProfileCareerTableViewCell else {return UITableViewCell()}
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileHistoryTableViewCell.identifier, for: indexPath) as? ProfileHistoryTableViewCell else {return UITableViewCell()}
             
             cell.careerConfigure(careerDataList[indexPath.row])
-            print(">>>>career>>>>")
             return cell
         }
         else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileCareerTableViewCell.identifier, for: indexPath) as? ProfileCareerTableViewCell else {return UITableViewCell()}
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileHistoryTableViewCell.identifier, for: indexPath) as? ProfileHistoryTableViewCell else {return UITableViewCell()}
             
             cell.educationConfigure(educationDataList[indexPath.row])
-            print(">>>>education>>>>")
             return cell
         }
-        
-//        return cell
     }
     
 }

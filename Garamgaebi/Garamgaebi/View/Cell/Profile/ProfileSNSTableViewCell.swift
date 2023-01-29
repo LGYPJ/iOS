@@ -43,7 +43,8 @@ class ProfileSNSTableViewCell: UITableViewCell {
     func configureSubViewLayouts() {
         
         snsLabel.snp.makeConstraints {
-            $0.top.bottom.leading.equalToSuperview().inset(12)
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().inset(12)
             $0.trailing.equalTo(editButton.snp.leading).offset(-12)
         }
         
