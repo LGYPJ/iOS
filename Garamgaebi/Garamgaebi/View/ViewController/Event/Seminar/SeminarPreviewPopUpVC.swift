@@ -22,6 +22,7 @@ class SeminarPreviewPopUpVC: UIViewController {
 	
 	lazy var profileBackgroundImageView: UIImageView = {
 		let imageView = UIImageView()
+		imageView.backgroundColor = UIColor(hex: 0xEBF0FF)
 		
 		return imageView
 	}()
@@ -101,14 +102,22 @@ class SeminarPreviewPopUpVC: UIViewController {
 		return imageView
 	}()
 	
+	var previewInfo: SeminarDetailPreview
 	
-
+	init(previewInfo: SeminarDetailPreview) {
+		self.previewInfo = previewInfo
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
     override func viewDidLoad() {
         super.viewDidLoad()
-		
 		navigationController?.navigationBar.isHidden = true
+		configureData()
 		configureViews()
-		configureDummyData()
 		addGesture()
     }
 	
@@ -119,17 +128,6 @@ class SeminarPreviewPopUpVC: UIViewController {
 			self?.containerView.transform = .identity
 			self?.containerView.isHidden = false
 		}
-	}
-	
-	// TODO: dummy
-	func configureDummyData() {
-		profileBackgroundImageView.backgroundColor = UIColor(hex: 0xEBF0FF)
-		profileImageView.image = UIImage(named: "ExProfileImage")
-		userNameLabel.text = "연현"
-		belongLabel.text = "재학생"
-		titleLabel.text = "docker에 대해 알아보자"
-		descriptionTextView.text = "함수형의 '함' 자도 몰랐던 저는 함수형 프로그래밍과 ReScript를 처음 접했을 때 어렵게만 느껴졌습니다. 어떤 부분이 생소했는지, 달랐는지, ReScript의 안전하고 명료한 코드 작성의 매력에 어쩌다 빠지게 되었는지 얘기해 보려 합니다."
-		linkLabel.text = "www.google.com"
 	}
     
 }
@@ -199,6 +197,17 @@ extension SeminarPreviewPopUpVC {
 			$0.top.equalToSuperview().inset(8)
 			$0.trailing.equalToSuperview().inset(8)
 		}
+	}
+	
+	private func configureData() {
+		userNameLabel.text = previewInfo.nickname
+		belongLabel.text = previewInfo.organization
+		titleLabel.text = previewInfo.title
+		descriptionTextView.text = previewInfo.content
+		
+		// TODO: profileImage, 발표자료 URL 처리
+		
+		
 	}
 	
 	private func addGesture() {
