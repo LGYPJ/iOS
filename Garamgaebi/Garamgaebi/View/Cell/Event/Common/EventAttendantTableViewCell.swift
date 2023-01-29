@@ -65,9 +65,9 @@ class EventAttendantTableViewCell: UITableViewCell {
 	}()
 	
 	// MARK: Properties
-	var seminarId: Int = 0 {
+	var programId: Int = 0 {
 		didSet {
-			print(seminarId)
+			print(programId)
 			fetchAttendant()
 		}
 	}
@@ -135,7 +135,7 @@ extension EventAttendantTableViewCell {
 	}
 	
 	private func fetchAttendant() {
-		SeminarDetailViewModel.requestSeminarAttendant(seminarId: self.seminarId, completion: {[weak self] result in
+		SeminarDetailViewModel.requestSeminarAttendant(seminarId: self.programId, completion: {[weak self] result in
 			self?.attendants = result
 		})
 	}

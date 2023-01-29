@@ -177,7 +177,7 @@ extension EventSeminarDetailVC: UITableViewDelegate, UITableViewDataSource {
 			return cell
 		case 1:
 			guard let cell = tableView.dequeueReusableCell(withIdentifier: EventAttendantTableViewCell.identifier, for: indexPath) as? EventAttendantTableViewCell else {return UITableViewCell()}
-			cell.seminarId = self.seminarId
+			cell.programId = self.seminarId
 			
 			return cell
 		case 2:
