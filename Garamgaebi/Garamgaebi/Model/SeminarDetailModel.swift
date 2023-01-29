@@ -16,11 +16,13 @@ struct SeminarDetailInfoResponse: Decodable {
 }
 
 struct SeminarDetailInfo: Decodable {
-	let name: String
+	let programIdx: Int
+	let title: String
 	let date: String
 	let location: String
 	let fee: String
 	let endDate: String
+	let programStatus: String
 	let userButtonStatus: String
 }
 
@@ -33,8 +35,9 @@ struct SeminarDetailAttentdantResponse: Decodable {
 }
 
 struct SeminarDetailAttendant: Decodable {
-	let profileImage: String
+	let memberIdx: Int
 	let nickname: String
+	let profileImg: String
 }
 
 // MARK: 세미나 발표 미리보기 정보
@@ -46,8 +49,11 @@ struct SeminarDetailPreviewResponse: Decodable {
 }
 
 struct SeminarDetailPreview: Decodable {
-	let profileImage: String
-	let previewTitle: String
+	let presentationIdx: Int
+	let title: String
 	let nickname: String
+	let profileImgUrl: String
 	let organization: String
+	let content: String
+	let presentationUrl: String
 }

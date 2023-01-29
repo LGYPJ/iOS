@@ -51,9 +51,9 @@ class EventSeminarDetailVC: UIViewController {
 	}()
 	
 	// MARK: Properties
+	var memberId: Int
 	var seminarId: Int
-	
-	var seminarInfo: SeminarDetailInfo = .init(name: "", date: "", location: "", fee: "", endDate: "", userButtonStatus: "") {
+	var seminarInfo: SeminarDetailInfo = .init(programIdx: 0, title: "", date: "", location: "", fee: "", endDate: "", programStatus: "", userButtonStatus: "") {
 		didSet {
 			tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
 		}
@@ -61,7 +61,8 @@ class EventSeminarDetailVC: UIViewController {
 
     // MARK: - Life Cycle
 	
-	init(seminarId: Int) {
+	init(memberId: Int, seminarId: Int) {
+		self.memberId = memberId
 		self.seminarId = seminarId
 		super.init(nibName: nil, bundle: nil)
 	}
@@ -145,7 +146,7 @@ extension EventSeminarDetailVC {
 	
 	// MARK: fetch data
 	private func fetchSeminarInfo() {
-		SeminarDetailViewModel.requestSeminarDetailInfo(seminarId: self.seminarId, completion: {[weak self] result in
+		SeminarDetailViewModel.requestSeminarDetailInfo(memberId: self.memberId, seminarId: self.seminarId, completion: {[weak self] result in
 			self?.seminarInfo = result
 		})
 	}
@@ -166,7 +167,7 @@ extension EventSeminarDetailVC: UITableViewDelegate, UITableViewDataSource {
 			guard let cell = tableView.dequeueReusableCell(withIdentifier: EventInfoTableViewCell.identifier, for: indexPath) as? EventInfoTableViewCell else {return UITableViewCell()}
 			cell.registerButton.addTarget(self, action: #selector(didTapRegisterButton), for: .touchUpInside)
 			
-			cell.eventNameLabel.text = self.seminarInfo.name
+			cell.eventNameLabel.text = self.seminarInfo.title
 			cell.dateInfoLabel.text = self.seminarInfo.date
 			cell.locationInfoLabel.text = self.seminarInfo.location
 			cell.costInfoLabel.text = self.seminarInfo.fee
