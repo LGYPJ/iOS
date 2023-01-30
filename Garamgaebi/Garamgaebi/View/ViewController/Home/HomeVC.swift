@@ -54,6 +54,10 @@ class HomeVC: UIViewController {
         //view.register(HomeEventInfoTableViewCell.self, forCellReuseIdentifier: HomeEventInfoTableViewCell.identifier)
         //view.register(HomeUserColectionViewCell.self, forCellReuseIdentifier: HomeUserColectionViewCell.identifier)
         //view.register(MyTableViewCellTwo.self, forCellReuseIdentifier: MyTableViewCellTwo.id)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(pushHomeDetail), name: Notification.Name("pushHomeDetailVC"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(pushNetworkingDetail), name: Notification.Name("pushNetworkingDetailVC"), object: nil)
+        
         return view
     }()
     
@@ -126,6 +130,14 @@ class HomeVC: UIViewController {
         default:
             print("error")
         }
+    }
+    
+    @objc func pushHomeDetail() {
+        self.navigationController?.pushViewController(EventSeminarDetailVC(), animated: true)
+    }
+    
+    @objc func pushNetworkingDetail() {
+        self.navigationController?.pushViewController(EventNetworkingDetailVC(), animated: true)
     }
     
     @objc private func buttonPressed(_ sender: Any) {

@@ -353,5 +353,18 @@ extension HomeEventInfoTableViewCell: UICollectionViewDataSource, UICollectionVi
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        switch collectionView.tag {
+        case 0:
+            NotificationCenter.default.post(name: Notification.Name("pushHomeDetailVC"), object: nil)
+        case 1:
+            NotificationCenter.default.post(name: Notification.Name("pushNetworkingDetailVC"), object: nil)
+        default:
+            print(">>>error: HomeEventInfoTableViewCell didSelectRowAt")
+        }
+        
+    }
+    
 }
 
