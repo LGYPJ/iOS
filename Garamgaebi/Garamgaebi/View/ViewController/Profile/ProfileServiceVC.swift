@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
-class ProfileServiceVC: UIViewController {
+class ProfileServiceVC: UIViewController, UITextFieldDelegate {
     
     // MARK: - Subviews
     
@@ -46,7 +46,7 @@ class ProfileServiceVC: UIViewController {
         $0.text = "휴일을 제외한 평일에는 하루 이내에 답변을 드릴게요.\n혹시 하루가 지나도 답변이 오지 않으면, 스팸 메일함을 확인해주세요."
     }
     
-    let emailTextField = UITextField().then {
+    lazy var emailTextField = UITextField().then {
         $0.basicTextField()
         $0.placeholder = "답변 받을 이메일 주소"
         
@@ -54,15 +54,24 @@ class ProfileServiceVC: UIViewController {
         $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
     }
     
-    let questionTypeTextField = UITextField().then {
+    lazy var questionTypeTextField = UITextField().then {
         $0.basicTextField()
         $0.placeholder = "질문 유형을 선택해주세요"
-        $0.isUserInteractionEnabled = false
-    }
-    let typeSelectBtn = UIButton().then {
-        $0.setImage(UIImage(systemName: "chevron.down"), for: .normal)
-        $0.tintColor = .mainBlack
-        $0.addTarget(self, action: #selector(showBottomSheet), for: .touchUpInside)
+        
+        let typeSelectBtn = UIButton()
+        typeSelectBtn.setImage(UIImage(systemName: "chevron.down"), for: .normal)
+        typeSelectBtn.tintColor = .mainBlack
+        
+        $0.addSubview(typeSelectBtn)
+        typeSelectBtn.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(12)
+            $0.width.height.equalTo(35)
+        }
+        
+        $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+        $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+        $0.addTarget(self, action: #selector(showBottomSheet), for: .editingDidBegin)
     }
     
     let textViewPlaceHolder = "내용을 적어주세요"
@@ -77,7 +86,7 @@ class ProfileServiceVC: UIViewController {
         $0.delegate = self // <-
     }
     
-    let agreeCheckBtn = UIButton().then {
+    lazy var agreeCheckBtn = UIButton().then {
         $0.setTitle("이메일 정보 제공 동의", for: .normal)
         $0.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.setImage(UIImage(systemName: "square")?.withTintColor(UIColor(hex: 0xAEAEAE), renderingMode: .alwaysOriginal), for: .normal)
@@ -129,7 +138,7 @@ class ProfileServiceVC: UIViewController {
     // MARK: - Functions
     private func configureLayouts() {
         // addSubview
-        [headerView, noticeLabel, emailTextField, questionTypeTextField, typeSelectBtn, contentTextField, agreeCheckBtn, agreemsgLabel, sendBtn, logoutLabel, withdrawalLabel]
+        [headerView, noticeLabel, emailTextField, questionTypeTextField, contentTextField, agreeCheckBtn, agreemsgLabel, sendBtn, logoutLabel, withdrawalLabel]
             .forEach {view.addSubview($0)}
         
         [titleLabel, backButton]
@@ -172,11 +181,6 @@ class ProfileServiceVC: UIViewController {
             $0.top.equalTo(emailTextField.snp.bottom).offset(12)
             $0.leading.trailing.equalTo(emailTextField)
             $0.height.equalTo(48)
-        }
-        
-        typeSelectBtn.snp.makeConstraints { /// 유형 선택 화살표
-            $0.centerY.equalTo(questionTypeTextField)
-            $0.trailing.equalTo(questionTypeTextField).inset(10)
         }
         
         contentTextField.snp.makeConstraints { /// 내용 입력
