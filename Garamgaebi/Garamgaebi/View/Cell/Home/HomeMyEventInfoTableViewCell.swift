@@ -15,7 +15,7 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
     
     // MARK: - Properties
     static let identifier = String(describing: HomeMyEventInfoTableViewCell.self)
-    static var cellHeight = 400.0
+    static var cellHeight = 100.0
     
     let dataList = HomeMyEventDataModel.list
 
@@ -49,6 +49,33 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
         return view
     }()
     
+    lazy var zeroDataBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.borderColor = UIColor.mainGray.withAlphaComponent(0.8).cgColor
+        view.layer.borderWidth = 1
+        view.layer.cornerRadius = 12
+        
+        return view
+    }()
+    
+    lazy var zeroDataImage: UIImageView = {
+        let img = UIImageView()
+        img.image = UIImage(named: "today")
+        img.tintColor = .mainGray.withAlphaComponent(0.8)
+        return img
+    }()
+    
+    lazy var zeroDataDescriptionLabel: UILabel = {
+        let label = UILabel()
+        label.text = "예정된 내 모임이 없습니다\n모임을 신청해주세요:)"
+        label.numberOfLines = 2
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        label.textColor = .mainGray.withAlphaComponent(0.8)
+        label.textAlignment = .center
+        
+        return label
+    }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -57,10 +84,12 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
         
         self.contentView.addSubview(titleLabel)
         self.contentView.addSubview(collectionView)
+        self.contentView.addSubview(zeroDataBackgroundView)
+        zeroDataBackgroundView.addSubview(zeroDataImage)
+        zeroDataBackgroundView.addSubview(zeroDataDescriptionLabel)
         configSubViewLayouts()
- 
-        // 부모 셀 높이 가변설정 (모임이 하나이상 존재할때)        
-        HomeMyEventInfoTableViewCell.cellHeight = 54.0 + 88.0 * Double(dataList.count) - 8.0 + 16.0
+        configureZeroCell()
+        
     }
     
     func configSubViewLayouts() {
@@ -75,7 +104,41 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview()//.offset(-16)
         }
+        
+        zeroDataBackgroundView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(12)
+            make.left.right.equalToSuperview().inset(16)
+            make.bottom.equalToSuperview().inset(16)
+        }
+        
+        zeroDataImage.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().inset(14)
+        }
+        zeroDataDescriptionLabel.snp.makeConstraints { make in
+            make.top.equalTo(zeroDataImage.snp.bottom).offset(8)
+            make.centerX.equalToSuperview()
+        }
     }
+    
+    // TODO: API 통신 후 수정
+    private func configureZeroCell() {
+        
+        
+        
+        if dataList.count == 0 {
+            // 부모 셀 높이 가변설정 (모임이 하나도 없을 때)
+            HomeMyEventInfoTableViewCell.cellHeight = 190
+            collectionView.isHidden = true
+            zeroDataBackgroundView.isHidden = false
+        } else {
+            // 부모 셀 높이 가변설정 (모임이 하나이상 존재할때)
+            HomeMyEventInfoTableViewCell.cellHeight = 54.0 + 88.0 * Double(dataList.count) - 8.0 + 16.0
+            collectionView.isHidden = false
+            zeroDataBackgroundView.isHidden = true
+        }
+    }
+    
 }
 
 extension HomeMyEventInfoTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
