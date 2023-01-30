@@ -127,11 +127,13 @@ class HomeVC: UIViewController {
     
     @objc func pushHomeDetail(_ notification: NSNotification) {
         print(notification.object)
-        self.navigationController?.pushViewController(EventSeminarDetailVC(), animated: true)
+		// TODO: object에서 ID값 가져오기
+		self.navigationController?.pushViewController(EventSeminarDetailVC(memberId: 0, seminarId: 0), animated: true)
     }
     
     @objc func pushNetworkingDetail(_ notification: NSNotification) {
-        self.navigationController?.pushViewController(EventNetworkingDetailVC(), animated: true)
+		// TODO: object에서 ID값 가져오기
+        self.navigationController?.pushViewController(EventNetworkingDetailVC(memberId: 0, networkingId: 0), animated: true)
     }
     
 }
