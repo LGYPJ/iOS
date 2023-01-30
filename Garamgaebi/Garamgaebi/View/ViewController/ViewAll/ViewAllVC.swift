@@ -95,13 +95,13 @@ class ViewAllVC: UIViewController {
     }
     
     @objc func pushEventDetailVC() {
-        //self.navigationController?.pushViewController(EventSeminarDetailVC(), animated: true)
-        self.navigationController?.pushViewController(EventNetworkingDetailVC(), animated: true)
+//        self.navigationController?.pushViewController(EventSeminarDetailVC(memberId: 0, seminarId: 0), animated: true)
+        self.navigationController?.pushViewController(EventNetworkingDetailVC(memberId: 0, networkingId: 0), animated: true)
     }
     
     @objc func pushApplyCancelVC() {
         //self.navigationController?.pushViewController(EventSeminarDetailVC(), animated: true)
-        self.navigationController?.pushViewController(EventApplyCancelVC(), animated: true)
+        self.navigationController?.pushViewController(EventApplyCancelVC(type: "SEMINAR", programId: 0, memberId: 0), animated: true)
     }
     
     

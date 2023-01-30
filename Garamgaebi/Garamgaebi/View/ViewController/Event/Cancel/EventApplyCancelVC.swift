@@ -38,7 +38,7 @@ class EventApplyCancelVC: UIViewController {
         return button
     }()
     
-	lazy var seminarInfoView: UIView = {
+	lazy var programInfoView: UIView = {
 		let view = UIView()
 		view.backgroundColor = .mainLightBlue
 		view.layer.cornerRadius = 12
@@ -46,7 +46,7 @@ class EventApplyCancelVC: UIViewController {
 		return view
 	}()
 
-	lazy var seminarNameLabel: UILabel = {
+	lazy var programNameLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
 		label.textColor = .black
@@ -277,9 +277,34 @@ class EventApplyCancelVC: UIViewController {
 
 		return stackView
 	}()
+	
+	// MARK: Properties
+	var type: String
+	var programId: Int
+	var memberId: Int
+	var seminarInfo = SeminarDetailInfo(programIdx: 0, title: "", date: "", location: "", fee: "", endDate: "", programStatus: "", userButtonStatus: "") {
+		didSet {
+			configureSeminarData()
+		}
+	}
+	var networkingInfo = NetworkingDetailInfo(programIdx: 0, title: "", date: "", location: "", fee: "", endDate: "", programStatus: "", userButtonStatus: "") {
+		didSet {
+			configureNetworkingData()
+		}
+	}
 
     // MARK: - Life Cycle
-
+	init(type: String, programId: Int, memberId: Int) {
+		self.type = type
+		self.programId = programId
+		self.memberId = memberId
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -298,7 +323,7 @@ class EventApplyCancelVC: UIViewController {
 
 	
 	func configureDummyData() {
-		seminarNameLabel.text = "2차 세미나"
+		programNameLabel.text = "2차 세미나"
 		dateInfoLabel.text = "2023-02-10 오후 6시"
 		locationInfoLabel.text = "가천대학교 비전타워 B201"
 		costInfoLabel.text = "10000원"
@@ -314,7 +339,7 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 	
 	private func configureViews() {
 		view.backgroundColor = .white
-		[headerView, seminarInfoView, nameTextField, nicknameTextField, numberTextField, accountStackView, cancelButton, downImageView]
+		[headerView, programInfoView, nameTextField, nicknameTextField, numberTextField, accountStackView, cancelButton, downImageView]
 			.forEach {view.addSubview($0)}
         
         //headerView
@@ -340,11 +365,11 @@ extension EventApplyCancelVC: sendBankNameProtocol {
         }
         
         
-		[seminarNameLabel, seminarInfoStackView]
-			.forEach {seminarInfoView.addSubview($0)}
+		[programNameLabel, seminarInfoStackView]
+			.forEach {programInfoView.addSubview($0)}
 		
         // seminarNameLabel
-		seminarNameLabel.snp.makeConstraints {
+		programNameLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().offset(12)
 			$0.leading.equalToSuperview().inset(16)
 		}
@@ -352,12 +377,12 @@ extension EventApplyCancelVC: sendBankNameProtocol {
         // seminarInfoStackView
 		seminarInfoStackView.snp.makeConstraints {
 			$0.leading.equalToSuperview().inset(16)
-			$0.top.equalTo(seminarNameLabel.snp.bottom).offset(8)
+			$0.top.equalTo(programNameLabel.snp.bottom).offset(8)
 			$0.bottom.equalToSuperview().inset(12)
 		}
 		
         // seminarInfoView
-		seminarInfoView.snp.makeConstraints {
+		programInfoView.snp.makeConstraints {
             $0.top.equalTo(headerView.snp.bottom).offset(16)
 			$0.leading.trailing.equalToSuperview().inset(16)
 		}
@@ -365,7 +390,7 @@ extension EventApplyCancelVC: sendBankNameProtocol {
         // nameTextField
 		nameTextField.snp.makeConstraints {
 			$0.leading.trailing.equalToSuperview().inset(16)
-			$0.top.equalTo(seminarInfoView.snp.bottom).offset(24)
+			$0.top.equalTo(programInfoView.snp.bottom).offset(24)
 			$0.height.equalTo(48)
 		}
         
@@ -422,6 +447,37 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 
 	}
 	
+	private func fetchProgramData() {
+		switch self.type {
+		case "SEMINAR":
+			SeminarDetailViewModel.requestSeminarDetailInfo(memberId: self.memberId, seminarId: self.programId, completion: {[weak self] result in
+				self?.seminarInfo = result
+			})
+		case "NETWORKING":
+			NetworkingDetailViewModel.requestNetworkingDetailInfo(memberId: self.memberId, networkingId: self.programId, completion: {[weak self] result in
+				self?.networkingInfo = result
+			})
+		default:
+			return
+		}
+	}
+	
+	private func configureSeminarData() {
+		programNameLabel.text = self.seminarInfo.title
+		dateInfoLabel.text = self.seminarInfo.date
+		locationInfoLabel.text = self.seminarInfo.location
+		costInfoLabel.text = self.seminarInfo.fee
+		deadlineInfoLabel.text = self.seminarInfo.endDate
+	}
+	
+	private func configureNetworkingData() {
+		programNameLabel.text = self.networkingInfo.title
+		dateInfoLabel.text = self.networkingInfo.date
+		locationInfoLabel.text = self.networkingInfo.location
+		costInfoLabel.text = self.networkingInfo.fee
+		deadlineInfoLabel.text = self.networkingInfo.endDate
+	}
+	
 	// 은행 텍스트 필드 tap
 	@objc private func didTapbankButton() {
 		let vc = BankPopUpVC()
@@ -432,7 +488,9 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 	// 취소 완료 alert
 	@objc private func didTapRegisterCancelButton() {
 		let sheet = UIAlertController(title: nil, message: "신청 취소가 완료되었습니다.", preferredStyle: .alert)
-		let closeAction = UIAlertAction(title: "닫기", style: .cancel)
+		let closeAction = UIAlertAction(title: "닫기", style: .cancel, handler: {[weak self] _ in
+			self?.navigationController?.popViewController(animated: true)
+		})
 		sheet.addAction(closeAction)
 		
 		present(sheet, animated: true)

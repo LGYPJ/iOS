@@ -48,14 +48,33 @@ class EventNetworkingDetailVC: UIViewController {
 		return tableView
 	}()
 	
+	// MARK: Properties
+	var memberId: Int
+	var networkingId: Int
+	var networkingInfo: NetworkingDetailInfo = .init(programIdx: 0, title: "", date: "", location: "", fee: "", endDate: "", programStatus: "", userButtonStatus: "") {
+		didSet {
+			tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+		}
+	}
+	
     
     // MARK: - Life Cycle
+	init(memberId: Int, networkingId: Int) {
+		self.memberId = memberId
+		self.networkingId = networkingId
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
 		configureViews()
 		configureTableView()
+		fetchNetworkingInfo()
 		
 		
     }
@@ -116,6 +135,12 @@ extension EventNetworkingDetailVC {
 		}
 	}
 	
+	private func fetchNetworkingInfo() {
+		NetworkingDetailViewModel.requestNetworkingDetailInfo(memberId: self.memberId, networkingId: self.networkingId, completion: {[weak self] result in
+			self?.networkingInfo = result
+		})
+	}
+	
 	
 	// 뒤로가기 버튼 did tap
 	@objc private func didTapBackBarButton() {
@@ -142,12 +167,19 @@ extension EventNetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 		switch indexPath.row {
 		case 0:
 			guard let cell = tableView.dequeueReusableCell(withIdentifier: EventInfoTableViewCell.identifier, for: indexPath) as? EventInfoTableViewCell else {return UITableViewCell()}
-			cell.eventNameLabel.text = "3차 네트워킹"
 			cell.registerButton.addTarget(self, action: #selector(didTapRegisterButton), for: .touchUpInside)
+			
+			cell.eventNameLabel.text = self.networkingInfo.title
+			cell.dateInfoLabel.text = self.networkingInfo.date
+			cell.locationInfoLabel.text = self.networkingInfo.location
+			cell.costInfoLabel.text = self.networkingInfo.fee
+			cell.deadlineInfoLabel.text = self.networkingInfo.endDate
+			cell.registerButton.setTitle(self.networkingInfo.userButtonStatus, for: .normal)
 			
 			return cell
 		case 1:
 			guard let cell = tableView.dequeueReusableCell(withIdentifier: EventAttendantTableViewCell.identifier, for: indexPath) as? EventAttendantTableViewCell else {return UITableViewCell()}
+			cell.programId = self.networkingId
 			
 			return cell
 		case 2:

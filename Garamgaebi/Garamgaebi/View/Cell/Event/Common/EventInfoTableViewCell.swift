@@ -164,20 +164,10 @@ class EventInfoTableViewCell: UITableViewCell {
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		configureViews()
-		configureDummyData()
 	}
 	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
-	}
-	
-	// TODO: API연동 후 삭제
-	func configureDummyData() {
-		eventNameLabel.text = "2차 세미나"
-		dateInfoLabel.text = "2023-02-10 오후 6시"
-		locationInfoLabel.text = "가천대학교 비전타워 B201"
-		costInfoLabel.text = "10000원"
-		deadlineInfoLabel.text = "2023-01-09 오후 6시"
 	}
 	
     
@@ -192,7 +182,7 @@ extension EventInfoTableViewCell {
 			.forEach {contentView.addSubview($0)}
 		
 		eventNameLabel.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(16)
+			$0.top.equalToSuperview().inset(12)
 			$0.leading.equalToSuperview().inset(16)
 		}
 		

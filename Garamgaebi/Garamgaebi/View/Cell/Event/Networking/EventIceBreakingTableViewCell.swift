@@ -33,7 +33,7 @@ class EventIceBreakingTableViewCell: UITableViewCell {
 	
 	lazy var contentImageView: UIImageView = {
 		let imageView = UIImageView()
-		imageView.image = UIImage(systemName: "seal.fill")
+//		imageView.image = UIImage(systemName: "seal.fill")
 		imageView.contentMode = .scaleAspectFit
 		
 		return imageView
@@ -60,6 +60,7 @@ class EventIceBreakingTableViewCell: UITableViewCell {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		
 		configureViews()
+		contentImageView.image = UIImage(named: "ExNetworkingImage")
 	}
 	
 	required init?(coder: NSCoder) {

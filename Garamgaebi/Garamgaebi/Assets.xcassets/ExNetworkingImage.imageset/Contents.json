@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "image 45.svg",
+      "filename" : "Frame 716.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -17,8 +17,5 @@
   "info" : {
     "author" : "xcode",
     "version" : 1
-  },
-  "properties" : {
-    "preserves-vector-representation" : true
   }
 }

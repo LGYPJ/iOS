@@ -1,11 +1,11 @@
 {
   "images" : [
     {
-      "filename" : "Frame 801.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "image 44.svg",
       "idiom" : "universal",
       "scale" : "2x"
     },
@@ -19,6 +19,7 @@
     "version" : 1
   },
   "properties" : {
-    "preserves-vector-representation" : true
+    "preserves-vector-representation" : true,
+    "template-rendering-intent" : "original"
   }
 }
