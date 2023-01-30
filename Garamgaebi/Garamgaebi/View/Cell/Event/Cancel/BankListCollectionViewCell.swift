@@ -14,6 +14,8 @@ class BankListCollectionViewCell: UICollectionViewCell {
 	
 	lazy var imageView: UIImageView = {
 		let imageView = UIImageView()
+		imageView.contentMode = .scaleAspectFit
+		imageView.clipsToBounds = true
 		
 		return imageView
 	}()
