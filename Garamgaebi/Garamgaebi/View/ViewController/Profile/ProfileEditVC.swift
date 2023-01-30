@@ -8,8 +8,20 @@
 import UIKit
 
 import SnapKit
+import Photos
 
-class ProfileEditVC: UIViewController {
+
+protocol EditProfileDataDelegate: AnyObject {
+    func editData(nickname: String, organization: String, email: String, introduce: String)
+}
+
+class ProfileEditVC: UIViewController, UITextFieldDelegate {
+    
+    // MARK: - Properties
+    weak var delegate: EditProfileDataDelegate?
+    
+    // 뷰의 초기 y 값을 저장해서 뷰가 올라갔는지 내려왔는지에 대한 분기처리시 사용
+    private var restoreFrameYValue = 0.0
     
     // MARK: - Subviews
     
@@ -23,7 +35,7 @@ class ProfileEditVC: UIViewController {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "프로필 편집"
-        label.textColor = UIColor(hex: 0x000000,alpha: 0.8)
+        label.textColor = UIColor.mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
         return label
     }()
@@ -33,20 +45,21 @@ class ProfileEditVC: UIViewController {
         button.setImage(UIImage(named: "arrowBackward"), for: .normal)
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         button.clipsToBounds = true
-        button.tintColor = UIColor(hex: 0x000000,alpha: 0.8)
+        button.tintColor = UIColor.mainBlack
         button.addTarget(self, action: #selector(didTapBackBarButton), for: .touchUpInside)
         
         return button
     }()
     
+    let imagePicker = UIImagePickerController()
     let profileImageView : UIImageView = {
         let view = UIImageView()
         view.layer.cornerRadius = 50
         view.backgroundColor = .mainGray
+        view.clipsToBounds = true
         
         return view
     }()
-    
     let profilePlusImageView = UIImageView().then {
         $0.image = UIImage(named: "ProfilePlus")
         $0.layer.cornerRadius = 11
@@ -58,8 +71,11 @@ class ProfileEditVC: UIViewController {
     }
     let nameTextField = UITextField().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        $0.borderStyle = .roundedRect
         $0.placeholder = "닉네임을 입럭해주세요 (최대 8글자)"
+        $0.basicTextField()
+        
+        $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+        $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
     }
     
     let orgLabel = UILabel().then {
@@ -68,8 +84,11 @@ class ProfileEditVC: UIViewController {
     }
     let orgTextField = UITextField().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        $0.borderStyle = .roundedRect
         $0.placeholder = "소속을 입럭해주세요"
+        $0.basicTextField()
+        
+        $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+        $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
     }
     
     let emailLabel = UILabel().then {
@@ -78,9 +97,11 @@ class ProfileEditVC: UIViewController {
     }
     let emailTextField = UITextField().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        //        $0.textColor = .mainGray
-        $0.borderStyle = .roundedRect
         $0.placeholder = "이메일을 입럭해주세요"
+        $0.basicTextField()
+        
+        $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+        $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
     }
     
     let introduceLabel = UILabel().then {
@@ -90,10 +111,10 @@ class ProfileEditVC: UIViewController {
     
     let textViewPlaceHolder = "100자 이내로 작성해주세요"
     lazy var introduceTextField = UITextView().then {
-        $0.layer.borderWidth = 0.8
-        $0.layer.borderColor = UIColor.systemGray5.cgColor // UIColor.lightGray.withAlphaComponent(0.7).cgColor
-        $0.layer.cornerRadius = 8
-        // $0.textContainerInset = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 16.0, right: 12.0)
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = UIColor.mainGray.cgColor // UIColor.lightGray.withAlphaComponent(0.7).cgColor
+        $0.layer.cornerRadius = 12
+        $0.textContainerInset = UIEdgeInsets(top: 12.0, left: 12.0, bottom: 12.0, right: 12.0)
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14) // .systemFont(ofSize: 18)
         $0.text = textViewPlaceHolder
         $0.textColor = .mainGray
@@ -101,11 +122,8 @@ class ProfileEditVC: UIViewController {
     }
     
     let editDoneBtn = UIButton().then {
+        $0.basicButton()
         $0.setTitle("완료하기", for: .normal)
-        $0.setTitleColor(.white, for: .normal)
-        $0.tintColor = .mainBlue
-        $0.backgroundColor = .mainBlue
-        $0.layer.cornerRadius = 10
     }
     
     
@@ -114,9 +132,14 @@ class ProfileEditVC: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .white
-
         configureLayouts()
+        tapGesture()
         
+        // 엔터키 클릭시 키보드 내리기
+        nameTextField.delegate = self
+        orgTextField.delegate = self
+        emailTextField.delegate = self
+        introduceTextField.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -173,7 +196,7 @@ class ProfileEditVC: UIViewController {
         }
         
         nameTextField.snp.makeConstraints {
-            $0.top.equalTo(nameLabel.snp.bottom).offset(5)
+            $0.top.equalTo(nameLabel.snp.bottom).offset(8)
             $0.leading.equalTo(nameLabel)
             $0.trailing.equalTo(-16)
             $0.height.equalTo(48)
@@ -186,7 +209,7 @@ class ProfileEditVC: UIViewController {
         }
         
         orgTextField.snp.makeConstraints {
-            $0.top.equalTo(orgLabel.snp.bottom).offset(5)
+            $0.top.equalTo(orgLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalTo(nameTextField)
             $0.height.equalTo(nameTextField)
         }
@@ -198,7 +221,7 @@ class ProfileEditVC: UIViewController {
         }
         
         emailTextField.snp.makeConstraints {
-            $0.top.equalTo(emailLabel.snp.bottom).offset(5)
+            $0.top.equalTo(emailLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalTo(orgTextField)
             $0.height.equalTo(nameTextField)
         }
@@ -213,7 +236,7 @@ class ProfileEditVC: UIViewController {
         }
         
         introduceTextField.snp.makeConstraints {
-            $0.top.equalTo(introduceLabel.snp.bottom).offset(5)
+            $0.top.equalTo(introduceLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalTo(nameTextField)
             $0.height.equalTo(100)
         }
@@ -222,9 +245,24 @@ class ProfileEditVC: UIViewController {
         editDoneBtn.snp.makeConstraints {
             $0.bottom.equalTo(-48)
             $0.leading.trailing.equalTo(emailTextField)
-            $0.height.equalTo(nameTextField)
         }
         editDoneBtn.addTarget(self, action: #selector(doneButtonDidTap), for: .touchUpInside)
+    }
+    
+    // 클릭 이벤트
+    func tapGesture() {
+        // 갤러리 클릭
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(profileImageDidTap))
+        profileImageView.addGestureRecognizer(tapGestureRecognizer)
+        profileImageView.isUserInteractionEnabled = true
+        
+//        // 키보드 처리 -> 텍스트필드 입력시 뷰 올리기
+//        restoreFrameYValue = self.view.frame.origin.y
+//
+//        // UIResponder.keyboardWillShowNotification : 키보드가 해제되기 직전에 post 된다.
+//        NotificationCenter.default.addObserver(self, selector: #selector(setKeyboardShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+//        // UIResponder.keyboardWillHideNotificationdcdc : 키보드가 보여지기 직전에 post 된다.
+//        NotificationCenter.default.addObserver(self, selector: #selector(setKeyboardHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     // SubTitle 별 처리
@@ -252,9 +290,64 @@ class ProfileEditVC: UIViewController {
         emailLabel.attributedText = attributedString3
     }
     
+    @objc func textFieldActivated(_ sender: UITextField) {
+        sender.layer.borderColor = UIColor.mainBlack.cgColor
+    }
+    
+    @objc func textFieldInactivated(_ sender: UITextField) {
+        sender.layer.borderColor = UIColor.mainGray.cgColor
+    }
+    
+    // 키보드 업
+    @objc func setKeyboardShow(_ notification: Notification) {
+        // 키보드가 내려왔을 때만 올리기
+        if self.view.frame.origin.y == restoreFrameYValue {
+            if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                let keyboardHeight = keyboardFrame.cgRectValue.height
+                self.view.frame.origin.y -= keyboardHeight
+                print("show keyboard")
+            }
+        }
+    }
+
+    // 키보드 다운
+    @objc private func setKeyboardHide(_ notification: Notification) {
+        // 키보드가 올라갔을 때만 내리기
+        if self.view.frame.origin.y != restoreFrameYValue {
+            if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                let keyboardHeight = keyboardFrame.cgRectValue.height
+                self.view.frame.origin.y += keyboardHeight
+                print("hide keyboard")
+            }
+        }
+    }
+    
+    @objc func profileImageDidTap() {
+        // 갤러리 권한 설정
+        checkAlbumPermission()
+        
+        // 앨범 허용 상태 체크
+        PHPhotoLibrary.requestAuthorization { (state) in
+            print(state)
+        }
+        
+        print("프로필 이미지 클릭")
+        
+    }
+    
     // 완료하기 버튼 did tap
     @objc private func doneButtonDidTap() {
         print("완료하기 버튼 클릭")
+        
+        // 텍스트값 가져오기
+        guard let editName = nameTextField.text else { return }
+        guard let editOrg = orgTextField.text else { return }
+        guard let editEmail = emailTextField.text else { return }
+        guard let editIntroduce = introduceTextField.text else { return }
+        
+        // 변경된 이름값 담기
+        self.delegate?.editData(nickname: editName, organization: editOrg, email: editEmail, introduce: editIntroduce)
+        
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -263,6 +356,30 @@ class ProfileEditVC: UIViewController {
     @objc private func didTapBackBarButton() {
         print("뒤로가기 버튼 클릭")
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    // 갤러리 권한 체크
+    func checkAlbumPermission(){
+        PHPhotoLibrary.requestAuthorization( { status in
+            switch status{
+            case .authorized:
+                print("Album: 권한 허용")
+                DispatchQueue.main.async {
+                    // 이미지 피커 열기
+                    self.imagePicker.delegate = self
+                    self.imagePicker.sourceType = .photoLibrary
+                    self.imagePicker.modalPresentationStyle = .fullScreen
+                    
+                    self.present(self.imagePicker, animated: true, completion: nil)
+                }
+            case .denied:
+                print("Album: 권한 거부")
+            case .restricted, .notDetermined:
+                print("Album: 선택하지 않음")
+            default:
+                break
+            }
+        })
     }
     
 }
@@ -296,9 +413,55 @@ extension ProfileEditVC: UITextViewDelegate {
         return true
     }
     
+    // 키보드
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder() // TextField 비활성화
+        
+        return true
+    }
+    
 }
 
 // MARK: - Extension
+extension ProfileEditVC : UIImagePickerControllerDelegate, UINavigationControllerDelegate{
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            self.dismiss(animated: false, completion: {
+                DispatchQueue.main.async {
+                    self.profileImageView.image = image
+                }
+            })
+        }
+    }
+    func PhotoAuth() -> Bool {
+            // 포토 라이브러리 접근 권한
+            let authorizationStatus = PHPhotoLibrary.authorizationStatus()
+
+            var isAuth = false
+
+            switch authorizationStatus {
+            case .authorized: return true // 사용자가 앱에 사진 라이브러리에 대한 액세스 권한을 명시 적으로 부여했습니다.
+            case .denied: break // 사용자가 사진 라이브러리에 대한 앱 액세스를 명시 적으로 거부했습니다.
+            case .limited: break // ?
+            case .notDetermined: // 사진 라이브러리 액세스에는 명시적인 사용자 권한이 필요하지만 사용자가 아직 이러한 권한을 부여하거나 거부하지 않았습니다
+                PHPhotoLibrary.requestAuthorization { (state) in
+                    if state == .authorized {
+                        isAuth = true
+                    }
+                }
+                return isAuth
+            case .restricted: break // 앱이 사진 라이브러리에 액세스 할 수있는 권한이 없으며 사용자는 이러한 권한을 부여 할 수 없습니다.
+            default: break
+            }
+        
+            return false;
+        }
+}
+
 extension UILabel {
     func asColor(targetString: String, color: UIColor) {
         let fullText = text ?? ""

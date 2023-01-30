@@ -26,6 +26,7 @@ extension UITextField {
     
     func basicTextField() {
         self.addLeftPadding()
+        self.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: self.frame.height))
         
         self.textColor = .mainBlack
         self.font = UIFont.NotoSansKR(type: .Regular, size: 14)

@@ -9,7 +9,14 @@ import UIKit
 
 import SnapKit
 
+protocol SelectServiceDataDelegate:  AnyObject {
+    func typeSelect(questype: String)
+}
+
 class ServiceBottomSheetVC: UIViewController {
+    
+    // MARK: - Properties
+    weak var delegate: SelectServiceDataDelegate?
     
     // MARK: - Subviews
     // 기존 화면을 흐려지게 만들기 위한 뷰
@@ -73,7 +80,7 @@ class ServiceBottomSheetVC: UIViewController {
     
     // MARK: - Properties
     // 바텀 시트 높이
-    let bottomHeight: CGFloat = 359
+    let bottomHeight: CGFloat = 300
     
     // bottomSheet가 view의 상단에서 떨어진 거리
     private var bottomSheetViewTopConstraint: NSLayoutConstraint!
@@ -94,6 +101,7 @@ class ServiceBottomSheetVC: UIViewController {
         super.viewDidAppear(animated)
         
         showBottomSheet()
+        tapGesture()
     }
     
     // MARK: - Functions
@@ -112,16 +120,18 @@ class ServiceBottomSheetVC: UIViewController {
     
     // 레이아웃 세팅
     private func configureLayout() {
-        dimmedBackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            dimmedBackView.topAnchor.constraint(equalTo: view.topAnchor),
-            dimmedBackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            dimmedBackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            dimmedBackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+//        dimmedBackView.translatesAutoresizingMaskIntoConstraints = false
+        dimmedBackView.snp.makeConstraints {
+            $0.top.bottom.leading.trailing.equalToSuperview()
+        }
         
         bottomSheetView.translatesAutoresizingMaskIntoConstraints = false
         let topConstant = view.safeAreaInsets.bottom + view.safeAreaLayoutGuide.layoutFrame.height
+//        bottomSheetView.snp.makeConstraints {
+//            $0.height.equalTo(bottomHeight)
+//            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(10)
+//            $0.bottom.equalToSuperview().inset(35)
+//        }
         bottomSheetViewTopConstraint = bottomSheetView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topConstant)
         NSLayoutConstraint.activate([
             bottomSheetView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
@@ -130,13 +140,12 @@ class ServiceBottomSheetVC: UIViewController {
             bottomSheetViewTopConstraint
         ])
         
-        dismissIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            dismissIndicatorView.widthAnchor.constraint(equalToConstant: 102),
-            dismissIndicatorView.heightAnchor.constraint(equalToConstant: 7),
-            dismissIndicatorView.topAnchor.constraint(equalTo: bottomSheetView.topAnchor, constant: 12),
-            dismissIndicatorView.centerXAnchor.constraint(equalTo: bottomSheetView.centerXAnchor)
-        ])
+        dismissIndicatorView.snp.makeConstraints {
+            $0.width.equalTo(60)
+            $0.height.equalTo(5)
+            $0.top.equalTo(bottomSheetView).inset(10)
+            $0.centerX.equalTo(bottomSheetView)
+        }
         
         // 바텀시트 내부
         // 타이틀
@@ -147,23 +156,43 @@ class ServiceBottomSheetVC: UIViewController {
         // 이용문의
         type1Label.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(17)
-            $0.leading.equalTo(titleLabel)
+            $0.leading.trailing.equalTo(titleLabel)
         }
         // 오류 신고
         type2Label.snp.makeConstraints {
             $0.top.equalTo(type1Label.snp.bottom).offset(11)
-            $0.leading.equalTo(type1Label)
+            $0.leading.trailing.equalTo(type1Label)
         }
         // 서비스 제안
         type3Label.snp.makeConstraints {
             $0.top.equalTo(type2Label.snp.bottom).offset(11)
-            $0.leading.equalTo(type1Label)
+            $0.leading.trailing.equalTo(type1Label)
         }
         // 기타
         etcLabel.snp.makeConstraints {
             $0.top.equalTo(type3Label.snp.bottom).offset(11)
-            $0.leading.equalTo(type1Label)
+            $0.leading.trailing.equalTo(type1Label)
         }
+    }
+    
+    // 질문 유형 선택 제스쳐
+    private func tapGesture() {
+        // 이용문의
+        let tapGestureRecognizer1 = UITapGestureRecognizer(target: self, action: #selector(type1DidTap))
+        type1Label.addGestureRecognizer(tapGestureRecognizer1)
+        type1Label.isUserInteractionEnabled = true
+        // 오류신고
+        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(type2DidTap))
+        type2Label.addGestureRecognizer(tapGestureRecognizer2)
+        type2Label.isUserInteractionEnabled = true
+        // 서비스 제안
+        let tapGestureRecognizer3 = UITapGestureRecognizer(target: self, action: #selector(type3DidTap))
+        type3Label.addGestureRecognizer(tapGestureRecognizer3)
+        type3Label.isUserInteractionEnabled = true
+        // 기타
+        let tapGestureRecognizerEtc = UITapGestureRecognizer(target: self, action: #selector(etcDidTap))
+        etcLabel.addGestureRecognizer(tapGestureRecognizerEtc)
+        etcLabel.isUserInteractionEnabled = true
     }
     
     // 바텀 시트 표출 애니메이션
@@ -223,5 +252,33 @@ class ServiceBottomSheetVC: UIViewController {
                 break
             }
         }
+    }
+    
+    // 질문 유형 선택
+    @objc func type1DidTap() { // 이용문의
+        guard let type = type1Label.text else { return }
+        
+        // 선택된 질문 유형 넘기기
+        self.delegate?.typeSelect(questype: type)
+        // 바텀시트 내리기
+        hideBottomSheetAndGoBack()
+    }
+    @objc func type2DidTap() { // 오류신고
+        guard let type = type2Label.text else { return }
+        
+        self.delegate?.typeSelect(questype: type)
+        hideBottomSheetAndGoBack()
+    }
+    @objc func type3DidTap() { // 서비스 제안
+        guard let type = type3Label.text else { return }
+        
+        self.delegate?.typeSelect(questype: type)
+        hideBottomSheetAndGoBack()
+    }
+    @objc func etcDidTap() { // 기타
+        guard let type = etcLabel.text else { return }
+        
+        self.delegate?.typeSelect(questype: type)
+        hideBottomSheetAndGoBack()
     }
 }

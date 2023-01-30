@@ -6,8 +6,10 @@
 //
 
 import UIKit
+import SnapKit
+import Then
 
-class ProfileServiceVC: UIViewController {
+class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     
     // MARK: - Subviews
     
@@ -44,23 +46,32 @@ class ProfileServiceVC: UIViewController {
         $0.text = "휴일을 제외한 평일에는 하루 이내에 답변을 드릴게요.\n혹시 하루가 지나도 답변이 오지 않으면, 스팸 메일함을 확인해주세요."
     }
     
-    let emailTextField = UITextField().then {
-        $0.placeholder = "답변 받을 이메일 주소"
+    lazy var emailTextField = UITextField().then {
         $0.basicTextField()
+        $0.placeholder = "답변 받을 이메일 주소"
         
         $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
     }
     
-    let questionTypeTextField = UITextField().then {
-        $0.placeholder = "질문 유형을 선택해주세요"
+    lazy var questionTypeTextField = UITextField().then {
         $0.basicTextField()
-        $0.isUserInteractionEnabled = false
-    }
-    let typeSelectBtn = UIButton().then {
-        $0.setImage(UIImage(systemName: "chevron.down"), for: .normal)
-        $0.tintColor = .mainBlack
-        $0.addTarget(self, action: #selector(showBottomSheet), for: .touchUpInside)
+        $0.placeholder = "질문 유형을 선택해주세요"
+        
+        let typeSelectBtn = UIButton()
+        typeSelectBtn.setImage(UIImage(systemName: "chevron.down"), for: .normal)
+        typeSelectBtn.tintColor = .mainBlack
+        
+        $0.addSubview(typeSelectBtn)
+        typeSelectBtn.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(12)
+            $0.width.height.equalTo(35)
+        }
+        
+        $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+        $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+        $0.addTarget(self, action: #selector(showBottomSheet), for: .editingDidBegin)
     }
     
     let textViewPlaceHolder = "내용을 적어주세요"
@@ -75,7 +86,7 @@ class ProfileServiceVC: UIViewController {
         $0.delegate = self // <-
     }
     
-    let agreeCheckBtn = UIButton().then {
+    lazy var agreeCheckBtn = UIButton().then {
         $0.setTitle("이메일 정보 제공 동의", for: .normal)
         $0.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.setImage(UIImage(systemName: "square")?.withTintColor(UIColor(hex: 0xAEAEAE), renderingMode: .alwaysOriginal), for: .normal)
@@ -96,16 +107,20 @@ class ProfileServiceVC: UIViewController {
     }
     
     let sendBtn = UIButton().then {
+        $0.basicButton()
         $0.setTitle("보내기", for: .normal)
-        $0.backgroundColor = .mainBlue
-        $0.tintColor = .mainBlue
-        $0.layer.cornerRadius = 10
+    }
+    
+    let logoutLabel = UIButton().then {
+        $0.setTitle("로그아웃", for: .normal)
+        $0.titleLabel?.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        $0.setTitleColor(UIColor(hex: 0xAEAEAE), for: .normal)
     }
     
     let withdrawalLabel = UIButton().then {
         $0.setTitle("회원탈퇴", for: .normal)
-        $0.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        $0.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
+        $0.titleLabel?.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        $0.setTitleColor(UIColor(hex: 0xAEAEAE), for: .normal)
     }
     
     // MARK: - LifeCycles
@@ -123,7 +138,7 @@ class ProfileServiceVC: UIViewController {
     // MARK: - Functions
     private func configureLayouts() {
         // addSubview
-        [headerView, noticeLabel, emailTextField, questionTypeTextField, typeSelectBtn, contentTextField, agreeCheckBtn, agreemsgLabel, sendBtn, withdrawalLabel]
+        [headerView, noticeLabel, emailTextField, questionTypeTextField, contentTextField, agreeCheckBtn, agreemsgLabel, sendBtn, logoutLabel, withdrawalLabel]
             .forEach {view.addSubview($0)}
         
         [titleLabel, backButton]
@@ -158,50 +173,43 @@ class ProfileServiceVC: UIViewController {
         
         emailTextField.snp.makeConstraints { /// 답변 받을 이메일 주소
             $0.top.equalTo(noticeLabel.snp.bottom).offset(16)
-            $0.leading.equalTo(noticeLabel.snp.leading)
-            $0.trailing.equalTo(noticeLabel.snp.trailing)
-            $0.height.equalTo(45)
+            $0.leading.trailing.equalTo(noticeLabel)
+            $0.height.equalTo(48)
         }
         
         questionTypeTextField.snp.makeConstraints { /// 질문 유형 선택
             $0.top.equalTo(emailTextField.snp.bottom).offset(12)
-            $0.leading.equalTo(emailTextField.snp.leading)
-            $0.trailing.equalTo(emailTextField.snp.trailing)
-            $0.height.equalTo(45)
-        }
-        
-        typeSelectBtn.snp.makeConstraints { /// 유형 선택 화살표
-            $0.centerY.equalTo(questionTypeTextField)
-            $0.trailing.equalTo(questionTypeTextField).inset(10)
+            $0.leading.trailing.equalTo(emailTextField)
+            $0.height.equalTo(48)
         }
         
         contentTextField.snp.makeConstraints { /// 내용 입력
             $0.top.equalTo(questionTypeTextField.snp.bottom).offset(12)
-            $0.leading.equalTo(emailTextField.snp.leading)
-            $0.trailing.equalTo(emailTextField.snp.trailing)
+            $0.leading.trailing.equalTo(emailTextField)
             $0.height.equalTo(160)
         }
         
         agreeCheckBtn.snp.makeConstraints { /// 이메일 정보 제공 동의
-            $0.top.equalTo(contentTextField.snp.bottom).offset(12)
-            $0.leading.equalTo(emailTextField.snp.leading)
-            //$0.width.equalTo(150)
-            //$0.trailing.equalTo(emailTextField.snp.trailing)
+            $0.top.equalTo(contentTextField.snp.bottom).offset(8)
+            $0.leading.equalTo(emailTextField)
         }
         agreemsgLabel.snp.makeConstraints { /// 답변 필요
             $0.top.equalTo(agreeCheckBtn.snp.bottom)
-            $0.leading.equalTo(agreeCheckBtn.snp.leading).offset(20)
+            $0.leading.equalTo(agreeCheckBtn).offset(23)
         }
         
         sendBtn.snp.makeConstraints { /// 메일 보내기 버튼
             $0.top.equalTo(agreemsgLabel.snp.bottom).offset(40)
-            $0.leading.equalTo(emailTextField)
-            $0.trailing.equalTo(emailTextField)
-            $0.height.equalTo(45)
+            $0.leading.trailing.equalTo(emailTextField)
+        }
+        
+        logoutLabel.snp.makeConstraints { /// 로그아웃
+            $0.bottom.equalTo(withdrawalLabel.snp.top)
+            $0.centerX.equalTo(withdrawalLabel)
         }
         
         withdrawalLabel.snp.makeConstraints { /// 회원탈퇴
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-30)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
             $0.centerX.equalToSuperview()
         }
         withdrawalLabel.addTarget(self, action: #selector(withdrawalButtonDidTap), for: .touchUpInside)
@@ -209,10 +217,15 @@ class ProfileServiceVC: UIViewController {
         
     }
     
+    func typeSelect(questype: String) {
+        self.questionTypeTextField.text = questype
+    }
+    
     // 바텀시트 나타내기
     @objc private func showBottomSheet() {
         let bottomSheetVC = ServiceBottomSheetVC()
         bottomSheetVC.modalPresentationStyle = .overFullScreen
+        bottomSheetVC.delegate = self
         self.present(bottomSheetVC, animated: false, completion: nil)
     }
     
@@ -230,9 +243,11 @@ class ProfileServiceVC: UIViewController {
         sender.isSelected.toggle()
         switch sender.isSelected {
         case true:
-            sender.setTitleColor(UIColor(hex: 0x000000).withAlphaComponent(0.8), for: .normal)
+            sender.setTitleColor(UIColor.mainBlack, for: .normal)
+            agreemsgLabel.textColor = .mainBlack
         case false:
             sender.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
+            agreemsgLabel.textColor = UIColor(hex: 0x8A8A8A)
         }
     }
     
@@ -246,12 +261,10 @@ class ProfileServiceVC: UIViewController {
     // 텍스트 활성화
     @objc func textFieldActivated(_ sender: UITextField) {
         sender.layer.borderColor = UIColor.mainBlack.cgColor
-        sender.layer.borderWidth = 1
     }
     
     @objc func textFieldInactivated(_ sender: UITextField) {
         sender.layer.borderColor = UIColor.mainGray.cgColor
-        sender.layer.borderWidth = 1
     }
 }
 
@@ -259,7 +272,7 @@ extension ProfileServiceVC: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == textViewPlaceHolder {
             textView.text = nil
-            textView.textColor = .black
+            textView.textColor = .mainBlack
         }
     }
 
@@ -267,7 +280,7 @@ extension ProfileServiceVC: UITextViewDelegate {
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             textView.text = textViewPlaceHolder
             textView.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-            textView.textColor = .systemGray5
+            textView.textColor = .mainGray
             //updateCountLabel(characterCount: 0)
         }
     }
