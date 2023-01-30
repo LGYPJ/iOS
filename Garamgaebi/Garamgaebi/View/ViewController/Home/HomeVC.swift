@@ -12,10 +12,6 @@ import SnapKit
 class HomeVC: UIViewController {
     
     // MARK: - Variable
-    var sectionHeader = ["1 section header", "2 section header"]
-    var sectionFooter = ["1 section footer", "2 section footer"]
-    var cellDataSource = ["1 cell", "2 cell", "3 cell"]
-    
     
     // MARK: - Subviews
     lazy var headerView: UIView = {
@@ -51,13 +47,6 @@ class HomeVC: UIViewController {
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
-        //view.register(HomeEventInfoTableViewCell.self, forCellReuseIdentifier: HomeEventInfoTableViewCell.identifier)
-        //view.register(HomeUserColectionViewCell.self, forCellReuseIdentifier: HomeUserColectionViewCell.identifier)
-        //view.register(MyTableViewCellTwo.self, forCellReuseIdentifier: MyTableViewCellTwo.id)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(pushHomeDetail), name: Notification.Name("pushHomeDetailVC"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(pushNetworkingDetail), name: Notification.Name("pushNetworkingDetailVC"), object: nil)
-        
         return view
     }()
     
@@ -65,12 +54,11 @@ class HomeVC: UIViewController {
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureViews()
         configureTableView()
         addSubViews()
         configLayouts()
-   
+        configNotificationCenter()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -122,6 +110,11 @@ class HomeVC: UIViewController {
         }
     }
     
+    func configNotificationCenter() {
+        NotificationCenter.default.addObserver(self, selector: #selector(pushHomeDetail(_:)), name: Notification.Name("pushHomeDetailVC"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(pushNetworkingDetail(_:)), name: Notification.Name("pushNetworkingDetailVC"), object: nil)
+    }
+    
     @objc private func pushNextView(_ sender: UIButton) {
         switch sender {
         case notificationViewButton:
@@ -132,27 +125,13 @@ class HomeVC: UIViewController {
         }
     }
     
-    @objc func pushHomeDetail() {
+    @objc func pushHomeDetail(_ notification: NSNotification) {
+        print(notification.object)
         self.navigationController?.pushViewController(EventSeminarDetailVC(), animated: true)
     }
     
-    @objc func pushNetworkingDetail() {
+    @objc func pushNetworkingDetail(_ notification: NSNotification) {
         self.navigationController?.pushViewController(EventNetworkingDetailVC(), animated: true)
-    }
-    
-    @objc private func buttonPressed(_ sender: Any) {
-        if let button = sender as? UIBarButtonItem {
-            switch button.tag {
-            case 1:
-                // Change the background color to blue.
-                self.view.backgroundColor = .blue
-            case 2:
-                // Change the background color to red.
-                self.view.backgroundColor = .red
-            default:
-                print("error")
-            }
-        }
     }
     
 }
@@ -185,6 +164,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
     }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 0:
@@ -206,7 +186,6 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             return cell
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeUserInfoTableViewCell.identifier, for: indexPath) as? HomeUserInfoTableViewCell else {return UITableViewCell()}
-            //cell.backgroundColor = .mainLightBlue
             return cell
         case 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeMyEventInfoTableViewCell.identifier, for: indexPath) as? HomeMyEventInfoTableViewCell else {return UITableViewCell()}
@@ -215,10 +194,6 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             return UITableViewCell()
             
         }
-        
     }
-    
-    
-    
 }
 

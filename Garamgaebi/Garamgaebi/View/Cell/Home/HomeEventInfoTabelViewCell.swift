@@ -353,13 +353,14 @@ extension HomeEventInfoTableViewCell: UICollectionViewDataSource, UICollectionVi
         return cell
     }
     
+    // TODO: Notification Object 구조 만들어야함
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         switch collectionView.tag {
         case 0:
-            NotificationCenter.default.post(name: Notification.Name("pushHomeDetailVC"), object: nil)
+            NotificationCenter.default.post(name: Notification.Name("pushHomeDetailVC"), object: "넘겨줄 데이터")
         case 1:
-            NotificationCenter.default.post(name: Notification.Name("pushNetworkingDetailVC"), object: nil)
+            NotificationCenter.default.post(name: Notification.Name("pushNetworkingDetailVC"), object: "넘겨줄 데이터")
         default:
             print(">>>error: HomeEventInfoTableViewCell didSelectRowAt")
         }
