@@ -32,6 +32,7 @@ class SeminarPreviewPopUpVC: UIViewController {
 		imageView.clipsToBounds = true
 		imageView.layer.borderWidth = 3
 		imageView.layer.borderColor = UIColor.white.cgColor
+		imageView.backgroundColor = .white
 		
 		return imageView
 	}()
@@ -205,6 +206,7 @@ extension SeminarPreviewPopUpVC {
 		titleLabel.text = previewInfo.title
 		descriptionTextView.text = previewInfo.content
 		
+		profileImageView.image = UIImage(systemName: previewInfo.profileImgUrl)?.withTintColor(.gray, renderingMode: .alwaysOriginal)
 		// TODO: profileImage, 발표자료 URL 처리
 		
 		

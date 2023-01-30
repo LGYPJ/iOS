@@ -55,5 +55,5 @@ struct SeminarDetailPreview: Decodable {
 	let profileImgUrl: String
 	let organization: String
 	let content: String
-	let presentationUrl: String
+	let presentationUrl: String?
 }
