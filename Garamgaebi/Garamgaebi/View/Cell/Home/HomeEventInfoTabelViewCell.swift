@@ -249,25 +249,11 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     @objc func presentViewAll(_ sender: UIButton) {
         switch sender {
         case seminarViewAllButton, seminarViewAllLabel:
-            
             HomeEventInfoTableViewCell.viewAllpageIndex = 0
-            NotificationCenter.default.post(name: Notification.Name("pushViewAll Seminar"), object: nil)
-            
-//            let vc = TabBarController()
-//            vc.selectedIndex = 1
-//            vc.modalPresentationStyle = .fullScreen
-//            self.window?.rootViewController?.dismiss(animated: false)
-//            self.window?.rootViewController?.present(vc, animated: false)
-            
-            //            self.window?.rootViewController?.present(vc, animated: false)
-            
+            NotificationCenter.default.post(name: Notification.Name("pushViewAllSeminar"), object: nil)
         case networkingViewAllButton, networkingViewAllLabel:
-
-            
             HomeEventInfoTableViewCell.viewAllpageIndex = 1
             NotificationCenter.default.post(name: Notification.Name("pushViewAllNetworking"), object: nil)
-//            self.window?.rootViewController?.present(vc, animated: false)
-            
         default:
             fatalError("HomeInfoTableViewCell presentViewAll error")
         }
