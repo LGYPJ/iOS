@@ -47,7 +47,7 @@ class EventAttendantTableViewCell: UITableViewCell {
 	lazy var noAttentdantBackgroundView: UIView = {
 		let view = UIView()
 		view.backgroundColor = .white
-		view.layer.borderColor = UIColor.mainGray.cgColor
+		view.layer.borderColor = UIColor.mainGray.withAlphaComponent(0.8).cgColor
 		view.layer.borderWidth = 1
 		view.layer.cornerRadius = 12
 		
@@ -59,7 +59,7 @@ class EventAttendantTableViewCell: UITableViewCell {
 		label.text = "아직 참석자가 없습니다.\n첫 참석자가 되어주세요!"
 		label.numberOfLines = 2
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .mainGray
+		label.textColor = .mainGray.withAlphaComponent(0.8)
 		
 		return label
 	}()

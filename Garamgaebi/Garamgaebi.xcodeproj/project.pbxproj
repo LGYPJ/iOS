@@ -35,6 +35,7 @@
 		2CED6901298390EA00C838BD /* SeminarDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED6900298390EA00C838BD /* SeminarDetailViewModel.swift */; };
 		2CED690329867F1800C838BD /* NetworkingDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED690229867F1800C838BD /* NetworkingDetailViewModel.swift */; };
 		2CED690529867F3300C838BD /* NetworkingDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED690429867F3300C838BD /* NetworkingDetailModel.swift */; };
+		2CED690729878AB200C838BD /* EventApplyCancelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED690629878AB200C838BD /* EventApplyCancelViewModel.swift */; };
 		460C0C2B296D855800FF5085 /* ProfileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460C0C2A296D855800FF5085 /* ProfileEditVC.swift */; };
 		462183F5297C51B800B9A035 /* ServiceBottomSheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462183F4297C51B800B9A035 /* ServiceBottomSheetVC.swift */; };
 		462C4D65297D34BD00F2E0C6 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462C4D64297D34BD00F2E0C6 /* UIButton+.swift */; };
@@ -149,6 +150,7 @@
 		2CED6900298390EA00C838BD /* SeminarDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarDetailViewModel.swift; sourceTree = "<group>"; };
 		2CED690229867F1800C838BD /* NetworkingDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingDetailViewModel.swift; sourceTree = "<group>"; };
 		2CED690429867F3300C838BD /* NetworkingDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingDetailModel.swift; sourceTree = "<group>"; };
+		2CED690629878AB200C838BD /* EventApplyCancelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventApplyCancelViewModel.swift; sourceTree = "<group>"; };
 		4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Garamgaebi_GaramgaebiUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		460C0C2A296D855800FF5085 /* ProfileEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditVC.swift; sourceTree = "<group>"; };
 		462183F4297C51B800B9A035 /* ServiceBottomSheetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceBottomSheetVC.swift; sourceTree = "<group>"; };
@@ -591,6 +593,7 @@
 				6082992B297FBDB000240036 /* HomeViewModel.swift */,
 				2CED6900298390EA00C838BD /* SeminarDetailViewModel.swift */,
 				2CED690229867F1800C838BD /* NetworkingDetailViewModel.swift */,
+				2CED690629878AB200C838BD /* EventApplyCancelViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1034,6 +1037,7 @@
 				6055D84529701F5700C86D53 /* InputCareerVC.swift in Sources */,
 				60F91401296D2F3D00626C40 /* ViewAllVC.swift in Sources */,
 				2CED690529867F3300C838BD /* NetworkingDetailModel.swift in Sources */,
+				2CED690729878AB200C838BD /* EventApplyCancelViewModel.swift in Sources */,
 				2CDD9509297657FE004B8D56 /* BankListCollectionViewCell.swift in Sources */,
 				2CDD94E529712E8E004B8D56 /* IceBreakingCardCollectionViewCell.swift in Sources */,
 				2CDD9502297551C4004B8D56 /* IceBreakingStartCardCollectionViewCell.swift in Sources */,

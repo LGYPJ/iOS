@@ -101,7 +101,7 @@ class ViewAllVC: UIViewController {
     
     @objc func pushApplyCancelVC() {
         //self.navigationController?.pushViewController(EventSeminarDetailVC(), animated: true)
-        self.navigationController?.pushViewController(EventApplyCancelVC(), animated: true)
+        self.navigationController?.pushViewController(EventApplyCancelVC(type: "SEMINAR", programId: 0, memberId: 0), animated: true)
     }
     
     
