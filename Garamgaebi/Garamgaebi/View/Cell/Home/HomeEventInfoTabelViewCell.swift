@@ -23,6 +23,7 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     let seminarList = HomeEventInfoTableViewCell.dataList.filter {
         $0.programType == "세미나"
     }
+    
     let networkingList = HomeEventInfoTableViewCell.dataList.filter {
         $0.programType == "네트워킹"
     }
@@ -50,6 +51,7 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         button.addTarget(self, action: #selector(presentViewAll), for: .touchUpInside)
         return button
     }()
+    
     lazy var seminarViewAllButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         button.setImage(UIImage(named: "arrowForward"), for: .normal)
@@ -57,6 +59,7 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         button.addTarget(self, action: #selector(presentViewAll), for: .touchUpInside)
         return button
     }()
+    
     lazy var seminarViewAllStack: UIStackView = {
         let stackView = UIStackView()
         [seminarViewAllLabel,seminarViewAllButton]
@@ -64,7 +67,6 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         stackView.spacing = 15
         stackView.axis = .horizontal
         stackView.alignment = .center
-//        stackView.backgroundColor = .mainGray
         return stackView
     }()
     
@@ -91,6 +93,7 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         button.addTarget(self, action: #selector(presentViewAll), for: .touchUpInside)
         return button
     }()
+    
     lazy var networkingViewAllButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         button.setImage(UIImage(named: "arrowForward"), for: .normal)
@@ -98,6 +101,7 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         button.addTarget(self, action: #selector(presentViewAll), for: .touchUpInside)
         return button
     }()
+    
     lazy var networkingViewAllStack: UIStackView = {
         let stackView = UIStackView()
         [networkingViewAllLabel,networkingViewAllButton]
@@ -116,7 +120,6 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         }()
         
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-
         view.isScrollEnabled = true
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
@@ -136,7 +139,6 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         }()
         
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-
         view.isScrollEnabled = true
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
@@ -167,13 +169,13 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         
         self.contentView.addSubview(seminarTitleLabel)
         self.contentView.addSubview(seminarPopUpButton)
-        self.contentView.addSubview(seminarViewAllButton)
+//        self.contentView.addSubview(seminarViewAllButton)
         self.contentView.addSubview(seminarViewAllStack)
         self.contentView.addSubview(seminarCollectionView)
         
         self.contentView.addSubview(networkingTitleLabel)
         self.contentView.addSubview(networkingPopUpButton)
-        self.contentView.addSubview(networkingViewAllButton)
+//        self.contentView.addSubview(networkingViewAllButton)
         self.contentView.addSubview(networkingViewAllStack)
         self.contentView.addSubview(networkingCollectionView)
         
@@ -193,7 +195,7 @@ class HomeEventInfoTableViewCell: UITableViewCell {
             make.width.height.equalTo(16)
         }
         seminarViewAllStack.snp.makeConstraints { make in
-            make.top.equalTo(seminarTitleLabel.snp.top)
+            make.centerY.equalTo(seminarTitleLabel.snp.centerY)
             make.right.equalToSuperview().inset(16)
         }
         seminarCollectionView.snp.makeConstraints { make in
