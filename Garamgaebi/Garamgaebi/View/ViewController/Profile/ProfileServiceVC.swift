@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
-class ProfileServiceVC: UIViewController, UITextFieldDelegate {
+class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     
     // MARK: - Subviews
     
@@ -217,10 +217,15 @@ class ProfileServiceVC: UIViewController, UITextFieldDelegate {
         
     }
     
+    func typeSelect(questype: String) {
+        self.questionTypeTextField.text = questype
+    }
+    
     // 바텀시트 나타내기
     @objc private func showBottomSheet() {
         let bottomSheetVC = ServiceBottomSheetVC()
         bottomSheetVC.modalPresentationStyle = .overFullScreen
+        bottomSheetVC.delegate = self
         self.present(bottomSheetVC, animated: false, completion: nil)
     }
     
