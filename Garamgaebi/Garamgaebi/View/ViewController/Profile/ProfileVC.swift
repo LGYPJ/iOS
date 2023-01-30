@@ -47,7 +47,8 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     
     let contentView = UIView()
     
-    let profileImageView = UIImageView().then {
+    var profileImageView = UIImageView().then {
+        $0.clipsToBounds = true
         $0.layer.cornerRadius = 50
         $0.backgroundColor = .mainGray
     }
@@ -466,7 +467,8 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         addEduBtn.addTarget(self,action: #selector(self.educationButtonDidTap(_:)), for: .touchUpInside)
     }
     
-    func editData(nickname: String, organization: String, email: String, introduce: String) {
+    func editData(image: String, nickname: String, organization: String, email: String, introduce: String) {
+        self.profileImageView.image = UIImage(named: image)
         self.nameLabel.text = nickname
         self.orgLabel.text = organization
         self.emailLabel.text = email

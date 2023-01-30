@@ -160,7 +160,7 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EventAttendantCollectionViewCell.identifier, for: indexPath) as? EventAttendantCollectionViewCell else {return UICollectionViewCell()}
 		
 		let cellData = self.attendants[indexPath.row]
-		cell.profileImageView.image = UIImage(systemName: cellData.profileImg)
+		cell.profileImageView.image = UIImage(named: cellData.profileImg)
 		cell.userNameLabel.text = cellData.nickname
 		
 		

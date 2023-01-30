@@ -12,7 +12,7 @@ import Photos
 
 
 protocol EditProfileDataDelegate: AnyObject {
-    func editData(nickname: String, organization: String, email: String, introduce: String)
+    func editData(image: String, nickname: String, organization: String, email: String, introduce: String)
 }
 
 class ProfileEditVC: UIViewController, UITextFieldDelegate {
@@ -346,7 +346,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         guard let editIntroduce = introduceTextField.text else { return }
         
         // 변경된 이름값 담기
-        self.delegate?.editData(nickname: editName, organization: editOrg, email: editEmail, introduce: editIntroduce)
+        self.delegate?.editData(image: "ExProfileImage", nickname: editName, organization: editOrg, email: editEmail, introduce: editIntroduce)
         
         self.navigationController?.popViewController(animated: true)
     }
