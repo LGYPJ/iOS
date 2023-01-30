@@ -10,7 +10,15 @@ import UIKit
 import SnapKit
 import Photos
 
+
+protocol EditProfileDataDelegate: AnyObject {
+    func editData(nickname: String, organization: String, email: String, introduce: String)
+}
+
 class ProfileEditVC: UIViewController {
+    
+    // MARK: - Properties
+    weak var delegate: EditProfileDataDelegate?
     
     // MARK: - Subviews
     
@@ -288,6 +296,16 @@ class ProfileEditVC: UIViewController {
     // 완료하기 버튼 did tap
     @objc private func doneButtonDidTap() {
         print("완료하기 버튼 클릭")
+        
+        // 텍스트값 가져오기
+        guard let editName = nameTextField.text else { return }
+        guard let editOrg = orgTextField.text else { return }
+        guard let editEmail = emailTextField.text else { return }
+        guard let editIntroduce = introduceTextField.text else { return }
+        
+        // 변경된 이름값 담기
+        self.delegate?.editData(nickname: editName, organization: editOrg, email: editEmail, introduce: editIntroduce)
+        
         self.navigationController?.popViewController(animated: true)
     }
     

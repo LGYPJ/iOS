@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-class ProfileVC: UIViewController {
+class ProfileVC: UIViewController, EditProfileDataDelegate {
     
     // MARK: - Properties
     let snsDataList = ProfileSnsDataModel.data
@@ -372,16 +372,20 @@ class ProfileVC: UIViewController {
             $0.top.equalTo(snsTopRadiusView.snp.bottom).offset(-1)
             $0.leading.trailing.equalTo(snsTopRadiusView)
         }
-//        snsDefaultLabel.snp.makeConstraints {
-//            $0.top.equalToSuperview().inset(12)
-//            $0.centerX.equalToSuperview()
-//            $0.bottom.equalTo(addSnsBtn.snp.top).offset(-12)
-//        }
-        snsTableView.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(addSnsBtn.snp.top).offset(-12)
-            $0.height.equalTo(snsDataList.count * 41)
+        if (snsDataList.count == 0) {
+            snsDefaultLabel.snp.makeConstraints {
+                $0.top.equalToSuperview().inset(12)
+                $0.centerX.equalToSuperview()
+                $0.bottom.equalTo(addSnsBtn.snp.top).offset(-12)
+            }
+        }
+        else {
+            snsTableView.snp.makeConstraints {
+                $0.top.equalToSuperview()
+                $0.leading.trailing.equalToSuperview()
+                $0.bottom.equalTo(addSnsBtn.snp.top).offset(-12)
+                $0.height.equalTo(snsDataList.count * 41)
+            }
         }
         addSnsBtn.snp.makeConstraints { /// SNS 추가 버튼
             $0.bottom.equalTo(snsBottomRadiusView).inset(12)
@@ -462,6 +466,13 @@ class ProfileVC: UIViewController {
         addEduBtn.addTarget(self,action: #selector(self.educationButtonDidTap(_:)), for: .touchUpInside)
     }
     
+    func editData(nickname: String, organization: String, email: String, introduce: String) {
+        self.nameLabel.text = nickname
+        self.orgLabel.text = organization
+        self.emailLabel.text = email
+        self.introduceTextField.text = introduce
+    }
+    
     @objc private func serviceButtonDidTap(_ sender : UIButton) {
         print("고객센터 버튼 클릭")
         
@@ -486,13 +497,10 @@ class ProfileVC: UIViewController {
         nextVC.nameTextField.text = nameString
         nextVC.orgTextField.text = orgString
         nextVC.emailTextField.text = emailString
+        nextVC.introduceTextField.text = introduceString
+        nextVC.introduceTextField.textColor = .mainBlack
         
-        if (introduceTextField.text != nil) {
-            print("!nil")
-            nextVC.introduceTextField.text = introduceString
-            nextVC.introduceTextField.textColor = .mainBlack
-        }
-        
+        nextVC.delegate = self
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
