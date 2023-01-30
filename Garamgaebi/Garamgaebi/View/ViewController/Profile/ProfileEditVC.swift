@@ -15,10 +15,13 @@ protocol EditProfileDataDelegate: AnyObject {
     func editData(nickname: String, organization: String, email: String, introduce: String)
 }
 
-class ProfileEditVC: UIViewController {
+class ProfileEditVC: UIViewController, UITextFieldDelegate {
     
     // MARK: - Properties
     weak var delegate: EditProfileDataDelegate?
+    
+    // 뷰의 초기 y 값을 저장해서 뷰가 올라갔는지 내려왔는지에 대한 분기처리시 사용
+    private var restoreFrameYValue = 0.0
     
     // MARK: - Subviews
     
@@ -131,6 +134,12 @@ class ProfileEditVC: UIViewController {
         view.backgroundColor = .white
         configureLayouts()
         tapGesture()
+        
+        // 엔터키 클릭시 키보드 내리기
+        nameTextField.delegate = self
+        orgTextField.delegate = self
+        emailTextField.delegate = self
+        introduceTextField.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -240,11 +249,20 @@ class ProfileEditVC: UIViewController {
         editDoneBtn.addTarget(self, action: #selector(doneButtonDidTap), for: .touchUpInside)
     }
     
-    // 프로필 이미지 클릭
+    // 클릭 이벤트
     func tapGesture() {
+        // 갤러리 클릭
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(profileImageDidTap))
         profileImageView.addGestureRecognizer(tapGestureRecognizer)
         profileImageView.isUserInteractionEnabled = true
+        
+//        // 키보드 처리 -> 텍스트필드 입력시 뷰 올리기
+//        restoreFrameYValue = self.view.frame.origin.y
+//
+//        // UIResponder.keyboardWillShowNotification : 키보드가 해제되기 직전에 post 된다.
+//        NotificationCenter.default.addObserver(self, selector: #selector(setKeyboardShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+//        // UIResponder.keyboardWillHideNotificationdcdc : 키보드가 보여지기 직전에 post 된다.
+//        NotificationCenter.default.addObserver(self, selector: #selector(setKeyboardHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     // SubTitle 별 처리
@@ -278,6 +296,30 @@ class ProfileEditVC: UIViewController {
     
     @objc func textFieldInactivated(_ sender: UITextField) {
         sender.layer.borderColor = UIColor.mainGray.cgColor
+    }
+    
+    // 키보드 업
+    @objc func setKeyboardShow(_ notification: Notification) {
+        // 키보드가 내려왔을 때만 올리기
+        if self.view.frame.origin.y == restoreFrameYValue {
+            if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                let keyboardHeight = keyboardFrame.cgRectValue.height
+                self.view.frame.origin.y -= keyboardHeight
+                print("show keyboard")
+            }
+        }
+    }
+
+    // 키보드 다운
+    @objc private func setKeyboardHide(_ notification: Notification) {
+        // 키보드가 올라갔을 때만 내리기
+        if self.view.frame.origin.y != restoreFrameYValue {
+            if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                let keyboardHeight = keyboardFrame.cgRectValue.height
+                self.view.frame.origin.y += keyboardHeight
+                print("hide keyboard")
+            }
+        }
     }
     
     @objc func profileImageDidTap() {
@@ -367,6 +409,17 @@ extension ProfileEditVC: UITextViewDelegate {
         let characterCount = newString.count
         guard characterCount <= 100 else { return false }
         //updateCountLabel(characterCount: characterCount)
+        
+        return true
+    }
+    
+    // 키보드
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder() // TextField 비활성화
         
         return true
     }
