@@ -17,6 +17,12 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
     static let identifier = String(describing: ViewAllMyEventTableViewCell.self)
     static let cellHeight = 428.0 // 지워야함
     
+    lazy var baseView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
     lazy var dateTimeView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(hex: 0xF5F5F5)
@@ -92,18 +98,53 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
         return button
     }()
     
+    lazy var zeroDataBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.borderColor = UIColor.mainGray.withAlphaComponent(0.8).cgColor
+        view.layer.borderWidth = 1
+        view.layer.cornerRadius = 12
+        
+        return view
+    }()
+    
+    lazy var zeroDataImage: UIImageView = {
+        let img = UIImageView()
+        img.image = UIImage(named: "today")
+        img.tintColor = .mainGray.withAlphaComponent(0.8)
+        return img
+    }()
+    
+    lazy var zeroDataDescriptionLabel: UILabel = {
+        let label = UILabel()
+        label.text = "이번달은 네트워킹이 없습니다"
+        label.numberOfLines = 1
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        label.textColor = .mainGray.withAlphaComponent(0.8)
+        label.textAlignment = .center
+        
+        return label
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        contentView.addSubview(dateTimeView)
+        // cell에 데이터 있을 때
+        contentView.addSubview(baseView)
+        baseView.addSubview(dateTimeView)
         dateTimeView.addSubview(dateInfoLabel)
         dateTimeView.addSubview(timeInfoLabel)
-        contentView.addSubview(titleInfoLabel)
-        contentView.addSubview(locationInfoLabel)
-        contentView.addSubview(settingButton)
+        baseView.addSubview(titleInfoLabel)
+        baseView.addSubview(locationInfoLabel)
+        baseView.addSubview(settingButton)
         
+        // cell에 데이터 없을 때
+        contentView.addSubview(zeroDataBackgroundView)
+        zeroDataBackgroundView.addSubview(zeroDataImage)
+        zeroDataBackgroundView.addSubview(zeroDataDescriptionLabel)
+        
+        // default
         configSubViewLayouts()
-
     }
     
     override func layoutSubviews() {
@@ -112,7 +153,9 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
     }
     
     func configSubViewLayouts() {
-
+        baseView.snp.makeConstraints { make in
+            make.top.left.bottom.right.equalToSuperview()
+        }
         dateTimeView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.left.equalToSuperview()
@@ -149,6 +192,9 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
     }
     
     public func configure(_ item: ViewAllMyEventDataModel) {
+        // TODO: 나중에 해줘야할 수 있음
+//        baseView.isHidden = false
+//        zeroDataBackgroundView.isHidden = true
         
         // item.date -> dateString
         let date = item.date
@@ -172,6 +218,33 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
         } else {
             settingButton.isHidden = true
         }
+    }
+    
+    // TODO: API 통신 후 수정
+    public func configureZeroCell(caseString: String) {
+
+        zeroDataBackgroundView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.left.right.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        
+        zeroDataImage.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.width.height.equalTo(44)
+            make.top.equalToSuperview().inset(14)
+        }
+        zeroDataDescriptionLabel.snp.makeConstraints { make in
+            make.top.equalTo(zeroDataImage.snp.bottom).offset(8)
+            make.centerX.equalToSuperview()
+        }
+        
+        
+        zeroDataDescriptionLabel.text = "\(caseString) 모임이 없습니다"
+        ViewAllSeminarTableViewCell.cellHeight = 100
+        baseView.isHidden = true
+        zeroDataBackgroundView.isHidden = false
+
     }
     
     // setting button did tap

@@ -41,10 +41,10 @@ class HomeNotificationVC: UIViewController {
     
     lazy var tableView: UITableView = {
         let view = UITableView()
-        // 임시적용
-        view.allowsSelection = true
-        view.backgroundColor = .clear
-        view.separatorStyle = .none
+        view.separatorStyle = .singleLine
+        view.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        view.allowsSelection = false
+        view.backgroundColor = .systemBackground
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero

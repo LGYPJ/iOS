@@ -12,6 +12,13 @@ class OnboardingCollectionViewCell: UICollectionViewCell {
     // MARK: - Properties
     static let cellId = String(describing: OnboardingCollectionViewCell.self)
     
+    lazy var onboardingImage: UIImageView = {
+        let img = UIImageView(image: UIImage(named: "Onboarding1"))
+        img.contentMode = .scaleAspectFill
+//        img.backgroundColor = .mainGray
+        return img
+    }()
+    
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "가천대생 개발자들의\n모임 참여를 보다 간편하게"
@@ -51,19 +58,24 @@ class OnboardingCollectionViewCell: UICollectionViewCell {
     }
     // MARK: - Config Methods
     func addSubViews(){
+        contentView.addSubview(onboardingImage)
         contentView.addSubview(titleLabel)
         contentView.addSubview(subTitleLabel)
     }
     func setLayouts(){
-        titleLabel.snp.makeConstraints { make in
+        onboardingImage.snp.makeConstraints { make in
             make.top.equalToSuperview()
+            make.centerX.equalToSuperview().offset(-15) // 이미지 중앙정렬 맞으면 고쳐야함
+        }
+        subTitleLabel.snp.makeConstraints { make in
+            make.bottom.equalToSuperview()
+            make.centerX.equalToSuperview()
+        }
+        titleLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(subTitleLabel.snp.top).offset(-20)
             make.centerX.equalToSuperview()
         }
         
-        subTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(14)
-            make.centerX.equalToSuperview()
-        }
     }
     // MARK: - Custom Functions
 //    func setOnboardingSlides(_ slides: OnboardingDataModel) {

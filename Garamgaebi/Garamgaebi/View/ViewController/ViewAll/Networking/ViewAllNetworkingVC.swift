@@ -43,6 +43,10 @@ class ViewAllNetworkingVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         dataDistribute()
+        // Data가 없을 때 시연용
+//        dataList1 = []
+//        dataList2 = []
+//        dataList3 = []
     }
     
     // MARK: - Functions
@@ -118,10 +122,19 @@ extension ViewAllNetworkingVC: UITableViewDataSource, UITableViewDelegate {
         
         switch section {
         case 0:
+            if dataList1.count == 0 {
+                return 1
+            }
             return dataList1.count
         case 1:
+            if dataList2.count == 0 {
+                return 1
+            }
             return dataList2.count
         case 2:
+            if dataList3.count == 0 {
+                return 1
+            }
             return dataList3.count
         default:
             print(fatalError())
@@ -131,7 +144,31 @@ extension ViewAllNetworkingVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let edgeInset = 8.0
-        let baseHeight = 140.0
+        var baseHeight = 140.0
+        
+        switch indexPath.section {
+        case 0:
+            if dataList1.count == 0 {
+                baseHeight = 100.0
+            } else {
+                baseHeight = 140.0
+            }
+        case 1:
+            if dataList2.count == 0 {
+                baseHeight = 100.0
+            } else {
+                baseHeight = 140.0
+            }
+        case 2:
+            if dataList3.count == 0 {
+                baseHeight = 100.0
+            } else {
+                baseHeight = 140.0
+            }
+        default:
+            return baseHeight + edgeInset
+        }
+        
         return baseHeight + edgeInset
     }
     
@@ -140,11 +177,23 @@ extension ViewAllNetworkingVC: UITableViewDataSource, UITableViewDelegate {
         
         switch indexPath.section {
         case 0:
-            cell.configure(dataList1[indexPath.row])
+            if dataList1.count == 0 {
+                cell.configureZeroCell(caseString: "이번 달은")
+            } else {
+                cell.configure(dataList1[indexPath.row])
+            }
         case 1:
-            cell.configure(dataList2[indexPath.row])
+            if dataList2.count == 0 {
+                cell.configureZeroCell(caseString: "예정된")
+            } else {
+                cell.configure(dataList2[indexPath.row])
+            }
         case 2:
-            cell.configure(dataList3[indexPath.row])
+            if dataList3.count == 0 {
+                cell.configureZeroCell(caseString: "마감된")
+            } else {
+                cell.configure(dataList3[indexPath.row])
+            }
         default:
             print("dataList Count Error")
         }

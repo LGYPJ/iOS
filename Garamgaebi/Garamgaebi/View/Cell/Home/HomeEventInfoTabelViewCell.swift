@@ -8,7 +8,7 @@
 import UIKit
 
 class HomeEventInfoTableViewCell: UITableViewCell {
-    
+    public static var viewAllpageIndex = 0
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -23,6 +23,7 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     let seminarList = HomeEventInfoTableViewCell.dataList.filter {
         $0.programType == "세미나"
     }
+    
     let networkingList = HomeEventInfoTableViewCell.dataList.filter {
         $0.programType == "네트워킹"
     }
@@ -38,6 +39,7 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     lazy var seminarPopUpButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "PopUpIcon"), for: .normal)
+        button.addTarget(self, action: #selector(presentPopUpView), for: .touchUpInside)
         return button
     }()
     
@@ -46,19 +48,23 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         button.setTitle("세미나 모아보기", for: .normal)
         button.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
         button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        button.addTarget(self, action: #selector(presentViewAll), for: .touchUpInside)
         return button
     }()
+    
     lazy var seminarViewAllButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         button.setImage(UIImage(named: "arrowForward"), for: .normal)
         button.clipsToBounds = true
+        button.addTarget(self, action: #selector(presentViewAll), for: .touchUpInside)
         return button
     }()
+    
     lazy var seminarViewAllStack: UIStackView = {
         let stackView = UIStackView()
         [seminarViewAllLabel,seminarViewAllButton]
             .forEach {stackView.addArrangedSubview($0)}
-        stackView.spacing = 0
+        stackView.spacing = 15
         stackView.axis = .horizontal
         stackView.alignment = .center
         return stackView
@@ -75,6 +81,7 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     lazy var networkingPopUpButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "PopUpIcon"), for: .normal)
+        button.addTarget(self, action: #selector(presentPopUpView), for: .touchUpInside)
         return button
     }()
     
@@ -83,29 +90,27 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         button.setTitle("네트워킹 모아보기", for: .normal)
         button.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
         button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        button.addTarget(self, action: #selector(presentViewAll), for: .touchUpInside)
         return button
     }()
+    
     lazy var networkingViewAllButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         button.setImage(UIImage(named: "arrowForward"), for: .normal)
         button.clipsToBounds = true
+        button.addTarget(self, action: #selector(presentViewAll), for: .touchUpInside)
         return button
     }()
+    
     lazy var networkingViewAllStack: UIStackView = {
         let stackView = UIStackView()
         [networkingViewAllLabel,networkingViewAllButton]
             .forEach {stackView.addArrangedSubview($0)}
-        stackView.spacing = 0
+        stackView.spacing = 15
         stackView.axis = .horizontal
         stackView.alignment = .center
         return stackView
     }()
-    
-//    private let collectionViewFlowLayout: UICollectionViewFlowLayout = {
-//        let layout = UICollectionViewFlowLayout()
-//        layout.scrollDirection = .horizontal
-//        return layout
-//    }()
     
     lazy var seminarCollectionView: UICollectionView = {
         let layout: UICollectionViewFlowLayout = {
@@ -115,7 +120,6 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         }()
         
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-
         view.isScrollEnabled = true
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
@@ -135,7 +139,6 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         }()
         
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-
         view.isScrollEnabled = true
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
@@ -166,13 +169,13 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         
         self.contentView.addSubview(seminarTitleLabel)
         self.contentView.addSubview(seminarPopUpButton)
-        self.contentView.addSubview(seminarViewAllButton)
+//        self.contentView.addSubview(seminarViewAllButton)
         self.contentView.addSubview(seminarViewAllStack)
         self.contentView.addSubview(seminarCollectionView)
         
         self.contentView.addSubview(networkingTitleLabel)
         self.contentView.addSubview(networkingPopUpButton)
-        self.contentView.addSubview(networkingViewAllButton)
+//        self.contentView.addSubview(networkingViewAllButton)
         self.contentView.addSubview(networkingViewAllStack)
         self.contentView.addSubview(networkingCollectionView)
         
@@ -192,7 +195,7 @@ class HomeEventInfoTableViewCell: UITableViewCell {
             make.width.height.equalTo(16)
         }
         seminarViewAllStack.snp.makeConstraints { make in
-            make.top.equalTo(seminarTitleLabel.snp.top)
+            make.centerY.equalTo(seminarTitleLabel.snp.centerY)
             make.right.equalToSuperview().inset(16)
         }
         seminarCollectionView.snp.makeConstraints { make in
@@ -230,6 +233,34 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         }
     }
     
+    @objc func presentPopUpView(_ sender: UIButton) {
+        switch sender {
+        case seminarPopUpButton:
+            let vc = HomeSeminarPopUpVC()
+            vc.modalPresentationStyle = .overFullScreen
+            self.window?.rootViewController?.present(vc, animated: false)
+        case networkingPopUpButton:
+            let vc = HomeNetworkingPopUpVC()
+            vc.modalPresentationStyle = .overCurrentContext
+            self.window?.rootViewController?.present(vc, animated: false)
+        default:
+            fatalError("HomeInfoTableViewCell presentPopUpView error")
+        }
+    }
+    
+    @objc func presentViewAll(_ sender: UIButton) {
+        switch sender {
+        case seminarViewAllButton, seminarViewAllLabel:
+            HomeEventInfoTableViewCell.viewAllpageIndex = 0
+            NotificationCenter.default.post(name: Notification.Name("pushViewAllSeminar"), object: nil)
+        case networkingViewAllButton, networkingViewAllLabel:
+            HomeEventInfoTableViewCell.viewAllpageIndex = 1
+            NotificationCenter.default.post(name: Notification.Name("pushViewAllNetworking"), object: nil)
+        default:
+            fatalError("HomeInfoTableViewCell presentViewAll error")
+        }
+    }
+    
     
 }
 
@@ -246,12 +277,10 @@ extension HomeEventInfoTableViewCell: UICollectionViewDataSource, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         if collectionView == seminarCollectionView {
-            print("section0<<<<<<<<<")
             return seminarList.count
         }
         
         else {
-            print("<<<<<<<<<section1")
             return networkingList.count
         }
         
@@ -326,4 +355,19 @@ extension HomeEventInfoTableViewCell: UICollectionViewDataSource, UICollectionVi
         return cell
     }
     
+    // TODO: Notification Object 구조 만들어야함
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        switch collectionView.tag {
+        case 0:
+            NotificationCenter.default.post(name: Notification.Name("pushHomeDetailVC"), object: "넘겨줄 데이터")
+        case 1:
+            NotificationCenter.default.post(name: Notification.Name("pushNetworkingDetailVC"), object: "넘겨줄 데이터")
+        default:
+            print(">>>error: HomeEventInfoTableViewCell didSelectRowAt")
+        }
+        
+    }
+    
 }
+

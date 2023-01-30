@@ -24,6 +24,15 @@ class TabBarController: UITabBarController {
             createNavController(for: ViewAllVC(), title: "모아보기", image: UIImage(named: "TabBarIconViewAll")!),
             createNavController(for: ProfileVC(), title: "내 프로필", image: UIImage.init(named: "TabBarIconProfile")!),
         ]
+        // TabBarController의 하위계층들을 미리 로딩하는 로직
+        self.viewControllers?.forEach {
+            if let navController = $0 as? UINavigationController {
+                let _ = navController.topViewController?.view
+            } else {
+                let _ = $0.view
+            }
+        }
+        
     }
     
     fileprivate func createNavController(for rootViewController: UIViewController,
