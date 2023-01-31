@@ -615,6 +615,16 @@ extension EventApplyVC {
 	
 	@objc private func didTapRegisterButton() {
 		// alert and dismiss
+		guard let name = nameTextField.text,
+			  let nickname = nicknameTextField.text,
+			  let number = numberTextField.text else {return}
+		
+		EventApplyViewModel.postApplyProgram(memberId: 0, programId: 0, name: name, nickname: nickname, phone: number, completion: { result in
+			if !result.isSuccess {
+				// 실패시 메세지 확인해서 경고 문구 추가
+				print(result)
+			}
+		})
 	}
 }
 
