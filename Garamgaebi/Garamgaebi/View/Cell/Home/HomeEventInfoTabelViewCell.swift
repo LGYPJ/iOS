@@ -16,17 +16,9 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     // MARK: - Properties
     static let identifier = String(describing: HomeEventInfoTableViewCell.self)
     static let cellHeight = 428.0
-    static let dataList = HomeEventDataModel.list.filter { data in
-        return data.state != "마감"
-    }
     
-    let seminarList = HomeEventInfoTableViewCell.dataList.filter {
-        $0.programType == "세미나"
-    }
-    
-    let networkingList = HomeEventInfoTableViewCell.dataList.filter {
-        $0.programType == "네트워킹"
-    }
+    var seminarList: [HomeSeminarInfo] = []
+    var networkingList: [HomeNetworkingInfo] = []
     
     lazy var seminarTitleLabel: UILabel = {
         let label = UILabel()
@@ -181,6 +173,7 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         
         self.contentView.addSubview(interSpcace)
         configSubViewLayouts()
+        configNotificationCenter()
         
     }
     
@@ -233,6 +226,13 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         }
     }
     
+    
+    func configNotificationCenter() {
+        NotificationCenter.default.addObserver(self, selector: #selector(presentHomeSeminarInfo(_:)), name: Notification.Name("presentHomeSeminarInfo"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(presentHomeNetworkingInfo(_:)), name: Notification.Name("presentHomeNetworkingInfo"), object: nil)
+        
+    }
+    
     @objc func presentPopUpView(_ sender: UIButton) {
         switch sender {
         case seminarPopUpButton:
@@ -241,7 +241,7 @@ class HomeEventInfoTableViewCell: UITableViewCell {
             self.window?.rootViewController?.present(vc, animated: false)
         case networkingPopUpButton:
             let vc = HomeNetworkingPopUpVC()
-            vc.modalPresentationStyle = .overCurrentContext
+            vc.modalPresentationStyle = .overFullScreen
             self.window?.rootViewController?.present(vc, animated: false)
         default:
             fatalError("HomeInfoTableViewCell presentPopUpView error")
@@ -261,6 +261,46 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         }
     }
     
+    @objc func presentHomeSeminarInfo(_ notification: NSNotification) {
+    
+        let seminarListBase = notification.object as! [HomeSeminarInfo]
+    
+        // 초기화
+        seminarList.removeAll()
+        
+        // 홈 화면 세미나 리스트 필터링
+        seminarList.append(seminarListBase.filter{$0.status == "THIS_MONTH"}.compactMap{$0
+        }.first!)
+        seminarList.append(seminarListBase.filter{$0.status == "READY"}.compactMap{$0
+        }.first!)
+        seminarListBase.filter{$0.status == "CLOSED"}.compactMap{$0}.forEach{seminarList.append($0)}
+        
+        // 컬렉션뷰 reload
+        seminarCollectionView.reloadData()
+        NotificationCenter.default.post(name: Notification.Name("HomeTableViewReload"), object: nil)
+        
+    }
+    
+    @objc func presentHomeNetworkingInfo(_ notification: NSNotification) {
+        
+        let networkingListBase = notification.object as! [HomeNetworkingInfo]
+       
+        // 초기화
+        networkingList.removeAll()
+        
+        // 홈 화면 네트워킹 리스트 필터링
+        networkingList.append(networkingListBase.filter{$0.status == "THIS_MONTH"}.compactMap{$0
+        }.first!)
+        networkingList.append(networkingListBase.filter{$0.status == "READY"}.compactMap{$0
+        }.first!)
+        networkingListBase.filter{$0.status == "CLOSED"}.compactMap{$0}.forEach{networkingList.append($0)}
+ 
+        // 컬렉션뷰 reload
+        networkingCollectionView.reloadData()
+        
+        NotificationCenter.default.post(name: Notification.Name("HomeTableViewReload"), object: nil)
+        
+    }
     
 }
 
@@ -338,9 +378,9 @@ extension HomeEventInfoTableViewCell: UICollectionViewDataSource, UICollectionVi
         
         switch collectionView.tag {
         case 0:
-            cell.configure(seminarList[indexPath.row])
+            cell.configureSeminarInfo(self.seminarList[indexPath.row])
         case 1:
-            cell.configure(networkingList[indexPath.row])
+            cell.configureNetworkingInfo(self.networkingList[indexPath.row])
         default:
             print("dataList Count Error")
         }
@@ -360,9 +400,9 @@ extension HomeEventInfoTableViewCell: UICollectionViewDataSource, UICollectionVi
         
         switch collectionView.tag {
         case 0:
-            NotificationCenter.default.post(name: Notification.Name("pushHomeDetailVC"), object: "넘겨줄 데이터")
+            NotificationCenter.default.post(name: Notification.Name("pushSeminarDetailVC"), object: seminarList[indexPath.row].programIdx)
         case 1:
-            NotificationCenter.default.post(name: Notification.Name("pushNetworkingDetailVC"), object: "넘겨줄 데이터")
+            NotificationCenter.default.post(name: Notification.Name("pushNetworkingDetailVC"), object: networkingList[indexPath.row].programIdx)
         default:
             print(">>>error: HomeEventInfoTableViewCell didSelectRowAt")
         }
