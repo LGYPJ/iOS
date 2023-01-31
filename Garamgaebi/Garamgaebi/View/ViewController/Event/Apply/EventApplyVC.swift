@@ -22,7 +22,7 @@ class EventApplyVC: UIViewController {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "세미나"
+        label.text = "세미나 신청하기"
         label.textColor = UIColor(hex: 0x000000,alpha: 0.8)
         label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
         return label
@@ -188,7 +188,7 @@ class EventApplyVC: UIViewController {
 	lazy var nameTitleLabel: UILabel = {
 		let label = UILabel()
 		label.text = "이름"
-		label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
 		label.textColor = .black
 		
 		return label
@@ -198,20 +198,30 @@ class EventApplyVC: UIViewController {
 		let textField = UITextField()
 		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
-		textField.layer.cornerRadius = 10
+		textField.layer.cornerRadius = 12
 		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
 		textField.leftViewMode = .always
 //		textField.placeholder = "이름을 입력해주세요"
-		textField.attributedPlaceholder = NSAttributedString(string: "이름을 입력해주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
+		textField.attributedPlaceholder = NSAttributedString(string: "이름을 입력해주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 14)!])
 
 
 		return textField
 	}()
 	
+	lazy var nameAlertLabel: UILabel = {
+		let label = UILabel()
+		label.textColor = .red
+		label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
+		label.text = "이름 형식을 확인해주세요."
+		label.isHidden = true
+		
+		return label
+	}()
+	
 	lazy var nicknameTitleLabel: UILabel = {
 		let label = UILabel()
 		label.text = "닉네임"
-		label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
 		label.textColor = .black
 		
 		return label
@@ -221,20 +231,30 @@ class EventApplyVC: UIViewController {
 		let textField = UITextField()
 		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
-		textField.layer.cornerRadius = 10
+		textField.layer.cornerRadius = 12
 		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
 		textField.leftViewMode = .always
 //		textField.placeholder = "닉네임을 입력해주세요"
-		textField.attributedPlaceholder = NSAttributedString(string: "닉네임을 입력해주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
+		textField.attributedPlaceholder = NSAttributedString(string: "닉네임을 입력해주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 14)!])
 
 		
 		return textField
 	}()
 	
+	lazy var nicknameAlertLabel: UILabel = {
+		let label = UILabel()
+		label.textColor = .red
+		label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
+		label.text = "닉네임이 일치하지 않습니다."
+		label.isHidden = true
+		
+		return label
+	}()
+	
 	lazy var numberTitleLabel: UILabel = {
 		let label = UILabel()
 		label.text = "전화번호"
-		label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
 		label.textColor = .black
 		
 		return label
@@ -244,14 +264,24 @@ class EventApplyVC: UIViewController {
 		let textField = UITextField()
 		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
-		textField.layer.cornerRadius = 10
+		textField.layer.cornerRadius = 12
 		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
 		textField.leftViewMode = .always
 //		textField.placeholder = "전화번호를 입력해주세요"
-		textField.attributedPlaceholder = NSAttributedString(string: "전화번호를 입력해주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
+		textField.attributedPlaceholder = NSAttributedString(string: "전화번호를 입력해주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 14)!])
 
 		
 		return textField
+	}()
+	
+	lazy var numberAlertLabel: UILabel = {
+		let label = UILabel()
+		label.textColor = .red
+		label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
+		label.text = "번호 형식이 올바르지 않습니다."
+		label.isHidden = true
+		
+		return label
 	}()
 	
 	lazy var descriptionTextView: UITextView = {
@@ -272,12 +302,32 @@ class EventApplyVC: UIViewController {
 		let button = UIButton()
 		button.setTitle("신청하기", for: .normal)
 		button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
-		button.backgroundColor = UIColor.mainBlue
+		button.backgroundColor = UIColor.mainGray
 		button.layer.cornerRadius = 10
+		button.addTarget(self, action: #selector(didTapRegisterButton), for: .touchUpInside)
+		button.isEnabled = false
+		
+		
 		return button
 	}()
 	
-    
+	// MARK: Properties
+	var isValidName = false {
+		didSet {
+			validName()
+		}
+	}
+	var isValidNickname = false {
+		didSet {
+			validNickname()
+		}
+	}
+	var isValidNumber = false {
+		didSet {
+			validNumber()
+		}
+	}
+	
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -285,6 +335,7 @@ class EventApplyVC: UIViewController {
 		
 		configureViews()
 		configureDummyData()
+		configureTextField()
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -363,7 +414,7 @@ extension EventApplyVC {
 			$0.edges.equalToSuperview()
 		}
 		
-		[eventInfoBackgroundView, nameTitleLabel, nameTextField, nicknameTitleLabel, nicknameTextField, numberTitleLabel, numberTextField, descriptionTextView]
+		[eventInfoBackgroundView, nameTitleLabel, nameTextField, nameAlertLabel, nicknameTitleLabel, nicknameTextField, nicknameAlertLabel, numberTitleLabel, numberTextField, numberAlertLabel, descriptionTextView]
 			.forEach {contentView.addSubview($0)}
 		
         // eventInfoBackgroundView
@@ -373,7 +424,7 @@ extension EventApplyVC {
 		
         // nameTitleLabel
 		nameTitleLabel.snp.makeConstraints {
-			$0.top.equalTo(eventInfoBackgroundView.snp.bottom).offset(24)
+			$0.top.equalTo(eventInfoBackgroundView.snp.bottom).offset(16)
 			$0.leading.equalToSuperview().inset(16)
 		}
 		
@@ -384,9 +435,14 @@ extension EventApplyVC {
 			$0.height.equalTo(48)
 		}
 		
+		nameAlertLabel.snp.makeConstraints {
+			$0.leading.equalToSuperview().inset(16)
+			$0.top.equalTo(nameTextField.snp.bottom).offset(4)
+		}
+		
         // nicknameTitleLabel
 		nicknameTitleLabel.snp.makeConstraints {
-			$0.top.equalTo(nameTextField.snp.bottom).offset(16)
+			$0.top.equalTo(nameAlertLabel.snp.bottom).offset(16)
 			$0.leading.equalToSuperview().inset(16)
 		}
 		
@@ -397,9 +453,14 @@ extension EventApplyVC {
 			$0.height.equalTo(48)
 		}
 		
+		nicknameAlertLabel.snp.makeConstraints {
+			$0.leading.equalToSuperview().inset(16)
+			$0.top.equalTo(nicknameTextField.snp.bottom).offset(4)
+		}
+		
         // numberTitleLabel
 		numberTitleLabel.snp.makeConstraints {
-			$0.top.equalTo(nicknameTextField.snp.bottom).offset(16)
+			$0.top.equalTo(nicknameAlertLabel.snp.bottom).offset(16)
 			$0.leading.equalToSuperview().inset(16)
 		}
 		
@@ -408,6 +469,11 @@ extension EventApplyVC {
 			$0.top.equalTo(numberTitleLabel.snp.bottom).offset(8)
 			$0.leading.trailing.equalToSuperview().inset(16)
 			$0.height.equalTo(48)
+		}
+		
+		numberAlertLabel.snp.makeConstraints {
+			$0.leading.equalToSuperview().inset(16)
+			$0.top.equalTo(numberTextField.snp.bottom).offset(4)
 		}
 		
         // descriptionTextView
@@ -436,8 +502,121 @@ extension EventApplyVC {
 		
 	}
 	
+	// textField delegate 등록
+	private func configureTextField() {
+		nameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+		nicknameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+		numberTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+		
+//		nameTextField.delegate = self
+//		nicknameTextField.delegate = self
+//		numberTextField.delegate = self
+	}
+	
+//	private func isValidName() {
+//		let nameRegEx = "[가-힣A-Za-z]{1,20}"
+//		let nameTest = NSPredicate(format: "SELF MATCHES %@", nameRegEx)
+//		let isValidName = nameTest.evaluate(with: nameTextField.text)
+//
+//		guard isValidName else {
+//			nameTextField.layer.borderColor = UIColor.red.cgColor
+//			nameAlertLabel.text = "이름 형식을 확인해주세요"
+//			registerButton.isEnabled = false
+//			registerButton.backgroundColor = .mainGray
+//			return
+//		}
+//
+//		registerButton.isEnabled = true
+//		registerButton.backgroundColor = .mainBlue
+//		nameAlertLabel.text = ""
+//
+//	}
+	
+	private func validateUserInfo() {
+		if isValidName && isValidNickname && isValidNumber {
+			UIView.animate(withDuration: 0.3) {[weak self] in
+				self?.registerButton.backgroundColor = .mainBlue
+				self?.registerButton.isEnabled = true
+			}
+		}
+	}
+	
+	private func validName() {
+		if isValidName {
+			HideAlert(textField: self.nameTextField, alertLabel: self.nameAlertLabel)
+		} else {
+			showAlert(textField: self.nameTextField, alertLabel: self.nameAlertLabel)
+		}
+	}
+	
+	private func validNickname() {
+		if isValidNickname {
+			HideAlert(textField: self.nicknameTextField, alertLabel: self.nicknameAlertLabel)
+		} else {
+			showAlert(textField: self.nicknameTextField, alertLabel: self.nicknameAlertLabel)
+		}
+	}
+	
+	private func validNumber() {
+		if isValidNumber {
+			HideAlert(textField: self.numberTextField, alertLabel: self.numberAlertLabel)
+		} else {
+			showAlert(textField: self.numberTextField, alertLabel: self.numberAlertLabel)
+		}
+	}
+	
+	private func showAlert(textField: UITextField, alertLabel: UILabel) {
+		textField.layer.borderColor = UIColor.red.cgColor
+		UIView.animate(withDuration: 0.3) {[weak self] in
+			self?.registerButton.backgroundColor = .mainGray
+			alertLabel.isHidden = false
+		}
+	}
+	
+	private func HideAlert(textField: UITextField, alertLabel: UILabel) {
+		textField.layer.borderColor = UIColor.black.cgColor
+		UIView.animate(withDuration: 0.3) {
+			alertLabel.isHidden = true
+		}
+	}
+	
 	// 뒤로가기 버튼 did tap
 	@objc private func didTapBackBarButton() {
 		self.navigationController?.popViewController(animated: true)
 	}
+	
+	@objc private func textFieldDidChange(_ sender: UITextField) {
+		
+		let text = sender.text ?? ""
+		
+		switch sender {
+		case nameTextField:
+			let nameRegEx =  "[가-힣A-Za-z]{1,20}"
+			let nameTest = NSPredicate(format: "SELF MATCHES %@", nameRegEx)
+			
+			self.isValidName = nameTest.evaluate(with: text)
+			// 이름 받는 property에 저장
+		case nicknameTextField:
+			// 유저 기본 닉네임과 동일
+			self.isValidNickname = text.isValidNickName()
+			//저장
+		case numberTextField:
+			let numberRegEx = "[0-9]{11}"
+			let numberTest = NSPredicate(format: "SELF MATCHES %@", numberRegEx)
+			
+			self.isValidNumber = numberTest.evaluate(with: text)
+			//저장
+		default:
+			print("error")
+		}
+		validateUserInfo()
+		
+	}
+	
+	@objc private func didTapRegisterButton() {
+		// alert and dismiss
+	}
 }
+
+
+
