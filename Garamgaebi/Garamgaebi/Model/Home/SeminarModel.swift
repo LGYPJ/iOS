@@ -1,5 +1,5 @@
 //
-//  HomeSeminarModel.swift
+//  SeminarModel.swift
 //  Garamgaebi
 //
 //  Created by 홍승완 on 2023/01/30.
@@ -14,25 +14,25 @@ struct HomeSeminarInfoResponse: Decodable {
     let result: [HomeSeminarInfo]?
 }
 
-struct HomeSeminarThisMonthInfoResponse: Decodable {
+struct SeminarThisMonthInfoResponse: Decodable {
     let isSuccess: Bool
     let code: Int
     let message: String
-    let result: HomeSeminarThisMonthInfo?
+    let result: SeminarThisMonthInfo?
 }
 
-struct HomeSeminarNextMonthInfoResponse: Decodable {
+struct SeminarNextMonthInfoResponse: Decodable {
     let isSuccess: Bool
     let code: Int
     let message: String
-    let result: HomeSeminarNextMonthInfo?
+    let result: SeminarNextMonthInfo?
 }
 
-struct HomeSeminarClosedInfoResponse: Decodable {
+struct SeminarClosedInfoResponse: Decodable {
     let isSuccess: Bool
     let code: Int
     let message: String
-    let result: [HomeSeminarClosedInfo]?
+    let result: [SeminarClosedInfo]?
 }
 
 struct HomeSeminarInfo: Decodable {
@@ -46,7 +46,7 @@ struct HomeSeminarInfo: Decodable {
     let isOpen: String
 }
 
-struct HomeSeminarThisMonthInfo: Decodable {
+struct SeminarThisMonthInfo: Decodable {
     let programIdx: Int
     let title: String
     let date: String
@@ -57,7 +57,7 @@ struct HomeSeminarThisMonthInfo: Decodable {
     let isOpen: String
 }
 
-struct HomeSeminarNextMonthInfo: Decodable {
+struct SeminarNextMonthInfo: Decodable {
     let programIdx: Int
     let title: String
     let date: String
@@ -68,7 +68,7 @@ struct HomeSeminarNextMonthInfo: Decodable {
     let isOpen: String
 }
 
-struct HomeSeminarClosedInfo: Decodable {
+struct SeminarClosedInfo: Decodable {
     let programIdx: Int
     let title: String
     let date: String

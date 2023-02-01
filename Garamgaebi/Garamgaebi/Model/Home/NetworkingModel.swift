@@ -1,5 +1,5 @@
 //
-//  HomeNetworkingModel.swift
+//  NetworkingModel.swift
 //  Garamgaebi
 //
 //  Created by 홍승완 on 2023/01/30.
@@ -14,25 +14,25 @@ struct HomeNetworkingInfoResponse: Decodable {
     let result: [HomeNetworkingInfo]?
 }
 
-struct HomeNetworkingThisMonthInfoResponse: Decodable {
+struct NetworkingThisMonthInfoResponse: Decodable {
     let isSuccess: Bool
     let code: Int
     let message: String
-    let result: HomeNetworkingThisMonthInfo?
+    let result: NetworkingThisMonthInfo?
 }
 
-struct HomeNetworkingNextMonthInfoResponse: Decodable {
+struct NetworkingNextMonthInfoResponse: Decodable {
     let isSuccess: Bool
     let code: Int
     let message: String
-    let result: HomeNetworkingNextMonthInfo?
+    let result: NetworkingNextMonthInfo?
 }
 
-struct HomeNetworkingClosedInfoResponse: Decodable {
+struct NetworkingClosedInfoResponse: Decodable {
     let isSuccess: Bool
     let code: Int
     let message: String
-    let result: [HomeNetworkingClosedInfo]?
+    let result: [NetworkingClosedInfo]?
 }
 
 struct HomeNetworkingInfo: Decodable {
@@ -46,7 +46,7 @@ struct HomeNetworkingInfo: Decodable {
     let isOpen: String
 }
 
-struct HomeNetworkingThisMonthInfo: Decodable {
+struct NetworkingThisMonthInfo: Decodable {
     let programIdx: Int
     let title: String
     let date: String
@@ -57,7 +57,7 @@ struct HomeNetworkingThisMonthInfo: Decodable {
     let isOpen: String
 }
 
-struct HomeNetworkingNextMonthInfo: Decodable {
+struct NetworkingNextMonthInfo: Decodable {
     let programIdx: Int
     let title: String
     let date: String
@@ -68,7 +68,7 @@ struct HomeNetworkingNextMonthInfo: Decodable {
     let isOpen: String
 }
 
-struct HomeNetworkingClosedInfo: Decodable {
+struct NetworkingClosedInfo: Decodable {
     let programIdx: Int
     let title: String
     let date: String

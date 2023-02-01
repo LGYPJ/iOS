@@ -88,6 +88,7 @@
 		60BD05032974187700F4B433 /* UnderlineSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD05022974187700F4B433 /* UnderlineSegmentedControl.swift */; };
 		60C6371A2984E1F100D2C814 /* HomeNetworkingPopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C637192984E1F100D2C814 /* HomeNetworkingPopUpVC.swift */; };
 		60C6371C2984E1FC00D2C814 /* HomeSeminarPopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C6371B2984E1FC00D2C814 /* HomeSeminarPopUpVC.swift */; };
+		60DCC895298A45AD002E7714 /* ViewAllViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DCC894298A45AD002E7714 /* ViewAllViewModel.swift */; };
 		60EC5310298900700068BD5F /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EC530F298900700068BD5F /* Date+.swift */; };
 		60EDD40329765BE100600807 /* ViewAllNetworkingDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EDD40229765BE100600807 /* ViewAllNetworkingDataModel.swift */; };
 		60EDD40529765C3400600807 /* ViewAllNetworkingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EDD40429765C3400600807 /* ViewAllNetworkingVC.swift */; };
@@ -95,8 +96,8 @@
 		60EDD4092976606400600807 /* ViewAllMyEventVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EDD4082976606400600807 /* ViewAllMyEventVC.swift */; };
 		60EDD40B2976611800600807 /* ViewAllMyEventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EDD40A2976611800600807 /* ViewAllMyEventTableViewCell.swift */; };
 		60EDD40D2976620B00600807 /* ViewAllMyEventDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EDD40C2976620B00600807 /* ViewAllMyEventDataModel.swift */; };
-		60F4C1542987E152004D9FCD /* HomeSeminarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F4C1532987E152004D9FCD /* HomeSeminarModel.swift */; };
-		60F4C1562987E330004D9FCD /* HomeNetworkingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F4C1552987E330004D9FCD /* HomeNetworkingModel.swift */; };
+		60F4C1542987E152004D9FCD /* SeminarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F4C1532987E152004D9FCD /* SeminarModel.swift */; };
+		60F4C1562987E330004D9FCD /* NetworkingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F4C1552987E330004D9FCD /* NetworkingModel.swift */; };
 		60F913FF296D2F2C00626C40 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F913FE296D2F2C00626C40 /* HomeVC.swift */; };
 		60F91401296D2F3D00626C40 /* ViewAllVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F91400296D2F3D00626C40 /* ViewAllVC.swift */; };
 		60F91403296D2F4800626C40 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F91402296D2F4800626C40 /* ProfileVC.swift */; };
@@ -215,6 +216,7 @@
 		60BD05022974187700F4B433 /* UnderlineSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineSegmentedControl.swift; sourceTree = "<group>"; };
 		60C637192984E1F100D2C814 /* HomeNetworkingPopUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNetworkingPopUpVC.swift; sourceTree = "<group>"; };
 		60C6371B2984E1FC00D2C814 /* HomeSeminarPopUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSeminarPopUpVC.swift; sourceTree = "<group>"; };
+		60DCC894298A45AD002E7714 /* ViewAllViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAllViewModel.swift; sourceTree = "<group>"; };
 		60EC530F298900700068BD5F /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		60EDD40229765BE100600807 /* ViewAllNetworkingDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAllNetworkingDataModel.swift; sourceTree = "<group>"; };
 		60EDD40429765C3400600807 /* ViewAllNetworkingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAllNetworkingVC.swift; sourceTree = "<group>"; };
@@ -222,8 +224,8 @@
 		60EDD4082976606400600807 /* ViewAllMyEventVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAllMyEventVC.swift; sourceTree = "<group>"; };
 		60EDD40A2976611800600807 /* ViewAllMyEventTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAllMyEventTableViewCell.swift; sourceTree = "<group>"; };
 		60EDD40C2976620B00600807 /* ViewAllMyEventDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAllMyEventDataModel.swift; sourceTree = "<group>"; };
-		60F4C1532987E152004D9FCD /* HomeSeminarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSeminarModel.swift; sourceTree = "<group>"; };
-		60F4C1552987E330004D9FCD /* HomeNetworkingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNetworkingModel.swift; sourceTree = "<group>"; };
+		60F4C1532987E152004D9FCD /* SeminarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarModel.swift; sourceTree = "<group>"; };
+		60F4C1552987E330004D9FCD /* NetworkingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingModel.swift; sourceTree = "<group>"; };
 		60F913FE296D2F2C00626C40 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		60F91400296D2F3D00626C40 /* ViewAllVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAllVC.swift; sourceTree = "<group>"; };
 		60F91402296D2F4800626C40 /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
@@ -472,8 +474,8 @@
 				60BD04F32973A47E00F4B433 /* HomeUserDataModel.swift */,
 				60BD04F92973C55D00F4B433 /* HomeMyEventDataModel.swift */,
 				60321601297A745400ACBB04 /* Notification */,
-				60F4C1532987E152004D9FCD /* HomeSeminarModel.swift */,
-				60F4C1552987E330004D9FCD /* HomeNetworkingModel.swift */,
+				60F4C1532987E152004D9FCD /* SeminarModel.swift */,
+				60F4C1552987E330004D9FCD /* NetworkingModel.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -606,6 +608,7 @@
 				2CED6900298390EA00C838BD /* SeminarDetailViewModel.swift */,
 				2CED690229867F1800C838BD /* NetworkingDetailViewModel.swift */,
 				2CED690629878AB200C838BD /* EventApplyCancelViewModel.swift */,
+				60DCC894298A45AD002E7714 /* ViewAllViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1041,7 +1044,7 @@
 				46C18D25297866E600A05CBF /* ProfileDataModel.swift in Sources */,
 				6082992C297FBDB000240036 /* HomeViewModel.swift in Sources */,
 				2CED6901298390EA00C838BD /* SeminarDetailViewModel.swift in Sources */,
-				60F4C1542987E152004D9FCD /* HomeSeminarModel.swift in Sources */,
+				60F4C1542987E152004D9FCD /* SeminarModel.swift in Sources */,
 				46876C692973D7E3000BA1B6 /* ProfileInputCareerVC.swift in Sources */,
 				46B4780B29700FEE002186A3 /* ProfileServiceVC.swift in Sources */,
 				46C18D2929788A7600A05CBF /* ProfileInputSNSVC.swift in Sources */,
@@ -1056,7 +1059,8 @@
 				2CED690529867F3300C838BD /* NetworkingDetailModel.swift in Sources */,
 				2CED690729878AB200C838BD /* EventApplyCancelViewModel.swift in Sources */,
 				2CDD9509297657FE004B8D56 /* BankListCollectionViewCell.swift in Sources */,
-				60F4C1562987E330004D9FCD /* HomeNetworkingModel.swift in Sources */,
+				60F4C1562987E330004D9FCD /* NetworkingModel.swift in Sources */,
+				60DCC895298A45AD002E7714 /* ViewAllViewModel.swift in Sources */,
 				2CDD94E529712E8E004B8D56 /* IceBreakingCardCollectionViewCell.swift in Sources */,
 				2CDD9502297551C4004B8D56 /* IceBreakingStartCardCollectionViewCell.swift in Sources */,
 				2CDD94FE2973BAB9004B8D56 /* CustomFlowLayout.swift in Sources */,
@@ -1272,11 +1276,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = QNLYL4GD4K;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Garamgaebi/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 공유 및 저장을 위해 접근 권한을 허용해 주세요.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -1288,6 +1294,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = garamgaebi.Garamgaebi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1303,11 +1310,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = QNLYL4GD4K;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Garamgaebi/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 공유 및 저장을 위해 접근 권한을 허용해 주세요.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -1319,6 +1328,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = garamgaebi.Garamgaebi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;

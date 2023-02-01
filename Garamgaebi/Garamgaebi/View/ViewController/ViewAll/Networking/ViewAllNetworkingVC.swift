@@ -10,11 +10,22 @@ import UIKit
 class ViewAllNetworkingVC: UIViewController {
     
     
-    private let dataList = ViewAllNetworkingDataModel.list
     private let sections: [String] = ["이번 달 네트워킹", "예정된 네트워킹", "마감된 네트워킹"]
-    private var dataList1: [ViewAllNetworkingDataModel] = []
-    private var dataList2: [ViewAllNetworkingDataModel] = []
-    private var dataList3: [ViewAllNetworkingDataModel] = []
+    private var dataList1: [NetworkingThisMonthInfo] = [] {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
+    private var dataList2: [NetworkingNextMonthInfo] = [] {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
+    private var dataList3: [NetworkingClosedInfo] = [] {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
     
     // MARK: - Subviews
     
@@ -42,7 +53,9 @@ class ViewAllNetworkingVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        dataDistribute()
+        
+        fetchData()
+        
         // Data가 없을 때 시연용
 //        dataList1 = []
 //        dataList2 = []
@@ -65,15 +78,21 @@ class ViewAllNetworkingVC: UIViewController {
         }
     }
     
-    func dataDistribute(){
-        dataList.compactMap { item in
-            if item.state == "오픈" {
-                dataList1.append(item)
-            } else if item.state == "오픈예정" {
-                dataList2.append(item)
-            } else if item.state == "마감" {
-                dataList3.append(item)
-            }
+    func fetchData(){
+        
+        // NetworkingThisMonthInfo의 data를 불러옴
+        ViewAllViewModel.getNetworkingThisMonthInfo  { [weak self] result in
+            self?.dataList1 = [result]
+        }
+        
+        // NetworkingNextMonthInfo의 data를 불러옴
+        ViewAllViewModel.getNetworkingNextMonthInfo  { [weak self] result in
+            self?.dataList2 = [result]
+        }
+        
+        // NetworkingClosedInfo의 data를 불러옴
+        ViewAllViewModel.getNetworkingClosedInfo { [weak self] result in
+            self?.dataList3 = result
         }
     }
     
@@ -173,6 +192,7 @@ extension ViewAllNetworkingVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ViewAllNetworkingTableViewCell.identifier, for: indexPath) as? ViewAllNetworkingTableViewCell else {return UITableViewCell()}
         
         switch indexPath.section {
@@ -180,24 +200,24 @@ extension ViewAllNetworkingVC: UITableViewDataSource, UITableViewDelegate {
             if dataList1.count == 0 {
                 cell.configureZeroCell(caseString: "이번 달은")
             } else {
-                cell.configure(dataList1[indexPath.row])
+                cell.configureThisMonthInfo(dataList1[indexPath.row])
             }
         case 1:
             if dataList2.count == 0 {
                 cell.configureZeroCell(caseString: "예정된")
             } else {
-                cell.configure(dataList2[indexPath.row])
+                cell.configureNextMonthInfo(dataList2[indexPath.row])
             }
         case 2:
             if dataList3.count == 0 {
                 cell.configureZeroCell(caseString: "마감된")
             } else {
-                cell.configure(dataList3[indexPath.row])
+                cell.configureClosedInfo(dataList3[indexPath.row])
             }
         default:
             print("dataList Count Error")
         }
-
+        
         return cell
         
     }

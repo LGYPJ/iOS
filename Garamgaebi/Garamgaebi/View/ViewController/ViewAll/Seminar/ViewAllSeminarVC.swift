@@ -10,11 +10,22 @@ import UIKit
 class ViewAllSeminarVC: UIViewController {
     
     
-    private let dataList = ViewAllSeminarDataModel.list
     private let sections: [String] = ["이번 달 세미나", "예정된 세미나", "마감된 세미나"]
-    private var dataList1: [ViewAllSeminarDataModel] = []
-    private var dataList2: [ViewAllSeminarDataModel] = []
-    private var dataList3: [ViewAllSeminarDataModel] = []
+    private var dataList1: [SeminarThisMonthInfo] = [] {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
+    private var dataList2: [SeminarNextMonthInfo] = [] {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
+    private var dataList3: [SeminarClosedInfo] = [] {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
     
     // MARK: - Subviews
     
@@ -42,7 +53,9 @@ class ViewAllSeminarVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        dataDistribute()
+        
+        fetchData()
+        
         // Data가 없을 때 시연용
 //        dataList1 = []
 //        dataList2 = []
@@ -65,16 +78,23 @@ class ViewAllSeminarVC: UIViewController {
         }
     }
     
-    func dataDistribute(){
-        dataList.compactMap { item in
-            if item.state == "오픈" {
-                dataList1.append(item)
-            } else if item.state == "오픈예정" {
-                dataList2.append(item)
-            } else if item.state == "마감" {
-                dataList3.append(item)
-            }
+    func fetchData(){
+
+        // SeminarThisMonthInfo의 data를 불러옴
+        ViewAllViewModel.getSeminarThisMonthInfo  { [weak self] result in
+            self?.dataList1 = [result]
         }
+        
+        // SeminarNextMonthInfo의 data를 불러옴
+        ViewAllViewModel.getSeminarNextMonthInfo  { [weak self] result in
+            self?.dataList2 = [result]
+        }
+        
+        // SeminarClosedInfo의 data를 불러옴
+        ViewAllViewModel.getSeminarClosedInfo { [weak self] result in
+            self?.dataList3 = result
+        }
+        
     }
     
     @objc private func pushNextView(_ sender: UIButton) {
@@ -180,19 +200,19 @@ extension ViewAllSeminarVC: UITableViewDataSource, UITableViewDelegate {
             if dataList1.count == 0 {
                 cell.configureZeroCell(caseString: "이번 달은")
             } else {
-                cell.configure(dataList1[indexPath.row])
+                cell.configureThisMonthInfo(dataList1[indexPath.row])
             }
         case 1:
             if dataList2.count == 0 {
                 cell.configureZeroCell(caseString: "예정된")
             } else {
-                cell.configure(dataList2[indexPath.row])
+                cell.configureNextMonthInfo(dataList2[indexPath.row])
             }
         case 2:
             if dataList3.count == 0 {
                 cell.configureZeroCell(caseString: "마감된")
             } else {
-                cell.configure(dataList3[indexPath.row])
+                cell.configureClosedInfo(dataList3[indexPath.row])
             }
         default:
             print("dataList Count Error")

@@ -160,29 +160,78 @@ class ViewAllSeminarTableViewCell: UITableViewCell {
         }
     }
     
-    public func configure(_ item: ViewAllSeminarDataModel) {
+    public func configureThisMonthInfo(_ item: SeminarThisMonthInfo) {
+        baseView.isHidden = false
+        zeroDataBackgroundView.isHidden = true
         
         titleInfoLabel.text = item.title
-        dateInfoLabel.text = item.date
         locationInfoLabel.text = item.location
-        switch item.state {
-        case "오픈":
-            contentView.backgroundColor = UIColor(hex: 0x356EFF, alpha: 0.8)
-            stateInfoLabel.text = item.state
-            [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,stateInfoLabel].forEach {
-                $0.textColor = .white
-            }
-        case "오픈예정":
-            contentView.backgroundColor = UIColor(hex: 0x356EFF, alpha: 0.1)
-            stateInfoLabel.text = item.state
-        case "마감":
-            contentView.backgroundColor = UIColor(hex: 0xF5F5F5)
-            stateInfoLabel.text = ""
-        default:
-            print("fatal error in ViewAllSeminarTableViewCell")
+        
+        contentView.backgroundColor = UIColor(hex: 0x356EFF, alpha: 0.8)
+        [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,stateInfoLabel].forEach {
+            $0.textColor = .white
         }
-     
+        
+        // item.date -> (String -> Date)
+        let date = item.date.toDate()
+        let dateformatter = DateFormatter()
+        // (Date -> String)
+        dateformatter.dateFormat = "yyyy-MM-dd"
+        let dateResult = dateformatter.string(from: date ?? Date())
+        dateInfoLabel.text = dateResult
+        
+        var dDayCount: Int = 0
+        dDayCount = (Calendar.current.dateComponents([.day], from: date ?? Date(), to: Date()).day ?? 0) - 1
+        stateInfoLabel.text = String("D\(dDayCount)")
     }
+    
+    public func configureNextMonthInfo(_ item: SeminarNextMonthInfo) {
+        baseView.isHidden = false
+        zeroDataBackgroundView.isHidden = true
+        
+        titleInfoLabel.text = item.title
+        locationInfoLabel.text = item.location
+
+        contentView.backgroundColor = UIColor(hex: 0x356EFF, alpha: 0.1)
+        [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,stateInfoLabel].forEach {
+            $0.textColor = UIColor(hex: 0x000000, alpha: 0.5)
+        }
+        
+        // item.date -> (String -> Date)
+        let date = item.date.toDate()
+        let dateformatter = DateFormatter()
+        // (Date -> String)
+        dateformatter.dateFormat = "yyyy-MM-dd"
+        let dateResult = dateformatter.string(from: date ?? Date())
+        dateInfoLabel.text = dateResult
+        
+        stateInfoLabel.text = "오픈예정"
+    }
+    
+    public func configureClosedInfo(_ item: SeminarClosedInfo) {
+        baseView.isHidden = false
+        zeroDataBackgroundView.isHidden = true
+        
+        titleInfoLabel.text = item.title
+        locationInfoLabel.text = item.location
+        
+        contentView.backgroundColor = UIColor(hex: 0xF5F5F5)
+        [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,stateInfoLabel].forEach {
+            $0.textColor = UIColor(hex: 0x000000, alpha: 0.5)
+        }
+        
+        // item.date -> (String -> Date)
+        let date = item.date.toDate()
+        let dateformatter = DateFormatter()
+        // (Date -> String)
+        dateformatter.dateFormat = "yyyy-MM-dd"
+        let dateResult = dateformatter.string(from: date ?? Date())
+        dateInfoLabel.text = dateResult
+        
+        stateInfoLabel.text = ""
+    }
+    
+    
     
     // TODO: API 통신 후 수정
     public func configureZeroCell(caseString: String) {

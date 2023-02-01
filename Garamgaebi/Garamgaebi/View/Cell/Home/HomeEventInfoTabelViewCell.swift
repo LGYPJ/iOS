@@ -268,11 +268,13 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         // 초기화
         seminarList.removeAll()
         
+        // TODO: - 서버 정상화 이후 수정
+        
         // 홈 화면 세미나 리스트 필터링
         seminarList.append(seminarListBase.filter{$0.status == "THIS_MONTH"}.compactMap{$0
-        }.first!)
+        }.first ?? HomeSeminarInfo(programIdx: 1, title: "123", date: "123", location: "123", type: "123", payment: "123", status: "123", isOpen: "123"))
         seminarList.append(seminarListBase.filter{$0.status == "READY"}.compactMap{$0
-        }.first!)
+        }.first ?? HomeSeminarInfo(programIdx: 1, title: "123", date: "123", location: "123", type: "123", payment: "123", status: "123", isOpen: "123"))
         seminarListBase.filter{$0.status == "CLOSED"}.compactMap{$0}.forEach{seminarList.append($0)}
         
         // 컬렉션뷰 reload
@@ -290,9 +292,9 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         
         // 홈 화면 네트워킹 리스트 필터링
         networkingList.append(networkingListBase.filter{$0.status == "THIS_MONTH"}.compactMap{$0
-        }.first!)
+        }.first ?? HomeNetworkingInfo(programIdx: 1, title: "123", date: "123", location: "123", type: "123", payment: "123", status: "123", isOpen: "123"))
         networkingList.append(networkingListBase.filter{$0.status == "READY"}.compactMap{$0
-        }.first!)
+        }.first ?? HomeNetworkingInfo(programIdx: 1, title: "123", date: "123", location: "123", type: "123", payment: "123", status: "123", isOpen: "123"))
         networkingListBase.filter{$0.status == "CLOSED"}.compactMap{$0}.forEach{networkingList.append($0)}
  
         // 컬렉션뷰 reload
