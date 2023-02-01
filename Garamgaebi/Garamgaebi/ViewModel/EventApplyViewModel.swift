@@ -11,8 +11,6 @@ class EventApplyViewModel {
 	public static func postApplyProgram(memberId: Int, programId: Int, name: String, nickname: String, phone: String, completion: @escaping ((EventApplyModel) -> Void)) {
 		let url = "https://garamgaebi.shop/applies/programs/0/enroll"
 		
-//		let body = EventApplyPostModel(memberIdx: memberId, programIdx: programId, name: name, nickname: nickname, phone: phone)
-		
 		let body: [String: Any] = [
 			"memberIdx": memberId,
 			"programIdx": programId,

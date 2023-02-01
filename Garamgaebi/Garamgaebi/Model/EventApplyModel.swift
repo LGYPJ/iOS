@@ -13,11 +13,3 @@ struct EventApplyModel: Decodable {
 	let message: String
 //	let result: Int
 }
-
-struct EventApplyPostModel: Encodable {
-	let memberIdx: Int
-	let programIdx: Int
-	let name: String
-	let nickname: String
-	let phone: String
-}

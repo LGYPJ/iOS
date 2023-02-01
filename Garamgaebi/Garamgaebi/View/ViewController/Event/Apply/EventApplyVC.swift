@@ -213,7 +213,8 @@ class EventApplyVC: UIViewController {
 		label.textColor = .red
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
 		label.text = "이름 형식을 확인해주세요."
-		label.isHidden = true
+//		label.isHidden = true
+		label.alpha = 0
 		
 		return label
 	}()
@@ -545,7 +546,7 @@ extension EventApplyVC {
 		if isValidName {
 			HideAlert(textField: self.nameTextField, alertLabel: self.nameAlertLabel)
 		} else {
-			showAlert(textField: self.nameTextField, alertLabel: self.nameAlertLabel)
+			showAlert(textField: self.nameTextField, alertLabel: self.nameAlertLabel, status: self.isValidName)
 		}
 	}
 	
@@ -553,7 +554,7 @@ extension EventApplyVC {
 		if isValidNickname {
 			HideAlert(textField: self.nicknameTextField, alertLabel: self.nicknameAlertLabel)
 		} else {
-			showAlert(textField: self.nicknameTextField, alertLabel: self.nicknameAlertLabel)
+			showAlert(textField: self.nicknameTextField, alertLabel: self.nicknameAlertLabel, status: self.isValidNickname)
 		}
 	}
 	
@@ -561,22 +562,26 @@ extension EventApplyVC {
 		if isValidNumber {
 			HideAlert(textField: self.numberTextField, alertLabel: self.numberAlertLabel)
 		} else {
-			showAlert(textField: self.numberTextField, alertLabel: self.numberAlertLabel)
+			showAlert(textField: self.numberTextField, alertLabel: self.numberAlertLabel, status: self.isValidNumber)
 		}
 	}
 	
-	private func showAlert(textField: UITextField, alertLabel: UILabel) {
-		textField.layer.borderColor = UIColor.red.cgColor
+	private func showAlert(textField: UITextField, alertLabel: UILabel, status: Bool) {
+		
 		UIView.animate(withDuration: 0.3) {[weak self] in
+			textField.layer.borderColor = UIColor.red.cgColor
 			self?.registerButton.backgroundColor = .mainGray
-			alertLabel.isHidden = false
+			alertLabel.alpha = 1
+
 		}
 	}
 	
 	private func HideAlert(textField: UITextField, alertLabel: UILabel) {
-		textField.layer.borderColor = UIColor.black.cgColor
+		
 		UIView.animate(withDuration: 0.3) {
-			alertLabel.isHidden = true
+			textField.layer.borderColor = UIColor.black.cgColor
+//			alertLabel.isHidden = true
+			alertLabel.alpha = 0
 		}
 	}
 	
@@ -593,8 +598,10 @@ extension EventApplyVC {
 		case nameTextField:
 			let nameRegEx =  "[가-힣A-Za-z]{1,20}"
 			let nameTest = NSPredicate(format: "SELF MATCHES %@", nameRegEx)
+			let result = nameTest.evaluate(with: text)
 			
-			self.isValidName = nameTest.evaluate(with: text)
+			self.isValidName = result
+			
 			// 이름 받는 property에 저장
 		case nicknameTextField:
 			// 유저 기본 닉네임과 동일
