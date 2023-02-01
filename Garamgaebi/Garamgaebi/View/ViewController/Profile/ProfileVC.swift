@@ -9,6 +9,7 @@ import UIKit
 
 import SnapKit
 import Then
+import Alamofire
 
 class ProfileVC: UIViewController, EditProfileDataDelegate {
     
@@ -253,11 +254,14 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         super.viewDidLoad()
         
         configureLayouts()
-        configureDummyData()
+//        configureDummyData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        // 서버 통신
+        getMyInfo()
         
         navigationController?.navigationBar.isHidden = true
         tabBarController?.tabBar.isHidden = false
@@ -530,6 +534,60 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
+    // MARK: - 내프로필 정보
+    func getMyInfo() {
+        
+        // 추후 로그인 구현 후 변경
+        let memberIdx: Int = 1
+        
+        // http 요청 주소 지정
+        let url = "https://garamgaebi.shop/profile/\(memberIdx)"
+        
+        // http 요청 헤더 지정
+        let header : HTTPHeaders = [
+            "Content-Type" : "application/json",
+        ]
+        
+        // httpBody에 parameters 추가
+        AF.request(
+            url, // 주소
+            method: .get, // 전송 타입
+            encoding: JSONEncoding.default, // 인코딩 스타일
+            headers: header // 헤더 지정
+        )
+        .validate() // statusCode:  200..<300
+        .responseDecodable(of: ProfileResponse.self) { response in
+            switch response.result {
+            case .success(let response):
+                if response.isSuccess {
+                    print("회원 정보 불러오기 성공")
+                    let result = response.result
+                    
+                    // 값 넣어주기
+                    self.nameLabel.text = result.nickName
+                    self.orgLabel.text = result.belong
+                    self.emailLabel.text = result.profileEmail
+                    if let userIntro = result.content { // 자기소개가 있으면
+                        self.introduceTextField.text = userIntro
+                    } else {
+                        self.introduceTextField.text = ""
+                    }
+//                    if let userProfileImg = result.profileUrl { // 프로필 이미지 값이 있으면
+//                        self.profileImageView.setImage(UIImage(named: userProfileImg), for: .normal)
+//                    } else {
+//                        self.profileImageView.setImage(UIImage(named: "profile"), for: .normal)
+//                    }
+//                    completion(result)
+                } else {
+                    // 통신은 정상적으로 됐으나(200), error발생
+                    print("실패(내프로필): \(response.message)")
+                }
+            case .failure(let error):
+                // 실제 HTTP에러 404 또는 디코드 에러?
+                print("실패(AF-내프로필): \(error.localizedDescription)")
+            }
+        }
+    }
     
     // TODO: API연동 후 삭제
     func configureDummyData() {
