@@ -512,27 +512,16 @@ extension EventApplyVC {
 //		nameTextField.delegate = self
 //		nicknameTextField.delegate = self
 //		numberTextField.delegate = self
+		
+		nameTextField.returnKeyType = .next
+		nicknameTextField.returnKeyType = .next
+		numberTextField.returnKeyType = .done
+		
+		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 	}
 	
-//	private func isValidName() {
-//		let nameRegEx = "[가-힣A-Za-z]{1,20}"
-//		let nameTest = NSPredicate(format: "SELF MATCHES %@", nameRegEx)
-//		let isValidName = nameTest.evaluate(with: nameTextField.text)
-//
-//		guard isValidName else {
-//			nameTextField.layer.borderColor = UIColor.red.cgColor
-//			nameAlertLabel.text = "이름 형식을 확인해주세요"
-//			registerButton.isEnabled = false
-//			registerButton.backgroundColor = .mainGray
-//			return
-//		}
-//
-//		registerButton.isEnabled = true
-//		registerButton.backgroundColor = .mainBlue
-//		nameAlertLabel.text = ""
-//
-//	}
-	
+	// 3개의 textField가 모두 조건을 만족했을때 버튼 활성화
 	private func validateUserInfo() {
 		if isValidName && isValidNickname && isValidNumber {
 			UIView.animate(withDuration: 0.3) {[weak self] in
@@ -633,7 +622,22 @@ extension EventApplyVC {
 			}
 		})
 	}
+	
+	@objc func keyboardWillShow(notification: NSNotification) {
+		guard let userInfo = notification.userInfo,
+			  let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {return}
+		
+		let contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardFrame.size.height, right: 0.0)
+		scrollView.contentInset = contentInset
+		scrollView.scrollIndicatorInsets = contentInset
+		
+	}
+	
+	@objc func keyboardWillHide(notification: NSNotification) {
+		let contentInset = UIEdgeInsets.zero
+			scrollView.contentInset = contentInset
+			scrollView.scrollIndicatorInsets = contentInset
+	}
 }
-
 
 
