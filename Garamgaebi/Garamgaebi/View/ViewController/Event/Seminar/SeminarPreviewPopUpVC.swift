@@ -206,7 +206,7 @@ extension SeminarPreviewPopUpVC {
 		titleLabel.text = previewInfo.title
 		descriptionTextView.text = previewInfo.content
 		
-		profileImageView.image = UIImage(systemName: previewInfo.profileImgUrl)?.withTintColor(.gray, renderingMode: .alwaysOriginal)
+		profileImageView.image = UIImage(named: previewInfo.profileImgUrl)
 		// TODO: profileImage, 발표자료 URL 처리
 		
 		

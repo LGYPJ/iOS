@@ -15,11 +15,10 @@ class SeminarDetailViewModel {
 //		let dummyData = SeminarDetailInfo(programIdx: 0,title: "2차 세미나", date: "2023-1-27 오후 8시", location: "AI공학관 302호", fee: "무료", endDate: "2023-1-20 오후 11시 59분", programStatus: "open", userButtonStatus: "신청하기")
 //		completion(dummyData)
 		let url = "https://garamgaebi.shop/seminars/info"
-		let params = [
-			"memberIdx": memberId,
-			"programIdx": seminarId
-		]
-		AF.request(url, method: .get, parameters: params)
+		// TODO: memberId jwt로 전환 예정
+//		let params = bodyDataStruct(memberIdx: memberId, programIdx: seminarId)
+		
+		AF.request(url, method: .get, parameters: nil)
 			.validate()
 			.responseDecodable(of: SeminarDetailInfoResponse.self) { response in
 				switch response.result {
@@ -40,10 +39,10 @@ class SeminarDetailViewModel {
 	
 	// 세미나 참가자 request
 	public static func requestSeminarAttendant(seminarId: Int, completion: @escaping ([SeminarDetailAttendant]) -> Void) {
-//		let dummyData = [ SeminarDetailAttendant(memberIdx: 0, nickname: "연현", profileImg: "person.circle"),
-//						  SeminarDetailAttendant(memberIdx: 1, nickname: "연현2", profileImg: "person"),
-//						  SeminarDetailAttendant(memberIdx: 2,nickname: "연현3", profileImg: "person.fill"),
-//						  SeminarDetailAttendant(memberIdx: 3, nickname: "연현4", profileImg: "person.circle")
+//		let dummyData = [ SeminarDetailAttendant(memberIdx: 0, nickname: "연현", profileImg: "ExProfileImage"),
+//						  SeminarDetailAttendant(memberIdx: 1, nickname: "연현2", profileImg: "ExProfileImage"),
+//						  SeminarDetailAttendant(memberIdx: 2,nickname: "연현3", profileImg: "ExProfileImage"),
+//						  SeminarDetailAttendant(memberIdx: 3, nickname: "연현4", profileImg: "ExProfileImage")
 //
 //		]
 //		completion(dummyData)
@@ -67,9 +66,9 @@ class SeminarDetailViewModel {
 	
 	// 세미나 발표미리보기 request
 	public static func requestSeminarPreview(seminarId: Int, completion: @escaping ([SeminarDetailPreview]) -> Void) {
-//		let dummyData = [ SeminarDetailPreview(presentationIdx: 0, title: "mvvvm에 대해 알아보자", nickname: "연현", profileImgUrl: "person", organization: "재학생", content: "mvvm은 model, view, viewmodel로 이루어져있습니다.", presentationUrl: nil),
-//						  SeminarDetailPreview(presentationIdx: 0, title: "swift에 대해 알아보자", nickname: "팀 쿡", profileImgUrl: "person", organization: "apple", content: "swift는 apple에서 개발한 언어로 아주 좋습니다.", presentationUrl: nil),
-//						  SeminarDetailPreview(presentationIdx: 0, title: "가천대학교에 대해 알아보자", nickname: "이길여", profileImgUrl: "person", organization: "가천대학교", content: "가천대학교는 경기도 성남시에 위치한 명문대입니다.", presentationUrl: nil)
+//		let dummyData = [ SeminarDetailPreview(presentationIdx: 0, title: "mvvvm에 대해 알아보자", nickname: "연현", profileImgUrl: "ExProfileImage", organization: "재학생", content: "mvvm은 model, view, viewmodel로 이루어져있습니다.", presentationUrl: nil),
+//						  SeminarDetailPreview(presentationIdx: 0, title: "swift에 대해 알아보자", nickname: "팀 쿡", profileImgUrl: "ExProfileImage", organization: "apple", content: "swift는 apple에서 개발한 언어로 아주 좋습니다.", presentationUrl: nil),
+//						  SeminarDetailPreview(presentationIdx: 0, title: "가천대학교에 대해 알아보자", nickname: "이길여", profileImgUrl: "ExProfileImage", organization: "가천대학교", content: "가천대학교는 경기도 성남시에 위치한 명문대입니다.", presentationUrl: nil)
 //		]
 //		completion(dummyData)
 		let url = "https://garamgaebi.shop/seminars/\(seminarId)/presentations"

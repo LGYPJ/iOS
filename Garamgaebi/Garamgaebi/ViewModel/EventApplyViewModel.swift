@@ -1,23 +1,22 @@
 //
-//  EventApplyCancelViewModel.swift
+//  EventApplyViewModel.swift
 //  Garamgaebi
 //
-//  Created by 정현우 on 2023/01/30.
+//  Created by 정현우 on 2023/01/31.
 //
 
 import Alamofire
 
-class EventApplyCancelViewModel {
-	// MARK: requestData
-	// post 은행 계좌
-	public static func postBankAccount(memberId: Int, programId: Int, bank: String, account: String, completion: @escaping ((EventApplyModel) -> Void)) {
-		let url = "https://garamgaebi.shop/applies/programs/0/leave"
+class EventApplyViewModel {
+	public static func postApplyProgram(memberId: Int, programId: Int, name: String, nickname: String, phone: String, completion: @escaping ((EventApplyModel) -> Void)) {
+		let url = "https://garamgaebi.shop/applies/programs/0/enroll"
 		
 		let body: [String: Any] = [
 			"memberIdx": memberId,
 			"programIdx": programId,
-			"bank": bank,
-			"account": account
+			"name": name,
+			"nickname": nickname,
+			"phone": phone
 		]
 		
 		AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default)
@@ -28,7 +27,6 @@ class EventApplyCancelViewModel {
 					if result.isSuccess {
 						completion(result)
 					} else {
-						completion(result)
 						print("실패(프로그램 신청): \(result.message)")
 					}
 				case .failure(let error):

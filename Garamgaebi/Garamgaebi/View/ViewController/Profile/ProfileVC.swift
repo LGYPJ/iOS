@@ -9,6 +9,7 @@ import UIKit
 
 import SnapKit
 import Then
+import Alamofire
 
 class ProfileVC: UIViewController, EditProfileDataDelegate {
     
@@ -47,7 +48,8 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     
     let contentView = UIView()
     
-    let profileImageView = UIImageView().then {
+    var profileImageView = UIImageView().then {
+        $0.clipsToBounds = true
         $0.layer.cornerRadius = 50
         $0.backgroundColor = .mainGray
     }
@@ -80,11 +82,11 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     
     let introduceTextField = UITextView().then {
         $0.layer.borderWidth = 1
-        $0.layer.borderColor = UIColor.systemGray5.cgColor // UIColor.lightGray.withAlphaComponent(0.7).cgColor
+        $0.layer.borderColor = UIColor.mainGray.cgColor
         $0.layer.cornerRadius = 12
         $0.textContainerInset = UIEdgeInsets(top: 12.0, left: 12.0, bottom: 12.0, right: 12.0)
-        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14) // .systemFont(ofSize: 18)
-        $0.textColor = .black
+        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        $0.textColor = .mainBlack
         $0.isUserInteractionEnabled = false
     }
     
@@ -103,7 +105,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         $0.layer.cornerRadius = 12
         
         $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        $0.layer.backgroundColor = UIColor.systemGray6.cgColor
+        $0.layer.backgroundColor = UIColor(hex: 0xF5F5F5).cgColor
     }
     let snsTitleLabel = UILabel().then {
         $0.text = "SNS"
@@ -152,7 +154,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         $0.layer.cornerRadius = 12
         
         $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        $0.layer.backgroundColor = UIColor.systemGray6.cgColor
+        $0.layer.backgroundColor = UIColor(hex: 0xF5F5F5).cgColor
     }
     let careerTitleLabel = UILabel().then {
         $0.text = "경력"
@@ -203,7 +205,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         $0.layer.cornerRadius = 12
         
         $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        $0.layer.backgroundColor = UIColor.systemGray6.cgColor
+        $0.layer.backgroundColor = UIColor(hex: 0xF5F5F5).cgColor
     }
     let eduTitleLabel = UILabel().then {
         $0.text = "교육"
@@ -252,7 +254,10 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         super.viewDidLoad()
         
         configureLayouts()
-        configureDummyData()
+//        configureDummyData()
+        
+        // 서버 통신
+        getMyInfo()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -466,7 +471,8 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         addEduBtn.addTarget(self,action: #selector(self.educationButtonDidTap(_:)), for: .touchUpInside)
     }
     
-    func editData(nickname: String, organization: String, email: String, introduce: String) {
+    func editData(image: String, nickname: String, organization: String, email: String, introduce: String) {
+        self.profileImageView.image = UIImage(named: image)
         self.nameLabel.text = nickname
         self.orgLabel.text = organization
         self.emailLabel.text = email
@@ -474,7 +480,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     }
     
     @objc private func serviceButtonDidTap(_ sender : UIButton) {
-        print("고객센터 버튼 클릭")
+//        print("고객센터 버튼 클릭")
         
         // 화면 전환
         let nextVC = ProfileServiceVC()
@@ -482,7 +488,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     }
     
     @objc private func editButtonDidTap(_ sender : UIButton) {
-        print("프로필 편집 버튼 클릭")
+//        print("프로필 편집 버튼 클릭")
         
         // 화면 전환
         let nextVC = ProfileEditVC()
@@ -505,7 +511,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     }
     
     @objc private func snsButtonDidTap(_ sender : UIButton) {
-        print("SNS 추가 버튼 클릭")
+//        print("SNS 추가 버튼 클릭")
         
         // 화면 전환
         let nextVC = ProfileInputSNSVC()
@@ -513,7 +519,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     }
     
     @objc private func careerButtonDidTap(_ sender : UIButton) {
-        print("경력 추가 버튼 클릭")
+//        print("경력 추가 버튼 클릭")
         
         // 화면 전환
         let nextVC = ProfileInputCareerVC()
@@ -521,13 +527,67 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     }
     
     @objc private func educationButtonDidTap(_ sender : UIButton) {
-        print("교육 추가 버튼 클릭")
+//        print("교육 추가 버튼 클릭")
         
         // 화면 전환
         let nextVC = ProfileInputEducationVC()
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
+    // MARK: - 내프로필 정보
+    func getMyInfo() {
+        
+        // 추후 로그인 구현 후 변경
+        let memberIdx: Int = 1
+        
+        // http 요청 주소 지정
+        let url = "https://garamgaebi.shop/profile/\(memberIdx)"
+        
+        // http 요청 헤더 지정
+        let header : HTTPHeaders = [
+            "Content-Type" : "application/json",
+        ]
+        
+        // httpBody에 parameters 추가
+        AF.request(
+            url, // 주소
+            method: .get, // 전송 타입
+            encoding: JSONEncoding.default, // 인코딩 스타일
+            headers: header // 헤더 지정
+        )
+        .validate() // statusCode:  200..<300
+        .responseDecodable(of: ProfileResponse.self) { response in
+            switch response.result {
+            case .success(let response):
+                if response.isSuccess {
+                    print("성공(내프로필): \(response.message)")
+                    let result = response.result
+                    
+                    // 값 넣어주기
+                    self.nameLabel.text = result.nickName
+                    self.orgLabel.text = result.belong
+                    self.emailLabel.text = result.profileEmail
+                    if let userIntro = result.content { // 자기소개가 있으면
+                        self.introduceTextField.text = userIntro
+                    } else {
+                        self.introduceTextField.text = ""
+                    }
+//                    if let userProfileImg = result.profileUrl { // 프로필 이미지 값이 있으면
+//                        self.profileImageView.setImage(UIImage(named: userProfileImg), for: .normal)
+//                    } else {
+//                        self.profileImageView.setImage(UIImage(named: "profile"), for: .normal)
+//                    }
+//                    completion(result)
+                } else {
+                    // 통신은 정상적으로 됐으나(200), error발생
+                    print("실패(내프로필): \(response.message)")
+                }
+            case .failure(let error):
+                // 실제 HTTP에러 404 또는 디코드 에러?
+                print("실패(AF-내프로필): \(error.localizedDescription)")
+            }
+        }
+    }
     
     // TODO: API연동 후 삭제
     func configureDummyData() {

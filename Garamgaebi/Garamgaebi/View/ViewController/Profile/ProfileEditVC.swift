@@ -9,10 +9,11 @@ import UIKit
 
 import SnapKit
 import Photos
+import Alamofire
 
 
 protocol EditProfileDataDelegate: AnyObject {
-    func editData(nickname: String, organization: String, email: String, introduce: String)
+    func editData(image: String, nickname: String, organization: String, email: String, introduce: String)
 }
 
 class ProfileEditVC: UIViewController, UITextFieldDelegate {
@@ -69,7 +70,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.text = "닉네임 *"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
     }
-    let nameTextField = UITextField().then {
+    lazy var nameTextField = UITextField().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.placeholder = "닉네임을 입럭해주세요 (최대 8글자)"
         $0.basicTextField()
@@ -82,7 +83,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.text = "소속 *"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
     }
-    let orgTextField = UITextField().then {
+    lazy var orgTextField = UITextField().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.placeholder = "소속을 입럭해주세요"
         $0.basicTextField()
@@ -95,7 +96,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.text = "이메일 *"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
     }
-    let emailTextField = UITextField().then {
+    lazy var emailTextField = UITextField().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.placeholder = "이메일을 입럭해주세요"
         $0.basicTextField()
@@ -305,7 +306,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
                 let keyboardHeight = keyboardFrame.cgRectValue.height
                 self.view.frame.origin.y -= keyboardHeight
-                print("show keyboard")
+//                print("show keyboard")
             }
         }
     }
@@ -317,7 +318,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
                 let keyboardHeight = keyboardFrame.cgRectValue.height
                 self.view.frame.origin.y += keyboardHeight
-                print("hide keyboard")
+//                print("hide keyboard")
             }
         }
     }
@@ -331,13 +332,13 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             print(state)
         }
         
-        print("프로필 이미지 클릭")
+//        print("프로필 이미지 클릭")
         
     }
     
     // 완료하기 버튼 did tap
     @objc private func doneButtonDidTap() {
-        print("완료하기 버튼 클릭")
+//        print("완료하기 버튼 클릭")
         
         // 텍스트값 가져오기
         guard let editName = nameTextField.text else { return }
@@ -345,16 +346,64 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         guard let editEmail = emailTextField.text else { return }
         guard let editIntroduce = introduceTextField.text else { return }
         
+        // 임시
+        let profileUrl = "ExProfileImage"
+        let memberIdx: Int = 1
+        
         // 변경된 이름값 담기
-        self.delegate?.editData(nickname: editName, organization: editOrg, email: editEmail, introduce: editIntroduce)
+        self.delegate?.editData(image: profileUrl, nickname: editName, organization: editOrg, email: editEmail, introduce: editIntroduce)
+        
+        patchMyInfo(memberIdx: memberIdx, nickName: editName, belong: editOrg, profileEmail: editEmail, content: editIntroduce, profileUrl: profileUrl)
         
         self.navigationController?.popViewController(animated: true)
     }
     
-    
+    // MARK: - 유저 정보 수정
+    func patchMyInfo(memberIdx: Int, nickName: String, belong: String, profileEmail: String, content: String, profileUrl: String) {
+        
+        // http 요청 주소 지정
+        let url = "https://garamgaebi.shop/profile/edit/\(memberIdx)"
+        
+        // http 요청 헤더 지정
+        let header : HTTPHeaders = [
+            "Content-Type" : "application/json",
+        ]
+        let bodyData: Parameters = [
+            "memberIdx": memberIdx,
+            "nickName": nickName,
+            "belong" : belong,
+            "profileEmail" : profileEmail,
+            "content": content,
+            "profileUrl": profileUrl
+        ]
+//        print(nickName, profileEmail)
+        
+        // httpBody 에 parameters 추가
+        AF.request(
+            url,
+            method: .post,
+            parameters: bodyData,
+            encoding: JSONEncoding.default,
+            headers: header
+        )
+        .validate()
+        .responseDecodable(of: ProfileEditResponse.self) { response in
+            switch response.result {
+            case .success(let response):
+                if response.isSuccess {
+                    print("성공(프로필수정): \(response.message)")
+                } else {
+                    print("실패(프로필수정): \(response.message)")
+                }
+            case .failure(let error):
+                print("실패(AF-프로필수정): \(error.localizedDescription)")
+            }
+        }
+    }
+
     // 뒤로가기 버튼 did tap
     @objc private func didTapBackBarButton() {
-        print("뒤로가기 버튼 클릭")
+//        print("뒤로가기 버튼 클릭")
         self.navigationController?.popViewController(animated: true)
     }
     
