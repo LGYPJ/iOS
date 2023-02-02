@@ -36,6 +36,8 @@
 		2CED690329867F1800C838BD /* NetworkingDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED690229867F1800C838BD /* NetworkingDetailViewModel.swift */; };
 		2CED690529867F3300C838BD /* NetworkingDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED690429867F3300C838BD /* NetworkingDetailModel.swift */; };
 		2CED690729878AB200C838BD /* EventApplyCancelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED690629878AB200C838BD /* EventApplyCancelViewModel.swift */; };
+		2CED690B298940E200C838BD /* EventApplyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED690A298940E200C838BD /* EventApplyViewModel.swift */; };
+		2CED690D2989426A00C838BD /* EventApplyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED690C2989426A00C838BD /* EventApplyModel.swift */; };
 		460C0C2B296D855800FF5085 /* ProfileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460C0C2A296D855800FF5085 /* ProfileEditVC.swift */; };
 		4614A1732984BA9500D12108 /* ProfileSNSTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4614A1722984BA9500D12108 /* ProfileSNSTableViewCell.swift */; };
 		462183F5297C51B800B9A035 /* ServiceBottomSheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462183F4297C51B800B9A035 /* ServiceBottomSheetVC.swift */; };
@@ -154,6 +156,8 @@
 		2CED690229867F1800C838BD /* NetworkingDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingDetailViewModel.swift; sourceTree = "<group>"; };
 		2CED690429867F3300C838BD /* NetworkingDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingDetailModel.swift; sourceTree = "<group>"; };
 		2CED690629878AB200C838BD /* EventApplyCancelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventApplyCancelViewModel.swift; sourceTree = "<group>"; };
+		2CED690A298940E200C838BD /* EventApplyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventApplyViewModel.swift; sourceTree = "<group>"; };
+		2CED690C2989426A00C838BD /* EventApplyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventApplyModel.swift; sourceTree = "<group>"; };
 		4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Garamgaebi_GaramgaebiUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		460C0C2A296D855800FF5085 /* ProfileEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditVC.swift; sourceTree = "<group>"; };
 		4614A1722984BA9500D12108 /* ProfileSNSTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSNSTableViewCell.swift; sourceTree = "<group>"; };
@@ -439,6 +443,7 @@
 				603215FE297A742100ACBB04 /* ViewAll */,
 				2CED68FE29838B2E00C838BD /* SeminarDetailModel.swift */,
 				2CED690429867F3300C838BD /* NetworkingDetailModel.swift */,
+				2CED690C2989426A00C838BD /* EventApplyModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -601,6 +606,7 @@
 				2CED6900298390EA00C838BD /* SeminarDetailViewModel.swift */,
 				2CED690229867F1800C838BD /* NetworkingDetailViewModel.swift */,
 				2CED690629878AB200C838BD /* EventApplyCancelViewModel.swift */,
+				2CED690A298940E200C838BD /* EventApplyViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1046,6 +1052,7 @@
 				2CDD94FC2972DE9F004B8D56 /* IceBreakingUserCollectionViewCell.swift in Sources */,
 				6055D84529701F5700C86D53 /* InputCareerVC.swift in Sources */,
 				60C6371A2984E1F100D2C814 /* HomeNetworkingPopUpVC.swift in Sources */,
+				2CED690D2989426A00C838BD /* EventApplyModel.swift in Sources */,
 				60F91401296D2F3D00626C40 /* ViewAllVC.swift in Sources */,
 				2CED690529867F3300C838BD /* NetworkingDetailModel.swift in Sources */,
 				2CED690729878AB200C838BD /* EventApplyCancelViewModel.swift in Sources */,
@@ -1094,6 +1101,7 @@
 				60BD04F42973A47E00F4B433 /* HomeUserDataModel.swift in Sources */,
 				60EDD40B2976611800600807 /* ViewAllMyEventTableViewCell.swift in Sources */,
 				60BD04F82973C37C00F4B433 /* HomeMyEventColectionViewCell.swift in Sources */,
+				2CED690B298940E200C838BD /* EventApplyViewModel.swift in Sources */,
 				60F91407296D445800626C40 /* UIColor+.swift in Sources */,
 				60EDD40729765C6800600807 /* ViewAllNetworkingTableViewCell.swift in Sources */,
 				6055D8432970183500C86D53 /* InputOrganizationVC.swift in Sources */,

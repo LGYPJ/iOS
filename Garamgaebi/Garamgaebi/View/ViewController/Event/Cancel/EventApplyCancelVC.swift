@@ -487,13 +487,31 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 	
 	// 취소 완료 alert
 	@objc private func didTapRegisterCancelButton() {
-		let sheet = UIAlertController(title: nil, message: "신청 취소가 완료되었습니다.", preferredStyle: .alert)
-		let closeAction = UIAlertAction(title: "닫기", style: .cancel, handler: {[weak self] _ in
-			self?.navigationController?.popViewController(animated: true)
-		})
-		sheet.addAction(closeAction)
+		guard let bank = self.bankButton.title(for: .normal),
+			  let account = self.accountTextField.text else {return}
 		
-		present(sheet, animated: true)
+		EventApplyCancelViewModel.postBankAccount(memberId: self.memberId, programId: self.programId, bank: bank, account: account, completion: {[weak self] response in
+			if !response.isSuccess {
+				let sheet = UIAlertController(title: nil, message: response.message, preferredStyle: .alert)
+				let closeAction = UIAlertAction(title: "닫기", style: .cancel, handler: {[weak self] _ in
+					self?.navigationController?.popViewController(animated: true)
+				})
+				sheet.addAction(closeAction)
+				
+				self?.present(sheet, animated: true)
+			} else {
+				let sheet = UIAlertController(title: nil, message: "신청 취소가 완료되었습니다.", preferredStyle: .alert)
+				let closeAction = UIAlertAction(title: "닫기", style: .cancel, handler: {[weak self] _ in
+					self?.navigationController?.popViewController(animated: true)
+				})
+				sheet.addAction(closeAction)
+				
+				self?.present(sheet, animated: true)
+			}
+			
+		})
+		
+		
 	}
 	
 	// 뒤로가기 버튼 did tap
