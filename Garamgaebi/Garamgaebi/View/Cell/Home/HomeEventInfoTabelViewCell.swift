@@ -263,38 +263,45 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     
     @objc func presentHomeSeminarInfo(_ notification: NSNotification) {
     
-        let seminarListBase = notification.object as! [HomeSeminarInfo]
-    
+        guard let seminarListBase = notification.object as? [HomeSeminarInfo] else { return }
+        
         // 초기화
         seminarList.removeAll()
         
         // TODO: - 서버 정상화 이후 수정
         
-        // 홈 화면 세미나 리스트 필터링
-        seminarList.append(seminarListBase.filter{$0.status == "THIS_MONTH"}.compactMap{$0
-        }.first ?? HomeSeminarInfo(programIdx: 1, title: "123", date: "123", location: "123", type: "123", payment: "123", status: "123", isOpen: "123"))
-        seminarList.append(seminarListBase.filter{$0.status == "READY"}.compactMap{$0
-        }.first ?? HomeSeminarInfo(programIdx: 1, title: "123", date: "123", location: "123", type: "123", payment: "123", status: "123", isOpen: "123"))
+        // 홈 화면 세미나 리스트 필터링 - 수정 후
+        if let value = seminarListBase.filter({$0.status == "THIS_MONTH"}).compactMap({$0}).first {
+            seminarList.append(value)
+        }
+        if let value = seminarListBase.filter({$0.status == "READY"}).compactMap({$0}).first {
+            seminarList.append(value)
+        }
         seminarListBase.filter{$0.status == "CLOSED"}.compactMap{$0}.forEach{seminarList.append($0)}
         
         // 컬렉션뷰 reload
         seminarCollectionView.reloadData()
+        
         NotificationCenter.default.post(name: Notification.Name("HomeTableViewReload"), object: nil)
         
     }
     
     @objc func presentHomeNetworkingInfo(_ notification: NSNotification) {
         
-        let networkingListBase = notification.object as! [HomeNetworkingInfo]
+        guard let networkingListBase = notification.object as? [HomeNetworkingInfo] else { return }
        
         // 초기화
         networkingList.removeAll()
         
         // 홈 화면 네트워킹 리스트 필터링
-        networkingList.append(networkingListBase.filter{$0.status == "THIS_MONTH"}.compactMap{$0
-        }.first ?? HomeNetworkingInfo(programIdx: 1, title: "123", date: "123", location: "123", type: "123", payment: "123", status: "123", isOpen: "123"))
-        networkingList.append(networkingListBase.filter{$0.status == "READY"}.compactMap{$0
-        }.first ?? HomeNetworkingInfo(programIdx: 1, title: "123", date: "123", location: "123", type: "123", payment: "123", status: "123", isOpen: "123"))
+        if let value = networkingListBase.filter({$0.status == "THIS_MONTH"}).compactMap({$0}).first {
+            networkingList.append(value)
+        }
+        
+        if let value = networkingListBase.filter({$0.status == "READY"}).compactMap({$0}).first {
+            networkingList.append(value)
+        }
+        
         networkingListBase.filter{$0.status == "CLOSED"}.compactMap{$0}.forEach{networkingList.append($0)}
  
         // 컬렉션뷰 reload
