@@ -37,6 +37,19 @@ class EventApplyCancelVC: UIViewController {
         
         return button
     }()
+	
+	let scrollView: UIScrollView = {
+		let scrollView = UIScrollView()
+		scrollView.isScrollEnabled = true
+		
+		return scrollView
+	}()
+	
+	let contentView: UIView = {
+		let view = UIView()
+		
+		return view
+	}()
     
 	lazy var programInfoView: UIView = {
 		let view = UIView()
@@ -307,10 +320,12 @@ class EventApplyCancelVC: UIViewController {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+		
 		configureViews()
 		configureDummyData()
 		configureAddTarget()
+		configureTextField()
+		configureGestureRecognizer()
         
     }
 	override func viewWillAppear(_ animated: Bool) {
@@ -339,9 +354,10 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 	
 	private func configureViews() {
 		view.backgroundColor = .white
-		[headerView, programInfoView, nameTextField, nicknameTextField, numberTextField, accountStackView, cancelButton, downImageView]
+		[headerView, scrollView,  cancelButton]
 			.forEach {view.addSubview($0)}
-        
+		
+		        
         //headerView
         headerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
@@ -364,6 +380,28 @@ extension EventApplyCancelVC: sendBankNameProtocol {
             make.centerY.equalToSuperview()
         }
         
+		scrollView.snp.makeConstraints {
+			$0.top.equalTo(headerView.snp.bottom)
+			$0.leading.trailing.equalToSuperview()
+			$0.bottom.equalTo(cancelButton.snp.top).offset(-15)
+//			$0.bottom.equalTo(cancelButton.snp.top)
+		}
+		
+		scrollView.addSubview(contentView)
+		contentView.snp.makeConstraints {
+			$0.width.equalToSuperview()
+			$0.edges.equalToSuperview()
+		}
+		
+		[programInfoView, nameTextField, nicknameTextField, numberTextField, accountStackView, downImageView]
+			.forEach {contentView.addSubview($0)}
+		// seminarInfoView
+		programInfoView.snp.makeConstraints {
+//			$0.top.equalTo(headerView.snp.bottom).offset(16)
+			$0.top.equalToSuperview().inset(16)
+			$0.leading.trailing.equalToSuperview().inset(16)
+		}
+
         
 		[programNameLabel, seminarInfoStackView]
 			.forEach {programInfoView.addSubview($0)}
@@ -381,11 +419,7 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 			$0.bottom.equalToSuperview().inset(12)
 		}
 		
-        // seminarInfoView
-		programInfoView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(16)
-			$0.leading.trailing.equalToSuperview().inset(16)
-		}
+       
 		
         // nameTextField
 		nameTextField.snp.makeConstraints {
@@ -413,6 +447,7 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 			$0.leading.trailing.equalToSuperview().inset(16)
 			$0.top.equalTo(numberTextField.snp.bottom).offset(24)
 			$0.height.equalTo(48)
+			$0.bottom.equalToSuperview()
 		}
 		
         // bankButton
@@ -435,16 +470,19 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 			$0.height.equalTo(48)
 
 		}
-
-		
-		
 	}
 	
 	private func configureAddTarget() {
 		cancelButton.addTarget(self, action: #selector(didTapRegisterCancelButton), for: .touchUpInside)
 		bankButton.addTarget(self, action: #selector(didTapbankButton), for: .touchUpInside)
 		accountTextField.addTarget(self, action: #selector(textFieldDidChange(textField:)), for: .editingChanged)
-
+	}
+	
+	private func configureTextField() {
+		accountTextField.delegate = self
+		accountTextField.returnKeyType = .done
+		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 	}
 	
 	private func fetchProgramData() {
@@ -476,6 +514,35 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 		locationInfoLabel.text = self.networkingInfo.location
 		costInfoLabel.text = self.networkingInfo.fee
 		deadlineInfoLabel.text = self.networkingInfo.endDate
+	}
+	
+	private func configureGestureRecognizer() {
+		let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(scrollViewDidTap))
+		tapGestureRecognizer.numberOfTapsRequired = 1
+		tapGestureRecognizer.isEnabled = true
+		tapGestureRecognizer.cancelsTouchesInView = false
+		
+		scrollView.addGestureRecognizer(tapGestureRecognizer)
+	}
+	
+	@objc private func scrollViewDidTap() {
+		self.view.endEditing(true)
+	}
+	
+	@objc func keyboardWillShow(notification: NSNotification) {
+		guard let userInfo = notification.userInfo,
+			  let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {return}
+		
+		let contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardFrame.size.height, right: 0.0)
+		scrollView.contentInset = contentInset
+		scrollView.scrollIndicatorInsets = contentInset
+		
+	}
+	
+	@objc func keyboardWillHide(notification: NSNotification) {
+		let contentInset = UIEdgeInsets.zero
+			scrollView.contentInset = contentInset
+			scrollView.scrollIndicatorInsets = contentInset
 	}
 	
 	// 은행 텍스트 필드 tap
@@ -539,3 +606,10 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 
 }
 
+extension EventApplyCancelVC: UITextFieldDelegate {
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		textField.resignFirstResponder()
+		return true
+	}
+
+}
