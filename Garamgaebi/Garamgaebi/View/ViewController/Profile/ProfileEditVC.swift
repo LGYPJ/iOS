@@ -70,7 +70,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.text = "닉네임 *"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
     }
-    let nameTextField = UITextField().then {
+    lazy var nameTextField = UITextField().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.placeholder = "닉네임을 입럭해주세요 (최대 8글자)"
         $0.basicTextField()
@@ -83,7 +83,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.text = "소속 *"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
     }
-    let orgTextField = UITextField().then {
+    lazy var orgTextField = UITextField().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.placeholder = "소속을 입럭해주세요"
         $0.basicTextField()
@@ -96,7 +96,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.text = "이메일 *"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
     }
-    let emailTextField = UITextField().then {
+    lazy var emailTextField = UITextField().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.placeholder = "이메일을 입럭해주세요"
         $0.basicTextField()
@@ -306,7 +306,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
                 let keyboardHeight = keyboardFrame.cgRectValue.height
                 self.view.frame.origin.y -= keyboardHeight
-                print("show keyboard")
+//                print("show keyboard")
             }
         }
     }
@@ -318,7 +318,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
                 let keyboardHeight = keyboardFrame.cgRectValue.height
                 self.view.frame.origin.y += keyboardHeight
-                print("hide keyboard")
+//                print("hide keyboard")
             }
         }
     }
@@ -332,13 +332,13 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             print(state)
         }
         
-        print("프로필 이미지 클릭")
+//        print("프로필 이미지 클릭")
         
     }
     
     // 완료하기 버튼 did tap
     @objc private func doneButtonDidTap() {
-        print("완료하기 버튼 클릭")
+//        print("완료하기 버튼 클릭")
         
         // 텍스트값 가져오기
         guard let editName = nameTextField.text else { return }
@@ -391,19 +391,19 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
-                    print(response.message)
+                    print("성공(프로필수정): \(response.message)")
                 } else {
                     print("실패(프로필수정): \(response.message)")
                 }
             case .failure(let error):
-                print("실패(AF-프로필수정: \(error.localizedDescription)")
+                print("실패(AF-프로필수정): \(error.localizedDescription)")
             }
         }
     }
-    
+
     // 뒤로가기 버튼 did tap
     @objc private func didTapBackBarButton() {
-        print("뒤로가기 버튼 클릭")
+//        print("뒤로가기 버튼 클릭")
         self.navigationController?.popViewController(animated: true)
     }
     

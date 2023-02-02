@@ -255,13 +255,13 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         
         configureLayouts()
 //        configureDummyData()
+        
+        // 서버 통신
+        getMyInfo()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // 서버 통신
-        getMyInfo()
         
         navigationController?.navigationBar.isHidden = true
         tabBarController?.tabBar.isHidden = false
@@ -480,7 +480,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     }
     
     @objc private func serviceButtonDidTap(_ sender : UIButton) {
-        print("고객센터 버튼 클릭")
+//        print("고객센터 버튼 클릭")
         
         // 화면 전환
         let nextVC = ProfileServiceVC()
@@ -488,7 +488,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     }
     
     @objc private func editButtonDidTap(_ sender : UIButton) {
-        print("프로필 편집 버튼 클릭")
+//        print("프로필 편집 버튼 클릭")
         
         // 화면 전환
         let nextVC = ProfileEditVC()
@@ -511,7 +511,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     }
     
     @objc private func snsButtonDidTap(_ sender : UIButton) {
-        print("SNS 추가 버튼 클릭")
+//        print("SNS 추가 버튼 클릭")
         
         // 화면 전환
         let nextVC = ProfileInputSNSVC()
@@ -519,7 +519,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     }
     
     @objc private func careerButtonDidTap(_ sender : UIButton) {
-        print("경력 추가 버튼 클릭")
+//        print("경력 추가 버튼 클릭")
         
         // 화면 전환
         let nextVC = ProfileInputCareerVC()
@@ -527,7 +527,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     }
     
     @objc private func educationButtonDidTap(_ sender : UIButton) {
-        print("교육 추가 버튼 클릭")
+//        print("교육 추가 버튼 클릭")
         
         // 화면 전환
         let nextVC = ProfileInputEducationVC()
@@ -560,7 +560,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
-                    print("회원 정보 불러오기 성공")
+                    print("성공(내프로필): \(response.message)")
                     let result = response.result
                     
                     // 값 넣어주기
