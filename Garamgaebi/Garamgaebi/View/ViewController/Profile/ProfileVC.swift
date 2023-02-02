@@ -82,11 +82,11 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     
     let introduceTextField = UITextView().then {
         $0.layer.borderWidth = 1
-        $0.layer.borderColor = UIColor.systemGray5.cgColor // UIColor.lightGray.withAlphaComponent(0.7).cgColor
+        $0.layer.borderColor = UIColor.mainGray.cgColor
         $0.layer.cornerRadius = 12
         $0.textContainerInset = UIEdgeInsets(top: 12.0, left: 12.0, bottom: 12.0, right: 12.0)
-        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14) // .systemFont(ofSize: 18)
-        $0.textColor = .black
+        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        $0.textColor = .mainBlack
         $0.isUserInteractionEnabled = false
     }
     
@@ -105,7 +105,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         $0.layer.cornerRadius = 12
         
         $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        $0.layer.backgroundColor = UIColor.systemGray6.cgColor
+        $0.layer.backgroundColor = UIColor(hex: 0xF5F5F5).cgColor
     }
     let snsTitleLabel = UILabel().then {
         $0.text = "SNS"
@@ -154,7 +154,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         $0.layer.cornerRadius = 12
         
         $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        $0.layer.backgroundColor = UIColor.systemGray6.cgColor
+        $0.layer.backgroundColor = UIColor(hex: 0xF5F5F5).cgColor
     }
     let careerTitleLabel = UILabel().then {
         $0.text = "경력"
@@ -205,7 +205,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         $0.layer.cornerRadius = 12
         
         $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        $0.layer.backgroundColor = UIColor.systemGray6.cgColor
+        $0.layer.backgroundColor = UIColor(hex: 0xF5F5F5).cgColor
     }
     let eduTitleLabel = UILabel().then {
         $0.text = "교육"
