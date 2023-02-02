@@ -80,8 +80,8 @@
 		60AA6BCB29752422002878B6 /* ViewAllSeminarDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AA6BCA29752422002878B6 /* ViewAllSeminarDataModel.swift */; };
 		60AA6BCD29755621002878B6 /* CustomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AA6BCC29755621002878B6 /* CustomHeaderView.swift */; };
 		60BC582E29715A2A00FBF1C3 /* CompleteRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BC582D29715A2A00FBF1C3 /* CompleteRegisterVC.swift */; };
-		60BD04F02973A25D00F4B433 /* HomeUserColectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD04EF2973A25D00F4B433 /* HomeUserColectionViewCell.swift */; };
-		60BD04F22973A3EC00F4B433 /* HomeUserInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD04F12973A3EC00F4B433 /* HomeUserInfoTableViewCell.swift */; };
+		60BD04F02973A25D00F4B433 /* RecommendUsersColectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD04EF2973A25D00F4B433 /* RecommendUsersColectionViewCell.swift */; };
+		60BD04F22973A3EC00F4B433 /* RecommendUsersInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD04F12973A3EC00F4B433 /* RecommendUsersInfoTableViewCell.swift */; };
 		60BD04F42973A47E00F4B433 /* HomeUserDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD04F32973A47E00F4B433 /* HomeUserDataModel.swift */; };
 		60BD04F62973AD2600F4B433 /* HomeMyEventInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD04F52973AD2600F4B433 /* HomeMyEventInfoTableViewCell.swift */; };
 		60BD04F82973C37C00F4B433 /* HomeMyEventColectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD04F72973C37C00F4B433 /* HomeMyEventColectionViewCell.swift */; };
@@ -212,8 +212,8 @@
 		60AA6BCA29752422002878B6 /* ViewAllSeminarDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAllSeminarDataModel.swift; sourceTree = "<group>"; };
 		60AA6BCC29755621002878B6 /* CustomHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHeaderView.swift; sourceTree = "<group>"; };
 		60BC582D29715A2A00FBF1C3 /* CompleteRegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteRegisterVC.swift; sourceTree = "<group>"; };
-		60BD04EF2973A25D00F4B433 /* HomeUserColectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUserColectionViewCell.swift; sourceTree = "<group>"; };
-		60BD04F12973A3EC00F4B433 /* HomeUserInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUserInfoTableViewCell.swift; sourceTree = "<group>"; };
+		60BD04EF2973A25D00F4B433 /* RecommendUsersColectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendUsersColectionViewCell.swift; sourceTree = "<group>"; };
+		60BD04F12973A3EC00F4B433 /* RecommendUsersInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendUsersInfoTableViewCell.swift; sourceTree = "<group>"; };
 		60BD04F32973A47E00F4B433 /* HomeUserDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUserDataModel.swift; sourceTree = "<group>"; };
 		60BD04F52973AD2600F4B433 /* HomeMyEventInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMyEventInfoTableViewCell.swift; sourceTree = "<group>"; };
 		60BD04F72973C37C00F4B433 /* HomeMyEventColectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMyEventColectionViewCell.swift; sourceTree = "<group>"; };
@@ -386,8 +386,8 @@
 				603215F8297A72D000ACBB04 /* Notification */,
 				601823322972DDCA00160EF4 /* HomeEventInfoTabelViewCell.swift */,
 				601823342972F04500160EF4 /* HomeEventCollectionViewCell.swift */,
-				60BD04F12973A3EC00F4B433 /* HomeUserInfoTableViewCell.swift */,
-				60BD04EF2973A25D00F4B433 /* HomeUserColectionViewCell.swift */,
+				60BD04F12973A3EC00F4B433 /* RecommendUsersInfoTableViewCell.swift */,
+				60BD04EF2973A25D00F4B433 /* RecommendUsersColectionViewCell.swift */,
 				60BD04F52973AD2600F4B433 /* HomeMyEventInfoTableViewCell.swift */,
 				60BD04F72973C37C00F4B433 /* HomeMyEventColectionViewCell.swift */,
 			);
@@ -1036,13 +1036,13 @@
 				60BD05032974187700F4B433 /* UnderlineSegmentedControl.swift in Sources */,
 				6055D84729701F6B00C86D53 /* InputEducationVC.swift in Sources */,
 				2CED690329867F1800C838BD /* NetworkingDetailViewModel.swift in Sources */,
-				60BD04F02973A25D00F4B433 /* HomeUserColectionViewCell.swift in Sources */,
+				60BD04F02973A25D00F4B433 /* RecommendUsersColectionViewCell.swift in Sources */,
 				60093A8B296E7EFB00F76783 /* LoginVC.swift in Sources */,
 				60BD04FF2973EBE600F4B433 /* HomeNotificationTableViewCell.swift in Sources */,
 				6082992F297FC20C00240036 /* EventService.swift in Sources */,
 				60BD04FA2973C55D00F4B433 /* HomeMyEventDataModel.swift in Sources */,
 				6038243C296D7E3F00E12CC2 /* OnboardingDataModel.swift in Sources */,
-				60BD04F22973A3EC00F4B433 /* HomeUserInfoTableViewCell.swift in Sources */,
+				60BD04F22973A3EC00F4B433 /* RecommendUsersInfoTableViewCell.swift in Sources */,
 				60AA6BC529751D1F002878B6 /* ViewAllSeminarVC.swift in Sources */,
 				601823372972FAD800160EF4 /* HomeEventDataModel.swift in Sources */,
 				60BD04FD2973D6BE00F4B433 /* HomeNotificationVC.swift in Sources */,

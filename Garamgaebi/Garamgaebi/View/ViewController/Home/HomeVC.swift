@@ -202,7 +202,7 @@ extension HomeVC {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(HomeEventInfoTableViewCell.self, forCellReuseIdentifier: HomeEventInfoTableViewCell.identifier)
-        tableView.register(HomeUserInfoTableViewCell.self, forCellReuseIdentifier: HomeUserInfoTableViewCell.identifier)
+        tableView.register(RecommendUsersInfoTableViewCell.self, forCellReuseIdentifier: RecommendUsersInfoTableViewCell.identifier)
         tableView.register(HomeMyEventInfoTableViewCell.self, forCellReuseIdentifier: HomeMyEventInfoTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
     }
@@ -219,7 +219,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         case 0:
             return HomeEventInfoTableViewCell.cellHeight + 16.0
         case 1:
-            return HomeUserInfoTableViewCell.cellHeight + 8.0
+            return RecommendUsersInfoTableViewCell.cellHeight + 8.0
         case 2:
             return HomeMyEventInfoTableViewCell.cellHeight
         default:
@@ -234,7 +234,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeEventInfoTableViewCell.identifier, for: indexPath) as? HomeEventInfoTableViewCell else {return UITableViewCell()}
             return cell
         case 1:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeUserInfoTableViewCell.identifier, for: indexPath) as? HomeUserInfoTableViewCell else {return UITableViewCell()}
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: RecommendUsersInfoTableViewCell.identifier, for: indexPath) as? RecommendUsersInfoTableViewCell else {return UITableViewCell()}
             return cell
         case 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeMyEventInfoTableViewCell.identifier, for: indexPath) as? HomeMyEventInfoTableViewCell else {return UITableViewCell()}

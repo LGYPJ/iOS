@@ -1,5 +1,5 @@
 //
-//  HomeUserInfoTableViewCell.swift
+//  RecommendUsersTableViewCell.swift
 //  Garamgaebi
 //
 //  Created by 홍승완 on 2023/01/15.
@@ -7,14 +7,14 @@
 
 import UIKit
 
-class HomeUserInfoTableViewCell: UITableViewCell {
+class RecommendUsersInfoTableViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - Properties
-    static let identifier = String(describing: HomeUserInfoTableViewCell.self)
+    static let identifier = String(describing: RecommendUsersInfoTableViewCell.self)
     static let cellHeight = 254.0
     
     //let dataList = HomeUserDataModel.list
@@ -54,7 +54,7 @@ class HomeUserInfoTableViewCell: UITableViewCell {
         view.contentInset = .zero
         view.backgroundColor = .clear
         view.clipsToBounds = true
-        view.register(HomeUserColectionViewCell.self, forCellWithReuseIdentifier: HomeUserColectionViewCell.identifier)
+        view.register(RecommendUsersColectionViewCell.self, forCellWithReuseIdentifier: RecommendUsersColectionViewCell.identifier)
         
         return view
     }()
@@ -112,7 +112,7 @@ class HomeUserInfoTableViewCell: UITableViewCell {
     
 }
 
-extension HomeUserInfoTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension RecommendUsersInfoTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     fileprivate var sectionInsets: UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
@@ -150,7 +150,7 @@ extension HomeUserInfoTableViewCell: UICollectionViewDataSource, UICollectionVie
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeUserColectionViewCell.identifier, for: indexPath) as? HomeUserColectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendUsersColectionViewCell.identifier, for: indexPath) as? RecommendUsersColectionViewCell else {
             return UICollectionViewCell()
         }
         

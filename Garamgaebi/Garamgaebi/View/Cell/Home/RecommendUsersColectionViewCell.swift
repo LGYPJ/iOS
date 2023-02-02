@@ -1,5 +1,5 @@
 //
-//  HomeUserCollectionViewCell.swift
+//  RecommendUsersColectionViewCell.swift
 //  Garamgaebi
 //
 //  Created by 홍승완 on 2023/01/15.
@@ -8,9 +8,9 @@
 import UIKit
 import Kingfisher
 
-class HomeUserColectionViewCell: UICollectionViewCell {
+class RecommendUsersColectionViewCell: UICollectionViewCell {
     
-    static let identifier = "HomeUserColectionViewCell"
+    static let identifier = String(describing: RecommendUsersColectionViewCell.self)
     public var memberIdx = Int()
     // MARK: - Subviews
     
