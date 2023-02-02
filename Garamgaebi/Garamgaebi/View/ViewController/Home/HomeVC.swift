@@ -13,6 +13,27 @@ class HomeVC: UIViewController {
     
     // MARK: - Variable
     
+    public var homeSeminarInfo: [HomeSeminarInfo] = [] {
+        didSet {
+            // notification -> Cell
+            
+            NotificationCenter.default.post(name: Notification.Name("presentHomeSeminarInfo"), object: homeSeminarInfo)
+            
+            self.tableView.reloadData()
+        }
+    }
+    
+    public var homeNetworkingInfo: [HomeNetworkingInfo] = [] {
+        didSet {
+            // notification -> Cell
+            
+            NotificationCenter.default.post(name: Notification.Name("presentHomeNetworkingInfo"), object: homeNetworkingInfo)
+            
+            self.tableView.reloadData()
+        }
+    }
+    
+    
     // MARK: - Subviews
     lazy var headerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 71))
@@ -64,6 +85,7 @@ class HomeVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = false
+        fetchData()
     }
     
     
@@ -109,9 +131,24 @@ class HomeVC: UIViewController {
             make.bottom.equalToSuperview()
         }
     }
+    private func fetchData() {
+        
+        // HomeSeminarInfo의 data를 불러옴
+        HomeViewModel.getHomeSeminarInfo { [weak self] result in
+            self?.homeSeminarInfo = result
+        }
+        
+        // HomeNetworkingInfo의 data를 불러옴
+        HomeViewModel.getHomeNetworkingInfo { [weak self] result in
+            self?.homeNetworkingInfo = result
+        }
+
+    }
     
     func configNotificationCenter() {
-        NotificationCenter.default.addObserver(self, selector: #selector(pushHomeDetail(_:)), name: Notification.Name("pushHomeDetailVC"), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadDatas), name: Notification.Name("HomeTableViewReload"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(pushSeminarDetail(_:)), name: Notification.Name("pushSeminarDetailVC"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(pushNetworkingDetail(_:)), name: Notification.Name("pushNetworkingDetailVC"), object: nil)
     }
     
@@ -125,15 +162,18 @@ class HomeVC: UIViewController {
         }
     }
     
-    @objc func pushHomeDetail(_ notification: NSNotification) {
-        print(notification.object)
+    @objc func pushSeminarDetail(_ notification: NSNotification) {
 		// TODO: object에서 ID값 가져오기
-		self.navigationController?.pushViewController(EventSeminarDetailVC(memberId: 1, seminarId: 1), animated: true)
+        self.navigationController?.pushViewController(EventSeminarDetailVC(memberId: 0, seminarId: notification.object as! Int), animated: true)
     }
     
     @objc func pushNetworkingDetail(_ notification: NSNotification) {
 		// TODO: object에서 ID값 가져오기
-        self.navigationController?.pushViewController(EventNetworkingDetailVC(memberId: 1, networkingId: 6), animated: true)
+        self.navigationController?.pushViewController(EventNetworkingDetailVC(memberId: 0, networkingId: notification.object as! Int), animated: true)
+    }
+    
+    @objc func reloadDatas() {
+        tableView.reloadData()
     }
     
 }

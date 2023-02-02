@@ -92,6 +92,12 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
     }
     
+    // cell 재사용 문제 해결
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        dDayInfoLabel.isHidden = false
+    }
+    
 
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -156,19 +162,28 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
     }
     
     
-    public func configure(_ item: HomeEventDataModel) {
+    public func configureSeminarInfo(_ item: HomeSeminarInfo) {
         
-        switch item.state {
-        case "오픈":
+        switch item.status {
+        case "THIS_MONTH":
             contentView.backgroundColor = UIColor(hex: 0x356EFF, alpha: 0.8)
             stateInfoLabel.setTitle("이번 달", for: .normal)
+            stateInfoLabel.backgroundColor = .mainYellow
             [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,dDayInfoLabel].forEach {
                 $0.textColor = .white
             }
-            
-        case "오픈예정":
+        case "READY":
             contentView.backgroundColor = UIColor(hex: 0x356EFF, alpha: 0.1)
             stateInfoLabel.setTitle("예정된", for: .normal)
+            stateInfoLabel.backgroundColor = UIColor(hex: 0xFFFACC)
+            [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,dDayInfoLabel].forEach {
+                $0.textColor = UIColor(hex: 0x000000, alpha: 0.8)
+            }
+        case "CLOSED":
+            contentView.backgroundColor = UIColor(hex: 0xF5F5F5)
+            stateInfoLabel.setTitle("마감된", for: .normal)
+            stateInfoLabel.backgroundColor = .mainGray
+            dDayInfoLabel.isHidden = true
             [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,dDayInfoLabel].forEach {
                 $0.textColor = UIColor(hex: 0x000000, alpha: 0.8)
             }
@@ -176,16 +191,101 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
             print("fatal error in (item.state) in 'HomeEventCollectionViewCell'"  )
         }
         
-        switch item.fee {
-        case 0:
+        
+        switch item.payment {
+        case "FREE":
             feeInfoLabel.setTitle("무료", for: .normal)
-        default:
+            feeInfoLabel.backgroundColor = UIColor(hex: 0xFFFFFF)
+        case "PREMIUM":
             feeInfoLabel.setTitle("유료", for: .normal)
+            feeInfoLabel.backgroundColor = UIColor(hex: 0xB8FFBB)
+        default:
+            feeInfoLabel.setTitle("ERROR", for: .normal)
         }
         
+        
         titleInfoLabel.text = item.title
-        dateInfoLabel.text = item.date
+        
+        
         locationInfoLabel.text = item.location
+        
+        
+        // item.date -> (String -> Date)
+        let date = item.date.toDate()
+        let dateformatter = DateFormatter()
+        // (Date -> String)
+        dateformatter.dateFormat = "yyyy-MM-dd"
+        let dateResult = dateformatter.string(from: date ?? Date())
+        dateInfoLabel.text = dateResult
+        
+        
+        var dDayCount: Int = 0
+        dDayCount = (Calendar.current.dateComponents([.day], from: date ?? Date(), to: Date()).day ?? 0) - 1
+        dDayInfoLabel.text = String("D\(dDayCount)")
+    }
+    
+    
+ 
+    public func configureNetworkingInfo(_ item: HomeNetworkingInfo) {
+        
+        switch item.status {
+        case "THIS_MONTH":
+            contentView.backgroundColor = .mainBlue.withAlphaComponent(0.8)
+            stateInfoLabel.setTitle("이번 달", for: .normal)
+            stateInfoLabel.backgroundColor = .mainYellow
+            [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,dDayInfoLabel].forEach {
+                $0.textColor = .white
+            }
+        case "READY":
+            contentView.backgroundColor = .mainBlue.withAlphaComponent(0.1)
+            stateInfoLabel.setTitle("예정된", for: .normal)
+            stateInfoLabel.backgroundColor = UIColor(hex: 0xFFFACC)
+            [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,dDayInfoLabel].forEach {
+                $0.textColor = UIColor(hex: 0x000000, alpha: 0.8)
+            }
+        case "CLOSED":
+            contentView.backgroundColor = UIColor(hex: 0xF5F5F5)
+            stateInfoLabel.setTitle("마감된", for: .normal)
+            stateInfoLabel.backgroundColor = .mainGray
+            dDayInfoLabel.isHidden = true
+            [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,dDayInfoLabel].forEach {
+                $0.textColor = UIColor(hex: 0x000000, alpha: 0.8)
+            }
+        default:
+            print("fatal error in (item.state) in 'HomeEventCollectionViewCell'"  )
+        }
+        
+        
+        switch item.payment {
+        case "FREE":
+            feeInfoLabel.setTitle("무료", for: .normal)
+            feeInfoLabel.backgroundColor = UIColor(hex: 0xFFFFFF)
+        case "PREMIUM":
+            feeInfoLabel.setTitle("유료", for: .normal)
+            feeInfoLabel.backgroundColor = UIColor(hex: 0xB8FFBB)
+        default:
+            feeInfoLabel.setTitle("ERROR", for: .normal)
+        }
+        
+        
+        titleInfoLabel.text = item.title
+        
+        
+        locationInfoLabel.text = item.location
+        
+        
+        // item.date -> (String -> Date)
+        let date = item.date.toDate()
+        let dateformatter = DateFormatter()
+        // (Date -> String)
+        dateformatter.dateFormat = "yyyy-MM-dd"
+        let dateResult = dateformatter.string(from: date ?? Date())
+        dateInfoLabel.text = dateResult
+        
+        
+        var dDayCount: Int = 0
+        dDayCount = (Calendar.current.dateComponents([.day], from: date ?? Date(), to: Date()).day ?? 0) - 1
+        dDayInfoLabel.text = String("D\(dDayCount)")
     }
     
 }

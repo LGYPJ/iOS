@@ -128,7 +128,7 @@ class OnboardingVC: UIViewController {
     private func setOnboardingData() {
         onboardingData.append(contentsOf: [
             OnboardingDataModel(img: "Onboarding1", title: "가천대생 개발자들의\n모임 참여를 보다 간편하게",
-                                subTitle: "모임의 시작에서 끝까지 개가천선으로 확인해요"),
+                                subTitle: "모임의 시작에서 끝까지 가람개비로 확인해요"),
             OnboardingDataModel(img: "Onboarding2", title: "활발한\n가천대생들의 네트워킹",
                                 subTitle: "프로필을 통해 선후배와 함께 소통해요")
         ])
