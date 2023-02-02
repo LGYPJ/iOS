@@ -17,8 +17,14 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
     static let identifier = String(describing: HomeMyEventInfoTableViewCell.self)
     static var cellHeight = 100.0
     
-    let dataList = HomeMyEventDataModel.list
-
+    public var myEventList: [MyEventInfoReady] = [] {
+        didSet {
+            self.collectionView.reloadData()
+            // cell -> Home으로 변경사항 알림
+            NotificationCenter.default.post(name: Notification.Name("HomeTableViewReload"), object: nil)
+        }
+    }
+    
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "내 모임"
@@ -88,8 +94,11 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
         zeroDataBackgroundView.addSubview(zeroDataImage)
         zeroDataBackgroundView.addSubview(zeroDataDescriptionLabel)
         configSubViewLayouts()
+        configNotificationCenter()
+    }
+    
+    override func layoutIfNeeded() {
         configureZeroCell()
-        
     }
     
     func configSubViewLayouts() {
@@ -123,34 +132,41 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
     
     // TODO: API 통신 후 수정
     private func configureZeroCell() {
-        
-        
-        
-        if dataList.count == 0 {
+        if myEventList.count == 0 {
             // 부모 셀 높이 가변설정 (모임이 하나도 없을 때)
             HomeMyEventInfoTableViewCell.cellHeight = 190
             collectionView.isHidden = true
             zeroDataBackgroundView.isHidden = false
         } else {
             // 부모 셀 높이 가변설정 (모임이 하나이상 존재할때)
-            HomeMyEventInfoTableViewCell.cellHeight = 54.0 + 88.0 * Double(dataList.count) - 8.0 + 16.0
+            HomeMyEventInfoTableViewCell.cellHeight = 54.0 + 88.0 * Double(myEventList.count) - 8.0 + 16.0
             collectionView.isHidden = false
             zeroDataBackgroundView.isHidden = true
         }
+    }
+    
+    func configNotificationCenter() {
+        NotificationCenter.default.addObserver(self, selector: #selector(presentMyEventInfo(_:)), name: Notification.Name("presentMyEventInfo"), object: nil)
+    }
+    
+    @objc func presentMyEventInfo(_ notification: NSNotification) {
+        guard let myEventListBase = notification.object as? [MyEventInfoReady] else { return }
+        myEventList = myEventListBase
+        collectionView.reloadData()
     }
     
 }
 
 extension HomeMyEventInfoTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataList.count
+        return myEventList.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeMyEventColectionViewCell.identifier, for: indexPath) as? HomeMyEventColectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(dataList[indexPath.row])
+        cell.configure(myEventList[indexPath.row])
         return cell
     }
 

@@ -37,6 +37,14 @@ class HomeVC: UIViewController {
         }
     }
     
+    public var myEventInfo: [MyEventInfoReady] = [] {
+        didSet {
+            // notification -> Cell
+            NotificationCenter.default.post(name: Notification.Name("presentMyEventInfo"), object: myEventInfo)
+            self.tableView.reloadData()
+        }
+    }
+    
     
     // MARK: - Subviews
     lazy var headerView: UIView = {
@@ -149,6 +157,9 @@ class HomeVC: UIViewController {
             self?.recommendUsersInfo = result
         }
         
+        HomeViewModel.getHomeMyEventInfo(memberId: 1) { [weak self] result in
+            self?.myEventInfo = result
+        }
 
     }
     

@@ -11,7 +11,11 @@ import UIKit
 class HomeMyEventColectionViewCell: UICollectionViewCell {
     
     static let identifier = "HomeMyEventColectionViewCell"
-    
+    public var programIdx = Int()
+    public var payment = String()
+    public var type = String()
+    public var status = String()
+    public var isOpen = String()
     lazy var dateTimeView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(hex: 0xF5F5F5)
@@ -100,22 +104,29 @@ class HomeMyEventColectionViewCell: UICollectionViewCell {
         }
     }
     
-    public func configure(_ item: HomeMyEventDataModel) {
-        // item.date -> dateString
-        let date = item.date
+    public func configure(_ item: MyEventInfoReady) {
+        
+        // item.date -> (String -> Date)
+        let dateTime = item.date.toDate()
+        
         let dateformatter = DateFormatter()
+        // (Date -> String)
         dateformatter.dateFormat = "M월 dd일"
-        let dateResult = dateformatter.string(from: date)
-        
-        // item.date -> timeString
-        let timeformatter = DateFormatter()
-        timeformatter.dateFormat = "HH:mm"
-        let timeResult = timeformatter.string(from: date)
-        
+        let dateResult = dateformatter.string(from: dateTime ?? Date())
         dateInfoLabel.text = dateResult
+        
+        dateformatter.dateFormat = "HH:mm"
+        let timeResult = dateformatter.string(from: dateTime ?? Date())
         timeInfoLabel.text = timeResult
+
         titleInfoLabel.text = item.title
         locationInfoLabel.text = item.location
         
+        // UI에 안보이지만 일단 저장함
+        programIdx = item.programIdx
+        payment = item.payment
+        type = item.type
+        status = item.status
+        isOpen = item.isOpen
     }
 }
