@@ -14,9 +14,12 @@ import Alamofire
 class ProfileVC: UIViewController, EditProfileDataDelegate {
     
     // MARK: - Properties
-    let snsDataList = ProfileSnsDataModel.data
+//    let snsDataList = ProfileSnsDataModel.data
     let careerDataList = ProfileCareerDataModel.list
     let educationDataList = ProfileEducationDataModel.list
+    
+    // 추후 로그인 구현 후 변경
+    let memberIdx: Int = 1
     
     // MARK: - Subviews
     lazy var headerView: UIView = {
@@ -115,7 +118,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         $0.text = "유저들과 소통을 위해서 SNS 주소를 남겨주세요!"
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.numberOfLines = 0
-//                $0.isHidden = true
+//        $0.isHidden = true
     }
     let snsBottomRadiusView = UIView().then {
         $0.layer.borderColor = UIColor.mainGray.cgColor
@@ -258,10 +261,15 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         
         // 서버 통신
         getMyInfo()
+        getSnsData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        // 서버 통신
+//        getSnsData()
+        showSnsDefaultLabel()
         
         navigationController?.navigationBar.isHidden = true
         tabBarController?.tabBar.isHidden = false
@@ -377,21 +385,31 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             $0.top.equalTo(snsTopRadiusView.snp.bottom).offset(-1)
             $0.leading.trailing.equalTo(snsTopRadiusView)
         }
-        if (snsDataList.count == 0) {
-            snsDefaultLabel.snp.makeConstraints {
-                $0.top.equalToSuperview().inset(12)
-                $0.centerX.equalToSuperview()
-                $0.bottom.equalTo(addSnsBtn.snp.top).offset(-12)
-            }
-        }
-        else {
-            snsTableView.snp.makeConstraints {
-                $0.top.equalToSuperview()
-                $0.leading.trailing.equalToSuperview()
-                $0.bottom.equalTo(addSnsBtn.snp.top).offset(-12)
-                $0.height.equalTo(snsDataList.count * 41)
-            }
-        }
+//        let snsDataModel = SnsData.shared.snsDataModel
+//        print("테이블뷰 높이에 맞게 넣어줄게요: \(snsDataModel.count)")
+//        snsTableView.snp.makeConstraints {
+//            $0.top.equalToSuperview()
+//            $0.leading.trailing.equalToSuperview()
+//            $0.bottom.equalTo(addSnsBtn.snp.top).offset(-12)
+////            $0.height.equalTo(90)
+//            $0.height.equalTo(snsDataModel.count * 41)
+//        }
+//        if (snsDataList.count == 0) {
+//            snsDefaultLabel.snp.makeConstraints {
+//                $0.top.equalToSuperview().inset(12)
+//                $0.centerX.equalToSuperview()
+//                $0.bottom.equalTo(addSnsBtn.snp.top).offset(-12)
+//            }
+//        }
+//        else {
+//            print("SNS 테이블뷰 보여주기")
+//            snsTableView.snp.makeConstraints {
+//                $0.top.equalToSuperview()
+//                $0.leading.trailing.equalToSuperview()
+//                $0.bottom.equalTo(addSnsBtn.snp.top).offset(-12)
+//                $0.height.equalTo(snsDataList.count * 41)
+//            }
+//        }
         addSnsBtn.snp.makeConstraints { /// SNS 추가 버튼
             $0.bottom.equalTo(snsBottomRadiusView).inset(12)
             $0.centerX.equalTo(snsBottomRadiusView)
@@ -537,9 +555,6 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     // MARK: - 내프로필 정보
     func getMyInfo() {
         
-        // 추후 로그인 구현 후 변경
-        let memberIdx: Int = 1
-        
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/\(memberIdx)"
         
@@ -589,21 +604,89 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         }
     }
     
-    // TODO: API연동 후 삭제
-    func configureDummyData() {
-        nameLabel.text = "코코아"
-        orgLabel.text = "가천대학교 소프트웨어학과"
-        emailLabel.text = "umc@gmail.com"
-        introduceTextField.text = "자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소."
+    // MARK: - SNS 조회
+    func getSnsData() {
+        
+        // http 요청 주소 지정
+        let url = "https://garamgaebi.shop/profile/sns/\(memberIdx)"
+        
+        // http 요청 헤더 지정
+        let header : HTTPHeaders = [
+            "Content-Type" : "application/json"
+        ]
+        
+        // httpBody에 parameters 추가
+        AF.request(
+            url,
+            method: .get,
+            encoding: JSONEncoding.default,
+            headers: header
+        )
+        .validate()
+        .responseDecodable(of: SnsResponse.self) { response in
+            switch response.result {
+            case .success(let response):
+                if response.isSuccess {
+                    print("성공(SNS): \(response.message)")
+                    let result = response.result
+
+                    let snsData = SnsData.shared
+                    
+                    // 값 넣어주기
+                    snsData.snsDataModel = result
+//                    print(snsData.snsDataModel)
+                    self.snsTableView.reloadData()
+                    
+                } else {
+                    print("실패(SNS): \(response.message)")
+                }
+            case .failure(let error):
+                print("실패(AF-SNS): \(error.localizedDescription)")
+            }
+        }
+        
+        // TODO: API연동 후 삭제
+        func configureDummyData() {
+            nameLabel.text = "코코아"
+            orgLabel.text = "가천대학교 소프트웨어학과"
+            emailLabel.text = "umc@gmail.com"
+            introduceTextField.text = "자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소."
+        }
+        
     }
     
+    func showSnsDefaultLabel() {
+        let snsCount = SnsData.shared.snsDataModel.count
+//        print("테이블뷰 높이에 맞게 넣어줄게요: \(snsCount)")
+        
+        if (snsCount == 0) {
+//            print("SNS 아이템이 없음")
+            snsDefaultLabel.snp.makeConstraints {
+                $0.top.equalToSuperview().inset(12)
+                $0.centerX.equalToSuperview()
+                $0.bottom.equalTo(addSnsBtn.snp.top).offset(-12)
+            }
+        }
+        else {
+//            print("SNS 테이블뷰 보여주기")
+            snsTableView.snp.makeConstraints {
+                $0.top.equalToSuperview()
+                $0.leading.trailing.equalToSuperview()
+                $0.bottom.equalTo(addSnsBtn.snp.top).offset(-12)
+                $0.height.equalTo(snsCount * 41)
+            }
+        }
+    }
 }
-
 // MARK: - Extension
 extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // 저장된 데이터 가져오기
+        let snsDataModel = SnsData.shared.snsDataModel
+        
         if tableView == snsTableView {
-            return snsDataList.count
+//            print("SNS 개수: \(snsDataModel.count)")
+            return snsDataModel.count
         }
         else if tableView == careerTableView {
             return careerDataList.count
@@ -622,9 +705,13 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        // 저장된 데이터 가져오기
+        let snsDataModel = SnsData.shared.snsDataModel
+        
+        
         if tableView == snsTableView {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileSNSTableViewCell.identifier, for: indexPath) as? ProfileSNSTableViewCell else { return UITableViewCell()}
-            cell.snsConfigure(snsDataList[indexPath.row])
+            cell.snsLabel.text = snsDataModel[indexPath.row].address
             return cell
         }
         else if tableView == careerTableView {
@@ -642,3 +729,4 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     }
     
 }
+

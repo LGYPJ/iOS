@@ -56,8 +56,8 @@ class ProfileSNSTableViewCell: UITableViewCell {
        
     }
     
-    public func snsConfigure(_ item: ProfileSnsDataModel) {
-        snsLabel.text = item.sns
-    }
+//    public func snsConfigure(_ item: SnsResult) {
+//        snsLabel.text = item.address
+//    }
 
 }

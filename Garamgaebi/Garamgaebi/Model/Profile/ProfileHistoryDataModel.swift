@@ -8,18 +8,21 @@
 import Foundation
 
 // MARK: - SNS
-struct ProfileSnsDataModel {
-    var sns: String
-    
-    init(sns: String) {
-        self.sns = sns
-    }
+struct SnsResponse: Decodable {
+    let isSuccess: Bool
+    let code: Int
+    let message: String
+    let result: [SnsResult]
+}
+struct SnsResult: Decodable {
+    let snsIdx: Int
+    let address: String
 }
 
-extension ProfileSnsDataModel {
-    static let data = [
-        ProfileSnsDataModel(sns: "neoninstagram.com")
-    ]
+class SnsData {
+    static let shared = SnsData()
+    
+    var snsDataModel: [SnsResult] = []
 }
 
 
