@@ -9,6 +9,7 @@ import UIKit
 
 import SnapKit
 import Photos
+import Alamofire
 
 
 protocol EditProfileDataDelegate: AnyObject {
@@ -345,12 +346,60 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         guard let editEmail = emailTextField.text else { return }
         guard let editIntroduce = introduceTextField.text else { return }
         
+        // 임시
+        let profileUrl = "ExProfileImage"
+        let memberIdx: Int = 1
+        
         // 변경된 이름값 담기
-        self.delegate?.editData(image: "ExProfileImage", nickname: editName, organization: editOrg, email: editEmail, introduce: editIntroduce)
+        self.delegate?.editData(image: profileUrl, nickname: editName, organization: editOrg, email: editEmail, introduce: editIntroduce)
+        
+        patchMyInfo(memberIdx: memberIdx, nickName: editName, belong: editOrg, profileEmail: editEmail, content: editIntroduce, profileUrl: profileUrl)
         
         self.navigationController?.popViewController(animated: true)
     }
     
+    // MARK: - 유저 정보 수정
+    func patchMyInfo(memberIdx: Int, nickName: String, belong: String, profileEmail: String, content: String, profileUrl: String) {
+        
+        // http 요청 주소 지정
+        let url = "https://garamgaebi.shop/profile/edit/\(memberIdx)"
+        
+        // http 요청 헤더 지정
+        let header : HTTPHeaders = [
+            "Content-Type" : "application/json",
+        ]
+        let bodyData: Parameters = [
+            "memberIdx": memberIdx,
+            "nickName": nickName,
+            "belong" : belong,
+            "profileEmail" : profileEmail,
+            "content": content,
+            "profileUrl": profileUrl
+        ]
+//        print(nickName, profileEmail)
+        
+        // httpBody 에 parameters 추가
+        AF.request(
+            url,
+            method: .post,
+            parameters: bodyData,
+            encoding: JSONEncoding.default,
+            headers: header
+        )
+        .validate()
+        .responseDecodable(of: ProfileEditResponse.self) { response in
+            switch response.result {
+            case .success(let response):
+                if response.isSuccess {
+                    print(response.message)
+                } else {
+                    print("실패(프로필수정): \(response.message)")
+                }
+            case .failure(let error):
+                print("실패(AF-프로필수정: \(error.localizedDescription)")
+            }
+        }
+    }
     
     // 뒤로가기 버튼 did tap
     @objc private func didTapBackBarButton() {

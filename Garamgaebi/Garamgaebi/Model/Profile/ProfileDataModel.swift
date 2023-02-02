@@ -23,6 +23,13 @@ struct ProfileResult: Decodable {
     let profileUrl: String?
 }
 
+// MARK: - ProfileEdit
+struct ProfileEditResponse: Decodable {
+    let isSuccess: Bool
+    let code : Int
+    let message : String
+    let result: String
+}
 
 // MARK: - Sns
 struct ProfileSnsDataModel {
