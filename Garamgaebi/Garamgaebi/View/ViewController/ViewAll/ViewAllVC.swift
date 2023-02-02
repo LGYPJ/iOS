@@ -40,6 +40,11 @@ class ViewAllVC: UIViewController {
         return control
     }()
     
+    lazy var segmentUnderLineView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .mainGray
+        return view
+    }()
     
     private let seminarView: UIViewController = {
         let seminarView = ViewAllSeminarVC()
@@ -130,6 +135,7 @@ class ViewAllVC: UIViewController {
         view.addSubview(headerView)
         headerView.addSubview(titleLabel)
         view.addSubview(segmentedControl)
+        view.addSubview(segmentUnderLineView)
         view.addSubview(pageViewController.view)
     }
     
@@ -154,6 +160,13 @@ class ViewAllVC: UIViewController {
             make.right.equalToSuperview()
             make.top.equalTo(headerView.snp.bottom)
             make.height.equalTo(36)
+        }
+        
+        // segmentUnderLineView
+        segmentUnderLineView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.height.equalTo(2)
+            make.centerY.equalTo(segmentedControl.snp.bottom)
         }
         
         // pageViewController
