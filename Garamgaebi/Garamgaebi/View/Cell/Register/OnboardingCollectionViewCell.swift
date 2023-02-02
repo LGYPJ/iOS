@@ -14,15 +14,14 @@ class OnboardingCollectionViewCell: UICollectionViewCell {
     
     lazy var onboardingImage: UIImageView = {
         let img = UIImageView(image: UIImage(named: "Onboarding1"))
-        img.contentMode = .scaleAspectFill
-//        img.backgroundColor = .mainGray
+        img.contentMode = .scaleAspectFit
         return img
     }()
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "가천대생 개발자들의\n모임 참여를 보다 간편하게"
-        label.font = UIFont.NotoSansKR(type: .Bold, size: 22)
+        label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
         label.textColor = .black
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
@@ -33,7 +32,7 @@ class OnboardingCollectionViewCell: UICollectionViewCell {
     lazy var subTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "모임의 시작에서 끝까지 개가천선으로 확인해요"
-        label.font = UIFont.NotoSansKR(type: .Regular, size: 18)
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         label.textColor = .black
         label.numberOfLines = 1
         return label
@@ -42,6 +41,7 @@ class OnboardingCollectionViewCell: UICollectionViewCell {
     // MARK: - Life Cycles
     override func awakeFromNib() {
         super.awakeFromNib()
+        
     }
     
     override func layoutSubviews() {
@@ -51,11 +51,6 @@ class OnboardingCollectionViewCell: UICollectionViewCell {
         setLayouts()
     }
     
-    override func prepareForReuse() {
-        // 해당 처리를 해준 이유가 계속 로티 이미지가 겹쳐서 생성되는 문제가 있었기 때문
-//        lottieName = ""
-//        animationView.stop()
-    }
     // MARK: - Config Methods
     func addSubViews(){
         contentView.addSubview(onboardingImage)
@@ -65,7 +60,7 @@ class OnboardingCollectionViewCell: UICollectionViewCell {
     func setLayouts(){
         onboardingImage.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.centerX.equalToSuperview().offset(-15) // 이미지 중앙정렬 맞으면 고쳐야함
+            make.centerX.equalToSuperview()
         }
         subTitleLabel.snp.makeConstraints { make in
             make.bottom.equalToSuperview()
@@ -77,10 +72,6 @@ class OnboardingCollectionViewCell: UICollectionViewCell {
         }
         
     }
-    // MARK: - Custom Functions
-//    func setOnboardingSlides(_ slides: OnboardingDataModel) {
-//        onboardingTitleLabel.text = slides.title
-//        onboardingDescriptionLabel.text = slides.subTitle
-//    }
+
 
 }
