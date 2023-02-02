@@ -191,33 +191,54 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
         }
     }
     
-    public func configure(_ item: ViewAllMyEventDataModel) {
+    public func configureReady(_ item: MyEventInfoReady) {
         // TODO: 나중에 해줘야할 수 있음
-//        baseView.isHidden = false
-//        zeroDataBackgroundView.isHidden = true
+        baseView.isHidden = false
+        zeroDataBackgroundView.isHidden = true
+        settingButton.isHidden = false
+        dateTimeView.backgroundColor = .mainLightBlue
         
-        // item.date -> dateString
-        let date = item.date
+        // item.date -> (String -> Date)
+        let dateTime = item.date.toDate()
+        
         let dateformatter = DateFormatter()
+        // (Date -> String)
         dateformatter.dateFormat = "M월 dd일"
-        let dateResult = dateformatter.string(from: date)
-        
-        // item.date -> timeString
-        let timeformatter = DateFormatter()
-        timeformatter.dateFormat = "HH:mm"
-        let timeResult = timeformatter.string(from: date)
-        
+        let dateResult = dateformatter.string(from: dateTime ?? Date())
         dateInfoLabel.text = dateResult
+        
+        dateformatter.dateFormat = "HH:mm"
+        let timeResult = dateformatter.string(from: dateTime ?? Date())
         timeInfoLabel.text = timeResult
+        
         titleInfoLabel.text = item.title
         locationInfoLabel.text = item.location
         
-        if item.state != "마감" {
-            settingButton.isHidden = false
-            dateTimeView.backgroundColor = .mainLightBlue
-        } else {
-            settingButton.isHidden = true
-        }
+    }
+    
+    public func configureClose(_ item: MyEventInfoClose) {
+        // TODO: 나중에 해줘야할 수 있음
+        baseView.isHidden = false
+        zeroDataBackgroundView.isHidden = true
+        settingButton.isHidden = true
+        dateTimeView.backgroundColor = UIColor(hex: 0xF5F5F5)
+        
+        // item.date -> (String -> Date)
+        let dateTime = item.date.toDate()
+        
+        let dateformatter = DateFormatter()
+        // (Date -> String)
+        dateformatter.dateFormat = "M월 dd일"
+        let dateResult = dateformatter.string(from: dateTime ?? Date())
+        dateInfoLabel.text = dateResult
+        
+        dateformatter.dateFormat = "HH:mm"
+        let timeResult = dateformatter.string(from: dateTime ?? Date())
+        timeInfoLabel.text = timeResult
+        
+        titleInfoLabel.text = item.title
+        locationInfoLabel.text = item.location
+ 
     }
     
     // TODO: API 통신 후 수정
