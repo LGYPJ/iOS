@@ -53,6 +53,7 @@
 		60093A8B296E7EFB00F76783 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60093A8A296E7EFB00F76783 /* LoginVC.swift */; };
 		60093A8D296E90FD00F76783 /* SchoolEmailAuthVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60093A8C296E90FD00F76783 /* SchoolEmailAuthVC.swift */; };
 		60093A8F296EC92200F76783 /* InputNickNameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60093A8E296EC92200F76783 /* InputNickNameVC.swift */; };
+		600BE590298B8A800040F23F /* RecommendUsersModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600BE58F298B8A800040F23F /* RecommendUsersModel.swift */; };
 		6018232829726BF600160EF4 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6018232729726BF600160EF4 /* TabBarController.swift */; };
 		6018232A29729DA400160EF4 /* CALayer+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6018232929729DA400160EF4 /* CALayer+.swift */; };
 		601823332972DDCA00160EF4 /* HomeEventInfoTabelViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601823322972DDCA00160EF4 /* HomeEventInfoTabelViewCell.swift */; };
@@ -180,6 +181,7 @@
 		60093A8A296E7EFB00F76783 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		60093A8C296E90FD00F76783 /* SchoolEmailAuthVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolEmailAuthVC.swift; sourceTree = "<group>"; };
 		60093A8E296EC92200F76783 /* InputNickNameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputNickNameVC.swift; sourceTree = "<group>"; };
+		600BE58F298B8A800040F23F /* RecommendUsersModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendUsersModel.swift; sourceTree = "<group>"; };
 		6018232729726BF600160EF4 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		6018232929729DA400160EF4 /* CALayer+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+.swift"; sourceTree = "<group>"; };
 		601823322972DDCA00160EF4 /* HomeEventInfoTabelViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeEventInfoTabelViewCell.swift; sourceTree = "<group>"; };
@@ -483,6 +485,7 @@
 				60321601297A745400ACBB04 /* Notification */,
 				60F4C1532987E152004D9FCD /* SeminarModel.swift */,
 				60F4C1552987E330004D9FCD /* NetworkingModel.swift */,
+				600BE58F298B8A800040F23F /* RecommendUsersModel.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -618,7 +621,6 @@
 				2CED690629878AB200C838BD /* EventApplyCancelViewModel.swift */,
 				60DCC894298A45AD002E7714 /* ViewAllViewModel.swift */,
 				2CED690A298940E200C838BD /* EventApplyViewModel.swift */,
-
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1060,6 +1062,7 @@
 				46B4780B29700FEE002186A3 /* ProfileServiceVC.swift in Sources */,
 				46C18D2929788A7600A05CBF /* ProfileInputSNSVC.swift in Sources */,
 				460C0C2B296D855800FF5085 /* ProfileEditVC.swift in Sources */,
+				600BE590298B8A800040F23F /* RecommendUsersModel.swift in Sources */,
 				46828A4229752EF80037AB8C /* ProfileInputEducationVC.swift in Sources */,
 				60EDD4092976606400600807 /* ViewAllMyEventVC.swift in Sources */,
 				60F913FF296D2F2C00626C40 /* HomeVC.swift in Sources */,

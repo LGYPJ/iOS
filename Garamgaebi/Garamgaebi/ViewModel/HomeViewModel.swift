@@ -74,6 +74,31 @@ class HomeViewModel {
             }
     }
     
+    // MARK: Request [가람개비 유저]
+    
+    // 홈 화면 가람개비 유저 조회 request
+    public static func getRecommendUsersInfo(completion: @escaping (([RecommendUsersInfo]) -> Void)) {
+        let url = "https://garamgaebi.shop/profile/profiles"
+
+        AF.request(url, method: .get)
+            .validate()
+            .responseDecodable(of: RecommendUsersInfoResponse.self) { response in
+                switch response.result {
+                case .success(let result):
+                    if result.isSuccess {
+                        guard let result = result.result else {return}
+                        completion(result)
+                    } else {
+                        // 통신은 정상적으로 됐으나(200), error발생
+                        print("실패(홈 화면 RecommedUsers 조회): \(result.message)")
+                    }
+                case .failure(let error):
+                    // 실제 HTTP에러 404
+                    print("실패(AF-홈 화면 RecommedUsers 조회): \(error.localizedDescription)")
+                }
+            }
+    }
+    
    
    
 }
