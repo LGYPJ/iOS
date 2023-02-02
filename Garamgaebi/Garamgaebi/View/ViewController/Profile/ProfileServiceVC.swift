@@ -231,7 +231,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     
     // 회원탈퇴 버튼 did tap
     @objc private func withdrawalButtonDidTap() {
-        print("회원탈퇴 버튼 클릭")
+//        print("회원탈퇴 버튼 클릭")
         
         // 화면 전환
         let nextVC = ProfileWithdrawalVC()
@@ -254,7 +254,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
 
     // 뒤로가기 버튼 did tap
     @objc private func didTapBackBarButton() {
-        print("뒤로가기 버튼 클릭")
+//        print("뒤로가기 버튼 클릭")
         self.navigationController?.popViewController(animated: true)
     }
     

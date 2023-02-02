@@ -211,13 +211,13 @@ class ProfileWithdrawalVC: UIViewController {
     }
     
     @objc private func didTapBackBarButton() {
-        print("뒤로가기 버튼 클릭")
+//        print("뒤로가기 버튼 클릭")
         self.navigationController?.popViewController(animated: false)
     }
     
     // 회원탈퇴 버튼 did tap
     @objc private func withdrawalButtonDidTap() {
-        print("회원탈퇴 버튼 클릭")
+//        print("회원탈퇴 버튼 클릭")
         
         self.navigationController?.popViewController(animated: false)
     }

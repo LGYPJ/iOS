@@ -342,7 +342,7 @@ class ProfileInputEducationVC: UIViewController {
     }
 
     @objc private func saveButtonDidTap(_ sender: UIButton) {
-        print("저장하기 버튼 클릭")
+//        print("저장하기 버튼 클릭")
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -350,14 +350,14 @@ class ProfileInputEducationVC: UIViewController {
         sender.isSelected.toggle()
         switch sender.isSelected {
         case true:
-            sender.setTitleColor(UIColor(hex: 0x000000).withAlphaComponent(0.8), for: .normal)
+            sender.setTitleColor(UIColor.mainBlack, for: .normal)
         case false:
             sender.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
         }
     }
 
     @objc func textFieldActivated(_ sender: UITextField) {
-        sender.layer.borderColor = UIColor(hex: 0x000000).withAlphaComponent(0.8).cgColor
+        sender.layer.borderColor = UIColor.mainBlack.cgColor
         sender.layer.borderWidth = 1
     }
 
@@ -368,7 +368,7 @@ class ProfileInputEducationVC: UIViewController {
     
     // 뒤로가기 버튼 did tap
     @objc private func didTapBackBarButton() {
-        print("뒤로가기 버튼 클릭")
+//        print("뒤로가기 버튼 클릭")
         self.navigationController?.popViewController(animated: true)
     }
     
