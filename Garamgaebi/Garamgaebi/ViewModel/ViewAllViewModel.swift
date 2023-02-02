@@ -167,4 +167,71 @@ class ViewAllViewModel {
                 }
             }
     }
+    
+    
+    
+    // MARK: Request [내 모임]
+    
+    // 모아보기 예정된 모임 조회 request
+    public static func getViewAllMyEventReadyInfo(memberId: Int, completion: @escaping (([MyEventInfoReady]) -> Void)) {
+        let url = "https://garamgaebi.shop/programs/\(memberId)/ready"
+        
+//        completion(
+//            [MyEventInfoReady(programIdx: 1, title: "2차 세미나", date: "2023-12-25T18:00:00", location: "가천대", type: "SEMINAR", payment: "PREMEUM", status: "THIS_MONTH", isOpen: "OPEN"),
+//             MyEventInfoReady(programIdx: 1, title: "2차 세미나", date: "2023-02-02T07:28:55.749Z", location: "가천대", type: "SEMINAR", payment: "PREMEUM", status: "THIS_MONTH", isOpen: "OPEN"),
+//             MyEventInfoReady(programIdx: 1, title: "2차 세미나", date: "2023-02-25T18:00:00", location: "가천대", type: "SEMINAR", payment: "PREMEUM", status: "THIS_MONTH", isOpen: "OPEN")
+//            ]
+//        )
+        
+        AF.request(url, method: .get)
+            .validate()
+            .responseDecodable(of: MyEventInfoReadyResponse.self) { response in
+                switch response.result {
+                case .success(let result):
+                    if result.isSuccess {
+                        guard let result = result.result else {return}
+                        completion(result)
+                    } else {
+                        // 통신은 정상적으로 됐으나(200), error발생
+                        print("실패(홈 화면 MyEvent 조회): \(result.message)")
+                    }
+                case .failure(let error):
+                    // 실제 HTTP에러 404
+                    print("실패(AF-홈 화면 MyEvent 조회): \(error.localizedDescription)")
+                }
+            }
+    }
+    
+    // 모아보기 마감된 모임 조회 request
+    public static func getViewAllMyEventCloseInfo(memberId: Int, completion: @escaping (([MyEventInfoClose]) -> Void)) {
+        let url = "https://garamgaebi.shop/programs/\(memberId)/close"
+        
+//        completion(
+//            [MyEventInfoClose(programIdx: 1, title: "2차 세미나", date: "2023-12-25T18:00:00", location: "가천대", type: "SEMINAR", payment: "PREMEUM", status: "THIS_MONTH", isOpen: "CLOSE"),
+//             MyEventInfoClose(programIdx: 1, title: "2차 네트워킹", date: "2023-02-02T07:28:55.749Z", location: "가천대", type: "NETWORKING", payment: "PREMEUM", status: "THIS_MONTH", isOpen: "CLOSE"),
+//             MyEventInfoClose(programIdx: 1, title: "2차 세미나", date: "2023-02-25T18:00:00", location: "가천대", type: "SEMINAR", payment: "PREMEUM", status: "THIS_MONTH", isOpen: "CLOSE")
+//            ]
+//        )
+        
+        AF.request(url, method: .get)
+            .validate()
+            .responseDecodable(of: MyEventInfoCloseResponse.self) { response in
+                switch response.result {
+                case .success(let result):
+                    if result.isSuccess {
+                        guard let result = result.result else {return}
+                        completion(result)
+                    } else {
+                        // 통신은 정상적으로 됐으나(200), error발생
+                        print("실패(홈 화면 MyEvent 조회): \(result.message)")
+                    }
+                case .failure(let error):
+                    // 실제 HTTP에러 404
+                    print("실패(AF-홈 화면 MyEvent 조회): \(error.localizedDescription)")
+                }
+            }
+    }
+    
+    
+    
 }
