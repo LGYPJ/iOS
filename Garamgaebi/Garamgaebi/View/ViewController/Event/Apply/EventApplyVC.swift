@@ -337,11 +337,17 @@ class EventApplyVC: UIViewController {
 		configureViews()
 		configureDummyData()
 		configureTextField()
+		configureGestureRecognizer()
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		self.tabBarController?.tabBar.isHidden = true
+	}
+	
+	// view를 터치했을때 editing 끝나게, 하지만 scrollview touch는 안먹음
+	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+		self.view.endEditing(true)
 	}
 	
 	// TODO: API연동 후 삭제
@@ -509,12 +515,12 @@ extension EventApplyVC {
 		nicknameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
 		numberTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
 		
-//		nameTextField.delegate = self
-//		nicknameTextField.delegate = self
-//		numberTextField.delegate = self
+		nameTextField.delegate = self
+		nicknameTextField.delegate = self
+		numberTextField.delegate = self
 		
-		nameTextField.returnKeyType = .next
-		nicknameTextField.returnKeyType = .next
+		nameTextField.returnKeyType = .done
+		nicknameTextField.returnKeyType = .done
 		numberTextField.returnKeyType = .done
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -572,6 +578,19 @@ extension EventApplyVC {
 //			alertLabel.isHidden = true
 			alertLabel.alpha = 0
 		}
+	}
+	
+	private func configureGestureRecognizer() {
+		let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(scrollViewDidTap))
+		tapGestureRecognizer.numberOfTapsRequired = 1
+		tapGestureRecognizer.isEnabled = true
+		tapGestureRecognizer.cancelsTouchesInView = false
+		
+		scrollView.addGestureRecognizer(tapGestureRecognizer)
+	}
+	
+	@objc private func scrollViewDidTap() {
+		self.view.endEditing(true)
 	}
 	
 	// 뒤로가기 버튼 did tap
@@ -640,4 +659,10 @@ extension EventApplyVC {
 	}
 }
 
+extension EventApplyVC: UITextFieldDelegate {
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		textField.resignFirstResponder()
+		return true
+	}
+}
 
