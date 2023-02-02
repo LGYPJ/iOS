@@ -16,9 +16,7 @@ class HomeVC: UIViewController {
     public var homeSeminarInfo: [HomeSeminarInfo] = [] {
         didSet {
             // notification -> Cell
-            
             NotificationCenter.default.post(name: Notification.Name("presentHomeSeminarInfo"), object: homeSeminarInfo)
-            
             self.tableView.reloadData()
         }
     }
@@ -26,9 +24,15 @@ class HomeVC: UIViewController {
     public var homeNetworkingInfo: [HomeNetworkingInfo] = [] {
         didSet {
             // notification -> Cell
-            
             NotificationCenter.default.post(name: Notification.Name("presentHomeNetworkingInfo"), object: homeNetworkingInfo)
-            
+            self.tableView.reloadData()
+        }
+    }
+    
+    public var recommendUsersInfo: [RecommendUsersInfo] = [] {
+        didSet {
+            // notification -> Cell
+            NotificationCenter.default.post(name: Notification.Name("presentRecommendUsersInfo"), object: recommendUsersInfo)
             self.tableView.reloadData()
         }
     }
@@ -98,9 +102,7 @@ class HomeVC: UIViewController {
         headerView.addSubview(titleLabel)
         headerView.addSubview(notificationViewButton)
         view.addSubview(tableView)
-        
-        
-        
+
     }
     
     func configLayouts() {
@@ -142,6 +144,11 @@ class HomeVC: UIViewController {
         HomeViewModel.getHomeNetworkingInfo { [weak self] result in
             self?.homeNetworkingInfo = result
         }
+        
+        HomeViewModel.getRecommendUsersInfo { [weak self] result in
+            self?.recommendUsersInfo = result
+        }
+        
 
     }
     

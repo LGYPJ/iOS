@@ -17,8 +17,16 @@ class HomeUserInfoTableViewCell: UITableViewCell {
     static let identifier = String(describing: HomeUserInfoTableViewCell.self)
     static let cellHeight = 254.0
     
-    let dataList = HomeUserDataModel.list
+    //let dataList = HomeUserDataModel.list
+    //var recommedUsersList: [RecommendUsersInfo] = []
     
+    public var recommendUsersList: [RecommendUsersInfo] = [] {
+        didSet {
+            self.collectionView.reloadData()
+            // cell -> Home으로 변경사항 알림
+            NotificationCenter.default.post(name: Notification.Name("HomeTableViewReload"), object: nil)
+        }
+    }
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -67,7 +75,9 @@ class HomeUserInfoTableViewCell: UITableViewCell {
         self.contentView.addSubview(collectionView)
         
         self.contentView.addSubview(interSpcace)
+        
         configSubViewLayouts()
+        configNotificationCenter()
         
     }
     
@@ -91,6 +101,14 @@ class HomeUserInfoTableViewCell: UITableViewCell {
         }
     }
     
+    func configNotificationCenter() {
+        NotificationCenter.default.addObserver(self, selector: #selector(presentRecommendUsersInfo(_:)), name: Notification.Name("presentRecommendUsersInfo"), object: nil)
+    }
+    
+    @objc func presentRecommendUsersInfo(_ notification: NSNotification) {
+        guard let recommendUsersListBase = notification.object as? [RecommendUsersInfo] else { return }
+        recommendUsersList = recommendUsersListBase
+    }
     
 }
 
@@ -105,7 +123,7 @@ extension HomeUserInfoTableViewCell: UICollectionViewDataSource, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataList.count
+        return recommendUsersList.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -136,7 +154,7 @@ extension HomeUserInfoTableViewCell: UICollectionViewDataSource, UICollectionVie
             return UICollectionViewCell()
         }
         
-        cell.configure(dataList[indexPath.row])
+        cell.configure(recommendUsersList[indexPath.row])
         
         return cell
     }
