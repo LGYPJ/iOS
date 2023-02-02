@@ -31,7 +31,7 @@ struct MyEventInfoCloseResponse: Decodable {
     let isSuccess: Bool
     let code: Int
     let message: String
-    let result: [MyEventInfoReady]?
+    let result: [MyEventInfoClose]?
 }
 
 struct MyEventInfoClose: Decodable {
