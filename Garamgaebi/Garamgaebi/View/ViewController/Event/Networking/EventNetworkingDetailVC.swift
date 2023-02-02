@@ -76,7 +76,7 @@ class EventNetworkingDetailVC: UIViewController {
 		configureTableView()
 		fetchNetworkingInfo()
 		
-		
+		self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -194,6 +194,13 @@ extension EventNetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	
+}
+
+extension EventNetworkingDetailVC: UIGestureRecognizerDelegate {
+	func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+			return true
+		}
+
 }
 
 

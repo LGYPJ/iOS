@@ -76,6 +76,8 @@ class EventSeminarDetailVC: UIViewController {
 		configureTableView()
 		configureViews()
 		fetchSeminarInfo()
+		
+		self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -190,4 +192,11 @@ extension EventSeminarDetailVC: UITableViewDelegate, UITableViewDataSource {
 		}
 	}
 	
+}
+
+extension EventSeminarDetailVC: UIGestureRecognizerDelegate {
+	func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+			return true
+		}
+
 }
