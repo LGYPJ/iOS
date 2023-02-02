@@ -162,8 +162,8 @@ class InputNickNameVC: UIViewController {
         
         // nextButton
         nextButton.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(14)
-            make.right.equalToSuperview().inset(14)
+            make.left.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16)
             make.bottom.equalToSuperview().inset(48)
             make.height.equalTo(48)
         }
@@ -237,13 +237,3 @@ class InputNickNameVC: UIViewController {
     }
 }
 
-extension String {
-    
-    // id 정규표현식 5~13자
-    func isValidNickName() -> Bool {
-        let nickRegEx = "[가-힣A-Za-z0-9]{1,8}"
-        let nickTest = NSPredicate(format: "SELF MATCHES %@", nickRegEx)
-        
-        return nickTest.evaluate(with: self)
-    }
-}

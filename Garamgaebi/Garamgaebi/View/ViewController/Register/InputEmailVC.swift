@@ -162,8 +162,8 @@ class InputEmailVC: UIViewController {
         
         // nextButton
         nextButton.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(14)
-            make.right.equalToSuperview().inset(14)
+            make.left.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16)
             make.bottom.equalToSuperview().inset(48)
             make.height.equalTo(48)
         }
@@ -236,16 +236,5 @@ class InputEmailVC: UIViewController {
             fatalError("Missing TextField...")
         }
 
-    }
-}
-
-extension String {
-    
-    // id 정규표현식 5~13자
-    func isValidEmail() -> Bool {
-        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
-        let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
-        
-        return emailTest.evaluate(with: self)
     }
 }
