@@ -128,7 +128,8 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
         }
         
         feeInfoLabel.snp.makeConstraints { make in
-            make.top.equalTo(stateInfoLabel.snp.top)
+            make.centerY.equalTo(stateInfoLabel.snp.centerY)
+            make.height.equalTo(18)
             make.left.equalTo(stateInfoLabel.snp.right).offset(8)
         }
         
