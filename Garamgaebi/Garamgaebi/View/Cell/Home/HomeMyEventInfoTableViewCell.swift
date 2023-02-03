@@ -36,22 +36,18 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
     private let collectionViewFlowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        //layout.minimumLineSpacing = 18.0
         layout.minimumInteritemSpacing = 0
-        //layout.itemSize = .init(width: 300, height: cellHeight)
         return layout
     }()
     
     lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewFlowLayout)
         view.isScrollEnabled = false
-        
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
         view.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
         view.clipsToBounds = true
         view.register(HomeMyEventColectionViewCell.self, forCellWithReuseIdentifier: HomeMyEventColectionViewCell.identifier)
-        
         return view
     }()
     
@@ -61,7 +57,6 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
         view.layer.borderColor = UIColor.mainGray.withAlphaComponent(0.8).cgColor
         view.layer.borderWidth = 1
         view.layer.cornerRadius = 12
-        
         return view
     }()
     
@@ -79,7 +74,6 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
         label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         label.textColor = .mainGray.withAlphaComponent(0.8)
         label.textAlignment = .center
-        
         return label
     }()
     
@@ -176,5 +170,18 @@ extension HomeMyEventInfoTableViewCell: UICollectionViewDataSource, UICollection
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 8
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let postObject = myEventList[indexPath.row]
+        
+        switch(postObject.type){
+        case "SEMINAR":
+            NotificationCenter.default.post(name: Notification.Name("pushSeminarDetailVC"), object: MyEventToDetailInfo(programIdx: postObject.programIdx, type: postObject.type))
+        case "NETWORKING":
+            NotificationCenter.default.post(name: Notification.Name("pushNetworkingDetailVC"), object: MyEventToDetailInfo(programIdx: postObject.programIdx, type: postObject.type))
+        default:
+            print(">>>ERROR: HomeMyEventInfoViewCell didSelectItemAt programType")
+        }
     }
 }
