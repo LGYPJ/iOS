@@ -44,3 +44,8 @@ struct MyEventInfoClose: Decodable {
     let status: String
     let isOpen: String
 }
+
+struct MyEventToDetailInfo {
+    let programIdx: Int
+    let type: String
+}
