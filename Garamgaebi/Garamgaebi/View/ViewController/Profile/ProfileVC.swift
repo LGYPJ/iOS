@@ -19,7 +19,10 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     let educationDataList = ProfileEducationDataModel.list
     
     // 추후 로그인 구현 후 변경
-    let memberIdx: Int = 1
+    let memberIdx: Int = 9 // 코코아
+    
+    // 추후 변경 (토큰 저장)
+    let token: String = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjb2NvYUBnYWNob24uYWMua3IiLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjc1NDQ0NDcyfQ.sodx-Szs9KxAkCh6DJ67MaayWA1Iy6WPMDj7fQJfNqM"
     
     // MARK: - Subviews
     lazy var headerView: UIView = {
@@ -257,22 +260,29 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         super.viewDidLoad()
         
         configureLayouts()
-//        configureDummyData()
         
         // 서버 통신
         getMyInfo()
-        getSnsData()
+//        getSnsData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         // 서버 통신
-//        getSnsData()
-        showSnsDefaultLabel()
+        getSnsData()
+//        showSnsDefaultLabel()
         
+//        print("1: viewWillAppear()")
         navigationController?.navigationBar.isHidden = true
         tabBarController?.tabBar.isHidden = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+//        print("1: viewDidAppear()")
+        showSnsDefaultLabel()
     }
     
     
@@ -385,31 +395,6 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             $0.top.equalTo(snsTopRadiusView.snp.bottom).offset(-1)
             $0.leading.trailing.equalTo(snsTopRadiusView)
         }
-//        let snsDataModel = SnsData.shared.snsDataModel
-//        print("테이블뷰 높이에 맞게 넣어줄게요: \(snsDataModel.count)")
-//        snsTableView.snp.makeConstraints {
-//            $0.top.equalToSuperview()
-//            $0.leading.trailing.equalToSuperview()
-//            $0.bottom.equalTo(addSnsBtn.snp.top).offset(-12)
-////            $0.height.equalTo(90)
-//            $0.height.equalTo(snsDataModel.count * 41)
-//        }
-//        if (snsDataList.count == 0) {
-//            snsDefaultLabel.snp.makeConstraints {
-//                $0.top.equalToSuperview().inset(12)
-//                $0.centerX.equalToSuperview()
-//                $0.bottom.equalTo(addSnsBtn.snp.top).offset(-12)
-//            }
-//        }
-//        else {
-//            print("SNS 테이블뷰 보여주기")
-//            snsTableView.snp.makeConstraints {
-//                $0.top.equalToSuperview()
-//                $0.leading.trailing.equalToSuperview()
-//                $0.bottom.equalTo(addSnsBtn.snp.top).offset(-12)
-//                $0.height.equalTo(snsDataList.count * 41)
-//            }
-//        }
         addSnsBtn.snp.makeConstraints { /// SNS 추가 버튼
             $0.bottom.equalTo(snsBottomRadiusView).inset(12)
             $0.centerX.equalTo(snsBottomRadiusView)
@@ -524,6 +509,10 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         nextVC.introduceTextField.text = introduceString
         nextVC.introduceTextField.textColor = .mainBlack
         
+        // 사용자
+        nextVC.memberIdx = memberIdx
+        nextVC.authorizaton = "Bearer \(token)"
+        
         nextVC.delegate = self
         navigationController?.pushViewController(nextVC, animated: true)
     }
@@ -533,6 +522,9 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         
         // 화면 전환
         let nextVC = ProfileInputSNSVC()
+        nextVC.memberIdx = memberIdx
+        nextVC.authorization = "Bearer \(token)"
+        
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
@@ -558,9 +550,12 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/\(memberIdx)"
         
+        let authorization = "Bearer \(token)"
+        
         // http 요청 헤더 지정
         let header : HTTPHeaders = [
-            "Content-Type" : "application/json",
+            "Content-Type": "application/json",
+            "Authorization": authorization
         ]
         
         // httpBody에 parameters 추가
@@ -610,9 +605,12 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/sns/\(memberIdx)"
         
+        let authorization = "Bearer \(token)"
+        
         // http 요청 헤더 지정
-        let header : HTTPHeaders = [
-            "Content-Type" : "application/json"
+        let header: HTTPHeaders = [
+            "Content-Type" : "application/json",
+            "Authorization": authorization
         ]
         
         // httpBody에 parameters 추가
@@ -627,37 +625,29 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
-                    print("성공(SNS): \(response.message)")
+                    print("성공(SNS조회): \(response.message)")
                     let result = response.result
 
                     let snsData = SnsData.shared
                     
                     // 값 넣어주기
                     snsData.snsDataModel = result
-//                    print(snsData.snsDataModel)
+//                    print("받은 SNS: \(snsData.snsDataModel.count)")
                     self.snsTableView.reloadData()
                     
                 } else {
-                    print("실패(SNS): \(response.message)")
+                    print("실패(SNS조회): \(response.message)")
                 }
             case .failure(let error):
-                print("실패(AF-SNS): \(error.localizedDescription)")
+                print("실패(AF-SNS조회): \(error.localizedDescription)")
             }
-        }
-        
-        // TODO: API연동 후 삭제
-        func configureDummyData() {
-            nameLabel.text = "코코아"
-            orgLabel.text = "가천대학교 소프트웨어학과"
-            emailLabel.text = "umc@gmail.com"
-            introduceTextField.text = "자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소."
         }
         
     }
     
     func showSnsDefaultLabel() {
         let snsCount = SnsData.shared.snsDataModel.count
-//        print("테이블뷰 높이에 맞게 넣어줄게요: \(snsCount)")
+//        print("들어가는 SNS: \(snsCount)")
         
         if (snsCount == 0) {
 //            print("SNS 아이템이 없음")

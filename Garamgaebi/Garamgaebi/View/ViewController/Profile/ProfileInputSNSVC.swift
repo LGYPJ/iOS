@@ -14,6 +14,7 @@ class ProfileInputSNSVC: UIViewController {
 
     // MARK: - Properties
     lazy var memberIdx: Int = 0
+    lazy var authorization: String = ""
     
     // MARK: - Subviews
     lazy var headerView: UIView = {
@@ -110,13 +111,13 @@ class ProfileInputSNSVC: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        print("2: viewWillDisappear()")
+//        print("2: viewWillDisappear()")
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        print("2: viewDidDisappear()")
+//        print("2: viewDidDisappear()")
     }
     
     // MARK: - Functions
@@ -228,7 +229,8 @@ class ProfileInputSNSVC: UIViewController {
         
         // http 요청 헤더 지정
         let header : HTTPHeaders = [
-            "Content-Type" : "application/json",
+            "Content-Type": "application/json",
+            "Authorization": authorization
         ]
         let bodyData: Parameters = [
             "memberIdx": memberIdx,
