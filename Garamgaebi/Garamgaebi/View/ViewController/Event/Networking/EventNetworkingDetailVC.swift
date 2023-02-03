@@ -53,6 +53,13 @@ class EventNetworkingDetailVC: UIViewController {
 	var networkingId: Int
 	var networkingInfo: NetworkingDetailInfo = .init(programIdx: 0, title: "", date: "", location: "", fee: 0, endDate: "", programStatus: "", userButtonStatus: "") {
 		didSet {
+			configureStatus()
+//			tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+		}
+	}
+	
+	var userButtonStatus = ProgramUserButtonStatus.APPLY {
+		didSet {
 			tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
 		}
 	}
@@ -141,6 +148,29 @@ extension EventNetworkingDetailVC {
 		})
 	}
 	
+	// 서버에서 받은 status string을 enum에서 정의한 타입으로 변경
+	private func configureStatus() {
+		switch networkingInfo.userButtonStatus {
+		case ProgramUserButtonStatus.APPLY.rawValue:
+			self.userButtonStatus = .APPLY
+			
+		case ProgramUserButtonStatus.CANCEL.rawValue:
+			self.userButtonStatus = .CANCEL
+			
+		case ProgramUserButtonStatus.BEFORE_APPLY_CONFIRM.rawValue:
+			self.userButtonStatus = .BEFORE_APPLY_CONFIRM
+			
+		case ProgramUserButtonStatus.APPLY_COMPLETE.rawValue:
+			self.userButtonStatus = .APPLY_COMPLETE
+			
+		case ProgramUserButtonStatus.CLOSED.rawValue:
+			self.userButtonStatus = .CLOSED
+
+		default:
+			print("세미나 상세보기 Button Error")
+		}
+	}
+	
 	
 	// 뒤로가기 버튼 did tap
 	@objc private func didTapBackBarButton() {
@@ -174,7 +204,48 @@ extension EventNetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 			cell.locationInfoLabel.text = self.networkingInfo.location
 			cell.costInfoLabel.text = "\(self.networkingInfo.fee)"
 			cell.deadlineInfoLabel.text = self.networkingInfo.endDate
-			cell.registerButton.setTitle(self.networkingInfo.userButtonStatus, for: .normal)
+			
+			switch self.userButtonStatus {
+			case .APPLY:
+				cell.registerButton.setTitle("신청하기", for: .normal)
+				cell.registerButton.setTitleColor(.white, for: .normal)
+				cell.registerButton.isEnabled = true
+				cell.registerButton.backgroundColor = .mainBlue
+				cell.registerButton.layer.borderWidth = 1
+			case .CANCEL:
+				cell.registerButton.setTitle("신청취소", for: .normal)
+				cell.registerButton.setTitleColor(.white, for: .normal)
+				cell.registerButton.isEnabled = true
+				cell.registerButton.backgroundColor = .mainBlue
+				cell.registerButton.layer.borderWidth = 1
+				
+			case .BEFORE_APPLY_CONFIRM:
+				cell.registerButton.setTitle("신청확인중", for: .normal)
+				cell.registerButton.setTitleColor(.mainBlue, for: .normal)
+				cell.registerButton.isEnabled = false
+				cell.registerButton.backgroundColor = .white
+				cell.registerButton.layer.borderWidth = 1
+				
+			case .APPLY_COMPLETE:
+				cell.registerButton.setTitle("신청완료", for: .normal)
+				cell.registerButton.setTitleColor(.mainBlue, for: .normal)
+				cell.registerButton.isEnabled = false
+				cell.registerButton.backgroundColor = .white
+				cell.registerButton.layer.borderWidth = 1
+				
+			case .CLOSED:
+				cell.registerButton.setTitle("마감", for: .normal)
+				cell.registerButton.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
+				cell.registerButton.isEnabled = false
+				cell.registerButton.backgroundColor = .mainGray
+				cell.registerButton.layer.borderWidth = 0
+			default:
+				cell.registerButton.setTitle("", for: .normal)
+				cell.registerButton.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
+				cell.registerButton.isEnabled = false
+				cell.registerButton.backgroundColor = .mainGray
+				cell.registerButton.layer.borderWidth = 0
+			}
 			
 			return cell
 		case 1:

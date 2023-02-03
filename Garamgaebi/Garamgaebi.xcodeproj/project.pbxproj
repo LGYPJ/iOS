@@ -38,6 +38,7 @@
 		2CED690729878AB200C838BD /* EventApplyCancelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED690629878AB200C838BD /* EventApplyCancelViewModel.swift */; };
 		2CED690B298940E200C838BD /* EventApplyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED690A298940E200C838BD /* EventApplyViewModel.swift */; };
 		2CED690D2989426A00C838BD /* EventApplyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED690C2989426A00C838BD /* EventApplyModel.swift */; };
+		2CED690F298CBD2800C838BD /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED690E298CBD2800C838BD /* Status.swift */; };
 		460C0C2B296D855800FF5085 /* ProfileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460C0C2A296D855800FF5085 /* ProfileEditVC.swift */; };
 		4614A1732984BA9500D12108 /* ProfileSNSTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4614A1722984BA9500D12108 /* ProfileSNSTableViewCell.swift */; };
 		462183F5297C51B800B9A035 /* ServiceBottomSheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462183F4297C51B800B9A035 /* ServiceBottomSheetVC.swift */; };
@@ -162,6 +163,7 @@
 		2CED690629878AB200C838BD /* EventApplyCancelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventApplyCancelViewModel.swift; sourceTree = "<group>"; };
 		2CED690A298940E200C838BD /* EventApplyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventApplyViewModel.swift; sourceTree = "<group>"; };
 		2CED690C2989426A00C838BD /* EventApplyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventApplyModel.swift; sourceTree = "<group>"; };
+		2CED690E298CBD2800C838BD /* Status.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
 		4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Garamgaebi_GaramgaebiUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		460C0C2A296D855800FF5085 /* ProfileEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditVC.swift; sourceTree = "<group>"; };
 		4614A1722984BA9500D12108 /* ProfileSNSTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSNSTableViewCell.swift; sourceTree = "<group>"; };
@@ -657,6 +659,7 @@
 			children = (
 				609A53D1296AB47300BBD338 /* AppDelegate.swift */,
 				609A53D3296AB47300BBD338 /* SceneDelegate.swift */,
+				2CED690E298CBD2800C838BD /* Status.swift */,
 				60F9140A296D465E00626C40 /* Fonts */,
 				60F91405296D440F00626C40 /* Extension */,
 				603215FD297A738400ACBB04 /* Model */,
@@ -1077,6 +1080,7 @@
 				2CDD94FE2973BAB9004B8D56 /* CustomFlowLayout.swift in Sources */,
 				462C4D65297D34BD00F2E0C6 /* UIButton+.swift in Sources */,
 				2CDD94F82971A389004B8D56 /* IceBreakingRoomListVC.swift in Sources */,
+				2CED690F298CBD2800C838BD /* Status.swift in Sources */,
 				2CDD94E329711EB3004B8D56 /* IceBreakingRoomVC.swift in Sources */,
 				60F91409296D446100626C40 /* UIFont+.swift in Sources */,
 				2CDD94EE297185A7004B8D56 /* EventIceBreakingTableViewCell.swift in Sources */,
