@@ -168,6 +168,7 @@ class HomeVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(reloadDatas), name: Notification.Name("HomeTableViewReload"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(pushSeminarDetail(_:)), name: Notification.Name("pushSeminarDetailVC"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(pushNetworkingDetail(_:)), name: Notification.Name("pushNetworkingDetailVC"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(postScrollDirection), name: Notification.Name("getScrollDirection"), object: nil)
     }
     
     @objc private func pushNextView(_ sender: UIButton) {
@@ -196,6 +197,11 @@ class HomeVC: UIViewController {
     @objc func reloadDatas() {
         tableView.reloadData()
     }
+    
+    @objc private func postScrollDirection() {
+        NotificationCenter.default.post(name: Notification.Name("postScrollDirection"), object: tableView.contentOffset.y)
+    }
+    
     
 }
 
