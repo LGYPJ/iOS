@@ -17,7 +17,6 @@ class ViewAllVC: UIViewController {
         }
     }
     
-    
     // MARK: - Subviews
     lazy var headerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 71))
@@ -94,8 +93,8 @@ class ViewAllVC: UIViewController {
         addSubViews()
         configLayouts()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(pushEventDetailVC), name: Notification.Name("pushEventDetailVC"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(pushApplyCancelVC), name: Notification.Name("pushEventApplyCancelVC"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(pushEventDetailVC(_:)), name: Notification.Name("pushEventDetailVC"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(pushApplyCancelVC(_:)), name: Notification.Name("pushEventApplyCancelVC"), object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(pushViewAllSeminar), name: Notification.Name("pushViewAllSeminar"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(pushViewAllNetworking), name: Notification.Name("pushViewAllNetworking"), object: nil)
@@ -106,27 +105,35 @@ class ViewAllVC: UIViewController {
         tabBarController?.tabBar.isHidden = false
     }
     
-    @objc func pushEventDetailVC() {
-//        self.navigationController?.pushViewController(EventSeminarDetailVC(memberId: 1, seminarId: 1), animated: true)
-        self.navigationController?.pushViewController(EventNetworkingDetailVC(memberId: 1, networkingId: 6), animated: true)
+    @objc func pushEventDetailVC(_ notification: NSNotification) {
+        let detailInfo: MyEventToDetailInfo = notification.object as! MyEventToDetailInfo
+        
+        switch(detailInfo.type){
+        case "SEMINAR":
+            self.navigationController?.pushViewController(EventSeminarDetailVC(memberId: 1, seminarId: detailInfo.programIdx), animated: true)
+            print("seminarId: \(detailInfo.programIdx)")
+        case "NETWORKING":
+            self.navigationController?.pushViewController(EventNetworkingDetailVC(memberId: 1, networkingId: detailInfo.programIdx), animated: true)
+            print("networkingId: \(detailInfo.programIdx)")
+        default:
+            fatalError(">>> ERROR: ViewAllVC pushEventDetailVC detailInfo")
+        }
     }
     
-    @objc func pushApplyCancelVC() {
-        //self.navigationController?.pushViewController(EventSeminarDetailVC(), animated: true)
-        self.navigationController?.pushViewController(EventApplyCancelVC(type: "SEMINAR", programId: 6, memberId: 0), animated: true)
+    @objc func pushApplyCancelVC(_ notification: NSNotification) {
+        let detailInfo: MyEventToDetailInfo = notification.object as! MyEventToDetailInfo
+
+        self.navigationController?.pushViewController(EventApplyCancelVC(type: detailInfo.type, programId: detailInfo.programIdx, memberId: 1), animated: true)
+        print("ApplyCancel// \(detailInfo.type) id -> \(detailInfo.programIdx)")
     }
     
     @objc func pushViewAllSeminar() {
-  
         pageNumber = HomeEventInfoTableViewCell.viewAllpageIndex
         self.tabBarController?.selectedIndex = 1
-
     }
     @objc func pushViewAllNetworking() {
         pageNumber = HomeEventInfoTableViewCell.viewAllpageIndex
         self.tabBarController?.selectedIndex = 1
-        
-//        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     // MARK: - Functions
@@ -177,16 +184,6 @@ class ViewAllVC: UIViewController {
             make.bottom.equalToSuperview()
         }
         
-    }
-    
-    @objc private func pushNextView(_ sender: UIButton) {
-        switch sender {
-            //        case notificationViewButton:
-            //            self.navigationController?.pushViewController(HomeNotificationVC(), animated: true)
-            //
-        default:
-            print("error")
-        }
     }
     
     @objc private func didChangeValue(segment: UISegmentedControl) {

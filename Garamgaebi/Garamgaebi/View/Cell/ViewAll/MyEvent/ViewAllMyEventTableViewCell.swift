@@ -17,6 +17,9 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
     static let identifier = String(describing: ViewAllMyEventTableViewCell.self)
     static let cellHeight = 428.0 // 지워야함
     
+    // cell에 저장될 EventInfo
+    public var cellEventInfo = MyEventToDetailInfo(programIdx: 0, type: "")
+    
     lazy var baseView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
@@ -68,14 +71,13 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         button.clipsToBounds = true
         button.tintColor = UIColor(hex: 0x1C1B1F)
-        //button.addTarget(self, action: #selector(didTapSettingButton), for: .touchUpInside)
         
         let detail = UIAction(
             title: "상세보기",
             image: UIImage(named: "searchIcon")?.withTintColor(UIColor(hex: 0x1C1B1F)),
             handler: { _ in
-                NotificationCenter.default.post(name: Notification.Name("pushEventDetailVC"), object: nil)
-                print("상세보기 클릭됨")
+                // 선택한 cell의 정보를 detailView에 전달
+                NotificationCenter.default.post(name: Notification.Name("pushEventDetailVC"), object: self.cellEventInfo)
             }
         )
         
@@ -83,18 +85,16 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
             title: "신청취소",
             image: UIImage(named: "deleteIcon")?.withTintColor(UIColor(hex: 0x1C1B1F)),
             handler: { _ in
-                NotificationCenter.default.post(name: Notification.Name("pushEventApplyCancelVC"), object: nil)
-                print("신청취소 클릭됨")
+                // 선택한 cell의 정보를 detailView에 전달
+                NotificationCenter.default.post(name: Notification.Name("pushEventApplyCancelVC"), object: self.cellEventInfo)
             }
         )
-
         
         button.showsMenuAsPrimaryAction = true
         button.menu = UIMenu(
                              identifier: nil,
                              options: .displayInline, // .destructive
                              children: [detail, cancel])
-        
         return button
     }()
     
@@ -104,7 +104,6 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
         view.layer.borderColor = UIColor.mainGray.withAlphaComponent(0.8).cgColor
         view.layer.borderWidth = 1
         view.layer.cornerRadius = 12
-        
         return view
     }()
     
@@ -122,7 +121,6 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
         label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         label.textColor = .mainGray.withAlphaComponent(0.8)
         label.textAlignment = .center
-        
         return label
     }()
     
@@ -214,6 +212,8 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
         titleInfoLabel.text = item.title
         locationInfoLabel.text = item.location
         
+        cellEventInfo = MyEventToDetailInfo(programIdx: item.programIdx, type: item.type)
+        
     }
     
     public func configureClose(_ item: MyEventInfoClose) {
@@ -238,6 +238,8 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
         
         titleInfoLabel.text = item.title
         locationInfoLabel.text = item.location
+        
+        cellEventInfo = MyEventToDetailInfo(programIdx: item.programIdx, type: item.type)
  
     }
     
@@ -260,17 +262,11 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
             make.centerX.equalToSuperview()
         }
         
-        
         zeroDataDescriptionLabel.text = "\(caseString) 모임이 없습니다"
         ViewAllSeminarTableViewCell.cellHeight = 100
         baseView.isHidden = true
         zeroDataBackgroundView.isHidden = false
 
-    }
-    
-    // setting button did tap
-    @objc private func didTapSettingButton() {
-        print("setting button did tap")
     }
 
 }
