@@ -8,12 +8,14 @@
 import UIKit
 
 import Then
+import Alamofire
 
 class ProfileInputSNSVC: UIViewController {
 
+    // MARK: - Properties
+    lazy var memberIdx: Int = 0
+    
     // MARK: - Subviews
-    
-    
     lazy var headerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 71))
         view.backgroundColor = .systemBackground
@@ -105,6 +107,17 @@ class ProfileInputSNSVC: UIViewController {
 
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        print("2: viewWillDisappear()")
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        print("2: viewDidDisappear()")
+    }
     
     // MARK: - Functions
     
@@ -184,7 +197,10 @@ class ProfileInputSNSVC: UIViewController {
     }
     
     @objc private func saveButtonDidTap(_ sender: UIButton) {
-//        print("저장하기 버튼 클릭")
+        print("저장하기 버튼 클릭")
+        guard let address = linkTextField.text else { return }
+        postSNS(memberIdx: memberIdx, address: address)
+                       
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -204,4 +220,41 @@ class ProfileInputSNSVC: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
+    // MARK: - [API] SNS 추가
+    func postSNS(memberIdx: Int, address: String) {
+        
+        // http 요청 주소 지정
+        let url = "https://garamgaebi.shop/profile/sns"
+        
+        // http 요청 헤더 지정
+        let header : HTTPHeaders = [
+            "Content-Type" : "application/json",
+        ]
+        let bodyData: Parameters = [
+            "memberIdx": memberIdx,
+            "address": address,
+        ]
+        
+        // httpBody 에 parameters 추가
+        AF.request(
+            url,
+            method: .post,
+            parameters: bodyData,
+            encoding: JSONEncoding.default,
+            headers: header
+        )
+        .validate()
+        .responseDecodable(of: ProfilePostResponse.self) { response in
+            switch response.result {
+            case .success(let response):
+                if response.isSuccess {
+                    print("성공(SNS추가): \(response.message)")
+                } else {
+                    print("실패(SNS추가): \(response.message)")
+                }
+            case .failure(let error):
+                print("실패(AF-SNS추가): \(error.localizedDescription)")
+            }
+        }
+    }
 }
