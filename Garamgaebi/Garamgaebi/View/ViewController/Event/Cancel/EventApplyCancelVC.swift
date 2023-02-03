@@ -295,12 +295,12 @@ class EventApplyCancelVC: UIViewController {
 	var type: String
 	var programId: Int
 	var memberId: Int
-	var seminarInfo = SeminarDetailInfo(programIdx: 0, title: "", date: "", location: "", fee: "", endDate: "", programStatus: "", userButtonStatus: "") {
+	var seminarInfo = SeminarDetailInfo(programIdx: 0, title: "", date: "", location: "", fee: 0, endDate: "", programStatus: "", userButtonStatus: "") {
 		didSet {
 			configureSeminarData()
 		}
 	}
-	var networkingInfo = NetworkingDetailInfo(programIdx: 0, title: "", date: "", location: "", fee: "", endDate: "", programStatus: "", userButtonStatus: "") {
+	var networkingInfo = NetworkingDetailInfo(programIdx: 0, title: "", date: "", location: "", fee: 0, endDate: "", programStatus: "", userButtonStatus: "") {
 		didSet {
 			configureNetworkingData()
 		}
@@ -504,7 +504,7 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 		programNameLabel.text = self.seminarInfo.title
 		dateInfoLabel.text = self.seminarInfo.date
 		locationInfoLabel.text = self.seminarInfo.location
-		costInfoLabel.text = self.seminarInfo.fee
+		costInfoLabel.text = "\(self.seminarInfo.fee)"
 		deadlineInfoLabel.text = self.seminarInfo.endDate
 	}
 	
@@ -512,7 +512,7 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 		programNameLabel.text = self.networkingInfo.title
 		dateInfoLabel.text = self.networkingInfo.date
 		locationInfoLabel.text = self.networkingInfo.location
-		costInfoLabel.text = self.networkingInfo.fee
+		costInfoLabel.text = "\(self.networkingInfo.fee)"
 		deadlineInfoLabel.text = self.networkingInfo.endDate
 	}
 	

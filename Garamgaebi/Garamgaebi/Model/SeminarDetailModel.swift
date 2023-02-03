@@ -20,7 +20,7 @@ struct SeminarDetailInfo: Decodable {
 	let title: String
 	let date: String
 	let location: String
-	let fee: String
+	let fee: Int
 	let endDate: String
 	let programStatus: String
 	let userButtonStatus: String

@@ -51,7 +51,7 @@ class EventNetworkingDetailVC: UIViewController {
 	// MARK: Properties
 	var memberId: Int
 	var networkingId: Int
-	var networkingInfo: NetworkingDetailInfo = .init(programIdx: 0, title: "", date: "", location: "", fee: "", endDate: "", programStatus: "", userButtonStatus: "") {
+	var networkingInfo: NetworkingDetailInfo = .init(programIdx: 0, title: "", date: "", location: "", fee: 0, endDate: "", programStatus: "", userButtonStatus: "") {
 		didSet {
 			tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
 		}
@@ -148,7 +148,7 @@ extension EventNetworkingDetailVC {
 	}
 	// 네트워킹 신청 did tap
 	@objc private func didTapRegisterButton() {
-		navigationController?.pushViewController(EventApplyVC(), animated: true)
+		navigationController?.pushViewController(EventApplyVC(memberId: 1, programId: 1), animated: true)
 	}
 	// 게임 참가하기 did tap
 	@objc private func didTapEntranceButton() {
@@ -172,7 +172,7 @@ extension EventNetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 			cell.eventNameLabel.text = self.networkingInfo.title
 			cell.dateInfoLabel.text = self.networkingInfo.date
 			cell.locationInfoLabel.text = self.networkingInfo.location
-			cell.costInfoLabel.text = self.networkingInfo.fee
+			cell.costInfoLabel.text = "\(self.networkingInfo.fee)"
 			cell.deadlineInfoLabel.text = self.networkingInfo.endDate
 			cell.registerButton.setTitle(self.networkingInfo.userButtonStatus, for: .normal)
 			

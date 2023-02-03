@@ -53,7 +53,7 @@ class EventSeminarDetailVC: UIViewController {
 	// MARK: Properties
 	var memberId: Int
 	var seminarId: Int
-	var seminarInfo: SeminarDetailInfo = .init(programIdx: 0, title: "", date: "", location: "", fee: "", endDate: "", programStatus: "", userButtonStatus: "") {
+	var seminarInfo: SeminarDetailInfo = .init(programIdx: 0, title: "", date: "", location: "", fee: 0, endDate: "", programStatus: "", userButtonStatus: "") {
 		didSet {
 			tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
 		}
@@ -143,7 +143,7 @@ extension EventSeminarDetailVC {
 	}
 	
 	@objc private func didTapRegisterButton() {
-		navigationController?.pushViewController(EventApplyVC(), animated: true)
+		navigationController?.pushViewController(EventApplyVC(memberId: 1, programId: 6), animated: true)
 	}
 	
 	// MARK: fetch data
@@ -172,7 +172,7 @@ extension EventSeminarDetailVC: UITableViewDelegate, UITableViewDataSource {
 			cell.eventNameLabel.text = self.seminarInfo.title
 			cell.dateInfoLabel.text = self.seminarInfo.date
 			cell.locationInfoLabel.text = self.seminarInfo.location
-			cell.costInfoLabel.text = self.seminarInfo.fee
+			cell.costInfoLabel.text = "\(self.seminarInfo.fee)"
 			cell.deadlineInfoLabel.text = self.seminarInfo.endDate
 			cell.registerButton.setTitle(self.seminarInfo.userButtonStatus, for: .normal)
 			

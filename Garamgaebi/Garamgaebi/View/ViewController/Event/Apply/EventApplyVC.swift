@@ -329,8 +329,21 @@ class EventApplyVC: UIViewController {
 		}
 	}
 	
+	var memberId: Int
+	var programId: Int
+	
     // MARK: - Life Cycle
-    
+	
+	init(memberId: Int, programId: Int) {
+		self.memberId = memberId
+		self.programId = programId
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 		
@@ -634,7 +647,7 @@ extension EventApplyVC {
 			  let nickname = nicknameTextField.text,
 			  let number = numberTextField.text else {return}
 		
-		EventApplyViewModel.postApplyProgram(memberId: 0, programId: 0, name: name, nickname: nickname, phone: number, completion: { result in
+		EventApplyViewModel.postApplyProgram(memberId: self.memberId, programId: self.programId, name: name, nickname: nickname, phone: number, completion: { result in
 			if !result.isSuccess {
 				// 실패시 메세지 확인해서 경고 문구 추가
 				print(result)
