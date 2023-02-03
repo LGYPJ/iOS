@@ -181,13 +181,16 @@ class HomeVC: UIViewController {
     }
     
     @objc func pushSeminarDetail(_ notification: NSNotification) {
-		// TODO: object에서 ID값 가져오기
-        self.navigationController?.pushViewController(EventSeminarDetailVC(memberId: 0, seminarId: notification.object as! Int), animated: true)
+        let detailInfo: MyEventToDetailInfo = notification.object as! MyEventToDetailInfo
+        
+        self.navigationController?.pushViewController(EventSeminarDetailVC(memberId: 1, seminarId: detailInfo.programIdx), animated: true)
+        print("seminarId: \(detailInfo.programIdx)")
     }
     
     @objc func pushNetworkingDetail(_ notification: NSNotification) {
-		// TODO: object에서 ID값 가져오기
-        self.navigationController?.pushViewController(EventNetworkingDetailVC(memberId: 0, networkingId: notification.object as! Int), animated: true)
+        let detailInfo: MyEventToDetailInfo = notification.object as! MyEventToDetailInfo
+        
+        self.navigationController?.pushViewController(EventNetworkingDetailVC(memberId: 1, networkingId: detailInfo.programIdx), animated: true)
     }
     
     @objc func reloadDatas() {

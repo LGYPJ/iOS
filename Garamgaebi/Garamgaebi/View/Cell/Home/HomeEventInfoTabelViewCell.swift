@@ -409,9 +409,9 @@ extension HomeEventInfoTableViewCell: UICollectionViewDataSource, UICollectionVi
         
         switch collectionView.tag {
         case 0:
-            NotificationCenter.default.post(name: Notification.Name("pushSeminarDetailVC"), object: seminarList[indexPath.row].programIdx)
+            NotificationCenter.default.post(name: Notification.Name("pushSeminarDetailVC"), object: MyEventToDetailInfo(programIdx: seminarList[indexPath.row].programIdx, type: seminarList[indexPath.row].type))
         case 1:
-            NotificationCenter.default.post(name: Notification.Name("pushNetworkingDetailVC"), object: networkingList[indexPath.row].programIdx)
+            NotificationCenter.default.post(name: Notification.Name("pushNetworkingDetailVC"), object: MyEventToDetailInfo(programIdx: networkingList[indexPath.row].programIdx, type: networkingList[indexPath.row].type))
         default:
             print(">>>error: HomeEventInfoTableViewCell didSelectRowAt")
         }
