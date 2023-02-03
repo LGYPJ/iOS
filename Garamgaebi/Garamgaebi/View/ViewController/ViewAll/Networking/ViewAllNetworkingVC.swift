@@ -29,9 +29,15 @@ class ViewAllNetworkingVC: UIViewController {
     
     // MARK: - Subviews
     
+    // tableView cell 선택 시 gray컬러로 변하지 않게 설정
+    lazy var background: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
     lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .grouped)
-        view.allowsSelection = false
         view.separatorStyle = .none
         view.bounces = true
         view.clipsToBounds = true
@@ -53,13 +59,7 @@ class ViewAllNetworkingVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         fetchData()
-        
-        // Data가 없을 때 시연용
-//        dataList1 = []
-//        dataList2 = []
-//        dataList3 = []
     }
     
     // MARK: - Functions
@@ -79,7 +79,6 @@ class ViewAllNetworkingVC: UIViewController {
     }
     
     func fetchData(){
-        
         // NetworkingThisMonthInfo의 data를 불러옴
         ViewAllViewModel.getNetworkingThisMonthInfo  { [weak self] result in
             self?.dataList1 = [result]
@@ -96,19 +95,7 @@ class ViewAllNetworkingVC: UIViewController {
         }
     }
     
-    @objc private func pushNextView(_ sender: UIButton) {
-        switch sender {
-            //        case notificationViewButton:
-            //            self.navigationController?.pushViewController(HomeNotificationVC(), animated: true)
-            //
-        default:
-            print("error")
-        }
-    }
-    
 }
-
-
 
 extension ViewAllNetworkingVC {
     
@@ -117,17 +104,11 @@ extension ViewAllNetworkingVC {
         view.backgroundColor = .white
     }
     
-    // 뒤로가기 버튼 did tap
-    @objc private func didTapBackBarButton() {
-        self.navigationController?.popViewController(animated: true)
-    }
-    
     private func configureTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(ViewAllNetworkingTableViewCell.self, forCellReuseIdentifier: ViewAllNetworkingTableViewCell.identifier)
         tableView.register(CustomHeaderView.self, forHeaderFooterViewReuseIdentifier: CustomHeaderView.identifier)
-        
     }
     
 }
@@ -156,7 +137,7 @@ extension ViewAllNetworkingVC: UITableViewDataSource, UITableViewDelegate {
             }
             return dataList3.count
         default:
-            print(fatalError())
+            print(">>> ERROR: ViewAllNetworkingVC dataList count")
             return 0
         }
     }
@@ -194,6 +175,8 @@ extension ViewAllNetworkingVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ViewAllNetworkingTableViewCell.identifier, for: indexPath) as? ViewAllNetworkingTableViewCell else {return UITableViewCell()}
+        
+        cell.selectedBackgroundView = background
         
         switch indexPath.section {
         case 0:
@@ -235,5 +218,22 @@ extension ViewAllNetworkingVC: UITableViewDataSource, UITableViewDelegate {
         return 50.0
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var postObject: MyEventToDetailInfo = MyEventToDetailInfo(programIdx: 0, type: "")
+        switch indexPath.section {
+        case 0:
+            postObject = MyEventToDetailInfo(programIdx: dataList1[indexPath.row].programIdx, type: dataList1[indexPath.row].type)
+        case 1:
+            postObject = MyEventToDetailInfo(programIdx: dataList2[indexPath.row].programIdx, type: dataList2[indexPath.row].type)
+        case 2:
+            postObject = MyEventToDetailInfo(programIdx: dataList3[indexPath.row].programIdx, type: dataList3[indexPath.row].type)
+        default:
+            print(">>> ERROR: ViewAllNetworkingVC didSelectRowAt dataList Error")
+        }
+        
+        print(postObject)
+        NotificationCenter.default.post(name: Notification.Name("pushEventDetailVC"), object: postObject)
+
+    }
 }
 
