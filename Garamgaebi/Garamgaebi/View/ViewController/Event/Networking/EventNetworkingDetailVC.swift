@@ -200,10 +200,20 @@ extension EventNetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 			cell.registerButton.addTarget(self, action: #selector(didTapRegisterButton), for: .touchUpInside)
 			
 			cell.eventNameLabel.text = self.networkingInfo.title
-			cell.dateInfoLabel.text = self.networkingInfo.date
+//			cell.dateInfoLabel.text = self.networkingInfo.date
 			cell.locationInfoLabel.text = self.networkingInfo.location
 			cell.costInfoLabel.text = "\(self.networkingInfo.fee)"
-			cell.deadlineInfoLabel.text = self.networkingInfo.endDate
+//			cell.deadlineInfoLabel.text = self.networkingInfo.endDate
+			
+			let convertDate = self.networkingInfo.date.toDate()
+			let convertEndDate = self.networkingInfo.endDate.toDate()
+			
+			let dateFormatter = DateFormatter()
+			dateFormatter.dateFormat = "yyyy-MM-dd a h시"
+			dateFormatter.locale = Locale(identifier: "ko_KR")
+			
+			cell.dateInfoLabel.text = dateFormatter.string(from: convertDate ?? Date())
+			cell.deadlineInfoLabel.text = dateFormatter.string(from: convertEndDate ?? Date())
 			
 			switch self.userButtonStatus {
 			case .APPLY:
