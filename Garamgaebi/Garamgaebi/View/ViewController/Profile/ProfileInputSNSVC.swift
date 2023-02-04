@@ -14,7 +14,7 @@ class ProfileInputSNSVC: UIViewController {
 
     // MARK: - Properties
     lazy var memberIdx: Int = 0
-    lazy var authorization: String = ""
+    lazy var token = UserDefaults.standard.string(forKey: "BearerToken")
     
     // MARK: - Subviews
     lazy var headerView: UIView = {
@@ -230,7 +230,7 @@ class ProfileInputSNSVC: UIViewController {
         // http 요청 헤더 지정
         let header : HTTPHeaders = [
             "Content-Type": "application/json",
-            "Authorization": authorization
+            "Authorization": "Bearer \(token ?? "")"
         ]
         let bodyData: Parameters = [
             "memberIdx": memberIdx,

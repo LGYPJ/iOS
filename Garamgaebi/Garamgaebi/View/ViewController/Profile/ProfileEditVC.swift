@@ -22,7 +22,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     weak var delegate: EditProfileDataDelegate?
     
     var memberIdx: Int = 0
-    var authorizaton: String = ""
+    var token = UserDefaults.standard.string(forKey: "BearerToken")
     
     // 뷰의 초기 y 값을 저장해서 뷰가 올라갔는지 내려왔는지에 대한 분기처리시 사용
     private var restoreFrameYValue = 0.0
@@ -370,7 +370,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         // http 요청 헤더 지정
         let header : HTTPHeaders = [
             "Content-Type": "application/json",
-            "Authorization": authorizaton
+            "Authorization": "Bearer \(token ?? "")"
         ]
         let bodyData: Parameters = [
             "memberIdx": memberIdx,
