@@ -11,7 +11,7 @@ class EventApplyCancelViewModel {
 	// MARK: requestData
 	// post 은행 계좌
 	public static func postBankAccount(memberId: Int, programId: Int, bank: String, account: String, completion: @escaping ((EventApplyModel) -> Void)) {
-		let url = "https://garamgaebi.shop/applies/programs/0/leave"
+		let url = "https://garamgaebi.shop/applies/programs/leave"
 		
 		let body: [String: Any] = [
 			"memberIdx": memberId,

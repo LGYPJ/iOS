@@ -329,19 +329,38 @@ class EventApplyVC: UIViewController {
 		}
 	}
 	
+	var memberId: Int
+	var programId: Int
+	
     // MARK: - Life Cycle
-    
+	
+	init(memberId: Int, programId: Int) {
+		self.memberId = memberId
+		self.programId = programId
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 		
 		configureViews()
 		configureDummyData()
 		configureTextField()
+		configureGestureRecognizer()
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		self.tabBarController?.tabBar.isHidden = true
+	}
+	
+	// view를 터치했을때 editing 끝나게, 하지만 scrollview touch는 안먹음
+	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+		self.view.endEditing(true)
 	}
 	
 	// TODO: API연동 후 삭제
@@ -509,12 +528,12 @@ extension EventApplyVC {
 		nicknameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
 		numberTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
 		
-//		nameTextField.delegate = self
-//		nicknameTextField.delegate = self
-//		numberTextField.delegate = self
+		nameTextField.delegate = self
+		nicknameTextField.delegate = self
+		numberTextField.delegate = self
 		
-		nameTextField.returnKeyType = .next
-		nicknameTextField.returnKeyType = .next
+		nameTextField.returnKeyType = .done
+		nicknameTextField.returnKeyType = .done
 		numberTextField.returnKeyType = .done
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -574,6 +593,19 @@ extension EventApplyVC {
 		}
 	}
 	
+	private func configureGestureRecognizer() {
+		let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(scrollViewDidTap))
+		tapGestureRecognizer.numberOfTapsRequired = 1
+		tapGestureRecognizer.isEnabled = true
+		tapGestureRecognizer.cancelsTouchesInView = false
+		
+		scrollView.addGestureRecognizer(tapGestureRecognizer)
+	}
+	
+	@objc private func scrollViewDidTap() {
+		self.view.endEditing(true)
+	}
+	
 	// 뒤로가기 버튼 did tap
 	@objc private func didTapBackBarButton() {
 		self.navigationController?.popViewController(animated: true)
@@ -615,7 +647,7 @@ extension EventApplyVC {
 			  let nickname = nicknameTextField.text,
 			  let number = numberTextField.text else {return}
 		
-		EventApplyViewModel.postApplyProgram(memberId: 0, programId: 0, name: name, nickname: nickname, phone: number, completion: { result in
+		EventApplyViewModel.postApplyProgram(memberId: self.memberId, programId: self.programId, name: name, nickname: nickname, phone: number, completion: { result in
 			if !result.isSuccess {
 				// 실패시 메세지 확인해서 경고 문구 추가
 				print(result)
@@ -640,4 +672,10 @@ extension EventApplyVC {
 	}
 }
 
+extension EventApplyVC: UITextFieldDelegate {
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		textField.resignFirstResponder()
+		return true
+	}
+}
 

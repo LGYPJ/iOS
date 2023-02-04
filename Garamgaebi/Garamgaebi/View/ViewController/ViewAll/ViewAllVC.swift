@@ -105,6 +105,7 @@ class ViewAllVC: UIViewController {
         tabBarController?.tabBar.isHidden = false
     }
     
+
     @objc func pushEventDetailVC(_ notification: NSNotification) {
         let detailInfo: MyEventToDetailInfo = notification.object as! MyEventToDetailInfo
         

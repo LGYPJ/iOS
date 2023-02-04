@@ -9,7 +9,7 @@ import Alamofire
 
 class EventApplyViewModel {
 	public static func postApplyProgram(memberId: Int, programId: Int, name: String, nickname: String, phone: String, completion: @escaping ((EventApplyModel) -> Void)) {
-		let url = "https://garamgaebi.shop/applies/programs/0/enroll"
+		let url = "https://garamgaebi.shop/applies/programs/enroll"
 		
 		let body: [String: Any] = [
 			"memberIdx": memberId,

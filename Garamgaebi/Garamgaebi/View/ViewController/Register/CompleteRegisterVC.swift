@@ -157,9 +157,16 @@ class CompleteRegisterVC: UIViewController {
             make.height.equalTo(20)
         }
     }
+	
+	private func login() {
+		LoginViewModel.postLogin(uniEmail: "jrwedo@gachon.ac.kr", password: "1234", completion: { result in
+			UserDefaults.standard.set(result.accessToken, forKey: "BearerToken")
+		})
+	}
     
     @objc
     private func presentHomeButtonTapped(_ sender: UIButton) {
+		login()
         var nextVC = TabBarController()
         nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
         nextVC.modalPresentationStyle = .fullScreen

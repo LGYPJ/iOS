@@ -14,6 +14,9 @@ class HomeViewModel {
     // 홈 화면 Seminar 조회 request
     public static func getHomeSeminarInfo(completion: @escaping (([HomeSeminarInfo]) -> Void)) {
         let url = "https://garamgaebi.shop/seminars/main"
+		let headers: HTTPHeaders = [
+			"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
+		]
 //        let dummy = [
 //            HomeSeminarInfo(programIdx: 1, title: "유료 세미나1", date: "2023-02-25T18:00:00", location: "가천관이지롱", type: "SEMINAR", payment: "PREMIUM", status: "THIS_MONTH", isOpen: "OPEN"),
 //            HomeSeminarInfo(programIdx: 1, title: "세미나2", date: "2023-02-25T18:00:00", location: "가천관일까?", type: "SEMINAR", payment: "FREE", status: "READY", isOpen: "OPEN"),
@@ -23,7 +26,7 @@ class HomeViewModel {
 //        ]
 //        completion(dummy)
         
-        AF.request(url, method: .get)
+		AF.request(url, method: .get, headers: headers)
             .validate()
             .responseDecodable(of: HomeSeminarInfoResponse.self) { response in
                 switch response.result {

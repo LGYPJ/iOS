@@ -17,7 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = scene as? UIWindowScene else { return }
         self.window = UIWindow(windowScene: windowScene)
         
-        let rootViewController = TabBarController()
+//        let rootViewController = TabBarController()
         //let rootViewController = EventApplyCancelVC()
         //let rootViewController = HomeVC()
         //let rootViewController = HomeNotificationVC()
@@ -29,7 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         //let rootViewController = OrganizationVC()
         //let rootViewController = RegisterInputCareerVC()
         //let rootViewController = RegisterInputEducationVC()
-        //let rootViewController = RegisterCompletedVC()
+        let rootViewController = CompleteRegisterVC()
         self.window?.rootViewController = rootViewController
         self.window?.makeKeyAndVisible()
         

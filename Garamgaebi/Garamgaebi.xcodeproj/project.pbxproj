@@ -38,6 +38,9 @@
 		2CED690729878AB200C838BD /* EventApplyCancelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED690629878AB200C838BD /* EventApplyCancelViewModel.swift */; };
 		2CED690B298940E200C838BD /* EventApplyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED690A298940E200C838BD /* EventApplyViewModel.swift */; };
 		2CED690D2989426A00C838BD /* EventApplyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED690C2989426A00C838BD /* EventApplyModel.swift */; };
+		2CED690F298CBD2800C838BD /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED690E298CBD2800C838BD /* Status.swift */; };
+		2CED6911298D251500C838BD /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED6910298D251500C838BD /* LoginViewModel.swift */; };
+		2CED6913298D258D00C838BD /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED6912298D258D00C838BD /* LoginModel.swift */; };
 		460C0C2B296D855800FF5085 /* ProfileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460C0C2A296D855800FF5085 /* ProfileEditVC.swift */; };
 		4614A1732984BA9500D12108 /* ProfileSNSTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4614A1722984BA9500D12108 /* ProfileSNSTableViewCell.swift */; };
 		462183F5297C51B800B9A035 /* ServiceBottomSheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462183F4297C51B800B9A035 /* ServiceBottomSheetVC.swift */; };
@@ -164,6 +167,9 @@
 		2CED690629878AB200C838BD /* EventApplyCancelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventApplyCancelViewModel.swift; sourceTree = "<group>"; };
 		2CED690A298940E200C838BD /* EventApplyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventApplyViewModel.swift; sourceTree = "<group>"; };
 		2CED690C2989426A00C838BD /* EventApplyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventApplyModel.swift; sourceTree = "<group>"; };
+		2CED690E298CBD2800C838BD /* Status.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
+		2CED6910298D251500C838BD /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		2CED6912298D258D00C838BD /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
 		4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Garamgaebi_GaramgaebiUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		460C0C2A296D855800FF5085 /* ProfileEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditVC.swift; sourceTree = "<group>"; };
 		4614A1722984BA9500D12108 /* ProfileSNSTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSNSTableViewCell.swift; sourceTree = "<group>"; };
@@ -454,6 +460,7 @@
 				60321600297A745000ACBB04 /* Home */,
 				603215FE297A742100ACBB04 /* ViewAll */,
 				2CED68FE29838B2E00C838BD /* SeminarDetailModel.swift */,
+				2CED6912298D258D00C838BD /* LoginModel.swift */,
 				2CED690429867F3300C838BD /* NetworkingDetailModel.swift */,
 				2CED690C2989426A00C838BD /* EventApplyModel.swift */,
 				600BE591298B9C090040F23F /* MyEventModel.swift */,
@@ -620,6 +627,7 @@
 			children = (
 				6082992B297FBDB000240036 /* HomeViewModel.swift */,
 				2CED6900298390EA00C838BD /* SeminarDetailViewModel.swift */,
+				2CED6910298D251500C838BD /* LoginViewModel.swift */,
 				2CED690229867F1800C838BD /* NetworkingDetailViewModel.swift */,
 				2CED690629878AB200C838BD /* EventApplyCancelViewModel.swift */,
 				60DCC894298A45AD002E7714 /* ViewAllViewModel.swift */,
@@ -663,6 +671,7 @@
 			children = (
 				609A53D1296AB47300BBD338 /* AppDelegate.swift */,
 				609A53D3296AB47300BBD338 /* SceneDelegate.swift */,
+				2CED690E298CBD2800C838BD /* Status.swift */,
 				60F9140A296D465E00626C40 /* Fonts */,
 				60F91405296D440F00626C40 /* Extension */,
 				603215FD297A738400ACBB04 /* Model */,
@@ -1035,6 +1044,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CED6913298D258D00C838BD /* LoginModel.swift in Sources */,
 				601823352972F04500160EF4 /* HomeEventCollectionViewCell.swift in Sources */,
 				60BD05032974187700F4B433 /* UnderlineSegmentedControl.swift in Sources */,
 				6055D84729701F6B00C86D53 /* InputEducationVC.swift in Sources */,
@@ -1084,6 +1094,7 @@
 				2CDD94FE2973BAB9004B8D56 /* CustomFlowLayout.swift in Sources */,
 				462C4D65297D34BD00F2E0C6 /* UIButton+.swift in Sources */,
 				2CDD94F82971A389004B8D56 /* IceBreakingRoomListVC.swift in Sources */,
+				2CED690F298CBD2800C838BD /* Status.swift in Sources */,
 				2CDD94E329711EB3004B8D56 /* IceBreakingRoomVC.swift in Sources */,
 				60F91409296D446100626C40 /* UIFont+.swift in Sources */,
 				2CDD94EE297185A7004B8D56 /* EventIceBreakingTableViewCell.swift in Sources */,
@@ -1110,6 +1121,7 @@
 				600BE592298B9C090040F23F /* MyEventModel.swift in Sources */,
 				2C0538F4296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift in Sources */,
 				2CDD94F2297191F1004B8D56 /* EventSeminarDetailVC.swift in Sources */,
+				2CED6911298D251500C838BD /* LoginViewModel.swift in Sources */,
 				2CDD94FA29728908004B8D56 /* IceBreakingRoomCollectionViewCell.swift in Sources */,
 				2C9E5611297A960900DF9E5A /* String+.swift in Sources */,
 				2CDD94EA29718369004B8D56 /* EventAttendantTableViewCell.swift in Sources */,
@@ -1297,9 +1309,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = FKL5LCYWBF;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Garamgaebi/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 공유 및 저장을 위해 접근 권한을 허용해 주세요.";
@@ -1312,7 +1324,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = garamgaebi.Garamgaebi;
+				PRODUCT_BUNDLE_IDENTIFIER = com.garamgaebi.Garamgaebi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1331,9 +1343,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = FKL5LCYWBF;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Garamgaebi/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 공유 및 저장을 위해 접근 권한을 허용해 주세요.";
@@ -1346,7 +1358,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = garamgaebi.Garamgaebi;
+				PRODUCT_BUNDLE_IDENTIFIER = com.garamgaebi.Garamgaebi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
