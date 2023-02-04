@@ -322,7 +322,7 @@ class EventApplyCancelVC: UIViewController {
         super.viewDidLoad()
 		
 		configureViews()
-		configureDummyData()
+//		configureDummyData()
 		configureAddTarget()
 		configureTextField()
 		configureGestureRecognizer()
