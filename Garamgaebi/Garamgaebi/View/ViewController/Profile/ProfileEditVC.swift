@@ -21,6 +21,9 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     // MARK: - Properties
     weak var delegate: EditProfileDataDelegate?
     
+    var memberIdx: Int = 0
+    var authorizaton: String = ""
+    
     // 뷰의 초기 y 값을 저장해서 뷰가 올라갔는지 내려왔는지에 대한 분기처리시 사용
     private var restoreFrameYValue = 0.0
     
@@ -348,25 +351,26 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         
         // 임시
         let profileUrl = "ExProfileImage"
-        let memberIdx: Int = 1
+        let memberIdx: Int = 9
         
         // 변경된 이름값 담기
         self.delegate?.editData(image: profileUrl, nickname: editName, organization: editOrg, email: editEmail, introduce: editIntroduce)
         
-        patchMyInfo(memberIdx: memberIdx, nickName: editName, belong: editOrg, profileEmail: editEmail, content: editIntroduce, profileUrl: profileUrl)
+        postMyInfo(memberIdx: memberIdx, nickName: editName, belong: editOrg, profileEmail: editEmail, content: editIntroduce, profileUrl: profileUrl)
         
         self.navigationController?.popViewController(animated: true)
     }
     
     // MARK: - 유저 정보 수정
-    func patchMyInfo(memberIdx: Int, nickName: String, belong: String, profileEmail: String, content: String, profileUrl: String) {
+    func postMyInfo(memberIdx: Int, nickName: String, belong: String, profileEmail: String, content: String, profileUrl: String) {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/edit/\(memberIdx)"
         
         // http 요청 헤더 지정
         let header : HTTPHeaders = [
-            "Content-Type" : "application/json",
+            "Content-Type": "application/json",
+            "Authorization": authorizaton
         ]
         let bodyData: Parameters = [
             "memberIdx": memberIdx,
@@ -387,7 +391,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             headers: header
         )
         .validate()
-        .responseDecodable(of: ProfileEditResponse.self) { response in
+        .responseDecodable(of: ProfilePostResponse.self) { response in
             switch response.result {
             case .success(let response):
                 if response.isSuccess {

@@ -24,7 +24,7 @@ struct ProfileResult: Decodable {
 }
 
 // MARK: - ProfileEdit
-struct ProfileEditResponse: Decodable {
+struct ProfilePostResponse: Decodable {
     let isSuccess: Bool
     let code: Int
     let message: String
