@@ -14,9 +14,6 @@ import Alamofire
 class ProfileVC: UIViewController, EditProfileDataDelegate {
     
     // MARK: - Properties
-//    let snsDataList = ProfileSnsDataModel.data
-//    let careerDataList = ProfileCareerDataModel.list
-    let educationDataList = ProfileEducationDataModel.list
     
     // 추후 로그인 구현 후 변경
     let memberIdx: Int = 9 // 코코아 memberIdx
@@ -271,6 +268,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         // 서버 통신
         getSnsData()
         getCareerData()
+        getEducationData()
 //        showSnsDefaultLabel()
         
 //        print("1: viewWillAppear()")
@@ -284,6 +282,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
 //        print("1: viewDidAppear()")
         showSnsDefaultLabel()
         showCareerDefaultLabel()
+        showEducationDefaultLabel()
     }
     
     
@@ -442,17 +441,6 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             $0.top.equalTo(eduTopRadiusView.snp.bottom).offset(-1)
             $0.leading.trailing.equalTo(eduTopRadiusView)
             $0.bottom.equalTo(scrollView).offset(-16)
-        }
-//        eduDefaultLabel.snp.makeConstraints {
-//            $0.top.equalToSuperview().inset(12)
-//            $0.leading.trailing.equalToSuperview()
-//            $0.bottom.equalTo(addEduBtn.snp.top).offset(-12)
-//        }
-        eduTableView.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(addEduBtn.snp.top).offset(-12)
-            $0.height.equalTo(educationDataList.count * 65)
         }
         
         addEduBtn.snp.makeConstraints { /// 교육 추가 버튼
@@ -631,7 +619,6 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
                 print("실패(AF-SNS조회): \(error.localizedDescription)")
             }
         }
-        
     }
     
     // MARK: - [GET] Career 조회
@@ -677,8 +664,53 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
                 print("실패(AF-Career조회): \(error.localizedDescription)")
             }
         }
-        
     }
+    
+    // MARK: - [GET] Education 조회
+    func getEducationData() {
+        
+        // http 요청 주소 지정
+        let url = "https://garamgaebi.shop/profile/education/\(memberIdx)"
+        
+        let authorization = "Bearer \(token ?? "")"
+        
+        // http 요청 헤더 지정
+        let header: HTTPHeaders = [
+            "Content-Type" : "application/json",
+            "Authorization": authorization
+        ]
+        
+        // httpBody에 parameters 추가
+        AF.request(
+            url,
+            method: .get,
+            encoding: JSONEncoding.default,
+            headers: header
+        )
+        .validate()
+        .responseDecodable(of: EducationResponse.self) { response in
+            switch response.result {
+            case .success(let response):
+                if response.isSuccess {
+                    print("성공(Education조회): \(response.message)")
+                    let result = response.result
+
+                    let eduData = EducationData.shared
+                    
+                    // 값 넣어주기
+                    eduData.educationDataModel = result
+//                    print("받은 Education: \(eduData.eduDataModel.count)")
+                    self.eduTableView.reloadData()
+                    
+                } else {
+                    print("실패(Education조회): \(response.message)")
+                }
+            case .failure(let error):
+                print("실패(AF-Education조회): \(error.localizedDescription)")
+            }
+        }
+    }
+    
     
     func showSnsDefaultLabel() {
         let snsCount = SnsData.shared.snsDataModel.count
@@ -724,6 +756,28 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             }
         }
     }
+    func showEducationDefaultLabel() {
+        let eduCount = EducationData.shared.educationDataModel.count
+//        print("들어가는 Edu: \(eduCount)")
+        
+        if (eduCount == 0) {
+//            print("Edu 아이템이 없음")
+            eduDefaultLabel.snp.makeConstraints {
+                $0.top.equalToSuperview().inset(12)
+                $0.centerX.equalToSuperview()
+                $0.bottom.equalTo(addEduBtn.snp.top).offset(-12)
+            }
+        }
+        else {
+//            print("Edu 테이블뷰 보여주기")
+            eduTableView.snp.makeConstraints {
+                $0.top.equalToSuperview()
+                $0.leading.trailing.equalToSuperview()
+                $0.bottom.equalTo(addEduBtn.snp.top).offset(-12)
+                $0.height.equalTo(eduCount * 65)
+            }
+        }
+    }
     
     // TODO: API연동 후 삭제
     func configureDummyData() {
@@ -739,6 +793,7 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
         // 저장된 데이터 가져오기
         let snsDataModel = SnsData.shared.snsDataModel
         let careerDataModel = CareerData.shared.careerDataModel
+        let eduDataModel = EducationData.shared.educationDataModel
         
         if tableView == snsTableView {
 //            print("SNS 개수: \(snsDataModel.count)")
@@ -749,7 +804,8 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             return careerDataModel.count
         }
         else if tableView == eduTableView {
-            return educationDataList.count
+//            print("Edu 개수: \(eduDataModel.count)")
+            return eduDataModel.count
         }
         else { return 0 }
     }
@@ -765,6 +821,7 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
         // 저장된 데이터 가져오기
         let snsDataModel = SnsData.shared.snsDataModel
         let careerDataModel = CareerData.shared.careerDataModel
+        let eduDataModel = EducationData.shared.educationDataModel
         
         
         if tableView == snsTableView {
@@ -786,7 +843,12 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
         else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileHistoryTableViewCell.identifier, for: indexPath) as? ProfileHistoryTableViewCell else {return UITableViewCell()}
             
-            cell.educationConfigure(educationDataList[indexPath.row])
+            let row = eduDataModel[indexPath.row]
+
+            cell.companyLabel.text = row.institution
+            cell.positionLabel.text = row.major
+            cell.periodLabel.text = "\(row.startDate) ~ \(row.endDate)"
+            
             return cell
         }
     }

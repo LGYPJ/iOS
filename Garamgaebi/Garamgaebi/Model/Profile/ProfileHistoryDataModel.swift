@@ -50,23 +50,23 @@ class CareerData {
 
 
 // MARK: - Education
-struct ProfileEducationDataModel {
-    var organization: String
-    var position: String
-    var startDate: String
-    var endDate: String
-    
-    init(organization: String, position: String, startDate: String, endDate: String) {
-        self.organization = organization
-        self.position = position
-        self.startDate = startDate
-        self.endDate = endDate
-    }
+struct EducationResponse: Decodable {
+    let isSuccess: Bool
+    let code: Int
+    let message: String
+    let result: [EducationResult]
+}
+struct EducationResult: Decodable {
+    let education: Int
+    let institution: String
+    let major: String
+    let isLearning: String
+    let startDate: String
+    let endDate: String
 }
 
-extension ProfileEducationDataModel {
-    static let list = [
-        ProfileEducationDataModel(organization: "우아한 형제들", position: "프론트엔드 프로그래머", startDate: "2020.04", endDate: "현재"),
-        ProfileEducationDataModel(organization: "우아한 형제들", position: "프론트엔드 프로그래머", startDate: "2020.04", endDate: "2021.09")
-    ]
+class EducationData {
+    static let shared = EducationData()
+    
+    var educationDataModel: [EducationResult] = []
 }
