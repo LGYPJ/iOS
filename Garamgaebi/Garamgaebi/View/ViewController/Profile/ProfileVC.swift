@@ -520,6 +520,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         
         // 화면 전환
         let nextVC = ProfileInputCareerVC()
+        nextVC.memberIdx = memberIdx
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
