@@ -19,10 +19,9 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     let educationDataList = ProfileEducationDataModel.list
     
     // 추후 로그인 구현 후 변경
-    let memberIdx: Int = 9 // 코코아
-    
-    // 추후 변경 (토큰 저장)
-    let token: String = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjb2NvYUBnYWNob24uYWMua3IiLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjc1NDc1NTk0fQ.P9ozyp0wSQRJ5I9XOrVPtxHB7ZRFJZH774JXIwGdTMM"
+    let memberIdx: Int = 9 // 코코아 memberIdx
+
+    let token = UserDefaults.standard.string(forKey: "BearerToken")
     
     // MARK: - Subviews
     lazy var headerView: UIView = {
@@ -501,7 +500,6 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         
         // 사용자
         nextVC.memberIdx = memberIdx
-        nextVC.authorizaton = "Bearer \(token)"
         
         nextVC.delegate = self
         navigationController?.pushViewController(nextVC, animated: true)
@@ -513,7 +511,6 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         // 화면 전환
         let nextVC = ProfileInputSNSVC()
         nextVC.memberIdx = memberIdx
-        nextVC.authorization = "Bearer \(token)"
         
         navigationController?.pushViewController(nextVC, animated: true)
     }
@@ -540,7 +537,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/\(memberIdx)"
         
-        let authorization = "Bearer \(token)"
+        let authorization = "Bearer \(token ?? "")"
         
         // http 요청 헤더 지정
         let header : HTTPHeaders = [
@@ -585,6 +582,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             case .failure(let error):
                 // 실제 HTTP에러 404 또는 디코드 에러?
                 print("실패(AF-내프로필): \(error.localizedDescription)")
+                self.configureDummyData() // 임시
             }
         }
     }
@@ -595,7 +593,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/sns/\(memberIdx)"
         
-        let authorization = "Bearer \(token)"
+        let authorization = "Bearer \(token ?? "")"
         
         // http 요청 헤더 지정
         let header: HTTPHeaders = [
@@ -641,7 +639,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/career/\(memberIdx)"
         
-        let authorization = "Bearer \(token)"
+        let authorization = "Bearer \(token ?? "")"
         
         // http 요청 헤더 지정
         let header: HTTPHeaders = [
@@ -724,6 +722,14 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
                 $0.height.equalTo(careerCount * 65)
             }
         }
+    }
+    
+    // TODO: API연동 후 삭제
+    func configureDummyData() {
+        nameLabel.text = "코코아"
+        orgLabel.text = "가천대학교 소프트웨어학과"
+        emailLabel.text = "umc@gmail.com"
+        introduceTextField.text = "자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소."
     }
 }
 // MARK: - Extension
