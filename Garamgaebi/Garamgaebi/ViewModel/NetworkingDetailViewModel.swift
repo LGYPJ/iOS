@@ -48,7 +48,7 @@ class NetworkingDetailViewModel {
 //
 //		]
 //		completion(dummyData)
-		let url = "https://garamgaebi.shop/seminars/\(networkingId)/participants"
+		let url = "https://garamgaebi.shop/networkings/\(networkingId)/participants"
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
         ]

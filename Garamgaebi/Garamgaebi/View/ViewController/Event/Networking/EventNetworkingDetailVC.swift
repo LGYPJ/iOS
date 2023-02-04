@@ -260,7 +260,9 @@ extension EventNetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 			return cell
 		case 1:
 			guard let cell = tableView.dequeueReusableCell(withIdentifier: EventAttendantTableViewCell.identifier, for: indexPath) as? EventAttendantTableViewCell else {return UITableViewCell()}
+			cell.type = "NETWORKING"
 			cell.programId = self.networkingId
+			
 			
 			return cell
 		case 2:
