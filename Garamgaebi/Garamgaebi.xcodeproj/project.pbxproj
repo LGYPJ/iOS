@@ -542,6 +542,13 @@
 			path = Register;
 			sourceTree = "<group>";
 		};
+		60513F33298E35630065CD15 /* Register */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Register;
+			sourceTree = "<group>";
+		};
 		6052F196297A60E70097B3F5 /* Event */ = {
 			isa = PBXGroup;
 			children = (
@@ -625,6 +632,7 @@
 		60829927297FBCB300240036 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				60513F33298E35630065CD15 /* Register */,
 				6082992B297FBDB000240036 /* HomeViewModel.swift */,
 				2CED6900298390EA00C838BD /* SeminarDetailViewModel.swift */,
 				2CED6910298D251500C838BD /* LoginViewModel.swift */,

@@ -11,8 +11,8 @@ import SnapKit
 class InputEmailVC: UIViewController {
     
     // MARK: - Propertys
-    var userEmail = String()
-    var isValidEmail = false {
+    var profileEmail = String()
+    var isValidProfileEmail = false {
         didSet {
             self.validateUserInfo()
         }
@@ -50,7 +50,7 @@ class InputEmailVC: UIViewController {
         return label
     }()
     
-    lazy var emailTextField: UITextField = {
+    lazy var profileEmailTextField: UITextField = {
         let textField = UITextField()
         
         textField.addLeftPadding()
@@ -106,12 +106,12 @@ class InputEmailVC: UIViewController {
     
     func addSubViews() {
         /* Buttons */
-        view.addSubview(emailTextField)
+        view.addSubview(profileEmailTextField)
         view.addSubview(pagingImage)
         view.addSubview(nextButton)
         
         /* Labels */
-        [titleLabel,descriptionLabel,emailTitleLabel,emailTextField,emailValidLabel].forEach {
+        [titleLabel,descriptionLabel,emailTitleLabel,profileEmailTextField,emailValidLabel].forEach {
             view.addSubview($0)
         }
  
@@ -147,7 +147,7 @@ class InputEmailVC: UIViewController {
         }
         
         // emailTextField
-        emailTextField.snp.makeConstraints { make in
+        profileEmailTextField.snp.makeConstraints { make in
             make.top.equalTo(emailTitleLabel.snp.bottom).offset(8)
             make.height.equalTo(48)
             make.left.right.equalToSuperview().inset(16)
@@ -155,7 +155,7 @@ class InputEmailVC: UIViewController {
         
         // emailValidLabel
         emailValidLabel.snp.makeConstraints { make in
-            make.top.equalTo(emailTextField.snp.bottom).offset(4)
+            make.top.equalTo(profileEmailTextField.snp.bottom).offset(4)
             make.height.equalTo(17)
             make.left.equalToSuperview().inset(16)
         }
@@ -172,7 +172,10 @@ class InputEmailVC: UIViewController {
     
     @objc
     private func nextButtonTapped(_ sender: Any) {
-        // EmailVC로 화면전환
+        // profileEmail 저장
+        UserDefaults.standard.set(profileEmail, forKey: "profileEmail")
+        
+        // InputOrganizationVC로 화면전환
         let nextVC = InputOrganizationVC()
         nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
         nextVC.modalPresentationStyle = .fullScreen
@@ -183,10 +186,10 @@ class InputEmailVC: UIViewController {
     // MARK: - ValidUserInfo
     
     func validateUserInfo() {
-        if isValidEmail {
+        if isValidProfileEmail {
             self.nextButton.isEnabled = true
-            self.emailTextField.layer.borderColor = UIColor.mainBlack.cgColor
-            self.emailTextField.layer.borderWidth = 1
+            self.profileEmailTextField.layer.borderColor = UIColor.mainBlack.cgColor
+            self.profileEmailTextField.layer.borderWidth = 1
             UIView.animate(withDuration: 0.33) {
                 self.nextButton.backgroundColor = .mainBlue
 //                self.emailValidLabel.isHidden = true
@@ -195,8 +198,8 @@ class InputEmailVC: UIViewController {
             }
         } else {
             self.nextButton.isEnabled = false
-            self.emailTextField.layer.borderColor = UIColor(hex: 0xFF0000).cgColor
-            self.emailTextField.layer.borderWidth = 1
+            self.profileEmailTextField.layer.borderColor = UIColor(hex: 0xFF0000).cgColor
+            self.profileEmailTextField.layer.borderWidth = 1
 //            self.emailValidLabel.isHidden = true
             UIView.animate(withDuration: 0.33) {
                 self.nextButton.backgroundColor = .mainGray
@@ -228,9 +231,9 @@ class InputEmailVC: UIViewController {
         let text = sender.text ?? ""
         
         switch sender {
-        case emailTextField:
-            self.isValidEmail = text.isValidEmail()
-            self.userEmail = text
+        case profileEmailTextField:
+            self.isValidProfileEmail = text.isValidEmail()
+            self.profileEmail = text
         
         default:
             fatalError("Missing TextField...")
