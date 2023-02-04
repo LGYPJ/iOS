@@ -16,7 +16,9 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     // MARK: - Properties
     static let identifier = String(describing: HomeEventInfoTableViewCell.self)
     static let cellHeight = 428.0
-    
+    var popUpX: CGFloat = 0.0
+    var popUpY: CGFloat = 0.0
+    var scrollDirection: CGFloat = 0.0
     var seminarList: [HomeSeminarInfo] = []
     var networkingList: [HomeNetworkingInfo] = []
     
@@ -31,7 +33,9 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     lazy var seminarPopUpButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "PopUpIcon"), for: .normal)
-        button.addTarget(self, action: #selector(presentPopUpView), for: .touchUpInside)
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(presentHomeSeminarPopUpVC(_:)))
+        gesture.numberOfTapsRequired = 1
+        button.addGestureRecognizer(gesture)
         return button
     }()
     
@@ -73,7 +77,9 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     lazy var networkingPopUpButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "PopUpIcon"), for: .normal)
-        button.addTarget(self, action: #selector(presentPopUpView), for: .touchUpInside)
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(presentHomeNetworkingPopUpVC(_:)))
+        gesture.numberOfTapsRequired = 1
+        button.addGestureRecognizer(gesture)
         return button
     }()
     
@@ -161,20 +167,18 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         
         self.contentView.addSubview(seminarTitleLabel)
         self.contentView.addSubview(seminarPopUpButton)
-//        self.contentView.addSubview(seminarViewAllButton)
         self.contentView.addSubview(seminarViewAllStack)
         self.contentView.addSubview(seminarCollectionView)
         
         self.contentView.addSubview(networkingTitleLabel)
         self.contentView.addSubview(networkingPopUpButton)
-//        self.contentView.addSubview(networkingViewAllButton)
         self.contentView.addSubview(networkingViewAllStack)
         self.contentView.addSubview(networkingCollectionView)
         
         self.contentView.addSubview(interSpcace)
+        
         configSubViewLayouts()
         configNotificationCenter()
-        
     }
     
     func configSubViewLayouts() {
@@ -230,22 +234,8 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     func configNotificationCenter() {
         NotificationCenter.default.addObserver(self, selector: #selector(presentHomeSeminarInfo(_:)), name: Notification.Name("presentHomeSeminarInfo"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(presentHomeNetworkingInfo(_:)), name: Notification.Name("presentHomeNetworkingInfo"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(setScrollDirection(_:)), name: Notification.Name("postScrollDirection"), object: nil)
         
-    }
-    
-    @objc func presentPopUpView(_ sender: UIButton) {
-        switch sender {
-        case seminarPopUpButton:
-            let vc = HomeSeminarPopUpVC()
-            vc.modalPresentationStyle = .overFullScreen
-            self.window?.rootViewController?.present(vc, animated: false)
-        case networkingPopUpButton:
-            let vc = HomeNetworkingPopUpVC()
-            vc.modalPresentationStyle = .overFullScreen
-            self.window?.rootViewController?.present(vc, animated: false)
-        default:
-            fatalError("HomeInfoTableViewCell presentPopUpView error")
-        }
     }
     
     @objc func presentViewAll(_ sender: UIButton) {
@@ -311,6 +301,32 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         
     }
     
+    // TODO: ScrollDirection 구해서 y에 빼줘야함
+    
+    @objc func presentHomeSeminarPopUpVC(_ touch: UITapGestureRecognizer) {
+        NotificationCenter.default.post(name: Notification.Name("getScrollDirection"), object: nil)
+        popUpX = seminarPopUpButton.layer.frame.midX - 28
+        popUpY = seminarPopUpButton.layer.frame.midY + 80 - scrollDirection
+        
+        let vc = HomeSeminarPopUpVC(x: popUpX, y: popUpY)
+        vc.modalPresentationStyle = .overFullScreen
+        self.window?.rootViewController?.present(vc, animated: false)
+    }
+    
+    @objc func presentHomeNetworkingPopUpVC(_ touch: UITapGestureRecognizer) {
+        NotificationCenter.default.post(name: Notification.Name("getScrollDirection"), object: nil)
+        popUpX = networkingPopUpButton.layer.frame.midX - 28
+        popUpY = networkingPopUpButton.layer.frame.midY + 80 - scrollDirection
+        
+        let vc = HomeNetworkingPopUpVC(x: popUpX, y: popUpY)
+        vc.modalPresentationStyle = .overFullScreen
+        self.window?.rootViewController?.present(vc, animated: false)
+    }
+    
+    @objc func setScrollDirection(_ notification: NSNotification) {
+        scrollDirection = notification.object as! CGFloat
+    }
+    
 }
 
 extension HomeEventInfoTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -324,38 +340,12 @@ extension HomeEventInfoTableViewCell: UICollectionViewDataSource, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
         if collectionView == seminarCollectionView {
             return seminarList.count
         }
-        
         else {
             return networkingList.count
         }
-        
-//        switch section {
-//        case 0:
-//            print("section 개수: \(seminarList.count)")
-//            return seminarList.count
-//        case 1:
-//            print("section 개수: \(networkingList.count)")
-//            return networkingList.count
-//        default:
-//            print(fatalError())
-//            return 0
-//        }
-        
-//        if collectionView.tag == 0{
-////            print("seminarList -> \(seminarList.count)")
-//            return seminarList.count
-//        }
-//        else if collectionView.tag == 1 {
-////            print("networkingList -> \(networkingList.count)")
-//            return networkingList.count
-//        }
-//        print(fatalError("error"))
-        
-        //return 0
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -393,14 +383,6 @@ extension HomeEventInfoTableViewCell: UICollectionViewDataSource, UICollectionVi
         default:
             print("dataList Count Error")
         }
-        
-//        if collectionView.tag == 1{
-////            cell.configure(seminarList[indexPath.row])
-//            cell.configure(seminarList[indexPath.row])
-//        }
-//        else if collectionView.tag == 2{
-//            cell.configure(networkingList[indexPath.row])
-//        }
         return cell
     }
     
@@ -409,9 +391,9 @@ extension HomeEventInfoTableViewCell: UICollectionViewDataSource, UICollectionVi
         
         switch collectionView.tag {
         case 0:
-            NotificationCenter.default.post(name: Notification.Name("pushSeminarDetailVC"), object: seminarList[indexPath.row].programIdx)
+            NotificationCenter.default.post(name: Notification.Name("pushSeminarDetailVC"), object: MyEventToDetailInfo(programIdx: seminarList[indexPath.row].programIdx, type: seminarList[indexPath.row].type))
         case 1:
-            NotificationCenter.default.post(name: Notification.Name("pushNetworkingDetailVC"), object: networkingList[indexPath.row].programIdx)
+            NotificationCenter.default.post(name: Notification.Name("pushNetworkingDetailVC"), object: MyEventToDetailInfo(programIdx: networkingList[indexPath.row].programIdx, type: networkingList[indexPath.row].type))
         default:
             print(">>>error: HomeEventInfoTableViewCell didSelectRowAt")
         }

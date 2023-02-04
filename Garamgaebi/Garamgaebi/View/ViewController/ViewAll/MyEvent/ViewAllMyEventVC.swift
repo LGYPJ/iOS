@@ -9,10 +9,18 @@ import UIKit
 
 class ViewAllMyEventVC: UIViewController {
 
-    private let dataList = ViewAllMyEventDataModel.list
     private let sections: [String] = ["예정된 모임", "지난 모임"]
-    private var dataList1: [ViewAllMyEventDataModel] = []
-    private var dataList2: [ViewAllMyEventDataModel] = []
+    
+    private var dataList1: [MyEventInfoReady] = [] {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
+    private var dataList2: [MyEventInfoClose] = [] {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
     
     // MARK: - Subviews
     
@@ -40,7 +48,7 @@ class ViewAllMyEventVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        dataDistribute()
+        fetchData()
         // Data가 없을 때 시연용
 //        dataList1 = []
 //        dataList2 = []
@@ -62,14 +70,18 @@ class ViewAllMyEventVC: UIViewController {
         }
     }
     
-    func dataDistribute(){
-        dataList.compactMap { item in
-            if item.state != "마감" {
-                dataList1.append(item)
-            } else {
-                dataList2.append(item)
-            }
+    func fetchData(){
+        
+        // MyEventReadyInfo의 data를 불러옴
+        ViewAllViewModel.getViewAllMyEventReadyInfo(memberId: 1) { [weak self] result in
+            self?.dataList1 = result
         }
+        
+        // MyEventReadyInfo의 data를 불러옴
+        ViewAllViewModel.getViewAllMyEventCloseInfo(memberId: 1) { [weak self] result in
+            self?.dataList2 = result
+        }
+
     }
     
     @objc private func pushNextView(_ sender: UIButton) {
@@ -168,13 +180,13 @@ extension ViewAllMyEventVC: UITableViewDataSource, UITableViewDelegate {
             if dataList1.count == 0 {
                 cell.configureZeroCell(caseString: "예정된 내")
             } else {
-                cell.configure(dataList1[indexPath.row])
+                cell.configureReady(dataList1[indexPath.row])
             }
         case 1:
             if dataList2.count == 0 {
                 cell.configureZeroCell(caseString: "지난")
             } else {
-                cell.configure(dataList2[indexPath.row])
+                cell.configureClose(dataList2[indexPath.row])
             }
         default:
             print("dataList Count Error")

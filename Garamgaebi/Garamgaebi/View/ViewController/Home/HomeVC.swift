@@ -16,9 +16,7 @@ class HomeVC: UIViewController {
     public var homeSeminarInfo: [HomeSeminarInfo] = [] {
         didSet {
             // notification -> Cell
-            
             NotificationCenter.default.post(name: Notification.Name("presentHomeSeminarInfo"), object: homeSeminarInfo)
-            
             self.tableView.reloadData()
         }
     }
@@ -26,9 +24,23 @@ class HomeVC: UIViewController {
     public var homeNetworkingInfo: [HomeNetworkingInfo] = [] {
         didSet {
             // notification -> Cell
-            
             NotificationCenter.default.post(name: Notification.Name("presentHomeNetworkingInfo"), object: homeNetworkingInfo)
-            
+            self.tableView.reloadData()
+        }
+    }
+    
+    public var recommendUsersInfo: [RecommendUsersInfo] = [] {
+        didSet {
+            // notification -> Cell
+            NotificationCenter.default.post(name: Notification.Name("presentRecommendUsersInfo"), object: recommendUsersInfo)
+            self.tableView.reloadData()
+        }
+    }
+    
+    public var myEventInfo: [MyEventInfoReady] = [] {
+        didSet {
+            // notification -> Cell
+            NotificationCenter.default.post(name: Notification.Name("presentMyEventInfo"), object: myEventInfo)
             self.tableView.reloadData()
         }
     }
@@ -98,9 +110,7 @@ class HomeVC: UIViewController {
         headerView.addSubview(titleLabel)
         headerView.addSubview(notificationViewButton)
         view.addSubview(tableView)
-        
-        
-        
+
     }
     
     func configLayouts() {
@@ -142,6 +152,14 @@ class HomeVC: UIViewController {
         HomeViewModel.getHomeNetworkingInfo { [weak self] result in
             self?.homeNetworkingInfo = result
         }
+        
+        HomeViewModel.getRecommendUsersInfo { [weak self] result in
+            self?.recommendUsersInfo = result
+        }
+        
+        HomeViewModel.getHomeMyEventInfo(memberId: 1) { [weak self] result in
+            self?.myEventInfo = result
+        }
 
     }
     
@@ -150,6 +168,7 @@ class HomeVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(reloadDatas), name: Notification.Name("HomeTableViewReload"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(pushSeminarDetail(_:)), name: Notification.Name("pushSeminarDetailVC"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(pushNetworkingDetail(_:)), name: Notification.Name("pushNetworkingDetailVC"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(postScrollDirection), name: Notification.Name("getScrollDirection"), object: nil)
     }
     
     @objc private func pushNextView(_ sender: UIButton) {
@@ -163,18 +182,26 @@ class HomeVC: UIViewController {
     }
     
     @objc func pushSeminarDetail(_ notification: NSNotification) {
-		// TODO: object에서 ID값 가져오기
-        self.navigationController?.pushViewController(EventSeminarDetailVC(memberId: 0, seminarId: notification.object as! Int), animated: true)
+        let detailInfo: MyEventToDetailInfo = notification.object as! MyEventToDetailInfo
+        
+        self.navigationController?.pushViewController(EventSeminarDetailVC(memberId: 1, seminarId: detailInfo.programIdx), animated: true)
+        print("seminarId: \(detailInfo.programIdx)")
     }
     
     @objc func pushNetworkingDetail(_ notification: NSNotification) {
-		// TODO: object에서 ID값 가져오기
-        self.navigationController?.pushViewController(EventNetworkingDetailVC(memberId: 0, networkingId: notification.object as! Int), animated: true)
+        let detailInfo: MyEventToDetailInfo = notification.object as! MyEventToDetailInfo
+        
+        self.navigationController?.pushViewController(EventNetworkingDetailVC(memberId: 1, networkingId: detailInfo.programIdx), animated: true)
     }
     
     @objc func reloadDatas() {
         tableView.reloadData()
     }
+    
+    @objc private func postScrollDirection() {
+        NotificationCenter.default.post(name: Notification.Name("postScrollDirection"), object: tableView.contentOffset.y)
+    }
+    
     
 }
 
@@ -195,7 +222,7 @@ extension HomeVC {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(HomeEventInfoTableViewCell.self, forCellReuseIdentifier: HomeEventInfoTableViewCell.identifier)
-        tableView.register(HomeUserInfoTableViewCell.self, forCellReuseIdentifier: HomeUserInfoTableViewCell.identifier)
+        tableView.register(RecommendUsersInfoTableViewCell.self, forCellReuseIdentifier: RecommendUsersInfoTableViewCell.identifier)
         tableView.register(HomeMyEventInfoTableViewCell.self, forCellReuseIdentifier: HomeMyEventInfoTableViewCell.identifier)
         tableView.rowHeight = UITableView.automaticDimension
     }
@@ -212,7 +239,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         case 0:
             return HomeEventInfoTableViewCell.cellHeight + 16.0
         case 1:
-            return HomeUserInfoTableViewCell.cellHeight + 8.0
+            return RecommendUsersInfoTableViewCell.cellHeight + 8.0
         case 2:
             return HomeMyEventInfoTableViewCell.cellHeight
         default:
@@ -227,7 +254,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeEventInfoTableViewCell.identifier, for: indexPath) as? HomeEventInfoTableViewCell else {return UITableViewCell()}
             return cell
         case 1:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeUserInfoTableViewCell.identifier, for: indexPath) as? HomeUserInfoTableViewCell else {return UITableViewCell()}
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: RecommendUsersInfoTableViewCell.identifier, for: indexPath) as? RecommendUsersInfoTableViewCell else {return UITableViewCell()}
             return cell
         case 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeMyEventInfoTableViewCell.identifier, for: indexPath) as? HomeMyEventInfoTableViewCell else {return UITableViewCell()}

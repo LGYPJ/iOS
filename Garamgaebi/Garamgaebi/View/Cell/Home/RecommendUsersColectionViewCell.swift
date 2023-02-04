@@ -1,20 +1,21 @@
 //
-//  HomeUserCollectionViewCell.swift
+//  RecommendUsersColectionViewCell.swift
 //  Garamgaebi
 //
 //  Created by 홍승완 on 2023/01/15.
 //
 
 import UIKit
+import Kingfisher
 
-class HomeUserColectionViewCell: UICollectionViewCell {
+class RecommendUsersColectionViewCell: UICollectionViewCell {
     
-    static let identifier = "HomeUserColectionViewCell"
-    
+    static let identifier = String(describing: RecommendUsersColectionViewCell.self)
+    public var memberIdx = Int()
     // MARK: - Subviews
     
-    lazy var imageInfoView: UIView = {
-        let view = UIView()
+    lazy var imageInfoView: UIImageView = {
+        let view = UIImageView()
         view.backgroundColor = .mainGray
         return view
     }()
@@ -89,12 +90,23 @@ class HomeUserColectionViewCell: UICollectionViewCell {
         }
     }
     
-    public func configure(_ item: HomeUserDataModel) {
+    public func configure(_ item: RecommendUsersInfo) {
         
-        //이미지 받아야함 (이미지) = item.profileImage
         
+//        // 이미지url 이미지View에 적용
+//        //https://terry-some.tistory.com/89 참고하였음
+//        let url = URL(string: item.profileUrl)
+//        imageInfoView.kf.setImage(with: url)
+        
+        // 닉네임
         nickNameInfoLabel.text = item.nickName
-        companyInfoLabel.text = item.company
-        positionInfoLabel.text = item.postion
+        
+        // 현재 belong으로 하나로 주는데 2개로 나눠 줘야한다고 생각함
+        companyInfoLabel.text = item.belong
+        positionInfoLabel.text = item.belong
+        
+        // memberIdx 저장
+        memberIdx = item.memberIdx
+        
     }
 }

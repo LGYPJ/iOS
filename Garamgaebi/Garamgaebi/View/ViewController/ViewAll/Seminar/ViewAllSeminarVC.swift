@@ -29,9 +29,15 @@ class ViewAllSeminarVC: UIViewController {
     
     // MARK: - Subviews
     
+    // tableView cell 선택 시 gray컬러로 변하지 않게 설정
+    lazy var background: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
     lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .grouped)
-        view.allowsSelection = false
         view.separatorStyle = .none
         view.bounces = true
         view.clipsToBounds = true
@@ -53,13 +59,7 @@ class ViewAllSeminarVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         fetchData()
-        
-        // Data가 없을 때 시연용
-//        dataList1 = []
-//        dataList2 = []
-//        dataList3 = []
     }
     
     // MARK: - Functions
@@ -79,7 +79,6 @@ class ViewAllSeminarVC: UIViewController {
     }
     
     func fetchData(){
-
         // SeminarThisMonthInfo의 data를 불러옴
         ViewAllViewModel.getSeminarThisMonthInfo  { [weak self] result in
             self?.dataList1 = [result]
@@ -94,22 +93,9 @@ class ViewAllSeminarVC: UIViewController {
         ViewAllViewModel.getSeminarClosedInfo { [weak self] result in
             self?.dataList3 = result
         }
-        
-    }
-    
-    @objc private func pushNextView(_ sender: UIButton) {
-        switch sender {
-            //        case notificationViewButton:
-            //            self.navigationController?.pushViewController(HomeNotificationVC(), animated: true)
-            //
-        default:
-            print("error")
-        }
     }
     
 }
-
-
 
 extension ViewAllSeminarVC {
     
@@ -118,17 +104,11 @@ extension ViewAllSeminarVC {
         view.backgroundColor = .white
     }
     
-    // 뒤로가기 버튼 did tap
-    @objc private func didTapBackBarButton() {
-        self.navigationController?.popViewController(animated: true)
-    }
-    
     private func configureTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(ViewAllSeminarTableViewCell.self, forCellReuseIdentifier: ViewAllSeminarTableViewCell.identifier)
         tableView.register(CustomHeaderView.self, forHeaderFooterViewReuseIdentifier: CustomHeaderView.identifier)
-        
     }
     
 }
@@ -157,7 +137,7 @@ extension ViewAllSeminarVC: UITableViewDataSource, UITableViewDelegate {
             }
             return dataList3.count
         default:
-            print(fatalError())
+            print(">>> ERROR: ViewAllSeminarVC dataList count")
             return 0
         }
     }
@@ -194,6 +174,8 @@ extension ViewAllSeminarVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ViewAllSeminarTableViewCell.identifier, for: indexPath) as? ViewAllSeminarTableViewCell else {return UITableViewCell()}
+        
+        cell.selectedBackgroundView = background
         
         switch indexPath.section {
         case 0:
@@ -235,5 +217,22 @@ extension ViewAllSeminarVC: UITableViewDataSource, UITableViewDelegate {
         return 50.0
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var postObject: MyEventToDetailInfo = MyEventToDetailInfo(programIdx: 0, type: "")
+        switch indexPath.section {
+        case 0:
+            postObject = MyEventToDetailInfo(programIdx: dataList1[indexPath.row].programIdx, type: dataList1[indexPath.row].type)
+        case 1:
+            postObject = MyEventToDetailInfo(programIdx: dataList2[indexPath.row].programIdx, type: dataList2[indexPath.row].type)
+        case 2:
+            postObject = MyEventToDetailInfo(programIdx: dataList3[indexPath.row].programIdx, type: dataList3[indexPath.row].type)
+        default:
+            print(">>> ERROR: ViewAllSeminarVC didSelectRowAt dataList Error")
+        }
+        
+        print(postObject)
+        NotificationCenter.default.post(name: Notification.Name("pushEventDetailVC"), object: postObject)
+        
+    }
 }
 

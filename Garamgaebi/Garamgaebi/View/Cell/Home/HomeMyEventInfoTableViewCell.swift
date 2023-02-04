@@ -17,8 +17,14 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
     static let identifier = String(describing: HomeMyEventInfoTableViewCell.self)
     static var cellHeight = 100.0
     
-    let dataList = HomeMyEventDataModel.list
-
+    public var myEventList: [MyEventInfoReady] = [] {
+        didSet {
+            self.collectionView.reloadData()
+            // cell -> Home으로 변경사항 알림
+            NotificationCenter.default.post(name: Notification.Name("HomeTableViewReload"), object: nil)
+        }
+    }
+    
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "내 모임"
@@ -30,22 +36,18 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
     private let collectionViewFlowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        //layout.minimumLineSpacing = 18.0
         layout.minimumInteritemSpacing = 0
-        //layout.itemSize = .init(width: 300, height: cellHeight)
         return layout
     }()
     
     lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewFlowLayout)
         view.isScrollEnabled = false
-        
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
         view.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
         view.clipsToBounds = true
         view.register(HomeMyEventColectionViewCell.self, forCellWithReuseIdentifier: HomeMyEventColectionViewCell.identifier)
-        
         return view
     }()
     
@@ -55,7 +57,6 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
         view.layer.borderColor = UIColor.mainGray.withAlphaComponent(0.8).cgColor
         view.layer.borderWidth = 1
         view.layer.cornerRadius = 12
-        
         return view
     }()
     
@@ -73,7 +74,6 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
         label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         label.textColor = .mainGray.withAlphaComponent(0.8)
         label.textAlignment = .center
-        
         return label
     }()
     
@@ -88,8 +88,11 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
         zeroDataBackgroundView.addSubview(zeroDataImage)
         zeroDataBackgroundView.addSubview(zeroDataDescriptionLabel)
         configSubViewLayouts()
+        configNotificationCenter()
+    }
+    
+    override func layoutIfNeeded() {
         configureZeroCell()
-        
     }
     
     func configSubViewLayouts() {
@@ -123,34 +126,41 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
     
     // TODO: API 통신 후 수정
     private func configureZeroCell() {
-        
-        
-        
-        if dataList.count == 0 {
+        if myEventList.count == 0 {
             // 부모 셀 높이 가변설정 (모임이 하나도 없을 때)
             HomeMyEventInfoTableViewCell.cellHeight = 190
             collectionView.isHidden = true
             zeroDataBackgroundView.isHidden = false
         } else {
             // 부모 셀 높이 가변설정 (모임이 하나이상 존재할때)
-            HomeMyEventInfoTableViewCell.cellHeight = 54.0 + 88.0 * Double(dataList.count) - 8.0 + 16.0
+            HomeMyEventInfoTableViewCell.cellHeight = 54.0 + 88.0 * Double(myEventList.count) - 8.0 + 16.0
             collectionView.isHidden = false
             zeroDataBackgroundView.isHidden = true
         }
+    }
+    
+    func configNotificationCenter() {
+        NotificationCenter.default.addObserver(self, selector: #selector(presentMyEventInfo(_:)), name: Notification.Name("presentMyEventInfo"), object: nil)
+    }
+    
+    @objc func presentMyEventInfo(_ notification: NSNotification) {
+        guard let myEventListBase = notification.object as? [MyEventInfoReady] else { return }
+        myEventList = myEventListBase
+        collectionView.reloadData()
     }
     
 }
 
 extension HomeMyEventInfoTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataList.count
+        return myEventList.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeMyEventColectionViewCell.identifier, for: indexPath) as? HomeMyEventColectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(dataList[indexPath.row])
+        cell.configure(myEventList[indexPath.row])
         return cell
     }
 
@@ -160,5 +170,18 @@ extension HomeMyEventInfoTableViewCell: UICollectionViewDataSource, UICollection
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 8
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let postObject = myEventList[indexPath.row]
+        
+        switch(postObject.type){
+        case "SEMINAR":
+            NotificationCenter.default.post(name: Notification.Name("pushSeminarDetailVC"), object: MyEventToDetailInfo(programIdx: postObject.programIdx, type: postObject.type))
+        case "NETWORKING":
+            NotificationCenter.default.post(name: Notification.Name("pushNetworkingDetailVC"), object: MyEventToDetailInfo(programIdx: postObject.programIdx, type: postObject.type))
+        default:
+            print(">>>ERROR: HomeMyEventInfoViewCell didSelectItemAt programType")
+        }
     }
 }
