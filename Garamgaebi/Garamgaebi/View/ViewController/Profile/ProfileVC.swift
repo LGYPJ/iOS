@@ -15,14 +15,14 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     
     // MARK: - Properties
 //    let snsDataList = ProfileSnsDataModel.data
-    let careerDataList = ProfileCareerDataModel.list
+//    let careerDataList = ProfileCareerDataModel.list
     let educationDataList = ProfileEducationDataModel.list
     
     // 추후 로그인 구현 후 변경
     let memberIdx: Int = 9 // 코코아
     
     // 추후 변경 (토큰 저장)
-    let token: String = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjb2NvYUBnYWNob24uYWMua3IiLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjc1NDQ0NDcyfQ.sodx-Szs9KxAkCh6DJ67MaayWA1Iy6WPMDj7fQJfNqM"
+    let token: String = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjb2NvYUBnYWNob24uYWMua3IiLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjc1NDc1NTk0fQ.P9ozyp0wSQRJ5I9XOrVPtxHB7ZRFJZH774JXIwGdTMM"
     
     // MARK: - Subviews
     lazy var headerView: UIView = {
@@ -271,6 +271,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         
         // 서버 통신
         getSnsData()
+        getCareerData()
 //        showSnsDefaultLabel()
         
 //        print("1: viewWillAppear()")
@@ -283,6 +284,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         
 //        print("1: viewDidAppear()")
         showSnsDefaultLabel()
+        showCareerDefaultLabel()
     }
     
     
@@ -418,18 +420,6 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             $0.leading.trailing.equalTo(careerTopRadiusView)
 //            $0.height.equalTo(dataList.count * 65 + 72)
         }
-//        careerDefaultLabel.snp.makeConstraints {
-//            $0.top.equalToSuperview().inset(12)
-//            $0.leading.trailing.equalToSuperview()
-//            $0.bottom.equalTo(addCareerBtn.snp.top).offset(-12)
-//        }
-        careerTableView.backgroundColor = .mainPurple
-        careerTableView.snp.makeConstraints { /// 경력 테이블뷰
-            $0.top.equalToSuperview()
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(addCareerBtn.snp.top).offset(-12)
-            $0.height.equalTo(careerDataList.count * 65)
-        }
         
         addCareerBtn.snp.makeConstraints { /// 경력 추가 버튼
             $0.bottom.equalToSuperview().inset(12)
@@ -544,7 +534,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
-    // MARK: - 내프로필 정보
+    // MARK: - [GET] 내프로필 정보
     func getMyInfo() {
         
         // http 요청 주소 지정
@@ -599,7 +589,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         }
     }
     
-    // MARK: - SNS 조회
+    // MARK: - [GET] SNS 조회
     func getSnsData() {
         
         // http 요청 주소 지정
@@ -645,6 +635,52 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         
     }
     
+    // MARK: - [GET] Career 조회
+    func getCareerData() {
+        
+        // http 요청 주소 지정
+        let url = "https://garamgaebi.shop/profile/career/\(memberIdx)"
+        
+        let authorization = "Bearer \(token)"
+        
+        // http 요청 헤더 지정
+        let header: HTTPHeaders = [
+            "Content-Type" : "application/json",
+            "Authorization": authorization
+        ]
+        
+        // httpBody에 parameters 추가
+        AF.request(
+            url,
+            method: .get,
+            encoding: JSONEncoding.default,
+            headers: header
+        )
+        .validate()
+        .responseDecodable(of: CareerResponse.self) { response in
+            switch response.result {
+            case .success(let response):
+                if response.isSuccess {
+                    print("성공(Career조회): \(response.message)")
+                    let result = response.result
+
+                    let careerData = CareerData.shared
+                    
+                    // 값 넣어주기
+                    careerData.careerDataModel = result
+//                    print("받은 Career: \(careerData.careerDataModel.count)")
+                    self.careerTableView.reloadData()
+                    
+                } else {
+                    print("실패(Career조회): \(response.message)")
+                }
+            case .failure(let error):
+                print("실패(AF-Career조회): \(error.localizedDescription)")
+            }
+        }
+        
+    }
+    
     func showSnsDefaultLabel() {
         let snsCount = SnsData.shared.snsDataModel.count
 //        print("들어가는 SNS: \(snsCount)")
@@ -667,19 +703,43 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             }
         }
     }
+    func showCareerDefaultLabel() {
+        let careerCount = CareerData.shared.careerDataModel.count
+//        print("들어가는 Career: \(careerCount)")
+        
+        if (careerCount == 0) {
+//            print("Career 아이템이 없음")
+            careerDefaultLabel.snp.makeConstraints {
+                $0.top.equalToSuperview().inset(12)
+                $0.centerX.equalToSuperview()
+                $0.bottom.equalTo(addCareerBtn.snp.top).offset(-12)
+            }
+        }
+        else {
+//            print("Career 테이블뷰 보여주기")
+            careerTableView.snp.makeConstraints {
+                $0.top.equalToSuperview()
+                $0.leading.trailing.equalToSuperview()
+                $0.bottom.equalTo(addCareerBtn.snp.top).offset(-12)
+                $0.height.equalTo(careerCount * 65)
+            }
+        }
+    }
 }
 // MARK: - Extension
 extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // 저장된 데이터 가져오기
         let snsDataModel = SnsData.shared.snsDataModel
+        let careerDataModel = CareerData.shared.careerDataModel
         
         if tableView == snsTableView {
 //            print("SNS 개수: \(snsDataModel.count)")
             return snsDataModel.count
         }
         else if tableView == careerTableView {
-            return careerDataList.count
+//            print("Career 개수: \(careerDataModel.count)")
+            return careerDataModel.count
         }
         else if tableView == eduTableView {
             return educationDataList.count
@@ -697,6 +757,7 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
         
         // 저장된 데이터 가져오기
         let snsDataModel = SnsData.shared.snsDataModel
+        let careerDataModel = CareerData.shared.careerDataModel
         
         
         if tableView == snsTableView {
@@ -707,7 +768,12 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
         else if tableView == careerTableView {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileHistoryTableViewCell.identifier, for: indexPath) as? ProfileHistoryTableViewCell else {return UITableViewCell()}
             
-            cell.careerConfigure(careerDataList[indexPath.row])
+            let row = careerDataModel[indexPath.row]
+
+            cell.companyLabel.text = row.company
+            cell.positionLabel.text = row.position
+            cell.periodLabel.text = "\(row.startDate) ~ \(row.endDate)"
+                    
             return cell
         }
         else {

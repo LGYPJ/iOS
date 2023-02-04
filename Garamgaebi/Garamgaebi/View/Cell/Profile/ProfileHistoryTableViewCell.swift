@@ -82,11 +82,11 @@ class ProfileHistoryTableViewCell: UITableViewCell {
        
     }
     
-    public func careerConfigure(_ item: ProfileCareerDataModel) {
-        companyLabel.text = item.company
-        positionLabel.text = item.position
-        periodLabel.text = "\(item.startDate) ~ \(item.endDate)"
-    }
+//    public func careerConfigure(_ item: ProfileCareerDataModel) {
+//        companyLabel.text = item.company
+//        positionLabel.text = item.position
+//        periodLabel.text = "\(item.startDate) ~ \(item.endDate)"
+//    }
     
     public func educationConfigure(_ item: ProfileEducationDataModel) {
         companyLabel.text = item.organization
