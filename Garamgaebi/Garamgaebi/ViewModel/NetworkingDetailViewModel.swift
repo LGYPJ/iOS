@@ -49,7 +49,10 @@ class NetworkingDetailViewModel {
 //		]
 //		completion(dummyData)
 		let url = "https://garamgaebi.shop/seminars/\(networkingId)/participants"
-		AF.request(url, method: .get)
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
+        ]
+		AF.request(url, method: .get, headers: headers)
 			.validate()
 			.responseDecodable(of: NetworkingDetailAttentdantResponse.self) { response in
 				switch response.result {

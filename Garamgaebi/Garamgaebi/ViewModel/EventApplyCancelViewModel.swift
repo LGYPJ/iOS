@@ -12,7 +12,9 @@ class EventApplyCancelViewModel {
 	// post 은행 계좌
 	public static func postBankAccount(memberId: Int, programId: Int, bank: String, account: String, completion: @escaping ((EventApplyModel) -> Void)) {
 		let url = "https://garamgaebi.shop/applies/programs/leave"
-		
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
+        ]
 		let body: [String: Any] = [
 			"memberIdx": memberId,
 			"programIdx": programId,
@@ -20,7 +22,7 @@ class EventApplyCancelViewModel {
 			"account": account
 		]
 		
-		AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default)
+        AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers)
 			.validate()
 			.responseDecodable(of: EventApplyModel.self) { response in
 				switch response.result {
