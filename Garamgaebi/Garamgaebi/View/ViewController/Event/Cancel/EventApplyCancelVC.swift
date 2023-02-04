@@ -322,10 +322,10 @@ class EventApplyCancelVC: UIViewController {
         super.viewDidLoad()
 		
 		configureViews()
-//		configureDummyData()
 		configureAddTarget()
 		configureTextField()
 		configureGestureRecognizer()
+		fetchProgramData()
         
     }
 	override func viewWillAppear(_ animated: Bool) {
@@ -335,17 +335,6 @@ class EventApplyCancelVC: UIViewController {
 		cancelButton.isEnabled = false
 		cancelButton.backgroundColor = .mainGray
 	}
-
-	
-	func configureDummyData() {
-		programNameLabel.text = "2차 세미나"
-		dateInfoLabel.text = "2023-02-10 오후 6시"
-		locationInfoLabel.text = "가천대학교 비전타워 B201"
-		costInfoLabel.text = "10000원"
-		deadlineInfoLabel.text = "2023-01-09 오후 6시"
-	}
-    
-
     
 }
 
@@ -502,18 +491,32 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 	
 	private func configureSeminarData() {
 		programNameLabel.text = self.seminarInfo.title
-		dateInfoLabel.text = self.seminarInfo.date
+		dateInfoLabel.text = self.seminarInfo.date.formattingDetailDate()
 		locationInfoLabel.text = self.seminarInfo.location
-		costInfoLabel.text = "\(self.seminarInfo.fee)"
-		deadlineInfoLabel.text = self.seminarInfo.endDate
+		
+		if self.seminarInfo.fee == 0 {
+			costStackView.isHidden = true
+		} else {
+			costStackView.isHidden = false
+			costInfoLabel.text = "\(self.seminarInfo.fee)원"
+		}
+		
+		deadlineInfoLabel.text = self.seminarInfo.endDate.formattingDetailDate()
 	}
 	
 	private func configureNetworkingData() {
 		programNameLabel.text = self.networkingInfo.title
-		dateInfoLabel.text = self.networkingInfo.date
+		dateInfoLabel.text = self.networkingInfo.date.formattingDetailDate()
 		locationInfoLabel.text = self.networkingInfo.location
-		costInfoLabel.text = "\(self.networkingInfo.fee)"
-		deadlineInfoLabel.text = self.networkingInfo.endDate
+		
+		if self.networkingInfo.fee == 0 {
+			costStackView.isHidden = true
+		} else {
+			costStackView.isHidden = false
+			costInfoLabel.text = "\(self.networkingInfo.fee)원"
+		}
+		
+		deadlineInfoLabel.text = self.networkingInfo.endDate.formattingDetailDate()
 	}
 	
 	private func configureGestureRecognizer() {

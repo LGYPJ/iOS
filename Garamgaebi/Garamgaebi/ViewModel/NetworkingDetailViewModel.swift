@@ -11,7 +11,7 @@ class NetworkingDetailViewModel {
 	// MARK: requestData
 	// 세미나 정보 request
 	public static func requestNetworkingDetailInfo(memberId: Int, networkingId: Int, completion: @escaping ((NetworkingDetailInfo) -> Void)) {
-		let dummyData = NetworkingDetailInfo(programIdx: 1,title: "유료 네트워킹1", date: "2023-04-15T18:00:00", location: "가천관", fee: 10000, endDate: "2023-04-08T18:00:00", programStatus: "OPEN", userButtonStatus: "CANCEL")
+		let dummyData = NetworkingDetailInfo(programIdx: networkingId,title: "유료 네트워킹1", date: "2023-04-15T18:00:00", location: "가천관", fee: 10000, endDate: "2023-04-08T18:00:00", programStatus: "OPEN", userButtonStatus: "CANCEL")
 		completion(dummyData)
 //		let url = "https://garamgaebi.shop/networkings/info"
 //
