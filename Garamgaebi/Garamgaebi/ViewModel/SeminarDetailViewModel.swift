@@ -46,7 +46,10 @@ class SeminarDetailViewModel {
 //		]
 //		completion(dummyData)
 		let url = "https://garamgaebi.shop/seminars/\(seminarId)/participants"
-		AF.request(url, method: .get)
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
+        ]
+		AF.request(url, method: .get, headers: headers)
 			.validate()
 			.responseDecodable(of: SeminarDetailAttentdantResponse.self) { response in
 				switch response.result {
@@ -71,7 +74,10 @@ class SeminarDetailViewModel {
 //		]
 //		completion(dummyData)
 		let url = "https://garamgaebi.shop/seminars/\(seminarId)/presentations"
-		AF.request(url, method: .get)
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
+        ]
+		AF.request(url, method: .get , headers: headers)
 			.validate()
 			.responseDecodable(of: SeminarDetailPreviewResponse.self) { response in
 				switch response.result {

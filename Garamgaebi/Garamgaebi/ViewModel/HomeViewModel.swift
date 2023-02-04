@@ -51,6 +51,9 @@ class HomeViewModel {
     // 홈 화면 Networking 조회 request
     public static func getHomeNetworkingInfo(completion: @escaping (([HomeNetworkingInfo]) -> Void)) {
         let url = "https://garamgaebi.shop/networkings/main"
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
+        ]
 //        let dummy =
 //        [
 //            HomeNetworkingInfo(programIdx: 1, title: "네트워킹1", date: "2023-02-25T18:00:00", location: "가천관", type: "NETWORKING", payment: "FREE", status: "THIS_MONTH", isOpen: "OPEN"),
@@ -58,7 +61,7 @@ class HomeViewModel {
 //            HomeNetworkingInfo(programIdx: 1, title: "네트워킹3", date: "2023-02-25T18:00:00", location: "가천관", type: "NETWORKING", payment: "FREE", status: "CLOSED", isOpen: "OPEN"),
 //        ]
 //        completion(dummy)
-        AF.request(url, method: .get)
+        AF.request(url, method: .get, headers: headers)
             .validate()
             .responseDecodable(of: HomeNetworkingInfoResponse.self) { response in
                 switch response.result {
@@ -82,8 +85,11 @@ class HomeViewModel {
     // 홈 화면 가람개비 유저 조회 request
     public static func getRecommendUsersInfo(completion: @escaping (([RecommendUsersInfo]) -> Void)) {
         let url = "https://garamgaebi.shop/profile/profiles"
-
-        AF.request(url, method: .get)
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
+        ]
+        
+        AF.request(url, method: .get, headers: headers)
             .validate()
             .responseDecodable(of: RecommendUsersInfoResponse.self) { response in
                 switch response.result {
@@ -108,6 +114,9 @@ class HomeViewModel {
     // 홈 화면 내 모임 조회 request
     public static func getHomeMyEventInfo(memberId: Int, completion: @escaping (([MyEventInfoReady]) -> Void)) {
         let url = "https://garamgaebi.shop/programs/\(memberId)/ready"
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
+        ]
         
 //        completion(
 //            [MyEventInfoReady(programIdx: 1, title: "2차 세미나", date: "2023-12-25T18:00:00", location: "가천대", type: "SEMINAR", payment: "PREMEUM", status: "THIS_MONTH", isOpen: "OPEN"),
@@ -116,7 +125,7 @@ class HomeViewModel {
 //            ]
 //        )
         
-        AF.request(url, method: .get)
+        AF.request(url, method: .get, headers: headers)
             .validate()
             .responseDecodable(of: MyEventInfoReadyResponse.self) { response in
                 switch response.result {
