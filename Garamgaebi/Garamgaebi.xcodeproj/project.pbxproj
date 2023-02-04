@@ -66,6 +66,8 @@
 		6038243C296D7E3F00E12CC2 /* OnboardingDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6038243B296D7E3F00E12CC2 /* OnboardingDataModel.swift */; };
 		6038243E296D80FB00E12CC2 /* OnboardingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6038243D296D80FB00E12CC2 /* OnboardingCollectionViewCell.swift */; };
 		6038243F296D96CC00E12CC2 /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60382439296D6C6600E12CC2 /* OnboardingVC.swift */; };
+		60513F35298E43F30065CD15 /* UniEmailAuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60513F34298E43F30065CD15 /* UniEmailAuthViewModel.swift */; };
+		60513F37298E44340065CD15 /* UniEmailAuthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60513F36298E44340065CD15 /* UniEmailAuthModel.swift */; };
 		6055D84129700C9500C86D53 /* InputEmailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D84029700C9500C86D53 /* InputEmailVC.swift */; };
 		6055D8432970183500C86D53 /* InputOrganizationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D8422970183400C86D53 /* InputOrganizationVC.swift */; };
 		6055D84529701F5700C86D53 /* InputCareerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D84429701F5700C86D53 /* InputCareerVC.swift */; };
@@ -198,6 +200,8 @@
 		60382439296D6C6600E12CC2 /* OnboardingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingVC.swift; sourceTree = "<group>"; };
 		6038243B296D7E3F00E12CC2 /* OnboardingDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDataModel.swift; sourceTree = "<group>"; };
 		6038243D296D80FB00E12CC2 /* OnboardingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCollectionViewCell.swift; sourceTree = "<group>"; };
+		60513F34298E43F30065CD15 /* UniEmailAuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniEmailAuthViewModel.swift; sourceTree = "<group>"; };
+		60513F36298E44340065CD15 /* UniEmailAuthModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniEmailAuthModel.swift; sourceTree = "<group>"; };
 		6055D84029700C9500C86D53 /* InputEmailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputEmailVC.swift; sourceTree = "<group>"; };
 		6055D8422970183400C86D53 /* InputOrganizationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputOrganizationVC.swift; sourceTree = "<group>"; };
 		6055D84429701F5700C86D53 /* InputCareerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputCareerVC.swift; sourceTree = "<group>"; };
@@ -482,6 +486,7 @@
 			isa = PBXGroup;
 			children = (
 				6038243B296D7E3F00E12CC2 /* OnboardingDataModel.swift */,
+				60513F36298E44340065CD15 /* UniEmailAuthModel.swift */,
 			);
 			path = Register;
 			sourceTree = "<group>";
@@ -545,6 +550,7 @@
 		60513F33298E35630065CD15 /* Register */ = {
 			isa = PBXGroup;
 			children = (
+				60513F34298E43F30065CD15 /* UniEmailAuthViewModel.swift */,
 			);
 			path = Register;
 			sourceTree = "<group>";
@@ -1064,6 +1070,7 @@
 				60BD04FA2973C55D00F4B433 /* HomeMyEventDataModel.swift in Sources */,
 				6038243C296D7E3F00E12CC2 /* OnboardingDataModel.swift in Sources */,
 				60BD04F22973A3EC00F4B433 /* RecommendUsersInfoTableViewCell.swift in Sources */,
+				60513F35298E43F30065CD15 /* UniEmailAuthViewModel.swift in Sources */,
 				60AA6BC529751D1F002878B6 /* ViewAllSeminarVC.swift in Sources */,
 				601823372972FAD800160EF4 /* HomeEventDataModel.swift in Sources */,
 				60BD04FD2973D6BE00F4B433 /* HomeNotificationVC.swift in Sources */,
@@ -1082,6 +1089,7 @@
 				46876C692973D7E3000BA1B6 /* ProfileInputCareerVC.swift in Sources */,
 				46B4780B29700FEE002186A3 /* ProfileServiceVC.swift in Sources */,
 				46C18D2929788A7600A05CBF /* ProfileInputSNSVC.swift in Sources */,
+				60513F37298E44340065CD15 /* UniEmailAuthModel.swift in Sources */,
 				460C0C2B296D855800FF5085 /* ProfileEditVC.swift in Sources */,
 				600BE590298B8A800040F23F /* RecommendUsersModel.swift in Sources */,
 				46828A4229752EF80037AB8C /* ProfileInputEducationVC.swift in Sources */,
