@@ -14,7 +14,7 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Subviews
     
-    lazy var stateInfoLabel: UIButton = {
+    lazy var statusInfoLabel: UIButton = {
         let button = UIButton()
         button.contentEdgeInsets = UIEdgeInsets(top: 0.5, left: 6, bottom: 0.5, right: 6)
         button.setTitle("이번 달", for: .normal)
@@ -26,7 +26,7 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    lazy var feeInfoLabel: UIButton = {
+    lazy var paymentInfoLabel: UIButton = {
         let button = UIButton()
         button.contentEdgeInsets = UIEdgeInsets(top: 0.5, left: 6, bottom: 0.5, right: 6)
         button.setTitle("무료", for: .normal)
@@ -109,8 +109,8 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
     }
     
     func configAddSubView(){
-        contentView.addSubview(stateInfoLabel)
-        contentView.addSubview(feeInfoLabel)
+        contentView.addSubview(statusInfoLabel)
+        contentView.addSubview(paymentInfoLabel)
         contentView.addSubview(titleInfoLabel)
         contentView.addSubview(dateLabel)
         contentView.addSubview(dateInfoLabel)
@@ -121,19 +121,20 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
     
     func configSubViewLayouts() {
         
-        stateInfoLabel.snp.makeConstraints { make in
+        statusInfoLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(15)
             make.height.equalTo(18)
             make.left.equalToSuperview().inset(16)
         }
         
-        feeInfoLabel.snp.makeConstraints { make in
-            make.top.equalTo(stateInfoLabel.snp.top)
-            make.left.equalTo(stateInfoLabel.snp.right).offset(8)
+        paymentInfoLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(statusInfoLabel.snp.centerY)
+            make.height.equalTo(18)
+            make.left.equalTo(statusInfoLabel.snp.right).offset(8)
         }
         
         titleInfoLabel.snp.makeConstraints { make in
-            make.top.equalTo(stateInfoLabel.snp.bottom).offset(4)
+            make.top.equalTo(statusInfoLabel.snp.bottom).offset(4)
             make.left.right.equalToSuperview().inset(16)
         }
         dateLabel.snp.makeConstraints { make in
@@ -167,22 +168,22 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
         switch item.status {
         case "THIS_MONTH":
             contentView.backgroundColor = UIColor(hex: 0x356EFF, alpha: 0.8)
-            stateInfoLabel.setTitle("이번 달", for: .normal)
-            stateInfoLabel.backgroundColor = .mainYellow
+            statusInfoLabel.setTitle("이번 달", for: .normal)
+            statusInfoLabel.backgroundColor = .mainYellow
             [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,dDayInfoLabel].forEach {
                 $0.textColor = .white
             }
         case "READY":
             contentView.backgroundColor = UIColor(hex: 0x356EFF, alpha: 0.1)
-            stateInfoLabel.setTitle("예정된", for: .normal)
-            stateInfoLabel.backgroundColor = UIColor(hex: 0xFFFACC)
+            statusInfoLabel.setTitle("예정된", for: .normal)
+            statusInfoLabel.backgroundColor = UIColor(hex: 0xFFFACC)
             [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,dDayInfoLabel].forEach {
                 $0.textColor = UIColor(hex: 0x000000, alpha: 0.8)
             }
         case "CLOSED":
             contentView.backgroundColor = UIColor(hex: 0xF5F5F5)
-            stateInfoLabel.setTitle("마감된", for: .normal)
-            stateInfoLabel.backgroundColor = .mainGray
+            statusInfoLabel.setTitle("마감된", for: .normal)
+            statusInfoLabel.backgroundColor = .mainGray
             dDayInfoLabel.isHidden = true
             [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,dDayInfoLabel].forEach {
                 $0.textColor = UIColor(hex: 0x000000, alpha: 0.8)
@@ -194,13 +195,13 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
         
         switch item.payment {
         case "FREE":
-            feeInfoLabel.setTitle("무료", for: .normal)
-            feeInfoLabel.backgroundColor = UIColor(hex: 0xFFFFFF)
+            paymentInfoLabel.setTitle("무료", for: .normal)
+            paymentInfoLabel.backgroundColor = UIColor(hex: 0xFFFFFF)
         case "PREMIUM":
-            feeInfoLabel.setTitle("유료", for: .normal)
-            feeInfoLabel.backgroundColor = UIColor(hex: 0xB8FFBB)
+            paymentInfoLabel.setTitle("유료", for: .normal)
+            paymentInfoLabel.backgroundColor = UIColor(hex: 0xB8FFBB)
         default:
-            feeInfoLabel.setTitle("ERROR", for: .normal)
+            paymentInfoLabel.setTitle("ERROR", for: .normal)
         }
         
         
@@ -231,22 +232,22 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
         switch item.status {
         case "THIS_MONTH":
             contentView.backgroundColor = .mainBlue.withAlphaComponent(0.8)
-            stateInfoLabel.setTitle("이번 달", for: .normal)
-            stateInfoLabel.backgroundColor = .mainYellow
+            statusInfoLabel.setTitle("이번 달", for: .normal)
+            statusInfoLabel.backgroundColor = .mainYellow
             [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,dDayInfoLabel].forEach {
                 $0.textColor = .white
             }
         case "READY":
             contentView.backgroundColor = .mainBlue.withAlphaComponent(0.1)
-            stateInfoLabel.setTitle("예정된", for: .normal)
-            stateInfoLabel.backgroundColor = UIColor(hex: 0xFFFACC)
+            statusInfoLabel.setTitle("예정된", for: .normal)
+            statusInfoLabel.backgroundColor = UIColor(hex: 0xFFFACC)
             [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,dDayInfoLabel].forEach {
                 $0.textColor = UIColor(hex: 0x000000, alpha: 0.8)
             }
         case "CLOSED":
             contentView.backgroundColor = UIColor(hex: 0xF5F5F5)
-            stateInfoLabel.setTitle("마감된", for: .normal)
-            stateInfoLabel.backgroundColor = .mainGray
+            statusInfoLabel.setTitle("마감된", for: .normal)
+            statusInfoLabel.backgroundColor = .mainGray
             dDayInfoLabel.isHidden = true
             [titleInfoLabel, dateLabel, dateInfoLabel, locationLabel, locationInfoLabel,dDayInfoLabel].forEach {
                 $0.textColor = UIColor(hex: 0x000000, alpha: 0.8)
@@ -258,13 +259,13 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
         
         switch item.payment {
         case "FREE":
-            feeInfoLabel.setTitle("무료", for: .normal)
-            feeInfoLabel.backgroundColor = UIColor(hex: 0xFFFFFF)
+            paymentInfoLabel.setTitle("무료", for: .normal)
+            paymentInfoLabel.backgroundColor = UIColor(hex: 0xFFFFFF)
         case "PREMIUM":
-            feeInfoLabel.setTitle("유료", for: .normal)
-            feeInfoLabel.backgroundColor = UIColor(hex: 0xB8FFBB)
+            paymentInfoLabel.setTitle("유료", for: .normal)
+            paymentInfoLabel.backgroundColor = UIColor(hex: 0xB8FFBB)
         default:
-            feeInfoLabel.setTitle("ERROR", for: .normal)
+            paymentInfoLabel.setTitle("ERROR", for: .normal)
         }
         
         

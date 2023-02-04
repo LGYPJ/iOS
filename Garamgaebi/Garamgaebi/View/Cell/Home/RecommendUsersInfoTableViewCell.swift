@@ -1,5 +1,5 @@
 //
-//  HomeUserInfoTableViewCell.swift
+//  RecommendUsersTableViewCell.swift
 //  Garamgaebi
 //
 //  Created by 홍승완 on 2023/01/15.
@@ -7,18 +7,26 @@
 
 import UIKit
 
-class HomeUserInfoTableViewCell: UITableViewCell {
+class RecommendUsersInfoTableViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - Properties
-    static let identifier = String(describing: HomeUserInfoTableViewCell.self)
+    static let identifier = String(describing: RecommendUsersInfoTableViewCell.self)
     static let cellHeight = 254.0
     
-    let dataList = HomeUserDataModel.list
+    //let dataList = HomeUserDataModel.list
+    //var recommedUsersList: [RecommendUsersInfo] = []
     
+    public var recommendUsersList: [RecommendUsersInfo] = [] {
+        didSet {
+            self.collectionView.reloadData()
+            // cell -> Home으로 변경사항 알림
+            NotificationCenter.default.post(name: Notification.Name("HomeTableViewReload"), object: nil)
+        }
+    }
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -46,7 +54,7 @@ class HomeUserInfoTableViewCell: UITableViewCell {
         view.contentInset = .zero
         view.backgroundColor = .clear
         view.clipsToBounds = true
-        view.register(HomeUserColectionViewCell.self, forCellWithReuseIdentifier: HomeUserColectionViewCell.identifier)
+        view.register(RecommendUsersColectionViewCell.self, forCellWithReuseIdentifier: RecommendUsersColectionViewCell.identifier)
         
         return view
     }()
@@ -67,7 +75,9 @@ class HomeUserInfoTableViewCell: UITableViewCell {
         self.contentView.addSubview(collectionView)
         
         self.contentView.addSubview(interSpcace)
+        
         configSubViewLayouts()
+        configNotificationCenter()
         
     }
     
@@ -91,10 +101,18 @@ class HomeUserInfoTableViewCell: UITableViewCell {
         }
     }
     
+    func configNotificationCenter() {
+        NotificationCenter.default.addObserver(self, selector: #selector(presentRecommendUsersInfo(_:)), name: Notification.Name("presentRecommendUsersInfo"), object: nil)
+    }
+    
+    @objc func presentRecommendUsersInfo(_ notification: NSNotification) {
+        guard let recommendUsersListBase = notification.object as? [RecommendUsersInfo] else { return }
+        recommendUsersList = recommendUsersListBase
+    }
     
 }
 
-extension HomeUserInfoTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension RecommendUsersInfoTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     fileprivate var sectionInsets: UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
@@ -105,7 +123,7 @@ extension HomeUserInfoTableViewCell: UICollectionViewDataSource, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataList.count
+        return recommendUsersList.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -132,11 +150,11 @@ extension HomeUserInfoTableViewCell: UICollectionViewDataSource, UICollectionVie
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeUserColectionViewCell.identifier, for: indexPath) as? HomeUserColectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendUsersColectionViewCell.identifier, for: indexPath) as? RecommendUsersColectionViewCell else {
             return UICollectionViewCell()
         }
         
-        cell.configure(dataList[indexPath.row])
+        cell.configure(recommendUsersList[indexPath.row])
         
         return cell
     }

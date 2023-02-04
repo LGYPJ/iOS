@@ -17,6 +17,9 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
     static let identifier = String(describing: ViewAllMyEventTableViewCell.self)
     static let cellHeight = 428.0 // 지워야함
     
+    // cell에 저장될 EventInfo
+    public var cellEventInfo = MyEventToDetailInfo(programIdx: 0, type: "")
+    
     lazy var baseView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
@@ -68,14 +71,13 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         button.clipsToBounds = true
         button.tintColor = UIColor(hex: 0x1C1B1F)
-        //button.addTarget(self, action: #selector(didTapSettingButton), for: .touchUpInside)
         
         let detail = UIAction(
             title: "상세보기",
             image: UIImage(named: "searchIcon")?.withTintColor(UIColor(hex: 0x1C1B1F)),
             handler: { _ in
-                NotificationCenter.default.post(name: Notification.Name("pushEventDetailVC"), object: nil)
-                print("상세보기 클릭됨")
+                // 선택한 cell의 정보를 detailView에 전달
+                NotificationCenter.default.post(name: Notification.Name("pushEventDetailVC"), object: self.cellEventInfo)
             }
         )
         
@@ -83,18 +85,16 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
             title: "신청취소",
             image: UIImage(named: "deleteIcon")?.withTintColor(UIColor(hex: 0x1C1B1F)),
             handler: { _ in
-                NotificationCenter.default.post(name: Notification.Name("pushEventApplyCancelVC"), object: nil)
-                print("신청취소 클릭됨")
+                // 선택한 cell의 정보를 detailView에 전달
+                NotificationCenter.default.post(name: Notification.Name("pushEventApplyCancelVC"), object: self.cellEventInfo)
             }
         )
-
         
         button.showsMenuAsPrimaryAction = true
         button.menu = UIMenu(
                              identifier: nil,
                              options: .displayInline, // .destructive
                              children: [detail, cancel])
-        
         return button
     }()
     
@@ -104,7 +104,6 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
         view.layer.borderColor = UIColor.mainGray.withAlphaComponent(0.8).cgColor
         view.layer.borderWidth = 1
         view.layer.cornerRadius = 12
-        
         return view
     }()
     
@@ -122,7 +121,6 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
         label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         label.textColor = .mainGray.withAlphaComponent(0.8)
         label.textAlignment = .center
-        
         return label
     }()
     
@@ -191,33 +189,58 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
         }
     }
     
-    public func configure(_ item: ViewAllMyEventDataModel) {
+    public func configureReady(_ item: MyEventInfoReady) {
         // TODO: 나중에 해줘야할 수 있음
-//        baseView.isHidden = false
-//        zeroDataBackgroundView.isHidden = true
+        baseView.isHidden = false
+        zeroDataBackgroundView.isHidden = true
+        settingButton.isHidden = false
+        dateTimeView.backgroundColor = .mainLightBlue
         
-        // item.date -> dateString
-        let date = item.date
+        // item.date -> (String -> Date)
+        let dateTime = item.date.toDate()
+        
         let dateformatter = DateFormatter()
+        // (Date -> String)
         dateformatter.dateFormat = "M월 dd일"
-        let dateResult = dateformatter.string(from: date)
-        
-        // item.date -> timeString
-        let timeformatter = DateFormatter()
-        timeformatter.dateFormat = "HH:mm"
-        let timeResult = timeformatter.string(from: date)
-        
+        let dateResult = dateformatter.string(from: dateTime ?? Date())
         dateInfoLabel.text = dateResult
+        
+        dateformatter.dateFormat = "HH:mm"
+        let timeResult = dateformatter.string(from: dateTime ?? Date())
         timeInfoLabel.text = timeResult
+        
         titleInfoLabel.text = item.title
         locationInfoLabel.text = item.location
         
-        if item.state != "마감" {
-            settingButton.isHidden = false
-            dateTimeView.backgroundColor = .mainLightBlue
-        } else {
-            settingButton.isHidden = true
-        }
+        cellEventInfo = MyEventToDetailInfo(programIdx: item.programIdx, type: item.type)
+        
+    }
+    
+    public func configureClose(_ item: MyEventInfoClose) {
+        // TODO: 나중에 해줘야할 수 있음
+        baseView.isHidden = false
+        zeroDataBackgroundView.isHidden = true
+        settingButton.isHidden = true
+        dateTimeView.backgroundColor = UIColor(hex: 0xF5F5F5)
+        
+        // item.date -> (String -> Date)
+        let dateTime = item.date.toDate()
+        
+        let dateformatter = DateFormatter()
+        // (Date -> String)
+        dateformatter.dateFormat = "M월 dd일"
+        let dateResult = dateformatter.string(from: dateTime ?? Date())
+        dateInfoLabel.text = dateResult
+        
+        dateformatter.dateFormat = "HH:mm"
+        let timeResult = dateformatter.string(from: dateTime ?? Date())
+        timeInfoLabel.text = timeResult
+        
+        titleInfoLabel.text = item.title
+        locationInfoLabel.text = item.location
+        
+        cellEventInfo = MyEventToDetailInfo(programIdx: item.programIdx, type: item.type)
+ 
     }
     
     // TODO: API 통신 후 수정
@@ -239,17 +262,11 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
             make.centerX.equalToSuperview()
         }
         
-        
         zeroDataDescriptionLabel.text = "\(caseString) 모임이 없습니다"
         ViewAllSeminarTableViewCell.cellHeight = 100
         baseView.isHidden = true
         zeroDataBackgroundView.isHidden = false
 
-    }
-    
-    // setting button did tap
-    @objc private func didTapSettingButton() {
-        print("setting button did tap")
     }
 
 }
