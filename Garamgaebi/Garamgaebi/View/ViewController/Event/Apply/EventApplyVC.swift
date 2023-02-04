@@ -346,9 +346,9 @@ class EventApplyVC: UIViewController {
 	
     // MARK: - Life Cycle
 	
-	init(type: String, memberId: Int, programId: Int) {
+	init(type: String, programId: Int) {
 		self.type = type
-		self.memberId = memberId
+		self.memberId = UserDefaults.standard.integer(forKey: "memberIdx")
 		self.programId = programId
 		super.init(nibName: nil, bundle: nil)
 	}

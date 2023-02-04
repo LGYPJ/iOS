@@ -69,8 +69,8 @@ class EventSeminarDetailVC: UIViewController {
 
     // MARK: - Life Cycle
 	
-	init(memberId: Int, seminarId: Int) {
-		self.memberId = memberId
+	init(seminarId: Int) {
+		self.memberId = UserDefaults.standard.integer(forKey: "memberIdx")
 		self.seminarId = seminarId
 		super.init(nibName: nil, bundle: nil)
 	}
@@ -175,7 +175,7 @@ extension EventSeminarDetailVC {
 	}
 	
 	@objc private func didTapRegisterButton() {
-		navigationController?.pushViewController(EventApplyVC(type: "SEMINAR" ,memberId: 1, programId: 6), animated: true)
+		navigationController?.pushViewController(EventApplyVC(type: "SEMINAR" ,programId: 6), animated: true)
 	}
 	
 	// MARK: fetch data

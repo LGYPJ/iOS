@@ -19,4 +19,5 @@ struct LoginModel: Codable {
 	let accessToken: String
 	let refreshToken: String
 	let refreshTokenExpirationTime: Int
+	let memberIdx: Int
 }

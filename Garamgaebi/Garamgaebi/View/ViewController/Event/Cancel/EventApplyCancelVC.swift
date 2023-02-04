@@ -307,10 +307,10 @@ class EventApplyCancelVC: UIViewController {
 	}
 
     // MARK: - Life Cycle
-	init(type: String, programId: Int, memberId: Int) {
+	init(type: String, programId: Int) {
 		self.type = type
 		self.programId = programId
-		self.memberId = memberId
+		self.memberId = UserDefaults.standard.integer(forKey: "memberIdx")
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -321,6 +321,7 @@ class EventApplyCancelVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
+		print("\(self.memberId) 123123")
 		configureViews()
 		configureAddTarget()
 		configureTextField()
