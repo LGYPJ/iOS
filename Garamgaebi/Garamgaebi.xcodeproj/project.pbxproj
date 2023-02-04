@@ -54,7 +54,7 @@
 		46C18D25297866E600A05CBF /* ProfileDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C18D24297866E600A05CBF /* ProfileDataModel.swift */; };
 		46C18D2929788A7600A05CBF /* ProfileInputSNSVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C18D2829788A7600A05CBF /* ProfileInputSNSVC.swift */; };
 		60093A8B296E7EFB00F76783 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60093A8A296E7EFB00F76783 /* LoginVC.swift */; };
-		60093A8D296E90FD00F76783 /* SchoolEmailAuthVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60093A8C296E90FD00F76783 /* SchoolEmailAuthVC.swift */; };
+		60093A8D296E90FD00F76783 /* UniEmailAuthVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60093A8C296E90FD00F76783 /* UniEmailAuthVC.swift */; };
 		60093A8F296EC92200F76783 /* InputNickNameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60093A8E296EC92200F76783 /* InputNickNameVC.swift */; };
 		600BE590298B8A800040F23F /* RecommendUsersModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600BE58F298B8A800040F23F /* RecommendUsersModel.swift */; };
 		600BE592298B9C090040F23F /* MyEventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600BE591298B9C090040F23F /* MyEventModel.swift */; };
@@ -188,7 +188,7 @@
 		5393A75B600780926B72C170 /* Pods-GaramgaebiTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaramgaebiTests.release.xcconfig"; path = "Target Support Files/Pods-GaramgaebiTests/Pods-GaramgaebiTests.release.xcconfig"; sourceTree = "<group>"; };
 		595E523818BF61B8A2004DDC /* Pods-Garamgaebi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Garamgaebi.release.xcconfig"; path = "Target Support Files/Pods-Garamgaebi/Pods-Garamgaebi.release.xcconfig"; sourceTree = "<group>"; };
 		60093A8A296E7EFB00F76783 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
-		60093A8C296E90FD00F76783 /* SchoolEmailAuthVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolEmailAuthVC.swift; sourceTree = "<group>"; };
+		60093A8C296E90FD00F76783 /* UniEmailAuthVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniEmailAuthVC.swift; sourceTree = "<group>"; };
 		60093A8E296EC92200F76783 /* InputNickNameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputNickNameVC.swift; sourceTree = "<group>"; };
 		600BE58F298B8A800040F23F /* RecommendUsersModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendUsersModel.swift; sourceTree = "<group>"; };
 		600BE591298B9C090040F23F /* MyEventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyEventModel.swift; sourceTree = "<group>"; };
@@ -536,7 +536,7 @@
 			children = (
 				60382439296D6C6600E12CC2 /* OnboardingVC.swift */,
 				60093A8A296E7EFB00F76783 /* LoginVC.swift */,
-				60093A8C296E90FD00F76783 /* SchoolEmailAuthVC.swift */,
+				60093A8C296E90FD00F76783 /* UniEmailAuthVC.swift */,
 				60093A8E296EC92200F76783 /* InputNickNameVC.swift */,
 				6055D84029700C9500C86D53 /* InputEmailVC.swift */,
 				6055D8422970183400C86D53 /* InputOrganizationVC.swift */,
@@ -1120,7 +1120,7 @@
 				609A53D2296AB47300BBD338 /* AppDelegate.swift in Sources */,
 				60EDD40D2976620B00600807 /* ViewAllMyEventDataModel.swift in Sources */,
 				462183F5297C51B800B9A035 /* ServiceBottomSheetVC.swift in Sources */,
-				60093A8D296E90FD00F76783 /* SchoolEmailAuthVC.swift in Sources */,
+				60093A8D296E90FD00F76783 /* UniEmailAuthVC.swift in Sources */,
 				60EC5310298900700068BD5F /* Date+.swift in Sources */,
 				46704AEA297F9D2B005E63EA /* ProfileHistoryTableViewCell.swift in Sources */,
 				60BD04F62973AD2600F4B433 /* HomeMyEventInfoTableViewCell.swift in Sources */,

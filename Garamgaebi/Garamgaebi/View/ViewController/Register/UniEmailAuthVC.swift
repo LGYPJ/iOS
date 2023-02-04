@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class SchoolEmailAuthVC: UIViewController {
+class UniEmailAuthVC: UIViewController {
     
     // MARK: - Propertys
     //let timeSelector: Selector = #selector(updateTime)
