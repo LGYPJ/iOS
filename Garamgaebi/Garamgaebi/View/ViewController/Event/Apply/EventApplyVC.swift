@@ -329,13 +329,26 @@ class EventApplyVC: UIViewController {
 		}
 	}
 	
+	var type: String
 	var memberId: Int
 	var programId: Int
 	
+	var seminarInfo: SeminarDetailInfo = .init(programIdx: 0, title: "", date: "", location: "", fee: 0, endDate: "", programStatus: "", userButtonStatus: "") {
+		didSet {
+			configureWithSeminarData()
+		}
+	}
+	var networkingInfo: NetworkingDetailInfo = .init(programIdx: 0, title: "", date: "", location: "", fee: 0, endDate: "", programStatus: "", userButtonStatus: "") {
+		didSet {
+			configureWithNetworkingData()
+		}
+	}
+	
     // MARK: - Life Cycle
 	
-	init(memberId: Int, programId: Int) {
-		self.memberId = memberId
+	init(type: String, programId: Int) {
+		self.type = type
+		self.memberId = UserDefaults.standard.integer(forKey: "memberIdx")
 		self.programId = programId
 		super.init(nibName: nil, bundle: nil)
 	}
@@ -348,9 +361,9 @@ class EventApplyVC: UIViewController {
         super.viewDidLoad()
 		
 		configureViews()
-		configureDummyData()
 		configureTextField()
 		configureGestureRecognizer()
+		fetchProgramData()
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -362,22 +375,62 @@ class EventApplyVC: UIViewController {
 	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 		self.view.endEditing(true)
 	}
-	
-	// TODO: API연동 후 삭제
-	func configureDummyData() {
-//		descriptionTextView.isHidden = true
-//		costStackView.isHidden = true
-		eventNameLabel.text = "2차 세미나"
-		dateInfoLabel.text = "2023-02-10 오후 6시"
-		locationInfoLabel.text = "가천대학교 비전타워 B201"
-		costInfoLabel.text = "10000원"
-		deadlineInfoLabel.text = "2023-01-09 오후 6시"
-		
-		descriptionTextView.text = "카카오뱅크 3333-22-5500352\n입금자명을 닉네임/이름(예시: 찹도/민세림)으로 해주셔야 합니다.\n\n신청 확정은 신청 마감 이후에 일괄 처리됩니다.\n신청취소는 일주일 전까지 가능합니다.(이후로는 취소 불가)\n환불은 모임 당일부터 7일 이내에 순차적으로 진행됩니다.\n\n입금이 완료되지 않으면 신청이 자동적으로 취소됩니다."
-	}
 }
 
 extension EventApplyVC {
+	
+	private func fetchProgramData() {
+		switch self.type {
+		case "SEMINAR":
+			SeminarDetailViewModel.requestSeminarDetailInfo(memberId: self.memberId, seminarId: self.programId, completion: {[weak self] result in
+				self?.seminarInfo = result
+			})
+		case "NETWORKING":
+			NetworkingDetailViewModel.requestNetworkingDetailInfo(memberId: self.memberId, networkingId: self.programId, completion: {[weak self] result in
+				self?.networkingInfo = result
+			})
+		default:
+			return
+		}
+	}
+	
+	private func configureWithSeminarData() {
+		titleLabel.text = "세미나 신청하기"
+		eventNameLabel.text = seminarInfo.title
+		dateInfoLabel.text = seminarInfo.date.formattingDetailDate()
+		locationInfoLabel.text = seminarInfo.location
+		if seminarInfo.fee == 0 {
+			costStackView.isHidden = true
+			descriptionTextView.isHidden = true
+		} else {
+			costStackView.isHidden = false
+			costInfoLabel.text = "\(seminarInfo.fee)원"
+			descriptionTextView.isHidden = false
+			// TODO: 환불계좌 안내 더미데이터
+			descriptionTextView.text = "카카오뱅크 3333-22-5500352\n입금자명을 닉네임/이름(예시: 찹도/민세림)으로 해주셔야 합니다.\n\n신청 확정은 신청 마감 이후에 일괄 처리됩니다.\n신청취소는 일주일 전까지 가능합니다.(이후로는 취소 불가)\n환불은 모임 당일부터 7일 이내에 순차적으로 진행됩니다.\n\n입금이 완료되지 않으면 신청이 자동적으로 취소됩니다."
+		}
+		
+		deadlineInfoLabel.text = seminarInfo.endDate.formattingDetailDate()
+	}
+	
+	private func configureWithNetworkingData() {
+		self.titleLabel.text = "네트워킹 신청하기"
+		eventNameLabel.text = networkingInfo.title
+		dateInfoLabel.text = networkingInfo.date.formattingDetailDate()
+		locationInfoLabel.text = networkingInfo.location
+		if networkingInfo.fee == 0 {
+			costStackView.isHidden = true
+			descriptionTextView.isHidden = true
+		} else {
+			costStackView.isHidden = false
+			costInfoLabel.text = "\(networkingInfo.fee)원"
+			descriptionTextView.isHidden = false
+			// TODO: 환불계좌 안내 더미데이터
+			descriptionTextView.text = "카카오뱅크 3333-22-5500352\n입금자명을 닉네임/이름(예시: 찹도/민세림)으로 해주셔야 합니다.\n\n신청 확정은 신청 마감 이후에 일괄 처리됩니다.\n신청취소는 일주일 전까지 가능합니다.(이후로는 취소 불가)\n환불은 모임 당일부터 7일 이내에 순차적으로 진행됩니다.\n\n입금이 완료되지 않으면 신청이 자동적으로 취소됩니다."
+		}
+		
+		deadlineInfoLabel.text = networkingInfo.endDate.formattingDetailDate()
+	}
 	
 	private func configureViews() {
 		view.backgroundColor = .white

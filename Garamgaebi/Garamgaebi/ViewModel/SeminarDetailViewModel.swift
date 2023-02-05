@@ -12,7 +12,7 @@ class SeminarDetailViewModel {
 	// MARK: requestData
 	// 세미나 정보 request
 	public static func requestSeminarDetailInfo(memberId: Int, seminarId: Int, completion: @escaping ((SeminarDetailInfo) -> Void)) {
-		let dummyData = SeminarDetailInfo(programIdx: 6	,title: "무료 세미나1", date: "2023-01-15T18:00:00", location: "가천관", fee: 0, endDate: "2023-01-08T18:00:00", programStatus: "CLOSED_CONFIRM", userButtonStatus: "CLOSED")
+		let dummyData = SeminarDetailInfo(programIdx: seminarId	,title: "무료 세미나1", date: "2023-01-15T18:00:00", location: "가천관", fee: 0, endDate: "2023-01-08T18:00:00", programStatus: "CLOSED_CONFIRM", userButtonStatus: "APPLY")
 		completion(dummyData)
 //		let url = "https://garamgaebi.shop/seminars/info"
 //		// TODO: memberId jwt로 전환 예정

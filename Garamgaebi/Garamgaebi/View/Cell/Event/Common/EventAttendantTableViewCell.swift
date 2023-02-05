@@ -17,7 +17,7 @@ class EventAttendantTableViewCell: UITableViewCell {
 		label.text = "참석자"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 18)
 		label.textColor = .black
-
+		
 		return label
 	}()
 	
@@ -37,9 +37,9 @@ class EventAttendantTableViewCell: UITableViewCell {
 		
 		let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
 		collectionView.showsHorizontalScrollIndicator = false
-//		collectionView.layer.borderColor = UIColor.mainGray.withAlphaComponent(0.8).cgColor
-//		collectionView.layer.borderWidth = 1
-//		collectionView.layer.cornerRadius = 12
+		//		collectionView.layer.borderColor = UIColor.mainGray.withAlphaComponent(0.8).cgColor
+		//		collectionView.layer.borderWidth = 1
+		//		collectionView.layer.cornerRadius = 12
 		
 		return collectionView
 	}()
@@ -65,13 +65,21 @@ class EventAttendantTableViewCell: UITableViewCell {
 	}()
 	
 	// MARK: Properties
+	var type: String?
+	
 	var programId: Int = 0 {
 		didSet {
-			print(programId)
 			fetchAttendant()
 		}
 	}
-	var attendants: [SeminarDetailAttendant] = [] {
+	var seminarAttendants: [SeminarDetailAttendant] = [] {
+		didSet {
+			configureZeroAttentdant()
+			collectionView.reloadData()
+		}
+	}
+	
+	var networkingAttendants: [NetworkingDetailAttendant] = [] {
 		didSet {
 			configureZeroAttentdant()
 			collectionView.reloadData()
@@ -135,13 +143,21 @@ extension EventAttendantTableViewCell {
 	}
 	
 	private func fetchAttendant() {
-		SeminarDetailViewModel.requestSeminarAttendant(seminarId: self.programId, completion: {[weak self] result in
-			self?.attendants = result
-		})
+		if self.type == "SEMINAR" {
+			SeminarDetailViewModel.requestSeminarAttendant(seminarId: self.programId, completion: {[weak self] result in
+				self?.seminarAttendants = result
+			})
+		} else {
+			NetworkingDetailViewModel.requestNetworkingAttendant(networkingId: self.programId, completion: {[weak self] result in
+				self?.networkingAttendants = result
+			})
+		}
+		
+		
 	}
 	
 	private func configureZeroAttentdant() {
-		if attendants.count == 0 {
+		if seminarAttendants.count == 0 {
 			collectionView.isHidden = true
 			noAttentdantBackgroundView.isHidden = false
 		} else {
@@ -153,13 +169,13 @@ extension EventAttendantTableViewCell {
 
 extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		return self.attendants.count
+		return self.seminarAttendants.count
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EventAttendantCollectionViewCell.identifier, for: indexPath) as? EventAttendantCollectionViewCell else {return UICollectionViewCell()}
 		
-		let cellData = self.attendants[indexPath.row]
+		let cellData = self.seminarAttendants[indexPath.row]
 		cell.profileImageView.image = UIImage(named: cellData.profileImg)
 		cell.userNameLabel.text = cellData.nickname
 		

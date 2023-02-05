@@ -66,8 +66,8 @@ class EventNetworkingDetailVC: UIViewController {
 	
     
     // MARK: - Life Cycle
-	init(memberId: Int, networkingId: Int) {
-		self.memberId = memberId
+	init(networkingId: Int) {
+		self.memberId = UserDefaults.standard.integer(forKey: "memberIdx")
 		self.networkingId = networkingId
 		super.init(nibName: nil, bundle: nil)
 	}
@@ -178,7 +178,7 @@ extension EventNetworkingDetailVC {
 	}
 	// 네트워킹 신청 did tap
 	@objc private func didTapRegisterButton() {
-		navigationController?.pushViewController(EventApplyVC(memberId: 1, programId: 1), animated: true)
+		navigationController?.pushViewController(EventApplyVC(type: "NETWORKING",programId: 1), animated: true)
 	}
 	// 게임 참가하기 did tap
 	@objc private func didTapEntranceButton() {
@@ -200,10 +200,20 @@ extension EventNetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 			cell.registerButton.addTarget(self, action: #selector(didTapRegisterButton), for: .touchUpInside)
 			
 			cell.eventNameLabel.text = self.networkingInfo.title
-			cell.dateInfoLabel.text = self.networkingInfo.date
+//			cell.dateInfoLabel.text = self.networkingInfo.date
 			cell.locationInfoLabel.text = self.networkingInfo.location
 			cell.costInfoLabel.text = "\(self.networkingInfo.fee)"
-			cell.deadlineInfoLabel.text = self.networkingInfo.endDate
+//			cell.deadlineInfoLabel.text = self.networkingInfo.endDate
+			
+			let convertDate = self.networkingInfo.date.toDate()
+			let convertEndDate = self.networkingInfo.endDate.toDate()
+			
+			let dateFormatter = DateFormatter()
+			dateFormatter.dateFormat = "yyyy-MM-dd a h시"
+			dateFormatter.locale = Locale(identifier: "ko_KR")
+			
+			cell.dateInfoLabel.text = dateFormatter.string(from: convertDate ?? Date())
+			cell.deadlineInfoLabel.text = dateFormatter.string(from: convertEndDate ?? Date())
 			
 			switch self.userButtonStatus {
 			case .APPLY:
@@ -250,7 +260,9 @@ extension EventNetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 			return cell
 		case 1:
 			guard let cell = tableView.dequeueReusableCell(withIdentifier: EventAttendantTableViewCell.identifier, for: indexPath) as? EventAttendantTableViewCell else {return UITableViewCell()}
+			cell.type = "NETWORKING"
 			cell.programId = self.networkingId
+			
 			
 			return cell
 		case 2:

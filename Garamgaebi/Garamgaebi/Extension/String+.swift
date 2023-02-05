@@ -50,6 +50,16 @@ extension String {
             return nil
         }
     }
+	
+	func formattingDetailDate() -> String {
+		guard let date = self.toDate() else {return ""}
+		
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "yyyy-MM-dd a h시"
+		dateFormatter.locale = Locale(identifier: "ko_KR")
+		
+		return dateFormatter.string(from: date)
+	}
     
     
 }
