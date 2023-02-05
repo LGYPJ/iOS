@@ -9,11 +9,17 @@ import UIKit
 import SnapKit
 
 class InputCareerVC: UIViewController {
-    
-    private let yearArray = (1901...2023).reversed().map { String($0) }
-    private let monthArray = (1...12).map { String(format:"%02d", $0) }
-    private var yearValue =  String()
-    private var monthValue = String()
+    var currentYear: Int = 0 {
+        didSet {
+            yearArray = (1950...currentYear).reversed().map { String($0) }
+        }
+    }
+    var yearArray: [String] = []
+    private var monthArray = (1...12).map { String(format:"%02d", $0) }
+    private var startYearValue =  String()
+    private var startMonthValue = String()
+    private var endYearValue =  String()
+    private var endMonthValue = String()
     
     // MARK: - Subviews
     
@@ -29,8 +35,15 @@ class InputCareerVC: UIViewController {
         exitBtn.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.NotoSansKR(type: .Regular, size: 16)!], for: .normal)
         
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        
+        let cancelBtn = UIBarButtonItem()
+        cancelBtn.title = "취소"
+        cancelBtn.target = self
+        cancelBtn.action = #selector(pickerCancel)
+        cancelBtn.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.NotoSansKR(type: .Regular, size: 16)!, NSAttributedString.Key.foregroundColor: UIColor(hex: 0xFF0000)], for: .normal)
+        
 
-        toolBar.setItems([flexSpace,exitBtn], animated: true)
+        toolBar.setItems([cancelBtn,flexSpace,exitBtn], animated: true)
         return toolBar
     }
     
@@ -263,6 +276,11 @@ class InputCareerVC: UIViewController {
         configLayouts()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setCurrentYear()
+    }
+    
     
     // MARK: - Functions
     
@@ -393,9 +411,15 @@ class InputCareerVC: UIViewController {
         }
     }
     
+    func setCurrentYear() {
+        let currentYearFormatter = DateFormatter()
+        currentYearFormatter.dateFormat = "yyyy"
+        currentYear = Int(currentYearFormatter.string(from: Date())) ?? 0
+    }
+    
     @objc
     private func nextButtonTapped(_ sender: UIButton) {
-        var nextVC = CompleteRegisterVC()
+        let nextVC = CompleteRegisterVC()
         nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
         nextVC.modalPresentationStyle = .fullScreen
         present(nextVC, animated: true)
@@ -416,8 +440,16 @@ class InputCareerVC: UIViewController {
         switch sender.isSelected {
         case true:
             sender.setTitleColor(UIColor(hex: 0x000000).withAlphaComponent(0.8), for: .normal)
+            endDateTextField.isEnabled = false
+            endDateTextField.text = "현재"
         case false:
             sender.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
+            endDateTextField.isEnabled = true
+            endDatePickerView.selectRow(0, inComponent: 0, animated: false)
+            endDatePickerView.selectRow(0, inComponent: 1, animated: false)
+            endYearValue = yearArray[0]
+            endMonthValue = monthArray[0]
+            endDateTextField.text = ""
         }
     }
     
@@ -425,6 +457,21 @@ class InputCareerVC: UIViewController {
     func textFieldActivated(_ sender: UITextField) {
         sender.layer.borderColor = UIColor(hex: 0x000000).withAlphaComponent(0.8).cgColor
         sender.layer.borderWidth = 1
+        if sender == startDateTextField || sender == endDateTextField {
+            // pickerView 초기화
+            switch(sender){
+            case startDateTextField:
+                startYearValue = yearArray[startDatePickerView.selectedRow(inComponent: 0)]
+                startMonthValue = monthArray[startDatePickerView.selectedRow(inComponent: 1)]
+                sender.text = "\(startYearValue)/\(startMonthValue)"
+            case endDateTextField:
+                endYearValue = yearArray[endDatePickerView.selectedRow(inComponent: 0)]
+                endMonthValue = monthArray[endDatePickerView.selectedRow(inComponent: 1)]
+                sender.text = "\(endYearValue)/\(endMonthValue)"
+            default:
+                print(">>>ERROR: InputCareerVC - pickerView error")
+            }
+        }
     }
     
     @objc
@@ -435,6 +482,35 @@ class InputCareerVC: UIViewController {
     
     @objc
     func pickerExit() {
+        if startDateTextField.isEditing {
+            let yearRow = startDatePickerView.selectedRow(inComponent: 0)
+            let monthRow = startDatePickerView.selectedRow(inComponent: 1)
+            startDateTextField.text = "\(yearArray[yearRow])/\(monthArray[monthRow])"
+            startYearValue = yearArray[startDatePickerView.selectedRow(inComponent: 0)]
+            startMonthValue = monthArray[startDatePickerView.selectedRow(inComponent: 1)]
+        }
+        else if endDateTextField.isEditing {
+            let yearRow = endDatePickerView.selectedRow(inComponent: 0)
+            let monthRow = endDatePickerView.selectedRow(inComponent: 1)
+            endDateTextField.text = "\(yearArray[yearRow])/\(monthArray[monthRow])"
+            endYearValue = yearArray[startDatePickerView.selectedRow(inComponent: 0)]
+            endMonthValue = monthArray[startDatePickerView.selectedRow(inComponent: 1)]
+        }
+        self.view.endEditing(true)
+    }
+    
+    @objc
+    func pickerCancel() {
+        if startDateTextField.isEditing {
+            startDatePickerView.selectRow(0, inComponent: 0, animated: false)
+            startDatePickerView.selectRow(0, inComponent: 1, animated: false)
+            startDateTextField.text = ""
+        }
+        else if endDateTextField.isEditing {
+            endDatePickerView.selectRow(0, inComponent: 0, animated: false)
+            endDatePickerView.selectRow(0, inComponent: 1, animated: false)
+            endDateTextField.text = ""
+        }
         self.view.endEditing(true)
     }
 
@@ -456,23 +532,22 @@ extension InputCareerVC: UIPickerViewDataSource, UIPickerViewDelegate {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        
         if pickerView.tag == 0 {
             if component == 0 {
-                yearValue = yearArray[row]
-                startDateTextField.text = "\(yearValue)/\(monthValue)"
+                startYearValue = yearArray[row]
+                startDateTextField.text = "\(startYearValue)/\(startMonthValue)"
             } else {
-                monthValue = monthArray[row]
-                startDateTextField.text = "\(yearValue)/\(monthValue)"
+                startMonthValue = monthArray[row]
+                startDateTextField.text = "\(startYearValue)/\(startMonthValue)"
             }
         }
         else if pickerView.tag == 1 {
             if component == 0 {
-                yearValue = yearArray[row]
-                endDateTextField.text = "\(yearValue)/\(monthValue)"
+                endYearValue = yearArray[row]
+                endDateTextField.text = "\(endYearValue)/\(endMonthValue)"
             } else {
-                monthValue = monthArray[row]
-                endDateTextField.text = "\(yearValue)/\(monthValue)"
+                endMonthValue = monthArray[row]
+                endDateTextField.text = "\(endYearValue)/\(endMonthValue)"
             }
         }
         
