@@ -69,8 +69,8 @@ class EventSeminarDetailVC: UIViewController {
 
     // MARK: - Life Cycle
 	
-	init(memberId: Int, seminarId: Int) {
-		self.memberId = memberId
+	init(seminarId: Int) {
+		self.memberId = UserDefaults.standard.integer(forKey: "memberIdx")
 		self.seminarId = seminarId
 		super.init(nibName: nil, bundle: nil)
 	}
@@ -175,7 +175,7 @@ extension EventSeminarDetailVC {
 	}
 	
 	@objc private func didTapRegisterButton() {
-		navigationController?.pushViewController(EventApplyVC(memberId: 1, programId: 6), animated: true)
+		navigationController?.pushViewController(EventApplyVC(type: "SEMINAR" ,programId: 6), animated: true)
 	}
 	
 	// MARK: fetch data
@@ -202,10 +202,29 @@ extension EventSeminarDetailVC: UITableViewDelegate, UITableViewDataSource {
 			cell.registerButton.addTarget(self, action: #selector(didTapRegisterButton), for: .touchUpInside)
 			
 			cell.eventNameLabel.text = self.seminarInfo.title
-			cell.dateInfoLabel.text = self.seminarInfo.date
+//			cell.dateInfoLabel.text = self.seminarInfo.date
 			cell.locationInfoLabel.text = self.seminarInfo.location
-			cell.costInfoLabel.text = "\(self.seminarInfo.fee)"
-			cell.deadlineInfoLabel.text = self.seminarInfo.endDate
+			if self.seminarInfo.fee == 0 {
+				cell.costStackView.isHidden = true
+			} else {
+				cell.costStackView.isHidden = false
+				cell.costInfoLabel.text = "\(self.seminarInfo.fee)원"
+			}
+			
+//			cell.deadlineInfoLabel.text = self.seminarInfo.endDate
+			
+//			let convertDate = self.seminarInfo.date.toDate()
+//			let convertEndDate = self.seminarInfo.endDate.toDate()
+//
+//			let dateFormatter = DateFormatter()
+//			dateFormatter.dateFormat = "yyyy-MM-dd a h시"
+//			dateFormatter.locale = Locale(identifier: "ko_KR")
+//
+//			cell.dateInfoLabel.text = dateFormatter.string(from: convertDate ?? Date())
+//			cell.deadlineInfoLabel.text = dateFormatter.string(from: convertEndDate ?? Date())
+			
+			cell.dateInfoLabel.text = self.seminarInfo.date.formattingDetailDate()
+			cell.deadlineInfoLabel.text = self.seminarInfo.endDate.formattingDetailDate()
 			
 			switch self.userButtonStatus {
 			case .APPLY:
@@ -254,6 +273,7 @@ extension EventSeminarDetailVC: UITableViewDelegate, UITableViewDataSource {
 			return cell
 		case 1:
 			guard let cell = tableView.dequeueReusableCell(withIdentifier: EventAttendantTableViewCell.identifier, for: indexPath) as? EventAttendantTableViewCell else {return UITableViewCell()}
+			cell.type = "SEMINAR"
 			cell.programId = self.seminarId
 			
 			return cell

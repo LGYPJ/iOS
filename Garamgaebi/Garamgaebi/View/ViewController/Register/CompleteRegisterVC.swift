@@ -161,6 +161,7 @@ class CompleteRegisterVC: UIViewController {
 	private func login() {
 		LoginViewModel.postLogin(uniEmail: "jrwedo@gachon.ac.kr", password: "1234", completion: { result in
 			UserDefaults.standard.set(result.accessToken, forKey: "BearerToken")
+			UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
 		})
 	}
     
