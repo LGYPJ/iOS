@@ -107,6 +107,7 @@ class InputCareerVC: UIViewController {
         textField.layer.borderColor = UIColor.mainGray.cgColor
         textField.layer.borderWidth = 1
         
+        textField.addTarget(self, action: #selector(allFilledIn), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
         
@@ -135,6 +136,7 @@ class InputCareerVC: UIViewController {
         textField.layer.borderColor = UIColor.mainGray.cgColor
         textField.layer.borderWidth = 1
         
+        textField.addTarget(self, action: #selector(allFilledIn), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
         
@@ -175,6 +177,7 @@ class InputCareerVC: UIViewController {
         textField.layer.borderColor = UIColor.mainGray.cgColor
         textField.layer.borderWidth = 1
         
+        textField.addTarget(self, action: #selector(allFilledIn), for: .editingDidEnd)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
         
@@ -215,6 +218,7 @@ class InputCareerVC: UIViewController {
         textField.layer.borderColor = UIColor.mainGray.cgColor
         textField.layer.borderWidth = 1
         
+        textField.addTarget(self, action: #selector(allFilledIn), for: .editingDidEnd)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
         
@@ -232,7 +236,9 @@ class InputCareerVC: UIViewController {
         button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         
         button.clipsToBounds = true
+        
         button.addTarget(self, action: #selector(toggleButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(allFilledIn), for: .touchUpInside)
         return button
     }()
     
@@ -263,6 +269,8 @@ class InputCareerVC: UIViewController {
         button.layer.cornerRadius = 12
         button.backgroundColor = .mainBlue
         button.clipsToBounds = true
+        button.isEnabled = false
+        button.backgroundColor = .mainGray
         button.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -512,6 +520,25 @@ class InputCareerVC: UIViewController {
             endDateTextField.text = ""
         }
         self.view.endEditing(true)
+    }
+    
+    @objc
+    func allFilledIn() {
+        if self.companyTextField.text?.count != 0,
+           self.positionTextField.text?.count != 0,
+           self.startDateTextField.text?.count != 0,
+           self.endDateTextField.text?.count != 0 {
+            /* 모든 textField가 채워졌으면 프로필 저장 버튼 활성화 */
+            UIView.animate(withDuration: 0.33) { [weak self] in
+                self?.saveUserProfileButton.backgroundColor = .mainBlue
+            }
+            saveUserProfileButton.isEnabled = true
+        } else {
+            saveUserProfileButton.isEnabled = false
+            UIView.animate(withDuration: 0.33) { [weak self] in
+                self?.saveUserProfileButton.backgroundColor = .mainGray
+            }
+        }
     }
 
 }
