@@ -198,7 +198,7 @@ class ProfileInputSNSVC: UIViewController {
     }
     
     @objc private func saveButtonDidTap(_ sender: UIButton) {
-        print("저장하기 버튼 클릭")
+//        print("저장하기 버튼 클릭")
         guard let address = linkTextField.text else { return }
         postSNS(memberIdx: memberIdx, address: address)
                        
@@ -221,7 +221,7 @@ class ProfileInputSNSVC: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
-    // MARK: - [API] SNS 추가
+    // MARK: - [POST] SNS 추가
     func postSNS(memberIdx: Int, address: String) {
         
         // http 요청 주소 지정

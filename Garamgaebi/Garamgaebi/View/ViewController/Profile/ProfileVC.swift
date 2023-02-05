@@ -16,7 +16,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     // MARK: - Properties
     
     // 추후 로그인 구현 후 변경
-    let memberIdx: Int = 10 // 코코아 memberIdx
+    let memberIdx = UserDefaults.standard.integer(forKey: "memberIdx")
 
     let token = UserDefaults.standard.string(forKey: "BearerToken")
     
@@ -266,14 +266,21 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         super.viewWillAppear(animated)
         
         // 서버 통신
-        getSnsData()
-        getCareerData()
-        getEducationData()
-//        showSnsDefaultLabel()
         
 //        print("1: viewWillAppear()")
         navigationController?.navigationBar.isHidden = true
         tabBarController?.tabBar.isHidden = false
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nil, bundle: nil)
+        getSnsData()
+        getCareerData()
+        getEducationData()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidAppear(_ animated: Bool) {
