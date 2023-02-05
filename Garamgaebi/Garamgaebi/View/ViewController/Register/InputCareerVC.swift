@@ -71,7 +71,7 @@ class InputCareerVC: UIViewController {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "경력"
-        label.textColor = .black
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 22)
         return label
     }()
@@ -88,7 +88,7 @@ class InputCareerVC: UIViewController {
     lazy var subtitleCompanyLabel: UILabel = {
         let label = UILabel()
         label.text = "회사"
-        label.textColor = .black.withAlphaComponent(0.8)
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 18)
         return label
     }()
@@ -100,14 +100,14 @@ class InputCareerVC: UIViewController {
         textField.placeholder = "회사명을 입력해주세요"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
-        textField.textColor = .black
+        textField.textColor = .mainBlack
         textField.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         textField.autocapitalizationType = .none
         
         textField.layer.borderColor = UIColor.mainGray.cgColor
         textField.layer.borderWidth = 1
         
-        textField.addTarget(self, action: #selector(allFilledIn), for: .editingChanged)
+        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
         
@@ -117,7 +117,7 @@ class InputCareerVC: UIViewController {
     lazy var subtitlePositionLabel: UILabel = {
         let label = UILabel()
         label.text = "직함"
-        label.textColor = .black.withAlphaComponent(0.8)
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 18)
         return label
     }()
@@ -129,14 +129,14 @@ class InputCareerVC: UIViewController {
         textField.placeholder = "직함을 입력해주세요 (예: 백엔드 개발자)"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
-        textField.textColor = .black
+        textField.textColor = .mainBlack
         textField.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         textField.autocapitalizationType = .none
         
         textField.layer.borderColor = UIColor.mainGray.cgColor
         textField.layer.borderWidth = 1
         
-        textField.addTarget(self, action: #selector(allFilledIn), for: .editingChanged)
+        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
         
@@ -147,7 +147,7 @@ class InputCareerVC: UIViewController {
     lazy var subtitleWorkingDateLabel: UILabel = {
         let label = UILabel()
         label.text = "재직 기간"
-        label.textColor = .black.withAlphaComponent(0.8)
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 18)
         return label
     }()
@@ -167,7 +167,7 @@ class InputCareerVC: UIViewController {
         textField.placeholder = "시작년월"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
-        textField.textColor = .black
+        textField.textColor = .mainBlack
         textField.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         textField.autocapitalizationType = .none
         
@@ -177,7 +177,7 @@ class InputCareerVC: UIViewController {
         textField.layer.borderColor = UIColor.mainGray.cgColor
         textField.layer.borderWidth = 1
         
-        textField.addTarget(self, action: #selector(allFilledIn), for: .editingDidEnd)
+        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
         
@@ -208,7 +208,7 @@ class InputCareerVC: UIViewController {
         textField.placeholder = "종료년월"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
-        textField.textColor = .black
+        textField.textColor = .mainBlack
         textField.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         textField.autocapitalizationType = .none
         
@@ -218,7 +218,7 @@ class InputCareerVC: UIViewController {
         textField.layer.borderColor = UIColor.mainGray.cgColor
         textField.layer.borderWidth = 1
         
-        textField.addTarget(self, action: #selector(allFilledIn), for: .editingDidEnd)
+        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
         
@@ -238,7 +238,7 @@ class InputCareerVC: UIViewController {
         button.clipsToBounds = true
         
         button.addTarget(self, action: #selector(toggleButton), for: .touchUpInside)
-        button.addTarget(self, action: #selector(allFilledIn), for: .touchUpInside)
+        button.addTarget(self, action: #selector(allTextFieldFilledIn), for: .touchUpInside)
         return button
     }()
     
@@ -447,7 +447,7 @@ class InputCareerVC: UIViewController {
         sender.isSelected.toggle()
         switch sender.isSelected {
         case true:
-            sender.setTitleColor(UIColor(hex: 0x000000).withAlphaComponent(0.8), for: .normal)
+            sender.setTitleColor(.mainBlack, for: .normal)
             endDateTextField.isEnabled = false
             endDateTextField.text = "현재"
         case false:
@@ -463,7 +463,7 @@ class InputCareerVC: UIViewController {
     
     @objc
     func textFieldActivated(_ sender: UITextField) {
-        sender.layer.borderColor = UIColor(hex: 0x000000).withAlphaComponent(0.8).cgColor
+        sender.layer.borderColor = UIColor.mainBlack.cgColor
         sender.layer.borderWidth = 1
         if sender == startDateTextField || sender == endDateTextField {
             // pickerView 초기화
@@ -523,7 +523,7 @@ class InputCareerVC: UIViewController {
     }
     
     @objc
-    func allFilledIn() {
+    func allTextFieldFilledIn() {
         if self.companyTextField.text?.count != 0,
            self.positionTextField.text?.count != 0,
            self.startDateTextField.text?.count != 0,
