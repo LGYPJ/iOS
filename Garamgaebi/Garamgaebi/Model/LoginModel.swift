@@ -16,6 +16,7 @@ struct LoginModelResponse: Codable {
 
 struct LoginModel: Codable {
 	let grantType: String
+    let memberIdx: Int
 	let accessToken: String
 	let refreshToken: String
 	let refreshTokenExpirationTime: Int

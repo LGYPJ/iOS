@@ -122,8 +122,8 @@ class LoginVC: UIViewController {
     @objc
     private func loginSuccessed(_ sender: Any) {
         
-        // LoginVC로 화면전환
-        let nextVC = SchoolEmailAuthVC()
+        // UniEmailAuthVC로 화면전환
+        let nextVC = UniEmailAuthVC()
         nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
         nextVC.modalPresentationStyle = .fullScreen
         present(nextVC, animated: true)

@@ -8,13 +8,14 @@
 import UIKit
 import SnapKit
 
-class SchoolEmailAuthVC: UIViewController {
-
+class UniEmailAuthVC: UIViewController {
+    
     // MARK: - Propertys
     //let timeSelector: Selector = #selector(updateTime)
     var timer: Timer?
     
     let interval = 1.0
+    var authNumber = UniEmailAuthNumber(key: "")
     var userId = String()
     var isValidId = false {
         didSet { // 프로퍼티 옵저버 :23
@@ -315,13 +316,24 @@ class SchoolEmailAuthVC: UIViewController {
     
     @objc
     func sendEmail(_ sender: UIButton) {
+        let uniEmail = UniEmailAuthModel(email: "\(userId)@gachon.ac.kr")
+        
+        DispatchQueue.main.async {
+            UniEmailAuthViewModel.requestSendEmail(uniEmail) { [weak self] result in
+                self?.authNumber = result
+                print(self?.authNumber.key)
+            }
+        }
+        
+        
         
         sender.setTitleColor(UIColor.mainBlue, for: .normal)
         sender.backgroundColor = .white
         sender.layer.borderColor = UIColor.mainBlue.cgColor
         sender.layer.borderWidth = 0.5
-        
-        var count = 5
+        authNumberTextField.isEnabled = true
+        authNumberSendButton.isEnabled = true
+        var count = 300
         
         if timer != nil && timer!.isValid {
             timer?.invalidate()
@@ -362,6 +374,7 @@ class SchoolEmailAuthVC: UIViewController {
                 sender.setTitle("이메일 재발송하기", for: .normal)
                 sender.setTitleColor(.white, for: .normal)
                 sender.backgroundColor = .mainBlue
+                initAuthNumberUI()
             }
 
         })
@@ -369,9 +382,7 @@ class SchoolEmailAuthVC: UIViewController {
     
     @objc
     private func authSuccessed(_ sender: Any) {
-        
-        // 임시로 올바른 인증번호 111111로 설정
-        if authNumberTextField.text?.hasPrefix("111111") == true {
+        if authNumberTextField.text == authNumber.key {
             // 인증번호 맞으면 ->
             self.nextButton.isEnabled = true
             // 타이머 끄기
@@ -494,6 +505,13 @@ class SchoolEmailAuthVC: UIViewController {
 
     }
     
+    private func initAuthNumberUI() {
+        authNumberTextField.isEnabled = false
+        authNumberSendButton.isEnabled = false
+        authNumberTextField.text = ""
+        authNumberSendButton.backgroundColor = .mainGray
+        authNumNotificationLabel.isHidden = true
+    }
     
 }
 

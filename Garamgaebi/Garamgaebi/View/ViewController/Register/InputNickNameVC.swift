@@ -10,7 +10,7 @@ import UIKit
 class InputNickNameVC: UIViewController {
     
     // MARK: - Propertys
-    var userNickName = String()
+    var nickName = String()
     var isValidNickName = false {
         didSet { 
             self.validateUserInfo()
@@ -172,7 +172,11 @@ class InputNickNameVC: UIViewController {
     
     @objc
     private func nextButtonTapped(_ sender: Any) {
-        // EmailVC로 화면전환
+        
+        // nickName 저장
+        UserDefaults.standard.set(nickName, forKey: "nickname")
+        
+        // InputEmailVC로 화면전환
         let nextVC = InputEmailVC()
         nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
         nextVC.modalPresentationStyle = .fullScreen
@@ -228,7 +232,7 @@ class InputNickNameVC: UIViewController {
         switch sender {
         case nickNameTextField:
             self.isValidNickName = text.isValidNickName()
-            self.userNickName = text
+            self.nickName = text
         
         default:
             fatalError("Missing TextField...")
