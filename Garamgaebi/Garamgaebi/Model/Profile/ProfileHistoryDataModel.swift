@@ -57,7 +57,7 @@ struct EducationResponse: Decodable {
     let result: [EducationResult]
 }
 struct EducationResult: Decodable {
-    let education: Int
+    let educationIdx: Int
     let institution: String
     let major: String
     let isLearning: String

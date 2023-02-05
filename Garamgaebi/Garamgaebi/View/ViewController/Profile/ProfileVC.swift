@@ -16,7 +16,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     // MARK: - Properties
     
     // 추후 로그인 구현 후 변경
-    let memberIdx: Int = 9 // 코코아 memberIdx
+    let memberIdx: Int = 10 // 코코아 memberIdx
 
     let token = UserDefaults.standard.string(forKey: "BearerToken")
     
@@ -517,6 +517,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         
         // 화면 전환
         let nextVC = ProfileInputEducationVC()
+        nextVC.memberIdx = memberIdx
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
