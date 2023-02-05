@@ -12,8 +12,10 @@ class InputCareerVC: UIViewController {
     var currentYear: Int = 0 {
         didSet {
             yearArray = (1950...currentYear).reversed().map { String($0) }
+            print(currentYear)
         }
     }
+    var currentYearMonth: Int = 0
     var yearArray: [String] = []
     private var monthArray = (1...12).map { String(format:"%02d", $0) }
     private var startYearValue =  String()
@@ -423,6 +425,10 @@ class InputCareerVC: UIViewController {
         let currentYearFormatter = DateFormatter()
         currentYearFormatter.dateFormat = "yyyy"
         currentYear = Int(currentYearFormatter.string(from: Date())) ?? 0
+        
+        let currentYearMonthFormatter = DateFormatter()
+        currentYearMonthFormatter.dateFormat = "MM"
+        currentYearMonth = Int(currentYearMonthFormatter.string(from: Date())) ?? 0
     }
     
     @objc
@@ -494,15 +500,15 @@ class InputCareerVC: UIViewController {
             let yearRow = startDatePickerView.selectedRow(inComponent: 0)
             let monthRow = startDatePickerView.selectedRow(inComponent: 1)
             startDateTextField.text = "\(yearArray[yearRow])/\(monthArray[monthRow])"
-            startYearValue = yearArray[startDatePickerView.selectedRow(inComponent: 0)]
-            startMonthValue = monthArray[startDatePickerView.selectedRow(inComponent: 1)]
+            startYearValue = yearArray[yearRow]
+            startMonthValue = monthArray[monthRow]
         }
         else if endDateTextField.isEditing {
             let yearRow = endDatePickerView.selectedRow(inComponent: 0)
             let monthRow = endDatePickerView.selectedRow(inComponent: 1)
             endDateTextField.text = "\(yearArray[yearRow])/\(monthArray[monthRow])"
-            endYearValue = yearArray[startDatePickerView.selectedRow(inComponent: 0)]
-            endMonthValue = monthArray[startDatePickerView.selectedRow(inComponent: 1)]
+            endYearValue = yearArray[yearRow]
+            endMonthValue = monthArray[monthRow]
         }
         self.view.endEditing(true)
     }
@@ -550,19 +556,58 @@ extension InputCareerVC: UIPickerViewDataSource, UIPickerViewDelegate {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if component == 0 {
-            return yearArray.count
-        } else {
-            return monthArray.count
+        if pickerView.tag == 0 {
+            if component == 0 {
+                return yearArray.count
+            } else {
+                switch(startYearValue){
+                case String(currentYear):
+                    // currentYearMonth까지
+                    return monthArray[0..<currentYearMonth].count
+                default:
+                    return monthArray.count
+                }
+                
+            }
+        } else if pickerView.tag == 1 {
+            if component == 0 {
+                return yearArray.count
+            } else {
+                switch(endYearValue){
+                case String(currentYear):
+                    // currentYearMonth까지
+                    return monthArray[0..<currentYearMonth].count
+                default:
+                    return monthArray.count
+                }
+                
+            }
         }
-        
+        print(">>>ERROR: pickerView numberOfRowsInComponent")
+        return 0
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if pickerView.tag == 0 {
             if component == 0 {
-                startYearValue = yearArray[row]
-                startDateTextField.text = "\(startYearValue)/\(startMonthValue)"
+                switch(startYearValue){
+                // 선택한 년도가 올해였을 때
+                case String(currentYear):
+                    startYearValue = yearArray[row]
+                    startDateTextField.text = "\(startYearValue)/\(startMonthValue)"
+                    pickerView.reloadAllComponents()
+                // 선택한 년도가 올해가 아니었을 때
+                default:
+                    startYearValue = yearArray[row]
+                    if startYearValue == String(currentYear){
+                        pickerView.selectRow(0, inComponent: 1, animated: true)
+                        startDateTextField.text = "\(startYearValue)/\(monthArray[0])"
+                        startMonthValue = monthArray[0]
+                    } else {
+                        startDateTextField.text = "\(startYearValue)/\(startMonthValue)"
+                    }
+                    pickerView.reloadAllComponents()
+                }
             } else {
                 startMonthValue = monthArray[row]
                 startDateTextField.text = "\(startYearValue)/\(startMonthValue)"
@@ -570,8 +615,24 @@ extension InputCareerVC: UIPickerViewDataSource, UIPickerViewDelegate {
         }
         else if pickerView.tag == 1 {
             if component == 0 {
-                endYearValue = yearArray[row]
-                endDateTextField.text = "\(endYearValue)/\(endMonthValue)"
+                switch(endYearValue){
+                // 선택한 년도가 올해였을 때
+                case String(currentYear):
+                    endYearValue = yearArray[row]
+                    endDateTextField.text = "\(endYearValue)/\(endMonthValue)"
+                    pickerView.reloadAllComponents()
+                // 선택한 년도가 올해가 아니었을 때
+                default:
+                    endYearValue = yearArray[row]
+                    if endYearValue == String(currentYear){
+                        pickerView.selectRow(0, inComponent: 1, animated: true)
+                        endDateTextField.text = "\(endYearValue)/\(monthArray[0])"
+                        endMonthValue = monthArray[0]
+                    } else {
+                        endDateTextField.text = "\(endYearValue)/\(endMonthValue)"
+                    }
+                    pickerView.reloadAllComponents()
+                }
             } else {
                 endMonthValue = monthArray[row]
                 endDateTextField.text = "\(endYearValue)/\(endMonthValue)"
