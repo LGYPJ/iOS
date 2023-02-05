@@ -54,7 +54,10 @@ class SeminarDetailViewModel {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
         ]
-		AF.request(url, method: .get, headers: headers)
+		let params: Parameters = [
+			"member-idx": UserDefaults.standard.integer(forKey: "memberIdx")
+		]
+		AF.request(url, method: .get, parameters: params, headers: headers)
 			.validate()
 			.responseDecodable(of: SeminarDetailAttentdantResponse.self) { response in
 				switch response.result {
