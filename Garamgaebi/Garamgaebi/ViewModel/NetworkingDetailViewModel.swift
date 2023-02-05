@@ -11,32 +11,33 @@ class NetworkingDetailViewModel {
 	// MARK: requestData
 	// 세미나 정보 request
 	public static func requestNetworkingDetailInfo(memberId: Int, networkingId: Int, completion: @escaping ((NetworkingDetailInfo) -> Void)) {
-		let dummyData = NetworkingDetailInfo(programIdx: networkingId,title: "유료 네트워킹1", date: "2023-04-15T18:00:00", location: "가천관", fee: 10000, endDate: "2023-04-08T18:00:00", programStatus: "OPEN", userButtonStatus: "CANCEL")
-		completion(dummyData)
-//		let url = "https://garamgaebi.shop/networkings/info"
-//
-//		// TODO: body데이터 수정예정
-//		let params = [
-//			"memberIdx": memberId,
-//			"programIdx": networkingId
-//		]
-//		AF.request(url, method: .get, parameters: params)
-//			.validate()
-//			.responseDecodable(of: NetworkingDetailInfoResponse.self) { resposne in
-//				switch resposne.result {
-//				case .success(let result):
-//					if result.isSuccess {
-//						guard let result = result.result else {return}
-//						completion(result)
-//					} else {
-//						// 통신은 정상적으로 됐으나(200), error발생
-//						print("실패(네트워킹 상세정보): \(result.message)")
-//					}
-//				case .failure(let error):
-//					// 실제 HTTP에러 404
-//					print("실패(AF-네트워킹 상세정보): \(error.localizedDescription)")
-//				}
-//			}
+//		let dummyData = NetworkingDetailInfo(programIdx: networkingId,title: "유료 네트워킹1", date: "2023-04-15T18:00:00", location: "가천관", fee: 10000, endDate: "2023-04-08T18:00:00", programStatus: "OPEN", userButtonStatus: "CANCEL")
+//		completion(dummyData)
+		let url = "https://garamgaebi.shop/networkings/\(networkingId)/info"
+		let headers: HTTPHeaders = [
+			"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
+		]
+		let params: Parameters = [
+			"member-idx": memberId
+		]
+
+		AF.request(url, method: .get, parameters: params, headers: headers)
+			.validate()
+			.responseDecodable(of: NetworkingDetailInfoResponse.self) { resposne in
+				switch resposne.result {
+				case .success(let result):
+					if result.isSuccess {
+						guard let result = result.result else {return}
+						completion(result)
+					} else {
+						// 통신은 정상적으로 됐으나(200), error발생
+						print("실패(네트워킹 상세정보): \(result.message)")
+					}
+				case .failure(let error):
+					// 실제 HTTP에러 404
+					print("실패(AF-네트워킹 상세정보): \(error.localizedDescription)")
+				}
+			}
 	}
 	
 	// 네트워킹 참가자 request

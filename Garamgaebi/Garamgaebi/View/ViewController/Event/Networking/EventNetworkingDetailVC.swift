@@ -202,18 +202,16 @@ extension EventNetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 			cell.eventNameLabel.text = self.networkingInfo.title
 //			cell.dateInfoLabel.text = self.networkingInfo.date
 			cell.locationInfoLabel.text = self.networkingInfo.location
-			cell.costInfoLabel.text = "\(self.networkingInfo.fee)"
+			if self.networkingInfo.fee == 0 {
+				cell.costStackView.isHidden = true
+			} else {
+				cell.costStackView.isHidden = false
+				cell.costInfoLabel.text = "\(self.networkingInfo.fee)원"
+			}
 //			cell.deadlineInfoLabel.text = self.networkingInfo.endDate
 			
-			let convertDate = self.networkingInfo.date.toDate()
-			let convertEndDate = self.networkingInfo.endDate.toDate()
-			
-			let dateFormatter = DateFormatter()
-			dateFormatter.dateFormat = "yyyy-MM-dd a h시"
-			dateFormatter.locale = Locale(identifier: "ko_KR")
-			
-			cell.dateInfoLabel.text = dateFormatter.string(from: convertDate ?? Date())
-			cell.deadlineInfoLabel.text = dateFormatter.string(from: convertEndDate ?? Date())
+			cell.dateInfoLabel.text = self.networkingInfo.date.formattingDetailDate()
+			cell.deadlineInfoLabel.text = self.networkingInfo.endDate.formattingDetailDate()
 			
 			switch self.userButtonStatus {
 			case .APPLY:
