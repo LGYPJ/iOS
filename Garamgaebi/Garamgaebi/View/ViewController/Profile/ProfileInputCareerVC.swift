@@ -9,10 +9,13 @@ import UIKit
 
 import Then
 import SnapKit
+import Alamofire
 
 class ProfileInputCareerVC: UIViewController {
     
     // MARK: - Properties
+    lazy var token = UserDefaults.standard.string(forKey: "BearerToken")
+    lazy var memberIdx: Int = 0
     
     private let yearArray = (1901...2023).reversed().map { String($0) }
     private let monthArray = (1...12).map { String(format:"%02d", $0) }
@@ -225,6 +228,7 @@ class ProfileInputCareerVC: UIViewController {
         addSubViews()
         configLayouts()
         
+//        print(token) // 토큰 확인
     }
     
     
@@ -347,6 +351,18 @@ class ProfileInputCareerVC: UIViewController {
     
     @objc private func saveButtonDidTap(_ sender: UIButton) {
 //        print("저장하기 버튼 클릭")
+        // 값 저장
+        guard let company = companyTextField.text else { return }
+        guard let position = positionTextField.text else { return }
+        //TODO: 서버에서 date 어떻게 받을지 모르겠음
+        guard let startDate = startDateTextField.text else { return }
+        guard let endDate = endDateTextField.text else { return }
+        //TODO: 토글 체크상태에 따라서 처리. 근데 이거 왜 String임?
+        let isWorking = "FALSE"
+        
+        // 서버 연동
+        postCareer(memberIdx: memberIdx, company: company, position: position, isWorking: isWorking, startDate: startDate, endDate: endDate)
+                
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -381,6 +397,49 @@ class ProfileInputCareerVC: UIViewController {
         self.view.endEditing(true)
     }
     
+    // MARK: - [POST] 경력 추가
+    func postCareer(memberIdx: Int, company: String, position: String, isWorking: String, startDate: String, endDate: String) {
+        
+        // http 요청 주소 지정
+        let url = "https://garamgaebi.shop/profile/career"
+        
+        // http 요청 헤더 지정
+        let header : HTTPHeaders = [
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(token ?? "")"
+        ]
+        let bodyData: Parameters = [
+            "memberIdx": memberIdx,
+            "company": company,
+            "position": position,
+            "isWorking": isWorking,
+            "startDate": startDate,
+            "endDate": endDate
+        ]
+        
+        // httpBody 에 parameters 추가
+        AF.request(
+            url,
+            method: .post,
+            parameters: bodyData,
+            encoding: JSONEncoding.default,
+            headers: header
+        )
+        .validate()
+        .responseDecodable(of: ProfilePostResponse.self) { response in
+            switch response.result {
+            case .success(let response):
+                if response.isSuccess {
+                    print("성공(Career추가): \(response.message)")
+                } else {
+                    print("실패(Career추가): \(response.message)")
+                }
+            case .failure(let error):
+                print("실패(AF-Career추가): \(error.localizedDescription)")
+            }
+        }
+    }
+    
 }
 
 extension ProfileInputCareerVC: UIPickerViewDataSource, UIPickerViewDelegate {
@@ -403,19 +462,19 @@ extension ProfileInputCareerVC: UIPickerViewDataSource, UIPickerViewDelegate {
         if pickerView.tag == 0 {
             if component == 0 {
                 yearValue = yearArray[row]
-                startDateTextField.text = "\(yearValue)/\(monthValue)"
+                startDateTextField.text = "\(yearValue)-\(monthValue)"
             } else {
                 monthValue = monthArray[row]
-                startDateTextField.text = "\(yearValue)/\(monthValue)"
+                startDateTextField.text = "\(yearValue)-\(monthValue)"
             }
         }
         else if pickerView.tag == 1 {
             if component == 0 {
                 yearValue = yearArray[row]
-                endDateTextField.text = "\(yearValue)/\(monthValue)"
+                endDateTextField.text = "\(yearValue)-\(monthValue)"
             } else {
                 monthValue = monthArray[row]
-                endDateTextField.text = "\(yearValue)/\(monthValue)"
+                endDateTextField.text = "\(yearValue)-\(monthValue)"
             }
         }
         
