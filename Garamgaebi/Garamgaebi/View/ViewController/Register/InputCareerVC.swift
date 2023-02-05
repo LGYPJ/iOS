@@ -12,17 +12,17 @@ class InputCareerVC: UIViewController {
     var currentYear: Int = 0 {
         didSet {
             yearArray = (1950...currentYear).reversed().map { String($0) }
-            print(currentYear)
         }
     }
     var currentYearMonth: Int = 0
     var yearArray: [String] = []
+    
     private var monthArray = (1...12).map { String(format:"%02d", $0) }
     private var startYearValue =  String()
     private var startMonthValue = String()
     private var endYearValue =  String()
     private var endMonthValue = String()
-    
+    private var isWorking: Bool = false
     // MARK: - Subviews
     
     private var toolbar: UIToolbar {
@@ -43,8 +43,6 @@ class InputCareerVC: UIViewController {
         cancelBtn.target = self
         cancelBtn.action = #selector(pickerCancel)
         cancelBtn.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.NotoSansKR(type: .Regular, size: 16)!, NSAttributedString.Key.foregroundColor: UIColor(hex: 0xFF0000)], for: .normal)
-        
-
         toolBar.setItems([cancelBtn,flexSpace,exitBtn], animated: true)
         return toolBar
     }
@@ -179,9 +177,9 @@ class InputCareerVC: UIViewController {
         textField.layer.borderColor = UIColor.mainGray.cgColor
         textField.layer.borderWidth = 1
         
-        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
         
         return textField
     }()
@@ -220,9 +218,9 @@ class InputCareerVC: UIViewController {
         textField.layer.borderColor = UIColor.mainGray.cgColor
         textField.layer.borderWidth = 1
         
-        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
         
         return textField
     }()
@@ -437,7 +435,6 @@ class InputCareerVC: UIViewController {
         nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
         nextVC.modalPresentationStyle = .fullScreen
         present(nextVC, animated: true)
-
     }
 
     @objc
@@ -453,9 +450,14 @@ class InputCareerVC: UIViewController {
         sender.isSelected.toggle()
         switch sender.isSelected {
         case true:
+            // cornerCase에서 토글시
+            startDateTextField.layer.borderColor = UIColor.mainGray.cgColor
+            endDateTextField.layer.borderColor = UIColor.mainGray.cgColor
+            
             sender.setTitleColor(.mainBlack, for: .normal)
             endDateTextField.isEnabled = false
             endDateTextField.text = "현재"
+            endYearValue = String(Int(yearArray[0])!+1)
         case false:
             sender.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
             endDateTextField.isEnabled = true
@@ -475,10 +477,12 @@ class InputCareerVC: UIViewController {
             // pickerView 초기화
             switch(sender){
             case startDateTextField:
+                endDateTextField.layer.borderColor = UIColor.mainGray.cgColor
                 startYearValue = yearArray[startDatePickerView.selectedRow(inComponent: 0)]
                 startMonthValue = monthArray[startDatePickerView.selectedRow(inComponent: 1)]
                 sender.text = "\(startYearValue)/\(startMonthValue)"
             case endDateTextField:
+                startDateTextField.layer.borderColor = UIColor.mainGray.cgColor
                 endYearValue = yearArray[endDatePickerView.selectedRow(inComponent: 0)]
                 endMonthValue = monthArray[endDatePickerView.selectedRow(inComponent: 1)]
                 sender.text = "\(endYearValue)/\(endMonthValue)"
@@ -530,15 +534,46 @@ class InputCareerVC: UIViewController {
     
     @objc
     func allTextFieldFilledIn() {
+        
+        /* 모든 textField가 채워졌으면 프로필 저장 버튼 활성화 */
         if self.companyTextField.text?.count != 0,
            self.positionTextField.text?.count != 0,
            self.startDateTextField.text?.count != 0,
            self.endDateTextField.text?.count != 0 {
-            /* 모든 textField가 채워졌으면 프로필 저장 버튼 활성화 */
-            UIView.animate(withDuration: 0.33) { [weak self] in
-                self?.saveUserProfileButton.backgroundColor = .mainBlue
+            
+            // 재직중 버튼 활성화시 -> 무조건 활성화
+            if isWorking {
+                UIView.animate(withDuration: 0.33) { [weak self] in
+                    self?.saveUserProfileButton.backgroundColor = .mainBlue
+                }
+                saveUserProfileButton.isEnabled = true
             }
-            saveUserProfileButton.isEnabled = true
+            // 재직중 버튼 비활성화시
+            else {
+                // 반드시 [start < end] 만족해야함
+                let startValue = Int(startMonthValue)! + 12*Int(startYearValue)!
+                let endValue = Int(endMonthValue)! + 12*Int(endYearValue)!
+                
+                // 불만족시
+                if startValue > endValue {
+                    // shake 애니메이션 + borderColor: 0xFF0000
+                    startDateTextField.shake()
+                    endDateTextField.shake()
+                    // 프로필 저장버튼 애니메이션
+                    saveUserProfileButton.isEnabled = false
+                    UIView.animate(withDuration: 0.33) { [weak self] in
+                        self?.saveUserProfileButton.backgroundColor = .mainGray
+                    }
+                } else { // 만족시
+                    // 프로필 저장버튼 애니메이션
+                    UIView.animate(withDuration: 0.33) { [weak self] in
+                        self?.saveUserProfileButton.backgroundColor = .mainBlue
+                    }
+                    saveUserProfileButton.isEnabled = true
+                }
+                
+            }
+            
         } else {
             saveUserProfileButton.isEnabled = false
             UIView.animate(withDuration: 0.33) { [weak self] in
