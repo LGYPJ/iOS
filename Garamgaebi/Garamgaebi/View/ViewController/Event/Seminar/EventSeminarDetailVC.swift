@@ -56,14 +56,14 @@ class EventSeminarDetailVC: UIViewController {
 	var seminarInfo: SeminarDetailInfo = .init(programIdx: 0, title: "", date: "", location: "", fee: 0, endDate: "", programStatus: "", userButtonStatus: "") {
 		didSet {
 			configureStatus()
-//			tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
 		}
 	}
 	
 //	var programStatus = ProgramStatus.CLOSED
 	var userButtonStatus = ProgramUserButtonStatus.APPLY {
 		didSet {
-			tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+//			tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+			tableView.reloadData()
 		}
 	}
 
@@ -175,7 +175,7 @@ extension EventSeminarDetailVC {
 	}
 	
 	@objc private func didTapRegisterButton() {
-		navigationController?.pushViewController(EventApplyVC(type: "SEMINAR" ,programId: 6), animated: true)
+		navigationController?.pushViewController(EventApplyVC(type: "SEMINAR" ,programId: self.seminarId), animated: true)
 	}
 	
 	// MARK: fetch data
