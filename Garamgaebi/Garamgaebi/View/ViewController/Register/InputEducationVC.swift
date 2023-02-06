@@ -9,12 +9,20 @@ import UIKit
 import SnapKit
 
 class InputEducationVC: UIViewController {
+    var currentYear: Int = 0 {
+        didSet {
+            yearArray = (1950...currentYear).reversed().map { String($0) }
+        }
+    }
+    var currentYearMonth: Int = 0
+    var yearArray: [String] = []
     
-    private let yearArray = (1901...2023).reversed().map { String($0) }
-    private let monthArray = (1...12).map { String(format:"%02d", $0) }
-    private var yearValue =  String()
-    private var monthValue = String()
-    
+    private var monthArray = (1...12).map { String(format:"%02d", $0) }
+    private var startYearValue =  String()
+    private var startMonthValue = String()
+    private var endYearValue =  String()
+    private var endMonthValue = String()
+    private var isLearning: Bool = false
     // MARK: - Subviews
     
     private var toolbar: UIToolbar {
@@ -30,7 +38,12 @@ class InputEducationVC: UIViewController {
         
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
-        toolBar.setItems([flexSpace,exitBtn], animated: true)
+        let cancelBtn = UIBarButtonItem()
+        cancelBtn.title = "취소"
+        cancelBtn.target = self
+        cancelBtn.action = #selector(pickerCancel)
+        cancelBtn.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.NotoSansKR(type: .Regular, size: 16)!, NSAttributedString.Key.foregroundColor: UIColor(hex: 0xFF0000)], for: .normal)
+        toolBar.setItems([cancelBtn,flexSpace,exitBtn], animated: true)
         return toolBar
     }
     
@@ -58,7 +71,7 @@ class InputEducationVC: UIViewController {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "교육"
-        label.textColor = .black
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 22)
         return label
     }()
@@ -75,7 +88,7 @@ class InputEducationVC: UIViewController {
     lazy var subtitleInstitutionLabel: UILabel = {
         let label = UILabel()
         label.text = "교육기관"
-        label.textColor = .black.withAlphaComponent(0.8)
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 18)
         return label
     }()
@@ -87,13 +100,14 @@ class InputEducationVC: UIViewController {
         textField.placeholder = "교육기관을 입력해주세요"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
-        textField.textColor = .black
+        textField.textColor = .mainBlack
         textField.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         textField.autocapitalizationType = .none
         
         textField.layer.borderColor = UIColor.mainGray.cgColor
         textField.layer.borderWidth = 1
         
+        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
         
@@ -103,7 +117,7 @@ class InputEducationVC: UIViewController {
     lazy var subtitleMajorLabel: UILabel = {
         let label = UILabel()
         label.text = "전공/과정"
-        label.textColor = .black.withAlphaComponent(0.8)
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 18)
         return label
     }()
@@ -115,23 +129,24 @@ class InputEducationVC: UIViewController {
         textField.placeholder = "전공/과정을 입력해주세요 (예: 웹 개발 과정)"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
-        textField.textColor = .black
+        textField.textColor = .mainBlack
         textField.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         textField.autocapitalizationType = .none
         
         textField.layer.borderColor = UIColor.mainGray.cgColor
         textField.layer.borderWidth = 1
         
+        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
-        
+
         return textField
     }()
     
     lazy var subtitleLearningDateLabel: UILabel = {
         let label = UILabel()
         label.text = "교육 기간"
-        label.textColor = .black.withAlphaComponent(0.8)
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 18)
         return label
     }()
@@ -151,7 +166,7 @@ class InputEducationVC: UIViewController {
         textField.placeholder = "시작년월"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
-        textField.textColor = .black
+        textField.textColor = .mainBlack
         textField.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         textField.autocapitalizationType = .none
         
@@ -163,6 +178,7 @@ class InputEducationVC: UIViewController {
         
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
         
         return textField
     }()
@@ -203,6 +219,7 @@ class InputEducationVC: UIViewController {
         
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
         
         return textField
     }()
@@ -219,6 +236,7 @@ class InputEducationVC: UIViewController {
         
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(toggleButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(allTextFieldFilledIn), for: .touchUpInside)
         return button
     }()
     
@@ -247,8 +265,9 @@ class InputEducationVC: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         button.layer.cornerRadius = 12
-        button.backgroundColor = .mainBlue
         button.clipsToBounds = true
+        button.isEnabled = false
+        button.backgroundColor = .mainGray
         button.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -262,6 +281,10 @@ class InputEducationVC: UIViewController {
         configLayouts()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setCurrentYear()
+    }
     
     // MARK: - Functions
     
@@ -391,6 +414,16 @@ class InputEducationVC: UIViewController {
         
     }
     
+    func setCurrentYear() {
+        let currentYearFormatter = DateFormatter()
+        currentYearFormatter.dateFormat = "yyyy"
+        currentYear = Int(currentYearFormatter.string(from: Date())) ?? 0
+        
+        let currentYearMonthFormatter = DateFormatter()
+        currentYearMonthFormatter.dateFormat = "MM"
+        currentYearMonth = Int(currentYearMonthFormatter.string(from: Date())) ?? 0
+    }
+    
     @objc
     private func nextButtonTapped(_ sender: UIButton) {
         var nextVC = CompleteRegisterVC()
@@ -412,16 +445,46 @@ class InputEducationVC: UIViewController {
         sender.isSelected.toggle()
         switch sender.isSelected {
         case true:
-            sender.setTitleColor(UIColor(hex: 0x000000).withAlphaComponent(0.8), for: .normal)
+            // cornerCase에서 토글시
+            startDateTextField.layer.borderColor = UIColor.mainGray.cgColor
+            endDateTextField.layer.borderColor = UIColor.mainGray.cgColor
+            
+            sender.setTitleColor(.mainBlack, for: .normal)
+            endDateTextField.isEnabled = false
+            endDateTextField.text = "현재"
+            endYearValue = String(Int(yearArray[0])!+1)
         case false:
             sender.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
+            endDateTextField.isEnabled = true
+            endDatePickerView.selectRow(0, inComponent: 0, animated: false)
+            endDatePickerView.selectRow(0, inComponent: 1, animated: false)
+            endYearValue = yearArray[0]
+            endMonthValue = monthArray[0]
+            endDateTextField.text = ""
         }
     }
     
     @objc
     func textFieldActivated(_ sender: UITextField) {
-        sender.layer.borderColor = UIColor(hex: 0x000000).withAlphaComponent(0.8).cgColor
+        sender.layer.borderColor = UIColor.mainBlack.cgColor
         sender.layer.borderWidth = 1
+        if sender == startDateTextField || sender == endDateTextField {
+            // pickerView 초기화
+            switch(sender){
+            case startDateTextField:
+                endDateTextField.layer.borderColor = UIColor.mainGray.cgColor
+                startYearValue = yearArray[startDatePickerView.selectedRow(inComponent: 0)]
+                startMonthValue = monthArray[startDatePickerView.selectedRow(inComponent: 1)]
+                sender.text = "\(startYearValue)/\(startMonthValue)"
+            case endDateTextField:
+                startDateTextField.layer.borderColor = UIColor.mainGray.cgColor
+                endYearValue = yearArray[endDatePickerView.selectedRow(inComponent: 0)]
+                endMonthValue = monthArray[endDatePickerView.selectedRow(inComponent: 1)]
+                sender.text = "\(endYearValue)/\(endMonthValue)"
+            default:
+                print(">>>ERROR: InputEducationVC - pickerView error")
+            }
+        }
     }
     
     @objc
@@ -432,8 +495,88 @@ class InputEducationVC: UIViewController {
 
     @objc
     func pickerExit() {
+        if startDateTextField.isEditing {
+            let yearRow = startDatePickerView.selectedRow(inComponent: 0)
+            let monthRow = startDatePickerView.selectedRow(inComponent: 1)
+            startDateTextField.text = "\(yearArray[yearRow])/\(monthArray[monthRow])"
+            startYearValue = yearArray[yearRow]
+            startMonthValue = monthArray[monthRow]
+        }
+        else if endDateTextField.isEditing {
+            let yearRow = endDatePickerView.selectedRow(inComponent: 0)
+            let monthRow = endDatePickerView.selectedRow(inComponent: 1)
+            endDateTextField.text = "\(yearArray[yearRow])/\(monthArray[monthRow])"
+            endYearValue = yearArray[yearRow]
+            endMonthValue = monthArray[monthRow]
+        }
         self.view.endEditing(true)
     }
+    
+    @objc
+    func pickerCancel() {
+        if startDateTextField.isEditing {
+            startDatePickerView.selectRow(0, inComponent: 0, animated: false)
+            startDatePickerView.selectRow(0, inComponent: 1, animated: false)
+            startDateTextField.text = ""
+        }
+        else if endDateTextField.isEditing {
+            endDatePickerView.selectRow(0, inComponent: 0, animated: false)
+            endDatePickerView.selectRow(0, inComponent: 1, animated: false)
+            endDateTextField.text = ""
+        }
+        self.view.endEditing(true)
+    }
+    
+    @objc
+    func allTextFieldFilledIn() {
+        
+        /* 모든 textField가 채워졌으면 프로필 저장 버튼 활성화 */
+        if self.institutionTextField.text?.count != 0,
+           self.majorTextField.text?.count != 0,
+           self.startDateTextField.text?.count != 0,
+           self.endDateTextField.text?.count != 0 {
+            
+            // 재직중 버튼 활성화시 -> 무조건 활성화
+            if isLearning {
+                UIView.animate(withDuration: 0.33) { [weak self] in
+                    self?.saveUserProfileButton.backgroundColor = .mainBlue
+                }
+                saveUserProfileButton.isEnabled = true
+            }
+            // 재직중 버튼 비활성화시
+            else {
+                // 반드시 [start < end] 만족해야함
+                let startValue = Int(startMonthValue)! + 12*Int(startYearValue)!
+                let endValue = Int(endMonthValue)! + 12*Int(endYearValue)!
+                
+                // 불만족시
+                if startValue > endValue {
+                    // shake 애니메이션 + borderColor: 0xFF0000
+                    startDateTextField.shake()
+                    endDateTextField.shake()
+                    // 프로필 저장버튼 애니메이션
+                    saveUserProfileButton.isEnabled = false
+                    UIView.animate(withDuration: 0.33) { [weak self] in
+                        self?.saveUserProfileButton.backgroundColor = .mainGray
+                    }
+                } else { // 만족시
+                    // 프로필 저장버튼 애니메이션
+                    UIView.animate(withDuration: 0.33) { [weak self] in
+                        self?.saveUserProfileButton.backgroundColor = .mainBlue
+                    }
+                    saveUserProfileButton.isEnabled = true
+                }
+                
+            }
+            
+        } else {
+            saveUserProfileButton.isEnabled = false
+            UIView.animate(withDuration: 0.33) { [weak self] in
+                self?.saveUserProfileButton.backgroundColor = .mainGray
+            }
+        }
+    }
+    
 }
 
 extension InputEducationVC: UIPickerViewDataSource, UIPickerViewDelegate {
@@ -443,35 +586,88 @@ extension InputEducationVC: UIPickerViewDataSource, UIPickerViewDelegate {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if component == 0 {
-            return yearArray.count
-        } else {
-            return monthArray.count
+        if pickerView.tag == 0 {
+            if component == 0 {
+                return yearArray.count
+            } else {
+                switch(startYearValue){
+                case String(currentYear):
+                    // currentYearMonth까지
+                    return monthArray[0..<currentYearMonth].count
+                default:
+                    return monthArray.count
+                }
+                
+            }
+        } else if pickerView.tag == 1 {
+            if component == 0 {
+                return yearArray.count
+            } else {
+                switch(endYearValue){
+                case String(currentYear):
+                    // currentYearMonth까지
+                    return monthArray[0..<currentYearMonth].count
+                default:
+                    return monthArray.count
+                }
+                
+            }
         }
-        
+        print(">>>ERROR: pickerView numberOfRowsInComponent")
+        return 0
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        
         if pickerView.tag == 0 {
             if component == 0 {
-                yearValue = yearArray[row]
-                startDateTextField.text = "\(yearValue)/\(monthValue)"
+                switch(startYearValue){
+                // 선택한 년도가 올해였을 때
+                case String(currentYear):
+                    startYearValue = yearArray[row]
+                    startDateTextField.text = "\(startYearValue)/\(startMonthValue)"
+                    pickerView.reloadAllComponents()
+                // 선택한 년도가 올해가 아니었을 때
+                default:
+                    startYearValue = yearArray[row]
+                    if startYearValue == String(currentYear){
+                        pickerView.selectRow(0, inComponent: 1, animated: true)
+                        startDateTextField.text = "\(startYearValue)/\(monthArray[0])"
+                        startMonthValue = monthArray[0]
+                    } else {
+                        startDateTextField.text = "\(startYearValue)/\(startMonthValue)"
+                    }
+                    pickerView.reloadAllComponents()
+                }
             } else {
-                monthValue = monthArray[row]
-                startDateTextField.text = "\(yearValue)/\(monthValue)"
+                startMonthValue = monthArray[row]
+                startDateTextField.text = "\(startYearValue)/\(startMonthValue)"
             }
         }
         else if pickerView.tag == 1 {
             if component == 0 {
-                yearValue = yearArray[row]
-                endDateTextField.text = "\(yearValue)/\(monthValue)"
+                switch(endYearValue){
+                // 선택한 년도가 올해였을 때
+                case String(currentYear):
+                    endYearValue = yearArray[row]
+                    endDateTextField.text = "\(endYearValue)/\(endMonthValue)"
+                    pickerView.reloadAllComponents()
+                // 선택한 년도가 올해가 아니었을 때
+                default:
+                    endYearValue = yearArray[row]
+                    if endYearValue == String(currentYear){
+                        pickerView.selectRow(0, inComponent: 1, animated: true)
+                        endDateTextField.text = "\(endYearValue)/\(monthArray[0])"
+                        endMonthValue = monthArray[0]
+                    } else {
+                        endDateTextField.text = "\(endYearValue)/\(endMonthValue)"
+                    }
+                    pickerView.reloadAllComponents()
+                }
             } else {
-                monthValue = monthArray[row]
-                endDateTextField.text = "\(yearValue)/\(monthValue)"
+                endMonthValue = monthArray[row]
+                endDateTextField.text = "\(endYearValue)/\(endMonthValue)"
             }
         }
-        
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
