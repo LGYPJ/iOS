@@ -21,7 +21,9 @@ class OnboardingVC: UIViewController {
         cv.backgroundColor = .white
         cv.register(OnboardingCollectionViewCell.self, forCellWithReuseIdentifier: "OnboardingCollectionViewCell")
         cv.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        cv.isScrollEnabled = false
+        cv.isScrollEnabled = true
+        cv.showsHorizontalScrollIndicator = false
+        cv.isPagingEnabled = true
         return cv
     }()
     
@@ -136,6 +138,9 @@ class OnboardingVC: UIViewController {
     
     @objc
     private func nextButtonTapped(_ sender: Any) {
+        // 버튼 클릭시 collectionView scroll 가능하도록
+        collectionView.isPagingEnabled = false
+        
         if currentPage == onboardingData.count - 1 {
 
             // LoginVC로 화면전환
@@ -148,7 +153,11 @@ class OnboardingVC: UIViewController {
             currentPage += 1
             let indexPath = IndexPath(item: currentPage, section: 0)
             collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            collectionView.reloadData()
         }
+        
+        // swipe로 paging 가능하도록
+        collectionView.isPagingEnabled = true
     }
 }
 
