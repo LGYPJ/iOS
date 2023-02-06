@@ -94,6 +94,7 @@ class CompleteRegisterVC: UIViewController {
         view.backgroundColor = .white
         addSubViews()
         configLayouts()
+        configNickname()
     }
     
     
@@ -157,6 +158,20 @@ class CompleteRegisterVC: UIViewController {
             make.height.equalTo(20)
         }
     }
+    
+    private func configNickname() {
+        if let nickname = UserDefaults.standard.string(forKey: "nickname") {
+            switch(nickname.count){
+            case 1..<5 :
+                descriptionLabel.text = "\(nickname)님, 환영합니다"
+            default:
+                descriptionLabel.text = "\(nickname)님,\n환영합니다"
+            }
+        } else {
+            fatalError(">>>ERROR: CompleteRegiseterVC - nickName")
+        }
+    }
+    
     private func register() {
         let usernickname = UserDefaults.standard.string(forKey: "nickname")!
         let userprofileEmail = UserDefaults.standard.string(forKey: "profileEmail")!
