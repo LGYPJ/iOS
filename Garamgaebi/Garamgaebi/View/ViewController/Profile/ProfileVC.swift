@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import Then
 import Alamofire
+import Kingfisher
 
 class ProfileVC: UIViewController, EditProfileDataDelegate {
     
@@ -476,7 +477,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     }
     
     func editData(image: String, nickname: String, organization: String, email: String, introduce: String) {
-        self.profileImageView.image = UIImage(named: image)
+        self.profileImageView.image = UIImage(named: image) // 변경 필요
         self.nameLabel.text = nickname
         self.orgLabel.text = organization
         self.emailLabel.text = email
@@ -502,6 +503,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         guard let orgString = orgLabel.text else { return }
         guard let emailString = emailLabel.text else { return }
         guard let introduceString = introduceTextField.text else { return }
+        guard let image = profileImageView.image else { return }
         
         // 값 넘기기
         nextVC.nameTextField.text = nameString
@@ -509,6 +511,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         nextVC.emailTextField.text = emailString
         nextVC.introduceTextField.text = introduceString
         nextVC.introduceTextField.textColor = .mainBlack
+        nextVC.profileImageView.image = image
         
         // 사용자
         nextVC.memberIdx = memberIdx
@@ -583,12 +586,14 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
                     } else {
                         self.introduceTextField.text = ""
                     }
-//                    if let userProfileImg = result.profileUrl { // 프로필 이미지 값이 있으면
-//                        self.profileImageView.setImage(UIImage(named: userProfileImg), for: .normal)
-//                    } else {
-//                        self.profileImageView.setImage(UIImage(named: "profile"), for: .normal)
-//                    }
-//                    completion(result)
+                    // 프로필 이미지
+                    if let urlString = result.profileUrl {
+                        let url = URL(string: urlString)
+
+                        self.profileImageView.kf.indicatorType = .activity
+                        self.profileImageView.kf.setImage(with: url)
+                    }
+                    //completion(result)
                 } else {
                     // 통신은 정상적으로 됐으나(200), error발생
                     print("실패(내프로필): \(response.message)")
