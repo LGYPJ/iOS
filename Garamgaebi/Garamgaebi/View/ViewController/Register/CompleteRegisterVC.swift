@@ -191,36 +191,41 @@ class CompleteRegisterVC: UIViewController {
         
          //response 받은 memberIdx로 회원가입 API post
         RegisterUserViewModel.requestRegisterUser(userInfo) { [weak self] result in
-            //UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
-            print(result.member_idx)
+            UserDefaults.standard.set(result.member_idx, forKey: "memberIdx")
+            self?.login()
         }
     }
 	
 	private func login() {
+        // 임시로 uniEmail, password 사용
         //jrwedo@gachon.ac.kr
         //1234
         
-		LoginViewModel.postLogin(uniEmail: "jrwedo@gachon.ac.kr", password: "1234", completion: { result in
+		LoginViewModel.postLogin(uniEmail: "jrwedo@gachon.ac.kr", password: "1234", completion: { [weak self] result in
 			UserDefaults.standard.set(result.accessToken, forKey: "BearerToken")
             UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
+            self?.presentHome()
 		})
         
 //        LoginViewModel.postLogin(uniEmail: useruniEmail, password: userpassword, completion: { result in
 //            UserDefaults.standard.set(result.accessToken, forKey: "BearerToken")
 //            UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
+//            presentHome()
 //        })
 	}
     
-    @objc
-    private func presentHomeButtonTapped(_ sender: UIButton) {
-        
-        // TODO: 통신 완료 후 present 되도록 completion 처리
-//        register()
-		login()
+    private func presentHome(){
         let nextVC = TabBarController()
         nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
         nextVC.modalPresentationStyle = .fullScreen
-        present(nextVC, animated: true)
+        self.present(nextVC, animated: true)
+    }
+    
+    @objc
+    private func presentHomeButtonTapped(_ sender: UIButton) {
+        // TODO: register 구현 후, 아래 삭제하고 register 안에서 login 실행
+//        register()
+        login()
     }
     
     @objc
