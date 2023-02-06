@@ -157,18 +157,52 @@ class CompleteRegisterVC: UIViewController {
             make.height.equalTo(20)
         }
     }
+    private func register() {
+        let usernickname = UserDefaults.standard.string(forKey: "nickname")!
+        let userprofileEmail = UserDefaults.standard.string(forKey: "profileEmail")!
+        
+        // TODO: 카카오 로그인 구현 후 임시 socialEmail 제거 예정
+        UserDefaults.standard.set("dummySocialEmail@social.co.kr", forKey: "socialEmail")
+        let usersocialEmail = UserDefaults.standard.string(forKey: "socialEmail")!
+        
+        let useruniEmail = UserDefaults.standard.string(forKey: "uniEmail")!
+        let userstatus = "ACTIVE"
+        
+        // TODO: password 추후 제거 예정
+        let userpassword = "1234" //UserDefaults.standard.string(forKey: "password")!
+        var userInfo =  RegisterUserInfo(nickname: usernickname, profileEmail: userprofileEmail, socialEmail: usersocialEmail, uniEmail: useruniEmail, status: userstatus, password: userpassword)
+        
+        print(userInfo)
+        
+         //response 받은 memberIdx로 회원가입 API post
+        RegisterUserViewModel.requestRegisterUser(userInfo) { [weak self] result in
+            //UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
+            print(result.member_idx)
+        }
+    }
 	
 	private func login() {
+        //jrwedo@gachon.ac.kr
+        //1234
+        
 		LoginViewModel.postLogin(uniEmail: "jrwedo@gachon.ac.kr", password: "1234", completion: { result in
 			UserDefaults.standard.set(result.accessToken, forKey: "BearerToken")
             UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
 		})
+        
+//        LoginViewModel.postLogin(uniEmail: useruniEmail, password: userpassword, completion: { result in
+//            UserDefaults.standard.set(result.accessToken, forKey: "BearerToken")
+//            UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
+//        })
 	}
     
     @objc
     private func presentHomeButtonTapped(_ sender: UIButton) {
+        
+        // TODO: 통신 완료 후 present 되도록 completion 처리
+//        register()
 		login()
-        var nextVC = TabBarController()
+        let nextVC = TabBarController()
         nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
         nextVC.modalPresentationStyle = .fullScreen
         present(nextVC, animated: true)

@@ -89,6 +89,8 @@
 		60AA6BC829751F66002878B6 /* ViewAllSeminarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AA6BC729751F66002878B6 /* ViewAllSeminarTableViewCell.swift */; };
 		60AA6BCB29752422002878B6 /* ViewAllSeminarDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AA6BCA29752422002878B6 /* ViewAllSeminarDataModel.swift */; };
 		60AA6BCD29755621002878B6 /* CustomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AA6BCC29755621002878B6 /* CustomHeaderView.swift */; };
+		60B344702990BADA00A18CBB /* RegisterUserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B3446F2990BADA00A18CBB /* RegisterUserViewModel.swift */; };
+		60B344742990BBA000A18CBB /* RegisterUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B344732990BBA000A18CBB /* RegisterUserModel.swift */; };
 		60BC582E29715A2A00FBF1C3 /* CompleteRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BC582D29715A2A00FBF1C3 /* CompleteRegisterVC.swift */; };
 		60BD04F02973A25D00F4B433 /* RecommendUsersColectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD04EF2973A25D00F4B433 /* RecommendUsersColectionViewCell.swift */; };
 		60BD04F22973A3EC00F4B433 /* RecommendUsersInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD04F12973A3EC00F4B433 /* RecommendUsersInfoTableViewCell.swift */; };
@@ -232,6 +234,8 @@
 		60AA6BC729751F66002878B6 /* ViewAllSeminarTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAllSeminarTableViewCell.swift; sourceTree = "<group>"; };
 		60AA6BCA29752422002878B6 /* ViewAllSeminarDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAllSeminarDataModel.swift; sourceTree = "<group>"; };
 		60AA6BCC29755621002878B6 /* CustomHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHeaderView.swift; sourceTree = "<group>"; };
+		60B3446F2990BADA00A18CBB /* RegisterUserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterUserViewModel.swift; sourceTree = "<group>"; };
+		60B344732990BBA000A18CBB /* RegisterUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterUserModel.swift; sourceTree = "<group>"; };
 		60BC582D29715A2A00FBF1C3 /* CompleteRegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteRegisterVC.swift; sourceTree = "<group>"; };
 		60BD04EF2973A25D00F4B433 /* RecommendUsersColectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendUsersColectionViewCell.swift; sourceTree = "<group>"; };
 		60BD04F12973A3EC00F4B433 /* RecommendUsersInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendUsersInfoTableViewCell.swift; sourceTree = "<group>"; };
@@ -499,6 +503,7 @@
 				60513F36298E44340065CD15 /* UniEmailAuthModel.swift */,
 				60513F38298E5D470065CD15 /* RegisterCareerModel.swift */,
 				60513F3A298E5F070065CD15 /* RegisterEducationModel.swift */,
+				60B344732990BBA000A18CBB /* RegisterUserModel.swift */,
 			);
 			path = Register;
 			sourceTree = "<group>";
@@ -565,6 +570,7 @@
 				60513F34298E43F30065CD15 /* UniEmailAuthViewModel.swift */,
 				60513F3C298E5FB40065CD15 /* RegisterCareerViewModel.swift */,
 				60513F3E298E5FBF0065CD15 /* RegisterEducationViewModel.swift */,
+				60B3446F2990BADA00A18CBB /* RegisterUserViewModel.swift */,
 			);
 			path = Register;
 			sourceTree = "<group>";
@@ -1103,6 +1109,7 @@
 				6082992C297FBDB000240036 /* HomeViewModel.swift in Sources */,
 				2CED6901298390EA00C838BD /* SeminarDetailViewModel.swift in Sources */,
 				60F4C1542987E152004D9FCD /* SeminarModel.swift in Sources */,
+				60B344702990BADA00A18CBB /* RegisterUserViewModel.swift in Sources */,
 				46876C692973D7E3000BA1B6 /* ProfileInputCareerVC.swift in Sources */,
 				46B4780B29700FEE002186A3 /* ProfileServiceVC.swift in Sources */,
 				46C18D2929788A7600A05CBF /* ProfileInputSNSVC.swift in Sources */,
@@ -1139,6 +1146,7 @@
 				60EDD40D2976620B00600807 /* ViewAllMyEventDataModel.swift in Sources */,
 				462183F5297C51B800B9A035 /* ServiceBottomSheetVC.swift in Sources */,
 				60093A8D296E90FD00F76783 /* UniEmailAuthVC.swift in Sources */,
+				60B344742990BBA000A18CBB /* RegisterUserModel.swift in Sources */,
 				60EC5310298900700068BD5F /* Date+.swift in Sources */,
 				46704AEA297F9D2B005E63EA /* ProfileHistoryTableViewCell.swift in Sources */,
 				60BD04F62973AD2600F4B433 /* HomeMyEventInfoTableViewCell.swift in Sources */,
