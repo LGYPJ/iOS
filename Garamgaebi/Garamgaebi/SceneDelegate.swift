@@ -6,11 +6,19 @@
 //
 
 import UIKit
+import KakaoSDKAuth
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
     
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        if let url = URLContexts.first?.url {
+            if (AuthApi.isKakaoTalkLoginUrl(url)) {
+                _ = AuthController.handleOpenUrl(url: url)
+            }
+        }
+    }
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 
@@ -22,14 +30,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         //let rootViewController = HomeVC()
         //let rootViewController = HomeNotificationVC()
 //        let rootViewController = OnboardingVC()
-        //let rootViewController = LoginVC()
+        let rootViewController = LoginVC()
         //let rootViewController = UniEmailAuthVC()
         //let rootViewController = InputNickNameVC()
         //let rootViewController = InputEmailVC()
         //let rootViewController = InputOrganizationVC()
         //let rootViewController = InputCareerVC()
         //let rootViewController = InputEducationVC()
-        let rootViewController = CompleteRegisterVC()
+//        let rootViewController = CompleteRegisterVC()
         self.window?.rootViewController = rootViewController
         self.window?.makeKeyAndVisible()
         
