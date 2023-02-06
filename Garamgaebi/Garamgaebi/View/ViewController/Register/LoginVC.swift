@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import KakaoSDKUser
 
 class LoginVC: UIViewController {
     
@@ -19,7 +20,7 @@ class LoginVC: UIViewController {
         label.font = UIFont.NotoSansKR(type: .Bold, size: 36)
         return label
     }()
-
+    
     lazy var subTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "가천대생들을 위한 커뮤니티"
@@ -27,7 +28,7 @@ class LoginVC: UIViewController {
         label.font = UIFont.NotoSansKR(type: .Bold, size: 22)
         return label
     }()
-
+    
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.text = "가람개비에서\n가천대 선후배를 찾아봐요!"
@@ -63,7 +64,6 @@ class LoginVC: UIViewController {
         view.backgroundColor = .white
         addSubViews()
         configLayouts()
-        
     }
     
     // MARK: - Functions
@@ -99,7 +99,7 @@ class LoginVC: UIViewController {
         }
         
         /* Labels */
-
+        
         //titleLabel
         titleLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(24)
@@ -121,13 +121,58 @@ class LoginVC: UIViewController {
     
     @objc
     private func loginSuccessed(_ sender: Any) {
-        
-        // UniEmailAuthVC로 화면전환
+        if (UserApi.isKakaoTalkLoginAvailable()) {
+            //카톡 설치되어있으면 -> 카톡으로 로그인
+            UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
+                if let error = error {
+                    print(error)
+                } else {
+                    print("카카오 톡으로 로그인 성공")
+                    
+                    _ = oauthToken
+                    /// 로그인 관련 메소드 추가
+                    ///
+                    // UniEmailAuthVC로 화면전환
+                    self.presentNextView()
+                }
+            }
+        }
+        else {
+            print("123123")
+            // 카톡 없으면 -> 계정으로 로그인
+            UserApi.shared.loginWithKakaoAccount { (oauthToken, error) in
+                if let error = error {
+                    print(error)
+                    print("로그인 실패")
+                } else {
+                    print("카카오 계정으로 로그인 성공")
+                    _ = oauthToken
+                    /// 관련 메소드 추가
+                    
+                    UserApi.shared.me() {(user, error) in
+                        if let error = error {
+                            print(error)
+                        }
+                        else {
+                            print("me() success.")
+                            
+                            //do something
+                            print(user?.kakaoAccount?.email)
+                        }
+                    }
+                    
+                    // UniEmailAuthVC로 화면전환
+                    self.presentNextView()
+                }
+            }
+        }
+
+    }
+    
+    private func presentNextView(){
         let nextVC = UniEmailAuthVC()
         nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
         nextVC.modalPresentationStyle = .fullScreen
-        present(nextVC, animated: true)
-        
+        self.present(nextVC, animated: true)
     }
-    
 }
