@@ -42,7 +42,7 @@ class OnboardingVC: UIViewController {
     lazy var pageControl: UIPageControl = {
         let view = UIPageControl()
         if #available(iOS 14.0, *) {
-            view.backgroundStyle = .minimal // .minimal
+            view.backgroundStyle = .minimal
         }
         view.numberOfPages = onboardingData.count
         view.setIndicatorImage(UIImage(named: "BluePoint"), forPage: 0)
@@ -110,7 +110,6 @@ class OnboardingVC: UIViewController {
         pageControl.numberOfPages = onboardingData.count
         pageControl.currentPageIndicatorTintColor = .mainBlue
         pageControl.pageIndicatorTintColor = .mainGray
-        
     }
     
     private func setCollectionView() {
@@ -123,8 +122,6 @@ class OnboardingVC: UIViewController {
             make.height.equalTo(350)
             make.width.equalToSuperview()
         }
-        
-        
     }
     
     private func setOnboardingData() {
@@ -142,18 +139,15 @@ class OnboardingVC: UIViewController {
         collectionView.isPagingEnabled = false
         
         if currentPage == onboardingData.count - 1 {
-
             // LoginVC로 화면전환
             let nextVC = LoginVC()
             nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
             nextVC.modalPresentationStyle = .fullScreen
             present(nextVC, animated: true)
-            
         } else {
             currentPage += 1
             let indexPath = IndexPath(item: currentPage, section: 0)
             collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-            collectionView.reloadData()
         }
         
         // swipe로 paging 가능하도록
@@ -179,12 +173,14 @@ extension OnboardingVC: UICollectionViewDataSource, UICollectionViewDelegateFlow
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let width = scrollView.frame.width
-        currentPage = Int(scrollView.contentOffset.x / width)
+        if scrollView.contentOffset.x/width == 0.0 {
+            currentPage = 0
+        } else if scrollView.contentOffset.x/width == 1.0 {
+            currentPage = 1
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
     }
-    
-    
 }
