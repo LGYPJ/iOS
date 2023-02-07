@@ -50,6 +50,11 @@ class HomeNotificationTableViewCell: UITableViewCell {
         
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        contentView.backgroundColor = nil
+    }
+    
     func configSubViewLayouts() {
         imgView.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(16)
@@ -85,6 +90,9 @@ class HomeNotificationTableViewCell: UITableViewCell {
             print(">>>ERROR: notificationType config")
         }
 
+        if item.isRead == false {
+            contentView.backgroundColor = .mainLightGray
+        }
         contentLabel.text = item.content
     }
     
