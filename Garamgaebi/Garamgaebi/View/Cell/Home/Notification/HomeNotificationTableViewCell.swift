@@ -67,9 +67,24 @@ class HomeNotificationTableViewCell: UITableViewCell {
        
     }
     
-    public func configure(_ item: HomeNotificationDataModel) {
-        imgView.image = item.image
-        categoryLabel.text = item.category
+    public func configure(_ item: NotificationInfo) {
+        switch(item.notificationType){
+        case "COLLECTIONS":
+            imgView.image = UIImage(named: "supervisorAccountIcon")
+            categoryLabel.text = "모아보기"
+        case "SOON_CLOSE":
+            imgView.image = UIImage(named: "alarmIcon")
+            categoryLabel.text = "마감임박"
+        case "APPLY_COMPLETE":
+            imgView.image = UIImage(named: "checkCircleIcon")
+            categoryLabel.text = "신청완료"
+        case "APPLY_CANCEL_COMPLETE":
+            imgView.image = UIImage(named: "checkCircleIcon")
+            categoryLabel.text = "신청취소완료"
+        default:
+            print(">>>ERROR: notificationType config")
+        }
+
         contentLabel.text = item.content
     }
     

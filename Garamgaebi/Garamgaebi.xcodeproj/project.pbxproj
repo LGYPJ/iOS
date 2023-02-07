@@ -85,6 +85,8 @@
 		609A53E9296AB47400BBD338 /* GaramgaebiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53E8296AB47400BBD338 /* GaramgaebiTests.swift */; };
 		609A53F3296AB47400BBD338 /* GaramgaebiUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53F2296AB47400BBD338 /* GaramgaebiUITests.swift */; };
 		609A53F5296AB47400BBD338 /* GaramgaebiUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53F4296AB47400BBD338 /* GaramgaebiUITestsLaunchTests.swift */; };
+		60A4BC132992257000C24DAC /* NotificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4BC122992257000C24DAC /* NotificationModel.swift */; };
+		60A4BC152992264000C24DAC /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4BC142992264000C24DAC /* NotificationViewModel.swift */; };
 		60AA6BC529751D1F002878B6 /* ViewAllSeminarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AA6BC429751D1F002878B6 /* ViewAllSeminarVC.swift */; };
 		60AA6BC829751F66002878B6 /* ViewAllSeminarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AA6BC729751F66002878B6 /* ViewAllSeminarTableViewCell.swift */; };
 		60AA6BCB29752422002878B6 /* ViewAllSeminarDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AA6BCA29752422002878B6 /* ViewAllSeminarDataModel.swift */; };
@@ -230,6 +232,8 @@
 		609A53EE296AB47400BBD338 /* GaramgaebiUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GaramgaebiUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		609A53F2296AB47400BBD338 /* GaramgaebiUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaramgaebiUITests.swift; sourceTree = "<group>"; };
 		609A53F4296AB47400BBD338 /* GaramgaebiUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaramgaebiUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		60A4BC122992257000C24DAC /* NotificationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationModel.swift; sourceTree = "<group>"; };
+		60A4BC142992264000C24DAC /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
 		60AA6BC429751D1F002878B6 /* ViewAllSeminarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAllSeminarVC.swift; sourceTree = "<group>"; };
 		60AA6BC729751F66002878B6 /* ViewAllSeminarTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAllSeminarTableViewCell.swift; sourceTree = "<group>"; };
 		60AA6BCA29752422002878B6 /* ViewAllSeminarDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAllSeminarDataModel.swift; sourceTree = "<group>"; };
@@ -526,6 +530,7 @@
 			isa = PBXGroup;
 			children = (
 				60BD05002973F6C900F4B433 /* HomeNotificationDataModel.swift */,
+				60A4BC122992257000C24DAC /* NotificationModel.swift */,
 			);
 			path = Notification;
 			sourceTree = "<group>";
@@ -666,6 +671,7 @@
 				2CED690629878AB200C838BD /* EventApplyCancelViewModel.swift */,
 				60DCC894298A45AD002E7714 /* ViewAllViewModel.swift */,
 				2CED690A298940E200C838BD /* EventApplyViewModel.swift */,
+				60A4BC142992264000C24DAC /* NotificationViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1084,6 +1090,7 @@
 				601823352972F04500160EF4 /* HomeEventCollectionViewCell.swift in Sources */,
 				60BD05032974187700F4B433 /* UnderlineSegmentedControl.swift in Sources */,
 				6055D84729701F6B00C86D53 /* InputEducationVC.swift in Sources */,
+				60A4BC152992264000C24DAC /* NotificationViewModel.swift in Sources */,
 				2CED690329867F1800C838BD /* NetworkingDetailViewModel.swift in Sources */,
 				60BD04F02973A25D00F4B433 /* RecommendUsersColectionViewCell.swift in Sources */,
 				60093A8B296E7EFB00F76783 /* LoginVC.swift in Sources */,
@@ -1150,6 +1157,7 @@
 				60EC5310298900700068BD5F /* Date+.swift in Sources */,
 				46704AEA297F9D2B005E63EA /* ProfileHistoryTableViewCell.swift in Sources */,
 				60BD04F62973AD2600F4B433 /* HomeMyEventInfoTableViewCell.swift in Sources */,
+				60A4BC132992257000C24DAC /* NotificationModel.swift in Sources */,
 				60513F3D298E5FB40065CD15 /* RegisterCareerViewModel.swift in Sources */,
 				60AA6BCD29755621002878B6 /* CustomHeaderView.swift in Sources */,
 				2CED68FF29838B2E00C838BD /* SeminarDetailModel.swift in Sources */,

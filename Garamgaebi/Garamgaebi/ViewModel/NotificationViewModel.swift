@@ -23,12 +23,12 @@ class NotificationViewModel {
         // 모아보기        마감임박      신청완료          신청취소완료
         // COLLECTIONS, SOON_CLOSE, APPLY_COMPLETE, APPLY_CANCEL_COMPLETE
         let dummy = [
-            NotificationInfo(notificationIdx: 1, notificationType: "COLLECTIONS", content: "알림 내용1", resourceIdx: 1, resourceType: "SEMINAR", isRead: false),
-            NotificationInfo(notificationIdx: 2, notificationType: "SOON_CLOSE", content: "알림 내용2", resourceIdx: 2, resourceType: "SEMINAR", isRead: false),
-            NotificationInfo(notificationIdx: 3, notificationType: "APPLY_COMPLETE", content: "알림 내용3", resourceIdx: 3, resourceType: "NETWORKING", isRead: false),
-            NotificationInfo(notificationIdx: 4, notificationType: "APPLY_CANCEL_COMPLETE", content: "알림 내용4", resourceIdx: 4, resourceType: "NETWORKING", isRead: false),
-            NotificationInfo(notificationIdx: 5, notificationType: "COLLECTIONS", content: "알림 내용5", resourceIdx: 5, resourceType: "SEMINAR", isRead: false),
-            NotificationInfo(notificationIdx: 6, notificationType: "COLLECTIONS", content: "알림 내용6", resourceIdx: 6, resourceType: "NETWORKING", isRead: false),
+            NotificationInfo(notificationIdx: 1, notificationType: "COLLECTIONS", content: "[모아보기] 유로 세미나1, programIdx 8로 이동", resourceIdx: 8, resourceType: "SEMINAR", isRead: false),
+            NotificationInfo(notificationIdx: 2, notificationType: "SOON_CLOSE", content: "알림 내용2 - dummy", resourceIdx: 2, resourceType: "SEMINAR", isRead: false),
+            NotificationInfo(notificationIdx: 3, notificationType: "APPLY_COMPLETE", content: "알림 내용3 - dummy", resourceIdx: 3, resourceType: "NETWORKING", isRead: false),
+            NotificationInfo(notificationIdx: 4, notificationType: "APPLY_CANCEL_COMPLETE", content: "알림 내용4 - dummy", resourceIdx: 4, resourceType: "NETWORKING", isRead: false),
+            NotificationInfo(notificationIdx: 5, notificationType: "COLLECTIONS", content: "알림 내용5 - dummy", resourceIdx: 5, resourceType: "SEMINAR", isRead: false),
+            NotificationInfo(notificationIdx: 6, notificationType: "COLLECTIONS", content: "알림 내용6 - dummy", resourceIdx: 6, resourceType: "NETWORKING", isRead: false),
         ]
         completion(dummy)
         
