@@ -17,8 +17,8 @@ struct RecommendUsersInfoResponse: Decodable {
 struct RecommendUsersInfo: Decodable {
     let memberIdx: Int
     let nickName: String
-    let profileUrl: String
-    let belong: String
+    let profileUrl: String?
+    let belong: String?
     let group: String
     let detail: String
 }
