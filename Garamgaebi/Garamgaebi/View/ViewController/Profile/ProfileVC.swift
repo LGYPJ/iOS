@@ -21,6 +21,12 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
 
     let token = UserDefaults.standard.string(forKey: "BearerToken")
     
+    var snsData: [SnsResult] = [] {
+        didSet {
+            self.showSnsDefaultLabel()
+            self.snsTableView.reloadData()
+        }
+    }
     var careerData: [CareerResult] = [] {
         didSet {
             self.showCareerDefaultLabel()
@@ -254,7 +260,9 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         super.viewWillAppear(animated)
         print("viewWillAppear()")
         // 서버 통신
-        self.getSnsData()
+        self.getSnsData { [weak self] result in
+            self?.snsData = result
+        }
         self.getCareerData { [weak self] result in
             self?.careerData = result
         }
@@ -267,7 +275,9 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nil, bundle: nil)
-        getSnsData()
+        getSnsData { [weak self] result in
+            self?.snsData = result
+        }
         getCareerData { [weak self] result in
             self?.careerData = result
         }
@@ -607,7 +617,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     }
     
     // MARK: - [GET] SNS 조회
-    func getSnsData() {
+    func getSnsData(completion: @escaping (([SnsResult])) -> Void) {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/sns/\(memberIdx)"
@@ -634,13 +644,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
                 if response.isSuccess {
 //                    print("성공(SNS조회): \(response.message)")
                     let result = response.result
-
-                    let snsData = SnsData.shared
-                    
-                    // 값 넣어주기
-                    snsData.snsDataModel = result
-//                    print("받은 SNS: \(snsData.snsDataModel.count)")
-                    self.snsTableView.reloadData()
+                    completion(result)
                     
                 } else {
                     print("실패(SNS조회): \(response.message)")
@@ -731,7 +735,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     
     
     func showSnsDefaultLabel() {
-        let snsCount = SnsData.shared.snsDataModel.count
+        let snsCount = snsData.count
 //        print("들어가는 SNS: \(snsCount)")
         
         if (snsCount == 0) {
@@ -809,12 +813,10 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
 // MARK: - Extension
 extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // 저장된 데이터 가져오기
-        let snsDataModel = SnsData.shared.snsDataModel
         
         if tableView == snsTableView {
-            //            print("SNS 개수: \(snsDataModel.count)")
-            return snsDataModel.count
+
+            return snsData.count
         }
         else if tableView == careerTableView {
             
@@ -834,15 +836,10 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        // 저장된 데이터 가져오기
-        let snsDataModel = SnsData.shared.snsDataModel
-        
-        
 //        print(">>>>>> indexPath \(indexPath)")
         if tableView == snsTableView {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileSNSTableViewCell.identifier, for: indexPath) as? ProfileSNSTableViewCell else { return UITableViewCell()}
-            cell.snsLabel.text = snsDataModel[indexPath.row].address
+            cell.snsLabel.text = snsData[indexPath.row].address
             
             cell.selectionStyle = .none
 //            print(">>>>>> sns")
