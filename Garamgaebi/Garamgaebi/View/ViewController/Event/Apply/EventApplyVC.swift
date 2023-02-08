@@ -700,10 +700,20 @@ extension EventApplyVC {
 			  let nickname = nicknameTextField.text,
 			  let number = numberTextField.text else {return}
 		
-		EventApplyViewModel.postApplyProgram(memberId: self.memberId, programId: self.programId, name: name, nickname: nickname, phone: number, completion: { result in
-			if !result.isSuccess {
-				// 실패시 메세지 확인해서 경고 문구 추가
-				print(result)
+		EventApplyViewModel.postApplyProgram(memberId: self.memberId, programId: self.programId, name: name, nickname: nickname, phone: number, completion: {[weak self] result in
+			
+			if result.isSuccess {
+				let alert = UIAlertController(title: "신청이 완료되었습니다!", message: nil, preferredStyle: .alert)
+				let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
+					self?.navigationController?.popViewController(animated: true)
+				}
+				alert.addAction(confirmAction)
+				self?.present(alert, animated: true)
+			} else {
+				let alert = UIAlertController(title: result.message, message: nil, preferredStyle: .alert)
+				let confirmAction = UIAlertAction(title: "확인", style: .default)
+				alert.addAction(confirmAction)
+				self?.present(alert, animated: true)
 			}
 		})
 	}
