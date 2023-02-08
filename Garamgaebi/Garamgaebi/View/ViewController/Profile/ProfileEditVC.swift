@@ -506,20 +506,21 @@ extension ProfileEditVC: UITextViewDelegate {
 
 // MARK: - Extension
 extension ProfileEditVC: PHPickerViewControllerDelegate {
-	func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-		picker.dismiss(animated: true)
-		
-		let itemProvider = results.first?.itemProvider
-		
-		if let itemProvider = itemProvider, itemProvider.canLoadObject(ofClass: UIImage.self) {
-			itemProvider.loadObject(ofClass: UIImage.self) { image, error in
-				DispatchQueue.main.async {
-					// image 다루기
-					self.profileImageView.image = image as? UIImage
-				}
-			}
-		}
-	}
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+        
+        let itemProvider = results.first?.itemProvider
+        
+        if let itemProvider = itemProvider, itemProvider.canLoadObject(ofClass: UIImage.self) {
+            itemProvider.loadObject(ofClass: UIImage.self) { image, error in
+                DispatchQueue.main.async {
+                    // image 다루기
+                    self.profileImageView.image = image as? UIImage
+                }
+            }
+        }
+    }
+}
 
 extension ProfileEditVC : UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -533,8 +534,6 @@ extension ProfileEditVC : UIImagePickerControllerDelegate, UINavigationControlle
                 self.profileImageView.image = selectedImage
             }
         }
-    
-        
     }
 
     func PhotoAuth() -> Bool {
