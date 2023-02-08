@@ -16,7 +16,7 @@ class OtherProfileVC: UIViewController {
     // MARK: - Properties
 
     // TODO: memberIdx 넘겨받기
-    let memberIdx = 10 // 넘겨받은 memberIdx
+    var memberIdx: Int // 넘겨받은 memberIdx
 
     let token = UserDefaults.standard.string(forKey: "BearerToken")
     
@@ -211,6 +211,12 @@ class OtherProfileVC: UIViewController {
     }()
     
     // MARK: - LifeCycles
+    
+    init(memberIdx: Int) {
+        self.memberIdx = memberIdx
+        super.init(nibName: nil, bundle: nil)
+    }
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -231,24 +237,12 @@ class OtherProfileVC: UIViewController {
         tabBarController?.tabBar.isHidden = false
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nil, bundle: nil)
-        getSnsData()
-        getCareerData()
-        getEducationData()
-            
-//                    print("받은 Education: \(eduData.eduDataModel.count)")
-    }
-    
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-//        print("1: viewDidAppear()")
         showUserHistoryBox()
     }
     
