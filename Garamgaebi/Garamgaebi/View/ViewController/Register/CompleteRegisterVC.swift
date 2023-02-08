@@ -9,6 +9,18 @@ import UIKit
 import SnapKit
 
 class CompleteRegisterVC: UIViewController {
+    let myCareer: RegisterCareerInfo?
+    let myEducation: RegisterEducationInfo?
+    
+    init(myCareer: RegisterCareerInfo?, myEducation: RegisterEducationInfo?) {
+        self.myCareer = myCareer
+        self.myEducation = myEducation
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     // MARK: - Subviews
 
     lazy var titleLabel: UILabel = {
@@ -175,24 +187,35 @@ class CompleteRegisterVC: UIViewController {
     private func register() {
         let usernickname = UserDefaults.standard.string(forKey: "nickname")!
         let userprofileEmail = UserDefaults.standard.string(forKey: "profileEmail")!
-        
-        // TODO: 카카오 로그인 구현 후 임시 socialEmail 제거 예정
-        UserDefaults.standard.set("dummySocialEmail@social.co.kr", forKey: "socialEmail")
         let usersocialEmail = UserDefaults.standard.string(forKey: "socialEmail")!
-        
         let useruniEmail = UserDefaults.standard.string(forKey: "uniEmail")!
         let userstatus = "ACTIVE"
-        
         // TODO: password 추후 제거 예정
         let userpassword = "1234" //UserDefaults.standard.string(forKey: "password")!
-        var userInfo =  RegisterUserInfo(nickname: usernickname, profileEmail: userprofileEmail, socialEmail: usersocialEmail, uniEmail: useruniEmail, status: userstatus, password: userpassword)
-        
+        let userInfo =  RegisterUserInfo(nickname: usernickname, profileEmail: userprofileEmail, socialEmail: usersocialEmail, uniEmail: useruniEmail, status: userstatus, password: userpassword)
         print(userInfo)
         
          //response 받은 memberIdx로 회원가입 API post
-        RegisterUserViewModel.requestRegisterUser(userInfo) { [weak self] result in
-            UserDefaults.standard.set(result.member_idx, forKey: "memberIdx")
-            self?.login()
+        RegisterUserViewModel.requestRegisterUser(parameter: userInfo) { [weak self] result in
+            UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
+            if self?.myCareer == nil {
+                guard let passMyEducation = RegisterEducationInfo(memberIdx: result.memberIdx, institution: (self?.myEducation!.institution)!, major: self?.myEducation!.major ?? "", isLearning: self?.myEducation!.isLearning ?? "", startDate: (self?.myEducation!.startDate)!, endDate: self?.myEducation!.endDate ?? "") as? RegisterEducationInfo else {
+                    return
+                }
+                RegisterEducationViewModel.requestInputEducation(passMyEducation) { result in
+                    if result {
+                        self?.login()
+                    }
+                }
+            } else {
+                guard let passMyCareer = RegisterCareerInfo(memberIdx: result.memberIdx, company: (self?.myCareer!.company)!, position: self?.myCareer!.position ?? "", isWorking: self?.myCareer!.isWorking ?? "", startDate: (self?.myCareer!.startDate)!, endDate: self?.myCareer!.endDate ?? "") as? RegisterCareerInfo else { return }
+                RegisterCareerViewModel.requestInputCareer(passMyCareer) { result in
+                    if result {
+                        self?.login()
+                    }
+                }
+            }
+                                                            
         }
     }
 	
@@ -203,7 +226,6 @@ class CompleteRegisterVC: UIViewController {
         
 		LoginViewModel.postLogin(uniEmail: "jrwedo@gachon.ac.kr", password: "1234", completion: { [weak self] result in
 			UserDefaults.standard.set(result.accessToken, forKey: "BearerToken")
-            UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
             self?.presentHome()
 		})
         
@@ -224,8 +246,8 @@ class CompleteRegisterVC: UIViewController {
     @objc
     private func presentHomeButtonTapped(_ sender: UIButton) {
         // TODO: register 구현 후, 아래 삭제하고 register 안에서 login 실행
-//        register()
-        login()
+        register()
+        //login()
     }
     
     @objc
