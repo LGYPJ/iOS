@@ -131,14 +131,20 @@ class LoginVC: UIViewController {
                     
                     _ = oauthToken
                     /// 로그인 관련 메소드 추가
-                    ///
-                    // UniEmailAuthVC로 화면전환
-                    self.presentNextView()
+                    UserApi.shared.me() {(user, error) in
+                        if let error = error {
+                            print(error)
+                        }
+                        else {
+                            UserDefaults.standard.set(user?.kakaoAccount?.email, forKey: "socialEmail")
+                            // UniEmailAuthVC로 화면전환
+                            self.presentNextView()
+                        }
+                    }
                 }
             }
         }
         else {
-            print("123123")
             // 카톡 없으면 -> 계정으로 로그인
             UserApi.shared.loginWithKakaoAccount { (oauthToken, error) in
                 if let error = error {
@@ -154,15 +160,12 @@ class LoginVC: UIViewController {
                             print(error)
                         }
                         else {
-                            print("me() success.")
-                            
-                            //do something
-                            print(user?.kakaoAccount?.email)
+                            UserDefaults.standard.set(user?.kakaoAccount?.email, forKey: "socialEmail")
+                            // UniEmailAuthVC로 화면전환
+                            self.presentNextView()
                         }
                     }
                     
-                    // UniEmailAuthVC로 화면전환
-                    self.presentNextView()
                 }
             }
         }
