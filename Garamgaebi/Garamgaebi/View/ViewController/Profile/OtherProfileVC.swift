@@ -31,9 +31,20 @@ class OtherProfileVC: UIViewController {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "프로필"
-        label.textColor = .black.withAlphaComponent(0.8)
-        label.font = UIFont.NotoSansKR(type: .Bold, size: 24)
+        label.textColor = UIColor.mainBlack
+        label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
         return label
+    }()
+    
+    lazy var backButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "arrowBackward"), for: .normal)
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        button.clipsToBounds = true
+        button.tintColor = UIColor.mainBlack
+        button.addTarget(self, action: #selector(didTapBackBarButton), for: .touchUpInside)
+        
+        return button
     }()
     
     let scrollView = UIScrollView()
@@ -246,7 +257,7 @@ class OtherProfileVC: UIViewController {
         
         // addSubview - HeaderView
         view.addSubview(headerView)
-        headerView.addSubview(titleLabel)
+        [titleLabel, backButton].forEach { headerView.addSubview($0) }
         
         view.addSubview(scrollView)
         
@@ -267,7 +278,7 @@ class OtherProfileVC: UIViewController {
         eduBottomRadiusView.addSubview(eduTableView)
         
         // layer
-        // HeaderView
+        //headerView
         headerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(71)
@@ -276,6 +287,12 @@ class OtherProfileVC: UIViewController {
         
         // titleLabel
         titleLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+        
+        // backButton
+        backButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.centerY.equalToSuperview()
         }
@@ -328,13 +345,6 @@ class OtherProfileVC: UIViewController {
             $0.top.equalTo(snsTopRadiusView.snp.bottom).offset(-1)
             $0.leading.trailing.equalTo(snsTopRadiusView)
         }
-//        let snsCount = SnsData.shared.snsDataModel.count
-//        snsTableView.snp.makeConstraints {
-//            $0.top.equalToSuperview()
-//            $0.leading.trailing.equalToSuperview()
-//            $0.bottom.equalToSuperview()
-//            $0.height.equalTo(snsCount * 41)
-//        }
         
         // Career
         careerTopRadiusView.snp.makeConstraints {
@@ -350,13 +360,6 @@ class OtherProfileVC: UIViewController {
             $0.top.equalTo(careerTopRadiusView.snp.bottom).offset(-1)
             $0.leading.trailing.equalTo(careerTopRadiusView)
         }
-//        let careerCount = CareerData.shared.careerDataModel.count
-//        careerTableView.snp.makeConstraints {
-//            $0.top.equalToSuperview()
-//            $0.leading.trailing.equalToSuperview()
-//            $0.bottom.equalToSuperview()
-//            $0.height.equalTo(careerCount * 65)
-//        }
         
         // 교육
         eduTopRadiusView.snp.makeConstraints {
@@ -373,13 +376,6 @@ class OtherProfileVC: UIViewController {
             $0.leading.trailing.equalTo(eduTopRadiusView)
             $0.bottom.equalTo(scrollView).offset(-16)
         }
-//        let eduCount = EducationData.shared.educationDataModel.count
-//        eduTableView.snp.makeConstraints {
-//            $0.top.equalToSuperview()
-//            $0.leading.trailing.equalToSuperview()
-//            $0.bottom.equalToSuperview()
-//            $0.height.equalTo(eduCount * 65)
-//        }
     }
     
     
@@ -466,7 +462,7 @@ class OtherProfileVC: UIViewController {
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
-                    print("성공(SNS조회): \(response.message)")
+//                    print("성공(SNS조회): \(response.message)")
                     let result = response.result
 
                     let snsData = SnsData.shared
@@ -511,7 +507,7 @@ class OtherProfileVC: UIViewController {
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
-                    print("성공(Career조회): \(response.message)")
+//                    print("성공(Career조회): \(response.message)")
                     let result = response.result
 
                     let careerData = CareerData.shared
@@ -556,7 +552,7 @@ class OtherProfileVC: UIViewController {
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
-                    print("성공(Education조회): \(response.message)")
+//                    print("성공(Education조회): \(response.message)")
                     let result = response.result
 
                     let eduData = EducationData.shared
@@ -604,6 +600,11 @@ class OtherProfileVC: UIViewController {
             $0.height.equalTo(eduCount * 65)
         }
         
+    }
+    
+    // 뒤로가기 버튼 did tap
+    @objc private func didTapBackBarButton() {
+        self.navigationController?.popViewController(animated: true)
     }
 }
 // MARK: - Extension
