@@ -169,6 +169,8 @@ class HomeVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(pushSeminarDetail(_:)), name: Notification.Name("pushSeminarDetailVC"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(pushNetworkingDetail(_:)), name: Notification.Name("pushNetworkingDetailVC"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(postScrollDirection), name: Notification.Name("getScrollDirection"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(postOtherProfileMemberIdx(_:)), name: Notification.Name("postOtherProfileMemberIdx"), object: nil)
+        
     }
     
     @objc private func pushNextView(_ sender: UIButton) {
@@ -192,6 +194,12 @@ class HomeVC: UIViewController {
         let detailInfo: MyEventToDetailInfo = notification.object as! MyEventToDetailInfo
         
         self.navigationController?.pushViewController(EventNetworkingDetailVC(networkingId: detailInfo.programIdx), animated: true)
+    }
+    
+    @objc func postOtherProfileMemberIdx(_ notification: NSNotification) {
+        let otherMemberIdx: Int = notification.object as! Int
+        
+        self.navigationController?.pushViewController(OtherProfileVC(memberIdx: otherMemberIdx), animated: true)
     }
     
     @objc func reloadDatas() {
