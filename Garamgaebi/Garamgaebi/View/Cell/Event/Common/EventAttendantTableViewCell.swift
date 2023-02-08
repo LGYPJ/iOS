@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 class EventAttendantTableViewCell: UITableViewCell {
 	
@@ -182,11 +183,14 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 		
 		if self.type == "SEMINAR" {
 			let cellData = self.seminarAttendants[indexPath.row]
-			cell.profileImageView.image = UIImage(named: cellData.profileImg)
+			cell.profileImageView.kf.indicatorType = .activity
+			cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg), placeholder: UIImage(named: "ExProfileImage"))
+			
 			cell.userNameLabel.text = cellData.nickname
 		} else {
 			let cellData = self.networkingAttendants[indexPath.row]
-			cell.profileImageView.image = UIImage(named: cellData.profileImg)
+			cell.profileImageView.kf.indicatorType = .activity
+			cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg), placeholder: UIImage(named: "ExProfileImage"))
 			cell.userNameLabel.text = cellData.nickname
 		}
 		
