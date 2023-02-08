@@ -101,7 +101,8 @@ extension EventPreviewTableViewCell: UICollectionViewDelegate, UICollectionViewD
 		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EventPreviewCollectionViewCell.identifier, for: indexPath) as? EventPreviewCollectionViewCell else {return UICollectionViewCell()}
 		
 		let cellData = self.previews[indexPath.row]
-		cell.profileImageView.image = UIImage(named: cellData.profileImgUrl)
+		cell.profileImageView.kf.indicatorType = .activity
+		cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImgUrl), placeholder: UIImage(named: "ExProfileImage"))
 		cell.titleLabel.text = cellData.title
 		cell.userLabel.text = cellData.nickname
 		cell.belongLabel.text = cellData.organization
