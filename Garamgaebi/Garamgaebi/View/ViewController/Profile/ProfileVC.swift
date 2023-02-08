@@ -21,6 +21,12 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
 
     let token = UserDefaults.standard.string(forKey: "BearerToken")
     
+    var careerData: [CareerResult] = [] {
+        didSet {
+            self.showCareerDefaultLabel()
+            self.careerTableView.reloadData()
+        }
+    }
     var eduData: [EducationResult] = [] {
         didSet {
             self.showEducationDefaultLabel()
@@ -174,7 +180,6 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         let view = UITableView()
 
         view.allowsSelection = true
-//        view.backgroundColor = .clear
         view.separatorStyle = .singleLine
         view.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         view.bounces = true
@@ -243,18 +248,18 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         
         // 서버 통신
         getMyInfo()
-//        getSnsData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        print("viewWillAppear()")
         // 서버 통신
-        //        print("1: viewWillAppear()")
         self.getSnsData()
-        self.getCareerData()
+        self.getCareerData { [weak self] result in
+            self?.careerData = result
+        }
         self.getEducationData { [weak self] result in
             self?.eduData = result
-            
         }
         navigationController?.navigationBar.isHidden = true
         tabBarController?.tabBar.isHidden = false
@@ -263,7 +268,9 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nil, bundle: nil)
         getSnsData()
-        getCareerData()
+        getCareerData { [weak self] result in
+            self?.careerData = result
+        }
         getEducationData { [weak self] result in
             self?.eduData = result
             
@@ -494,7 +501,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             guard let orgString = self.orgLabel.text else { return }
             guard let emailString = self.emailLabel.text else { return }
             guard let introduceString = self.introduceTextField.text else { return }
-            guard let image = self.profileImageView.image else { return }
+//            guard let image = self.profileImageView.image else { return }
             
             // 값 넘기기
             nextVC.nameTextField.text = nameString
@@ -502,7 +509,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             nextVC.emailTextField.text = emailString
             nextVC.introduceTextField.text = introduceString
             nextVC.introduceTextField.textColor = .mainBlack
-            nextVC.profileImageView.image = image
+//            nextVC.profileImageView.image = image
             
             // 사용자
             nextVC.memberIdx = self.memberIdx
@@ -645,7 +652,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     }
     
     // MARK: - [GET] Career 조회
-    func getCareerData() {
+    func getCareerData(completion: @escaping (([CareerResult]) -> Void)) {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/career/\(memberIdx)"
@@ -672,13 +679,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
                 if response.isSuccess {
 //                    print("성공(Career조회): \(response.message)")
                     let result = response.result
-
-                    let careerData = CareerData.shared
-                    
-                    // 값 넣어주기
-                    careerData.careerDataModel = result
-//                    print("받은 Career: \(careerData.careerDataModel.count)")
-                    self.careerTableView.reloadData()
+                    completion(result)
                     
                 } else {
                     print("실패(Career조회): \(response.message)")
@@ -752,7 +753,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         }
     }
     func showCareerDefaultLabel() {
-        let careerCount = CareerData.shared.careerDataModel.count
+        let careerCount = careerData.count
 //        print("들어가는 Career: \(careerCount)")
         
         if (careerCount == 0) {
@@ -810,22 +811,18 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // 저장된 데이터 가져오기
         let snsDataModel = SnsData.shared.snsDataModel
-        let careerDataModel = CareerData.shared.careerDataModel
-        let eduDataModel = EducationData.shared.educationDataModel
         
         if tableView == snsTableView {
             //            print("SNS 개수: \(snsDataModel.count)")
             return snsDataModel.count
         }
         else if tableView == careerTableView {
-            //            print("Career 개수: \(careerDataModel.count)")
-            //print(careerDataModel)
-            return careerDataModel.count
+            
+            return careerData.count
         }
         else if tableView == eduTableView {
-            //            print("Edu 개수: \(eduDataModel.count)")
+            
             return eduData.count
-            //return eduDataModel.count
         }
         else { return 0 }
     }
@@ -840,8 +837,6 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
         
         // 저장된 데이터 가져오기
         let snsDataModel = SnsData.shared.snsDataModel
-        let careerDataModel = CareerData.shared.careerDataModel
-        let eduDataModel = eduData
         
         
 //        print(">>>>>> indexPath \(indexPath)")
@@ -856,7 +851,7 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
         else if tableView == careerTableView {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileHistoryTableViewCell.identifier, for: indexPath) as? ProfileHistoryTableViewCell else {return UITableViewCell()}
             
-            let row = careerDataModel[indexPath.row]
+            let row = careerData[indexPath.row]
             
             cell.companyLabel.text = row.company
             cell.positionLabel.text = row.position
