@@ -223,17 +223,17 @@ class CompleteRegisterVC: UIViewController {
         // 임시로 uniEmail, password 사용
         //jrwedo@gachon.ac.kr
         //1234
+        let useruniEmail = UserDefaults.standard.string(forKey: "uniEmail")!
+        let userpassword = "1234"
+        print("로그인 된 memberIdx: 36")
+        print("로그인 된 uniEmail: \(useruniEmail)")
+        print("로그인 된 password: \(userpassword)")
         
-		LoginViewModel.postLogin(uniEmail: "jrwedo@gachon.ac.kr", password: "1234", completion: { [weak self] result in
-			UserDefaults.standard.set(result.accessToken, forKey: "BearerToken")
+        LoginViewModel.postLogin(uniEmail: useruniEmail, password: userpassword, completion: { [weak self] result in
+            UserDefaults.standard.set(result.accessToken, forKey: "BearerToken")
+            UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
             self?.presentHome()
-		})
-        
-//        LoginViewModel.postLogin(uniEmail: useruniEmail, password: userpassword, completion: { result in
-//            UserDefaults.standard.set(result.accessToken, forKey: "BearerToken")
-//            UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
-//            presentHome()
-//        })
+        })
 	}
     
     private func presentHome(){
@@ -245,9 +245,14 @@ class CompleteRegisterVC: UIViewController {
     
     @objc
     private func presentHomeButtonTapped(_ sender: UIButton) {
-        // TODO: register 구현 후, 아래 삭제하고 register 안에서 login 실행
-        register()
-        //login()
+        // TODO: 모두 완료 후 login() 지우고, register() 활성화
+        /// 현재 로그인된 정보
+        /// memberIdx: 36
+        /// uniEmail: seutest@gachon.ac.kr
+        /// passwod: 1234
+        //register()
+        
+        login()
     }
     
     @objc

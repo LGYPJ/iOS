@@ -37,7 +37,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         //let rootViewController = InputOrganizationVC()
         //let rootViewController = InputCareerVC()
         //let rootViewController = InputEducationVC()
-        let rootViewController = CompleteRegisterVC()
+        let rootViewController = CompleteRegisterVC(myCareer: nil, myEducation: nil)
         self.window?.rootViewController = rootViewController
         self.window?.makeKeyAndVisible()
         
