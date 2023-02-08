@@ -383,6 +383,9 @@ class ProfileInputEducationVC: UIViewController {
         // 서버 연동
         postEducation(memberIdx: memberIdx, institution: institution, major: major, isLearning: isLearning, startDate: startDate, endDate: endDate)
         
+        // 서버 통신 후 profileVC reload 요청
+        NotificationCenter.default.post(name: Notification.Name("profileVCRefresh"), object: nil)
+        
         self.navigationController?.popViewController(animated: true)
     }
     
