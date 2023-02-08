@@ -431,7 +431,9 @@ class InputCareerVC: UIViewController {
     
     @objc
     private func nextButtonTapped(_ sender: UIButton) {
-        let nextVC = CompleteRegisterVC()
+        let myCareerInfo = RegisterCareerInfo(memberIdx: 0, company: companyTextField.text!, position: positionTextField.text!, isWorking: String(isWorking), startDate: startDateTextField.text!, endDate: endDateTextField.text!)
+        
+        let nextVC = CompleteRegisterVC(myCareer: myCareerInfo, myEducation: nil)
         nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
         nextVC.modalPresentationStyle = .fullScreen
         present(nextVC, animated: true)
@@ -458,6 +460,7 @@ class InputCareerVC: UIViewController {
             endDateTextField.isEnabled = false
             endDateTextField.text = "현재"
             endYearValue = String(Int(yearArray[0])!+1)
+            endMonthValue = monthArray[0]
         case false:
             sender.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
             endDateTextField.isEnabled = true

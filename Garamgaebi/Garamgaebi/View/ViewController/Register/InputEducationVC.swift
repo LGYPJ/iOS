@@ -426,7 +426,9 @@ class InputEducationVC: UIViewController {
     
     @objc
     private func nextButtonTapped(_ sender: UIButton) {
-        var nextVC = CompleteRegisterVC()
+        let myEducationInfo = RegisterEducationInfo(memberIdx: 0, institution: institutionTextField.text!, major: majorTextField.text!, isLearning: String(isLearning), startDate: startDateTextField.text!, endDate: endDateTextField.text!)
+        
+        let nextVC = CompleteRegisterVC(myCareer: nil, myEducation: myEducationInfo)
         nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
         nextVC.modalPresentationStyle = .fullScreen
         present(nextVC, animated: true)
@@ -453,6 +455,7 @@ class InputEducationVC: UIViewController {
             endDateTextField.isEnabled = false
             endDateTextField.text = "현재"
             endYearValue = String(Int(yearArray[0])!+1)
+            endMonthValue = monthArray[0]
         case false:
             sender.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
             endDateTextField.isEnabled = true
@@ -533,8 +536,8 @@ class InputEducationVC: UIViewController {
         /* 모든 textField가 채워졌으면 프로필 저장 버튼 활성화 */
         if self.institutionTextField.text?.count != 0,
            self.majorTextField.text?.count != 0,
-           self.startDateTextField.text?.count != 0,
-           self.endDateTextField.text?.count != 0 {
+           self.startDateTextField.text?.count == 7,
+           self.endDateTextField.text?.count == 7 {
             
             // 재직중 버튼 활성화시 -> 무조건 활성화
             if isLearning {
