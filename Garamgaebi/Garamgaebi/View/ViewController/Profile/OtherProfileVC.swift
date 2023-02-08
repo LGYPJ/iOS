@@ -219,22 +219,20 @@ class OtherProfileVC: UIViewController {
  
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureLayouts()
-        
-        // 서버 통신
-        getOtherInfo()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
+        tabBarController?.tabBar.isHidden = false
+        view.backgroundColor = .white
+        
         // 서버 통신
-        //        print("1: viewWillAppear()")
+        self.getOtherInfo()
         self.getSnsData()
         self.getCareerData()
         self.getEducationData()
-        navigationController?.navigationBar.isHidden = true
-        tabBarController?.tabBar.isHidden = false
     }
     
     required init?(coder: NSCoder) {
