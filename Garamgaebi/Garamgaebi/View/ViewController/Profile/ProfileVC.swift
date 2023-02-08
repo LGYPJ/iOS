@@ -113,12 +113,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     // 하단 버튼
     // SNS
     let snsTopRadiusView = UIView().then {
-        $0.layer.borderColor = UIColor.mainGray.cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 12
-        
-        $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        $0.layer.backgroundColor = UIColor(hex: 0xF5F5F5).cgColor
+        $0.profileTopRadiusView()
     }
     let snsTitleLabel = UILabel().then {
         $0.text = "SNS"
@@ -131,11 +126,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
 //        $0.isHidden = true
     }
     let snsBottomRadiusView = UIView().then {
-        $0.layer.borderColor = UIColor.mainGray.cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 12
-        
-        $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        $0.profileBottomRadiusView()
     }
     
     lazy var snsTableView: UITableView = {
@@ -162,12 +153,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     
     // 경력
     let careerTopRadiusView = UIView().then {
-        $0.layer.borderColor = UIColor.mainGray.cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 12
-        
-        $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        $0.layer.backgroundColor = UIColor(hex: 0xF5F5F5).cgColor
+        $0.profileTopRadiusView()
     }
     let careerTitleLabel = UILabel().then {
         $0.text = "경력"
@@ -181,11 +167,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
 //        $0.isHidden = true
     }
     let careerBottomRadiusView = UIView().then {
-        $0.layer.borderColor = UIColor.mainGray.cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 12
-        
-        $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        $0.profileBottomRadiusView()
     }
     
     lazy var careerTableView: UITableView = {
@@ -213,12 +195,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     
     // 교육
     let eduTopRadiusView = UIView().then {
-        $0.layer.borderColor = UIColor.mainGray.cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 12
-        
-        $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        $0.layer.backgroundColor = UIColor(hex: 0xF5F5F5).cgColor
+        $0.profileTopRadiusView()
     }
     let eduTitleLabel = UILabel().then {
         $0.text = "교육"
@@ -232,11 +209,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         //        $0.isHidden = true
     }
     let eduBottomRadiusView = UIView().then {
-        $0.layer.borderColor = UIColor.mainGray.cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 12
-        
-        $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        $0.profileBottomRadiusView()
     }
     
     lazy var eduTableView: UITableView = {
@@ -326,6 +299,8 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     }
     
     func configureLayouts() {
+        
+        view.backgroundColor = .white
         
         // addSubview - HeaderView
         view.addSubview(headerView)

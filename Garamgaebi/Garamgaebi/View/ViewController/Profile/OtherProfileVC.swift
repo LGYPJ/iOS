@@ -97,23 +97,14 @@ class OtherProfileVC: UIViewController {
     // 하단 버튼
     // SNS
     let snsTopRadiusView = UIView().then {
-        $0.layer.borderColor = UIColor.mainGray.cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 12
-        
-        $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        $0.layer.backgroundColor = UIColor(hex: 0xF5F5F5).cgColor
+        $0.profileTopRadiusView()
     }
     let snsTitleLabel = UILabel().then {
         $0.text = "SNS"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
     }
     let snsBottomRadiusView = UIView().then {
-        $0.layer.borderColor = UIColor.mainGray.cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 12
-        
-        $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        $0.profileBottomRadiusView()
     }
     
     lazy var snsTableView: UITableView = {
@@ -136,23 +127,14 @@ class OtherProfileVC: UIViewController {
     
     // 경력
     let careerTopRadiusView = UIView().then {
-        $0.layer.borderColor = UIColor.mainGray.cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 12
-        
-        $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        $0.layer.backgroundColor = UIColor(hex: 0xF5F5F5).cgColor
+        $0.profileTopRadiusView()
     }
     let careerTitleLabel = UILabel().then {
         $0.text = "경력"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
     }
     let careerBottomRadiusView = UIView().then {
-        $0.layer.borderColor = UIColor.mainGray.cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 12
-        
-        $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        $0.profileBottomRadiusView()
     }
     
     lazy var careerTableView: UITableView = {
@@ -174,23 +156,14 @@ class OtherProfileVC: UIViewController {
     
     // 교육
     let eduTopRadiusView = UIView().then {
-        $0.layer.borderColor = UIColor.mainGray.cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 12
-        
-        $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        $0.layer.backgroundColor = UIColor(hex: 0xF5F5F5).cgColor
+        $0.profileTopRadiusView()
     }
     let eduTitleLabel = UILabel().then {
         $0.text = "교육"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
     }
     let eduBottomRadiusView = UIView().then {
-        $0.layer.borderColor = UIColor.mainGray.cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 12
-        
-        $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        $0.profileBottomRadiusView()
     }
     
     lazy var eduTableView: UITableView = {
