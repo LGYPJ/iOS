@@ -82,7 +82,7 @@ class ProfileInputCareerVC: UIViewController {
         cancelBtn.action = #selector(pickerCancel)
         cancelBtn.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.NotoSansKR(type: .Regular, size: 16)!, NSAttributedString.Key.foregroundColor: UIColor(hex: 0xFF0000)], for: .normal)
         
-        toolBar.setItems([flexSpace,exitBtn, cancelBtn], animated: true)
+        toolBar.setItems([cancelBtn, flexSpace, exitBtn], animated: true)
         return toolBar
     }
     
@@ -143,7 +143,6 @@ class ProfileInputCareerVC: UIViewController {
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
         
-        
         return textField
     }()
     
@@ -172,9 +171,9 @@ class ProfileInputCareerVC: UIViewController {
         textField.inputView = startDatePickerView
         textField.inputAccessoryView = toolbar
         
-        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
         
         return textField
     }()
@@ -205,9 +204,9 @@ class ProfileInputCareerVC: UIViewController {
         textField.inputView = endDatePickerView
         textField.inputAccessoryView = toolbar
         
-        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
         
         return textField
     }()
@@ -224,6 +223,7 @@ class ProfileInputCareerVC: UIViewController {
         
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(toggleButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(allTextFieldFilledIn), for: .touchUpInside)
         return button
     }()
     
@@ -232,7 +232,7 @@ class ProfileInputCareerVC: UIViewController {
         button.setTitle("저장하기", for: .normal)
         button.basicButton()
         button.backgroundColor = .mainGray
-        button.isEnabled = true
+        button.isEnabled = false
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(saveButtonDidTap), for: .touchUpInside)
         return button
@@ -417,6 +417,7 @@ class ProfileInputCareerVC: UIViewController {
             endDateTextField.isEnabled = false
             endDateTextField.text = "현재"
             endYearValue = String(Int(yearArray[0])!+1)
+            endMonthValue = monthArray[0]
         case false:
             sender.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
             endDateTextField.isEnabled = true
@@ -516,8 +517,8 @@ class ProfileInputCareerVC: UIViewController {
                 // 불만족시
                 if startValue > endValue {
                     // shake 애니메이션 + borderColor: 0xFF0000
-//                    startDateTextField.shake()
-//                    endDateTextField.shake()
+                    startDateTextField.shake()
+                    endDateTextField.shake()
                     // 프로필 저장버튼 애니메이션
                     saveUserProfileButton.isEnabled = false
                     UIView.animate(withDuration: 0.33) { [weak self] in
@@ -635,12 +636,12 @@ extension ProfileInputCareerVC: UIPickerViewDataSource, UIPickerViewDelegate {
         if pickerView.tag == 0 {
             if component == 0 {
                 switch(startYearValue){
-                    // 선택한 년도가 올해였을 때
+                // 선택한 년도가 올해였을 때
                 case String(currentYear):
                     startYearValue = yearArray[row]
                     startDateTextField.text = "\(startYearValue)/\(startMonthValue)"
                     pickerView.reloadAllComponents()
-                    // 선택한 년도가 올해가 아니었을 때
+                // 선택한 년도가 올해가 아니었을 때
                 default:
                     startYearValue = yearArray[row]
                     if startYearValue == String(currentYear){
@@ -660,12 +661,12 @@ extension ProfileInputCareerVC: UIPickerViewDataSource, UIPickerViewDelegate {
         else if pickerView.tag == 1 {
             if component == 0 {
                 switch(endYearValue){
-                    // 선택한 년도가 올해였을 때
+                // 선택한 년도가 올해였을 때
                 case String(currentYear):
                     endYearValue = yearArray[row]
                     endDateTextField.text = "\(endYearValue)/\(endMonthValue)"
                     pickerView.reloadAllComponents()
-                    // 선택한 년도가 올해가 아니었을 때
+                // 선택한 년도가 올해가 아니었을 때
                 default:
                     endYearValue = yearArray[row]
                     if endYearValue == String(currentYear){
