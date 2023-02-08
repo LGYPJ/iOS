@@ -493,31 +493,35 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     }
     
     @objc private func editButtonDidTap(_ sender : UIButton) {
-//        print("프로필 편집 버튼 클릭")
+        print("프로필 편집 버튼 클릭")
         
         // 화면 전환
         let nextVC = ProfileEditVC()
         
+        guard let nameString = self.nameLabel.text else { return }
+        guard let orgString = self.orgLabel.text else { return }
+        guard let emailString = self.emailLabel.text else { return }
+        guard let introduceString = self.introduceTextField.text else { return }
+        guard let image = self.profileImageView.image else { return }
+        
         // 다음 화면으로 넘길 텍스트
-        guard let nameString = nameLabel.text else { return }
-        guard let orgString = orgLabel.text else { return }
-        guard let emailString = emailLabel.text else { return }
-        guard let introduceString = introduceTextField.text else { return }
-        guard let image = profileImageView.image else { return }
+        DispatchQueue.main.async {
+            
+            // 값 넘기기
+            nextVC.nameTextField.text = nameString
+            nextVC.orgTextField.text = orgString
+            nextVC.emailTextField.text = emailString
+            nextVC.introduceTextField.text = introduceString
+            nextVC.introduceTextField.textColor = .mainBlack
+            nextVC.profileImageView.image = image
+            
+            // 사용자
+            nextVC.memberIdx = self.memberIdx
+            
+            nextVC.delegate = self
+            self.navigationController?.pushViewController(nextVC, animated: true)
+        }
         
-        // 값 넘기기
-        nextVC.nameTextField.text = nameString
-        nextVC.orgTextField.text = orgString
-        nextVC.emailTextField.text = emailString
-        nextVC.introduceTextField.text = introduceString
-        nextVC.introduceTextField.textColor = .mainBlack
-        nextVC.profileImageView.image = image
-        
-        // 사용자
-        nextVC.memberIdx = memberIdx
-        
-        nextVC.delegate = self
-        navigationController?.pushViewController(nextVC, animated: true)
     }
     
     @objc private func snsButtonDidTap(_ sender : UIButton) {
@@ -574,7 +578,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
-                    print("성공(내프로필): \(response.message)")
+//                    print("성공(내프로필): \(response.message)")
                     let result = response.result
                     
                     // 값 넣어주기
@@ -632,7 +636,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
-                    print("성공(SNS조회): \(response.message)")
+//                    print("성공(SNS조회): \(response.message)")
                     let result = response.result
 
                     let snsData = SnsData.shared
@@ -677,7 +681,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
-                    print("성공(Career조회): \(response.message)")
+//                    print("성공(Career조회): \(response.message)")
                     let result = response.result
 
                     let careerData = CareerData.shared
@@ -722,7 +726,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
-                    print("성공(Education조회): \(response.message)")
+//                    print("성공(Education조회): \(response.message)")
                     let result = response.result
                     completion(result)
                     
@@ -782,7 +786,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     }
     func showEducationDefaultLabel() {
         let eduCount = eduData.count
-        print("eduCount \(eduCount)")
+//        print("eduCount \(eduCount)")
 //        print("들어가는 Edu: \(eduCount)")
         
         if (eduCount == 0) {
@@ -849,11 +853,13 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
         let eduDataModel = eduData
         
         
-        print(">>>>>> indexPath \(indexPath)")
+//        print(">>>>>> indexPath \(indexPath)")
         if tableView == snsTableView {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileSNSTableViewCell.identifier, for: indexPath) as? ProfileSNSTableViewCell else { return UITableViewCell()}
             cell.snsLabel.text = snsDataModel[indexPath.row].address
-            print(">>>>>> sns")
+            
+            cell.selectionStyle = .none
+//            print(">>>>>> sns")
             return cell
         }
         else if tableView == careerTableView {
@@ -864,22 +870,25 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             cell.companyLabel.text = row.company
             cell.positionLabel.text = row.position
             cell.periodLabel.text = "\(row.startDate) ~ \(row.endDate)"
-            print(">>>>>> career \(indexPath)")
+            
+            cell.selectionStyle = .none
+//            print(">>>>>> career \(indexPath)")
             return cell
         }
         else if tableView == eduTableView {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileHistoryTableViewCell.identifier, for: indexPath) as? ProfileHistoryTableViewCell else {return UITableViewCell()}
             
             let row = eduDataModel[indexPath.row]
-            print(row.institution)
+//            print(row.institution)
             cell.companyLabel.text = row.institution
             cell.positionLabel.text = row.major
             cell.periodLabel.text = "\(row.startDate) ~ \(row.endDate)"
             
+            cell.selectionStyle = .none
             return cell
         }
         
-        print("망해부렀어")
+//        print("망해부렀어")
         return UITableViewCell()
     }
 }
