@@ -26,5 +26,5 @@ struct RegisterUserInfo: Codable {
 
 struct RegisterMemberIdx: Codable {
     // TODO: snake_case -> camelCase로 추후 변경?
-    let member_idx: Int
+    let memberIdx: Int
 }
