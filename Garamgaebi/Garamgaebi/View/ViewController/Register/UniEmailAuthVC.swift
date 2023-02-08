@@ -420,6 +420,9 @@ class UniEmailAuthVC: UIViewController {
     
     @objc
     private func nextButtonTapped(_ sender: Any) {
+        // uniEmail UserDefault에 저장
+        UserDefaults.standard.set("\(userId)@gachon.ac.kr", forKey: "uniEmail")
+        
         // EmailVC로 화면전환
         let nextVC = InputNickNameVC()
         nextVC.modalTransitionStyle = .crossDissolve // .coverVertical

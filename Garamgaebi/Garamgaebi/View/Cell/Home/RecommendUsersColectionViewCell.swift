@@ -20,27 +20,45 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    lazy var contentInfoView: UIView = {
+        let view = UIView()
+        return view
+    }()
+    
     lazy var nickNameInfoLabel: UILabel = {
         let label = UILabel()
-        label.text = "네온"
+        label.text = "nickname dummy"
         label.font = UIFont.NotoSansKR(type: .Medium, size: 16)
-        label.textColor = UIColor(hex: 0x000000,alpha: 0.8)
+        label.textColor = .mainBlack
+        label.textAlignment = .center
         return label
     }()
     
-    lazy var companyInfoLabel: UILabel = {
+    lazy var belongInfoLabel: UILabel = {
         let label = UILabel()
-        label.text = "가천대학교"
+        label.text = "belong dummy"
         label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
-        label.textColor = UIColor(hex: 0x000000,alpha: 0.8)
+        label.textColor = .mainBlack
+        label.textAlignment = .center
+        label.numberOfLines = 0
         return label
     }()
     
-    lazy var positionInfoLabel: UILabel = {
+    lazy var groupInfoLabel: UILabel = {
         let label = UILabel()
-        label.text = "산업디자인학과"
+        label.text = "group dummy"
         label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
-        label.textColor = UIColor(hex: 0x000000,alpha: 0.8)
+        label.textColor = .mainBlack
+        label.textAlignment = .center
+        return label
+    }()
+    
+    lazy var detailInfoLabel: UILabel = {
+        let label = UILabel()
+        label.text = "detail dummy"
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
+        label.textColor = .mainBlack
+        label.textAlignment = .center
         return label
     }()
     
@@ -49,7 +67,6 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
     }
     
-
     override func layoutSubviews() {
         super.layoutSubviews()
         contentView.layer.cornerRadius = 12
@@ -62,9 +79,11 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
     
     func configAddSubView(){
         contentView.addSubview(imageInfoView)
-        contentView.addSubview(nickNameInfoLabel)
-        contentView.addSubview(companyInfoLabel)
-        contentView.addSubview(positionInfoLabel)
+        contentView.addSubview(contentInfoView)
+        contentInfoView.addSubview(nickNameInfoLabel)
+        contentInfoView.addSubview(belongInfoLabel)
+        contentInfoView.addSubview(groupInfoLabel)
+        contentInfoView.addSubview(detailInfoLabel)
     }
     
     func configSubViewLayouts() {
@@ -73,20 +92,36 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
             make.width.equalTo(120)
             make.height.equalTo(100)
         }
-        
+        contentInfoView.snp.makeConstraints { make in
+            make.top.equalTo(imageInfoView.snp.bottom)
+            make.left.right.equalToSuperview().inset(12)
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
         nickNameInfoLabel.snp.makeConstraints { make in
-            make.top.equalTo(imageInfoView.snp.bottom).offset(8)
+            make.top.equalToSuperview().offset(8)
+            make.left.right.equalToSuperview()
             make.centerX.equalToSuperview()
         }
         
-        companyInfoLabel.snp.makeConstraints { make in
+        belongInfoLabel.snp.makeConstraints { make in
             make.top.equalTo(nickNameInfoLabel.snp.bottom).offset(8)
+            make.left.right.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().inset(12)
+        }
+        
+        groupInfoLabel.snp.makeConstraints { make in
+            make.top.equalTo(nickNameInfoLabel.snp.bottom).offset(8)
+            make.left.right.equalToSuperview()
             make.centerX.equalToSuperview()
         }
         
-        positionInfoLabel.snp.makeConstraints { make in
-            make.top.equalTo(companyInfoLabel.snp.bottom)
+        detailInfoLabel.snp.makeConstraints { make in
+            make.top.equalTo(groupInfoLabel.snp.bottom)
+            make.left.right.equalToSuperview()
             make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().inset(12)
         }
     }
     
@@ -101,10 +136,24 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
         // 닉네임
         nickNameInfoLabel.text = item.nickName
         
-        // 현재 belong으로 하나로 주는데 2개로 나눠 줘야한다고 생각함
-        companyInfoLabel.text = item.belong
-        positionInfoLabel.text = item.belong
-        
+        // belong이 있으면 belong만 보여주고 아니면 group,detail
+        switch(item.belong != nil){
+        case true:
+            belongInfoLabel.isHidden = false
+            groupInfoLabel.isHidden = true
+            detailInfoLabel.isHidden = true
+            
+            belongInfoLabel.text = item.belong
+        default:
+            // 현재 belong으로 하나로 주는데 2개로 나눠 줘야한다고 생각함
+            belongInfoLabel.isHidden = true
+            groupInfoLabel.isHidden = false
+            detailInfoLabel.isHidden = false
+            
+            groupInfoLabel.text = item.group
+            detailInfoLabel.text = item.detail
+        }
+
         // memberIdx 저장
         memberIdx = item.memberIdx
         

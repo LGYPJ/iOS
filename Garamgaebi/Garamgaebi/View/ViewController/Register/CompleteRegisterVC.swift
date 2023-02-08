@@ -9,6 +9,18 @@ import UIKit
 import SnapKit
 
 class CompleteRegisterVC: UIViewController {
+    let myCareer: RegisterCareerInfo?
+    let myEducation: RegisterEducationInfo?
+    
+    init(myCareer: RegisterCareerInfo?, myEducation: RegisterEducationInfo?) {
+        self.myCareer = myCareer
+        self.myEducation = myEducation
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     // MARK: - Subviews
 
     lazy var titleLabel: UILabel = {
@@ -94,6 +106,7 @@ class CompleteRegisterVC: UIViewController {
         view.backgroundColor = .white
         addSubViews()
         configLayouts()
+        configNickname()
     }
     
     
@@ -157,21 +170,89 @@ class CompleteRegisterVC: UIViewController {
             make.height.equalTo(20)
         }
     }
+    
+    private func configNickname() {
+        if let nickname = UserDefaults.standard.string(forKey: "nickname") {
+            switch(nickname.count){
+            case 1..<5 :
+                descriptionLabel.text = "\(nickname)님, 환영합니다"
+            default:
+                descriptionLabel.text = "\(nickname)님,\n환영합니다"
+            }
+        } else {
+            fatalError(">>>ERROR: CompleteRegiseterVC - nickName")
+        }
+    }
+    
+    private func register() {
+        let usernickname = UserDefaults.standard.string(forKey: "nickname")!
+        let userprofileEmail = UserDefaults.standard.string(forKey: "profileEmail")!
+        let usersocialEmail = UserDefaults.standard.string(forKey: "socialEmail")!
+        let useruniEmail = UserDefaults.standard.string(forKey: "uniEmail")!
+        let userstatus = "ACTIVE"
+        // TODO: password 추후 제거 예정
+        let userpassword = "1234" //UserDefaults.standard.string(forKey: "password")!
+        let userInfo =  RegisterUserInfo(nickname: usernickname, profileEmail: userprofileEmail, socialEmail: usersocialEmail, uniEmail: useruniEmail, status: userstatus, password: userpassword)
+        print(userInfo)
+        
+         //response 받은 memberIdx로 회원가입 API post
+        RegisterUserViewModel.requestRegisterUser(parameter: userInfo) { [weak self] result in
+            UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
+            if self?.myCareer == nil {
+                guard let passMyEducation = RegisterEducationInfo(memberIdx: result.memberIdx, institution: (self?.myEducation!.institution)!, major: self?.myEducation!.major ?? "", isLearning: self?.myEducation!.isLearning ?? "", startDate: (self?.myEducation!.startDate)!, endDate: self?.myEducation!.endDate ?? "") as? RegisterEducationInfo else {
+                    return
+                }
+                RegisterEducationViewModel.requestInputEducation(passMyEducation) { result in
+                    if result {
+                        self?.login()
+                    }
+                }
+            } else {
+                guard let passMyCareer = RegisterCareerInfo(memberIdx: result.memberIdx, company: (self?.myCareer!.company)!, position: self?.myCareer!.position ?? "", isWorking: self?.myCareer!.isWorking ?? "", startDate: (self?.myCareer!.startDate)!, endDate: self?.myCareer!.endDate ?? "") as? RegisterCareerInfo else { return }
+                RegisterCareerViewModel.requestInputCareer(passMyCareer) { result in
+                    if result {
+                        self?.login()
+                    }
+                }
+            }
+                                                            
+        }
+    }
 	
 	private func login() {
-		LoginViewModel.postLogin(uniEmail: "jrwedo@gachon.ac.kr", password: "1234", completion: { result in
-			UserDefaults.standard.set(result.accessToken, forKey: "BearerToken")
+        // 임시로 uniEmail, password 사용
+        //jrwedo@gachon.ac.kr
+        //1234
+        let useruniEmail = UserDefaults.standard.string(forKey: "uniEmail")!
+        let userpassword = "1234"
+        print("로그인 된 memberIdx: 36")
+        print("로그인 된 uniEmail: \(useruniEmail)")
+        print("로그인 된 password: \(userpassword)")
+        
+        LoginViewModel.postLogin(uniEmail: useruniEmail, password: userpassword, completion: { [weak self] result in
+            UserDefaults.standard.set(result.accessToken, forKey: "BearerToken")
             UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
-		})
+            self?.presentHome()
+        })
 	}
+    
+    private func presentHome(){
+        let nextVC = TabBarController()
+        nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
+        nextVC.modalPresentationStyle = .fullScreen
+        self.present(nextVC, animated: true)
+    }
     
     @objc
     private func presentHomeButtonTapped(_ sender: UIButton) {
-		login()
-        var nextVC = TabBarController()
-        nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
-        nextVC.modalPresentationStyle = .fullScreen
-        present(nextVC, animated: true)
+        // TODO: 모두 완료 후 login() 지우고, register() 활성화
+        /// 현재 로그인된 정보
+        /// memberIdx: 36
+        /// uniEmail: seutest@gachon.ac.kr
+        /// passwod: 1234
+        //register()
+        
+        login()
     }
     
     @objc
