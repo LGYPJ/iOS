@@ -7,6 +7,8 @@
 
 import UIKit
 import SnapKit
+import Starscream
+import Alamofire
 
 class IceBreakingRoomVC: UIViewController {
 	
@@ -101,8 +103,9 @@ class IceBreakingRoomVC: UIViewController {
 		return label
 	}()
 	
-	var cardCount = 10
-	var currentIndex = 0
+	private var cardCount = 10
+	private var currentIndex = 0
+	private var socket: WebSocket!
 	
     // MARK: - Life Cycle
     
@@ -112,6 +115,7 @@ class IceBreakingRoomVC: UIViewController {
 		configureCollectionView()
 		configureViews()
 		configureButtonTarget()
+		connectWebSocket()
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -198,14 +202,35 @@ extension IceBreakingRoomVC {
 		nextButton.addTarget(self, action: #selector(didTapNextButton), for: .touchUpInside)
 	}
 	
-	// 뒤로가기 버튼 did tap
-	@objc private func didTapBackBarButton() {
-		self.navigationController?.popViewController(animated: true)
+	private func connectWebSocket() {
+		let url = "ws://garamgaebi.shop/ws/game"
+		var request = URLRequest(url: URL(string: url)!)
+		request.timeoutInterval = 5
+//		request.addValue("Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")", forHTTPHeaderField: "Authorization")
+//		request.addValue(url, forHTTPHeaderField: "Origin")  // HTTPUpgare error 방지
+//		request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+		self.socket = WebSocket(request: request)
+		self.socket.delegate = self
+		self.socket.connect()
 	}
 	
-	// 다음 카드 버튼 did tap
-	@objc private func didTapNextButton() {
-		currentIndex += 1
+	private func disconnectWebSocket() {
+		if socket != nil {
+			socket?.disconnect()
+		} else {
+			print("실패(disconnectWebSocket): WebSocket이 연결된 상태가 아닙니다.")
+		}
+	}
+	
+	private func requestWebSocket(index: String) {
+		if socket != nil {
+			socket.write(string: index)
+		} else {
+			print("실패(requestWebSocket): WebSocket이 연결된 상태가 아닙니다.")
+		}
+	}
+	
+	private func scrollToNextItem() {
 		if currentIndex < cardCount {
 			// 해당 인덱스로 스크롤
 			cardCollectionView.scrollToItem(at: IndexPath(row: currentIndex, section: 1), at: .centeredHorizontally, animated: true)
@@ -222,6 +247,19 @@ extension IceBreakingRoomVC {
 				self?.nextButton.isEnabled = false
 			})
 		}
+	}
+	
+	// 뒤로가기 버튼 did tap
+	@objc private func didTapBackBarButton() {
+		self.navigationController?.popViewController(animated: true)
+		disconnectWebSocket()
+	}
+	
+	// 다음 카드 버튼 did tap
+	@objc private func didTapNextButton() {
+		currentIndex += 1
+		requestWebSocket(index: "\(currentIndex)")
+		scrollToNextItem()
 	}
 }
 
@@ -301,5 +339,35 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 			})
 		}
 	}
+}
+
+extension IceBreakingRoomVC: WebSocketDelegate {
+	func didReceive(event: WebSocketEvent, client: WebSocket) {
+		switch event {
+		case .connected(let headers):
+			print("websocket is connected: \(headers)")
+		case .disconnected(let reason, let code):
+			print("websocket is disconnected: \(reason) with code: \(code)")
+		case .text(let text):
+			print("received text: \(text)")
+			self.currentIndex = Int(text) ?? 0
+			scrollToNextItem()
+		case .binary(let data):
+			print("Received data: \(data.count)")
+		case .ping(_):
+			break
+		case .pong(_):
+			break
+		case .viabilityChanged(_):
+			break
+		case .reconnectSuggested(_):
+			break
+		case .cancelled:
+			print("websocket is canclled")
+		case .error(let error):
+			print("websocket is error = \(error!)")
+		}
+	}
+	
 }
 

@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import Photos
 import Alamofire
+import PhotosUI
 
 
 protocol EditProfileDataDelegate: AnyObject {
@@ -64,6 +65,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         // 이미지 centerCrop
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
+		view.contentMode = .scaleAspectFill
         
         return view
     }()
@@ -333,16 +335,16 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     }
     
     @objc func profileImageDidTap() {
-        // 갤러리 권한 설정
-        checkAlbumPermission()
-        
-        // 앨범 허용 상태 체크
-        PHPhotoLibrary.requestAuthorization { (state) in
-            print(state)
-        }
-        
-//        print("프로필 이미지 클릭")
-        
+		var configuration = PHPickerConfiguration()
+		// 선택할 수 있는 사진 개수
+		configuration.selectionLimit = 1
+		// 사진만 나오게 필터링
+		configuration.filter = .images
+		
+		let picker = PHPickerViewController(configuration: configuration)
+		picker.delegate = self
+		
+		self.present(picker, animated: true, completion: nil)
     }
     
     // 완료하기 버튼 did tap
@@ -434,29 +436,29 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         self.navigationController?.popViewController(animated: true)
     }
     
-    // 갤러리 권한 체크
-    func checkAlbumPermission(){
-        PHPhotoLibrary.requestAuthorization( { status in
-            switch status{
-            case .authorized:
-                print("Album: 권한 허용")
-                DispatchQueue.main.async {
-                    // 이미지 피커 열기
-                    self.imagePicker.delegate = self
-                    self.imagePicker.sourceType = .photoLibrary
-                    self.imagePicker.modalPresentationStyle = .fullScreen
-                    
-                    self.present(self.imagePicker, animated: true, completion: nil)
-                }
-            case .denied:
-                print("Album: 권한 거부")
-            case .restricted, .notDetermined:
-                print("Album: 선택하지 않음")
-            default:
-                break
-            }
-        })
-    }
+//    // 갤러리 권한 체크
+//    func checkAlbumPermission(){
+//        PHPhotoLibrary.requestAuthorization( { status in
+//            switch status{
+//            case .authorized:
+//                print("Album: 권한 허용")
+//                DispatchQueue.main.async {
+//                    // 이미지 피커 열기
+//                    self.imagePicker.delegate = self
+//                    self.imagePicker.sourceType = .photoLibrary
+//                    self.imagePicker.modalPresentationStyle = .fullScreen
+//
+//                    self.present(self.imagePicker, animated: true, completion: nil)
+//                }
+//            case .denied:
+//                print("Album: 권한 거부")
+//            case .restricted, .notDetermined:
+//                print("Album: 선택하지 않음")
+//            default:
+//                break
+//            }
+//        })
+//    }
     
 }
 
@@ -503,6 +505,22 @@ extension ProfileEditVC: UITextViewDelegate {
 }
 
 // MARK: - Extension
+extension ProfileEditVC: PHPickerViewControllerDelegate {
+	func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+		picker.dismiss(animated: true)
+		
+		let itemProvider = results.first?.itemProvider
+		
+		if let itemProvider = itemProvider, itemProvider.canLoadObject(ofClass: UIImage.self) {
+			itemProvider.loadObject(ofClass: UIImage.self) { image, error in
+				DispatchQueue.main.async {
+					// image 다루기
+					self.profileImageView.image = image as? UIImage
+				}
+			}
+		}
+	}
+
 extension ProfileEditVC : UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
@@ -542,8 +560,9 @@ extension ProfileEditVC : UIImagePickerControllerDelegate, UINavigationControlle
         
         return false;
     }
-    
+
 }
+
 
 extension UILabel {
     func asColor(targetString: String, color: UIColor) {

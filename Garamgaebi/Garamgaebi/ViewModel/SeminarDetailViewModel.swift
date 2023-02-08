@@ -12,28 +12,33 @@ class SeminarDetailViewModel {
 	// MARK: requestData
 	// 세미나 정보 request
 	public static func requestSeminarDetailInfo(memberId: Int, seminarId: Int, completion: @escaping ((SeminarDetailInfo) -> Void)) {
-		let dummyData = SeminarDetailInfo(programIdx: seminarId	,title: "무료 세미나1", date: "2023-01-15T18:00:00", location: "가천관", fee: 0, endDate: "2023-01-08T18:00:00", programStatus: "CLOSED_CONFIRM", userButtonStatus: "APPLY")
-		completion(dummyData)
-//		let url = "https://garamgaebi.shop/seminars/info"
-//		// TODO: memberId jwt로 전환 예정
-//
-//		AF.request(url, method: .get, parameters: nil)
-//			.validate()
-//			.responseDecodable(of: SeminarDetailInfoResponse.self) { response in
-//				switch response.result {
-//				case .success(let result):
-//					if result.isSuccess {
-//						guard let result = result.result else {return}
-//						completion(result)
-//					} else {
-//						// 통신은 정상적으로 됐으나(200), error발생
-//						print("실패(세미나 상세정보): \(result.message)")
-//					}
-//				case .failure(let error):
-//					// 실제 HTTP에러 404
-//					print("실패(AF-세미나 상세정보): \(error.localizedDescription)")
-//				}
-//			}
+//		let dummyData = SeminarDetailInfo(programIdx: seminarId	,title: "무료 세미나1", date: "2023-01-15T18:00:00", location: "가천관", fee: 0, endDate: "2023-01-08T18:00:00", programStatus: "CLOSED_CONFIRM", userButtonStatus: "APPLY")
+//		completion(dummyData)
+		let url = "https://garamgaebi.shop/seminars/\(seminarId)/info"
+		let headers: HTTPHeaders = [
+			"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
+		]
+		let params: Parameters = [
+			"member-idx": memberId
+		]
+
+		AF.request(url, method: .get, parameters: params, headers: headers)
+			.validate()
+			.responseDecodable(of: SeminarDetailInfoResponse.self) { response in
+				switch response.result {
+				case .success(let result):
+					if result.isSuccess {
+						guard let result = result.result else {return}
+						completion(result)
+					} else {
+						// 통신은 정상적으로 됐으나(200), error발생
+						print("실패(세미나 상세정보): \(result.message)")
+					}
+				case .failure(let error):
+					// 실제 HTTP에러 404
+					print("실패(AF-세미나 상세정보): \(error.localizedDescription)")
+				}
+			}
 	}
 	
 	// 세미나 참가자 request
@@ -49,7 +54,10 @@ class SeminarDetailViewModel {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
         ]
-		AF.request(url, method: .get, headers: headers)
+		let params: Parameters = [
+			"member-idx": UserDefaults.standard.integer(forKey: "memberIdx")
+		]
+		AF.request(url, method: .get, parameters: params, headers: headers)
 			.validate()
 			.responseDecodable(of: SeminarDetailAttentdantResponse.self) { response in
 				switch response.result {

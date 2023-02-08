@@ -30,6 +30,7 @@ class EventApplyViewModel {
 						completion(result)
 					} else {
 						print("실패(프로그램 신청): \(result.message)")
+						completion(result)
 					}
 				case .failure(let error):
 					print("실패(AF-프로그램 신청): \(error.localizedDescription)")

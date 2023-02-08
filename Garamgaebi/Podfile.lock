@@ -22,6 +22,7 @@ PODS:
     - RxSwift (= 6.5.0)
   - RxSwift (6.5.0)
   - SnapKit (5.6.0)
+  - Starscream (4.0.4)
   - Then (3.0.0)
   - WeakMapTable (1.2.0)
 
@@ -35,6 +36,7 @@ DEPENDENCIES:
   - RxCocoa
   - RxSwift
   - SnapKit (~> 5.6.0)
+  - Starscream
   - Then
 
 SPEC REPOS:
@@ -49,6 +51,7 @@ SPEC REPOS:
     - RxRelay
     - RxSwift
     - SnapKit
+    - Starscream
     - Then
     - WeakMapTable
 
@@ -63,9 +66,10 @@ SPEC CHECKSUMS:
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
+  Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
   WeakMapTable: 05c694ce8439a7a9ebabb56187287a63c57673d6
 
-PODFILE CHECKSUM: f9ea9cb5c068ce9023587b651b9b4dcb154c1e39
+PODFILE CHECKSUM: e04d8948ad281e29531695da83324b1f289a8b24
 
 COCOAPODS: 1.11.3

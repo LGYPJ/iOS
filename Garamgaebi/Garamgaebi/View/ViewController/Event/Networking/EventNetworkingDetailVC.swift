@@ -54,13 +54,13 @@ class EventNetworkingDetailVC: UIViewController {
 	var networkingInfo: NetworkingDetailInfo = .init(programIdx: 0, title: "", date: "", location: "", fee: 0, endDate: "", programStatus: "", userButtonStatus: "") {
 		didSet {
 			configureStatus()
-//			tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
 		}
 	}
 	
 	var userButtonStatus = ProgramUserButtonStatus.APPLY {
 		didSet {
-			tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+//			tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+			tableView.reloadData()
 		}
 	}
 	
@@ -89,6 +89,7 @@ class EventNetworkingDetailVC: UIViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		self.tabBarController?.tabBar.isHidden = true
+		fetchNetworkingInfo()
 	}
     
 
@@ -178,7 +179,7 @@ extension EventNetworkingDetailVC {
 	}
 	// 네트워킹 신청 did tap
 	@objc private func didTapRegisterButton() {
-		navigationController?.pushViewController(EventApplyVC(type: "NETWORKING",programId: 1), animated: true)
+		navigationController?.pushViewController(EventApplyVC(type: "NETWORKING",programId: self.networkingId), animated: true)
 	}
 	// 게임 참가하기 did tap
 	@objc private func didTapEntranceButton() {
@@ -202,18 +203,16 @@ extension EventNetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 			cell.eventNameLabel.text = self.networkingInfo.title
 //			cell.dateInfoLabel.text = self.networkingInfo.date
 			cell.locationInfoLabel.text = self.networkingInfo.location
-			cell.costInfoLabel.text = "\(self.networkingInfo.fee)"
+			if self.networkingInfo.fee == 0 {
+				cell.costStackView.isHidden = true
+			} else {
+				cell.costStackView.isHidden = false
+				cell.costInfoLabel.text = "\(self.networkingInfo.fee)원"
+			}
 //			cell.deadlineInfoLabel.text = self.networkingInfo.endDate
 			
-			let convertDate = self.networkingInfo.date.toDate()
-			let convertEndDate = self.networkingInfo.endDate.toDate()
-			
-			let dateFormatter = DateFormatter()
-			dateFormatter.dateFormat = "yyyy-MM-dd a h시"
-			dateFormatter.locale = Locale(identifier: "ko_KR")
-			
-			cell.dateInfoLabel.text = dateFormatter.string(from: convertDate ?? Date())
-			cell.deadlineInfoLabel.text = dateFormatter.string(from: convertEndDate ?? Date())
+			cell.dateInfoLabel.text = self.networkingInfo.date.formattingDetailDate()
+			cell.deadlineInfoLabel.text = self.networkingInfo.endDate.formattingDetailDate()
 			
 			switch self.userButtonStatus {
 			case .APPLY:
