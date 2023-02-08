@@ -52,6 +52,7 @@ class OtherProfileVC: UIViewController {
     let contentView = UIView()
     
     var profileImageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 50
         $0.backgroundColor = .mainGray

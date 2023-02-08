@@ -60,6 +60,9 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         let view = UIImageView()
         view.layer.cornerRadius = 50
         view.backgroundColor = .mainGray
+        
+        // 이미지 centerCrop
+        view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         
         return view
@@ -78,6 +81,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.placeholder = "닉네임을 입럭해주세요 (최대 8글자)"
         $0.basicTextField()
         
+        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
     }
@@ -91,6 +95,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.placeholder = "소속을 입럭해주세요"
         $0.basicTextField()
         
+        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
     }
@@ -104,6 +109,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.placeholder = "이메일을 입럭해주세요"
         $0.basicTextField()
         
+        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
     }
@@ -127,7 +133,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     
     let editDoneBtn = UIButton().then {
         $0.basicButton()
-        $0.setTitle("완료하기", for: .normal)
+        $0.setTitle("저장하기", for: .normal)
     }
     
     
@@ -401,10 +407,30 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             }
         }
     }
+    
+    @objc func allTextFieldFilledIn() {
+        
+        /* 모든 textField가 채워졌으면 프로필 저장 버튼 활성화 */
+        if self.nameTextField.text?.count != 0,
+           self.orgTextField.text?.count != 0,
+           self.emailTextField.text?.count != 0 {
+
+            // 프로필 저장버튼 활성화
+            UIView.animate(withDuration: 0.33) { [weak self] in
+                self?.editDoneBtn.backgroundColor = .mainBlue
+            }
+            editDoneBtn.isEnabled = true
+            
+        } else { // 프로필 저장버튼 비활성화
+            editDoneBtn.isEnabled = false
+            UIView.animate(withDuration: 0.33) { [weak self] in
+                self?.editDoneBtn.backgroundColor = .mainGray
+            }
+        }
+    }
 
     // 뒤로가기 버튼 did tap
     @objc private func didTapBackBarButton() {
-//        print("뒤로가기 버튼 클릭")
         self.navigationController?.popViewController(animated: true)
     }
     

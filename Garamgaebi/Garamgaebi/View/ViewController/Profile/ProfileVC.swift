@@ -59,7 +59,10 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     let contentView = UIView()
     
     var profileImageView = UIImageView().then {
+        // 이미지 centerCrop
+        $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
+        
         $0.layer.cornerRadius = 50
         $0.backgroundColor = .mainGray
     }
@@ -493,19 +496,20 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     }
     
     @objc private func editButtonDidTap(_ sender : UIButton) {
-        print("프로필 편집 버튼 클릭")
+//        print("프로필 편집 버튼 클릭")
         
-        // 화면 전환
-        let nextVC = ProfileEditVC()
-        
-        guard let nameString = self.nameLabel.text else { return }
-        guard let orgString = self.orgLabel.text else { return }
-        guard let emailString = self.emailLabel.text else { return }
-        guard let introduceString = self.introduceTextField.text else { return }
-        guard let image = self.profileImageView.image else { return }
         
         // 다음 화면으로 넘길 텍스트
         DispatchQueue.main.async {
+            
+            // 화면 전환
+            let nextVC = ProfileEditVC()
+            
+            guard let nameString = self.nameLabel.text else { return }
+            guard let orgString = self.orgLabel.text else { return }
+            guard let emailString = self.emailLabel.text else { return }
+            guard let introduceString = self.introduceTextField.text else { return }
+            guard let image = self.profileImageView.image else { return }
             
             // 값 넘기기
             nextVC.nameTextField.text = nameString
