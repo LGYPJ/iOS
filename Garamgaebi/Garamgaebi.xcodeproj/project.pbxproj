@@ -50,6 +50,7 @@
 		46876C6729732053000BA1B6 /* ProfileWithdrawalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46876C6629732053000BA1B6 /* ProfileWithdrawalVC.swift */; };
 		46876C692973D7E3000BA1B6 /* ProfileInputCareerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46876C682973D7E3000BA1B6 /* ProfileInputCareerVC.swift */; };
 		4688328C298B7A2D00D85886 /* ProfileHistoryDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4688328B298B7A2D00D85886 /* ProfileHistoryDataModel.swift */; };
+		468A713B2990BD9000696FC6 /* OtherProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468A713A2990BD9000696FC6 /* OtherProfileVC.swift */; };
 		46B4780B29700FEE002186A3 /* ProfileServiceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B4780A29700FEE002186A3 /* ProfileServiceVC.swift */; };
 		46C18D25297866E600A05CBF /* ProfileDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C18D24297866E600A05CBF /* ProfileDataModel.swift */; };
 		46C18D2929788A7600A05CBF /* ProfileInputSNSVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C18D2829788A7600A05CBF /* ProfileInputSNSVC.swift */; };
@@ -186,6 +187,7 @@
 		46876C6629732053000BA1B6 /* ProfileWithdrawalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileWithdrawalVC.swift; sourceTree = "<group>"; };
 		46876C682973D7E3000BA1B6 /* ProfileInputCareerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInputCareerVC.swift; sourceTree = "<group>"; };
 		4688328B298B7A2D00D85886 /* ProfileHistoryDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHistoryDataModel.swift; sourceTree = "<group>"; };
+		468A713A2990BD9000696FC6 /* OtherProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherProfileVC.swift; sourceTree = "<group>"; };
 		46B4780A29700FEE002186A3 /* ProfileServiceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileServiceVC.swift; sourceTree = "<group>"; };
 		46C18D24297866E600A05CBF /* ProfileDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDataModel.swift; sourceTree = "<group>"; };
 		46C18D2829788A7600A05CBF /* ProfileInputSNSVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInputSNSVC.swift; sourceTree = "<group>"; };
@@ -763,6 +765,7 @@
 				46828A4129752EF80037AB8C /* ProfileInputEducationVC.swift */,
 				46C18D2829788A7600A05CBF /* ProfileInputSNSVC.swift */,
 				462183F4297C51B800B9A035 /* ServiceBottomSheetVC.swift */,
+				468A713A2990BD9000696FC6 /* OtherProfileVC.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -1137,6 +1140,7 @@
 				60093A8D296E90FD00F76783 /* UniEmailAuthVC.swift in Sources */,
 				60EC5310298900700068BD5F /* Date+.swift in Sources */,
 				46704AEA297F9D2B005E63EA /* ProfileHistoryTableViewCell.swift in Sources */,
+				468A713B2990BD9000696FC6 /* OtherProfileVC.swift in Sources */,
 				60BD04F62973AD2600F4B433 /* HomeMyEventInfoTableViewCell.swift in Sources */,
 				60513F3D298E5FB40065CD15 /* RegisterCareerViewModel.swift in Sources */,
 				60AA6BCD29755621002878B6 /* CustomHeaderView.swift in Sources */,
@@ -1343,7 +1347,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FKL5LCYWBF;
+				DEVELOPMENT_TEAM = QNLYL4GD4K;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Garamgaebi/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 공유 및 저장을 위해 접근 권한을 허용해 주세요.";
@@ -1377,7 +1381,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FKL5LCYWBF;
+				DEVELOPMENT_TEAM = QNLYL4GD4K;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Garamgaebi/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 공유 및 저장을 위해 접근 권한을 허용해 주세요.";
