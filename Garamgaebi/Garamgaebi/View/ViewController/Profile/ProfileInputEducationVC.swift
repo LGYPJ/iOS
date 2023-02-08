@@ -156,17 +156,9 @@ class ProfileInputEducationVC: UIViewController {
 
     lazy var startDateTextField: UITextField = {
         let textField = UITextField()
-
-        let calenderImg = UIImageView(image: UIImage(named: "CalendarMonth"))
-        textField.addSubview(calenderImg)
-        calenderImg.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview().inset(14)
-            make.right.equalToSuperview().inset(15)
-            make.width.equalTo(18)
-        }
         
+        textField.dateTextField()
         textField.placeholder = "시작년월"
-        textField.basicTextField()
 
         textField.inputView = startDatePickerView
         textField.inputAccessoryView = toolbar
@@ -191,16 +183,8 @@ class ProfileInputEducationVC: UIViewController {
     lazy var endDateTextField: UITextField = {
         let textField = UITextField()
         
-        let calenderImg = UIImageView(image: UIImage(named: "CalendarMonth"))
-        textField.addSubview(calenderImg)
-        calenderImg.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview().inset(14)
-            make.right.equalToSuperview().inset(15)
-            make.width.equalTo(18)
-        }
-
+        textField.dateTextField()
         textField.placeholder = "종료년월"
-        textField.basicTextField()
         
         textField.inputView = endDatePickerView
         textField.inputAccessoryView = toolbar

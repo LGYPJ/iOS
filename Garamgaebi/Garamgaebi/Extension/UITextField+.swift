@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 extension UITextField {
 	func addLeftPadding() {
@@ -35,6 +36,18 @@ extension UITextField {
         self.layer.cornerRadius = 12
         self.layer.borderColor = UIColor.mainGray.cgColor
         self.layer.borderWidth = 1
+    }
+    
+    func dateTextField() {
+        self.basicTextField()
+        
+        let calenderImg = UIImageView(image: UIImage(named: "CalendarMonth"))
+        self.addSubview(calenderImg)
+        calenderImg.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview().inset(14)
+            make.right.equalToSuperview().inset(15)
+            make.width.equalTo(18)
+        }
     }
 	
 }
