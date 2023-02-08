@@ -73,12 +73,12 @@ class ViewAllMyEventVC: UIViewController {
     func fetchData(){
         
         // MyEventReadyInfo의 data를 불러옴
-        ViewAllViewModel.getViewAllMyEventReadyInfo(memberId: 1) { [weak self] result in
+        ViewAllViewModel.getViewAllMyEventReadyInfo(memberId: Int(UserDefaults.standard.string(forKey: "memberIdx")!)!) { [weak self] result in
             self?.dataList1 = result
         }
         
         // MyEventReadyInfo의 data를 불러옴
-        ViewAllViewModel.getViewAllMyEventCloseInfo(memberId: 1) { [weak self] result in
+        ViewAllViewModel.getViewAllMyEventCloseInfo(memberId: Int(UserDefaults.standard.string(forKey: "memberIdx")!)!) { [weak self] result in
             self?.dataList2 = result
         }
 
