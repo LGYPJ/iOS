@@ -157,7 +157,7 @@ extension EventAttendantTableViewCell {
 	}
 	
 	private func configureZeroAttentdant() {
-		if seminarAttendants.count == 0 {
+		if seminarAttendants.count == 0 && networkingAttendants.count == 0 {
 			collectionView.isHidden = true
 			noAttentdantBackgroundView.isHidden = false
 		} else {
@@ -169,15 +169,27 @@ extension EventAttendantTableViewCell {
 
 extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		return self.seminarAttendants.count
+		if self.type == "SEMINAR" {
+			return self.seminarAttendants.count
+		} else {
+			return self.networkingAttendants.count
+		}
+		
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EventAttendantCollectionViewCell.identifier, for: indexPath) as? EventAttendantCollectionViewCell else {return UICollectionViewCell()}
 		
-		let cellData = self.seminarAttendants[indexPath.row]
-		cell.profileImageView.image = UIImage(named: cellData.profileImg)
-		cell.userNameLabel.text = cellData.nickname
+		if self.type == "SEMINAR" {
+			let cellData = self.seminarAttendants[indexPath.row]
+			cell.profileImageView.image = UIImage(named: cellData.profileImg)
+			cell.userNameLabel.text = cellData.nickname
+		} else {
+			let cellData = self.networkingAttendants[indexPath.row]
+			cell.profileImageView.image = UIImage(named: cellData.profileImg)
+			cell.userNameLabel.text = cellData.nickname
+		}
+		
 		
 		
 //		if indexPath.row == 0{
