@@ -202,7 +202,6 @@ extension EventSeminarDetailVC: UITableViewDelegate, UITableViewDataSource {
 			cell.registerButton.addTarget(self, action: #selector(didTapRegisterButton), for: .touchUpInside)
 			
 			cell.eventNameLabel.text = self.seminarInfo.title
-//			cell.dateInfoLabel.text = self.seminarInfo.date
 			cell.locationInfoLabel.text = self.seminarInfo.location
 			if self.seminarInfo.fee == 0 {
 				cell.costStackView.isHidden = true
@@ -211,17 +210,6 @@ extension EventSeminarDetailVC: UITableViewDelegate, UITableViewDataSource {
 				cell.costInfoLabel.text = "\(self.seminarInfo.fee)원"
 			}
 			
-//			cell.deadlineInfoLabel.text = self.seminarInfo.endDate
-			
-//			let convertDate = self.seminarInfo.date.toDate()
-//			let convertEndDate = self.seminarInfo.endDate.toDate()
-//
-//			let dateFormatter = DateFormatter()
-//			dateFormatter.dateFormat = "yyyy-MM-dd a h시"
-//			dateFormatter.locale = Locale(identifier: "ko_KR")
-//
-//			cell.dateInfoLabel.text = dateFormatter.string(from: convertDate ?? Date())
-//			cell.deadlineInfoLabel.text = dateFormatter.string(from: convertEndDate ?? Date())
 			
 			cell.dateInfoLabel.text = self.seminarInfo.date.formattingDetailDate()
 			cell.deadlineInfoLabel.text = self.seminarInfo.endDate.formattingDetailDate()
@@ -235,9 +223,9 @@ extension EventSeminarDetailVC: UITableViewDelegate, UITableViewDataSource {
 				cell.registerButton.layer.borderWidth = 1
 			case .CANCEL:
 				cell.registerButton.setTitle("신청취소", for: .normal)
-				cell.registerButton.setTitleColor(.white, for: .normal)
-				cell.registerButton.isEnabled = true
-				cell.registerButton.backgroundColor = .mainBlue
+				cell.registerButton.setTitleColor(.mainBlue, for: .normal)
+				cell.registerButton.isEnabled = false
+				cell.registerButton.backgroundColor = .white
 				cell.registerButton.layer.borderWidth = 1
 				
 			case .BEFORE_APPLY_CONFIRM:
