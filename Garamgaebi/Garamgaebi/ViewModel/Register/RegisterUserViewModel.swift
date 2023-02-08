@@ -18,7 +18,7 @@ class RegisterUserViewModel {
     // password -> 추후 제거 예정
     
     // response로 memberIdx 받아옴
-    public static func requestRegisterUser(_ parameter : RegisterUserInfo, completion: @escaping (RegisterMemberIdx) -> ()) {
+    public static func requestRegisterUser(parameter : RegisterUserInfo, completion: @escaping (RegisterMemberIdx) -> ()) {
         let url = "https://garamgaebi.shop/member/post"
         let body: [String: Any] = [
             "nickname": parameter.nickname,
@@ -36,12 +36,13 @@ class RegisterUserViewModel {
             case .success(let result):
                 if result.isSuccess {
                     print("DEBUG: 가입 성공", result.message)
-                    completion(result.result)
+                    completion(result.result!)
                 } else {
                     print("DEBUG: 가입 실패", result.message)
                 }
                 
             case .failure(let error):
+                print(error)
                 print("DEBUG: 가입 RegisterUserInfo 전송 실패", error.localizedDescription)
             }
         }
