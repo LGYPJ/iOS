@@ -158,5 +158,9 @@ extension RecommendUsersInfoTableViewCell: UICollectionViewDataSource, UICollect
         
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        NotificationCenter.default.post(name: Notification.Name("postOtherProfileMemberIdx"), object: recommendUsersList[indexPath.row].memberIdx)
+    }
 
 }
