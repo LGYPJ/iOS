@@ -309,12 +309,22 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         showSnsDefaultLabel()
         showCareerDefaultLabel()
         showEducationDefaultLabel()
-        
+        configNotificationCenter()
         
     }
     
     
     // MARK: - Functions
+    func configNotificationCenter() {
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadProfile), name: Notification.Name("profileVCRefresh"), object: nil)
+    }
+    
+    @objc func reloadProfile() {
+        snsTableView.reloadData()
+        careerTableView.reloadData()
+        eduTableView.reloadData()
+    }
+    
     func configureLayouts() {
         
         // addSubview - HeaderView
@@ -834,11 +844,13 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
         }
         else if tableView == careerTableView {
             //            print("Career 개수: \(careerDataModel.count)")
+            //print(careerDataModel)
             return careerDataModel.count
         }
         else if tableView == eduTableView {
             //            print("Edu 개수: \(eduDataModel.count)")
-            return eduDataModel.count
+            return eduData.count
+            //return eduDataModel.count
         }
         else { return 0 }
     }
@@ -882,7 +894,9 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
         else if tableView == eduTableView {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileHistoryTableViewCell.identifier, for: indexPath) as? ProfileHistoryTableViewCell else {return UITableViewCell()}
             
-            let row = eduDataModel[indexPath.row]
+            //let row = eduDataModel[indexPath.row]
+            let row = eduData[indexPath.row]
+            
 //            print(row.institution)
             cell.companyLabel.text = row.institution
             cell.positionLabel.text = row.major
