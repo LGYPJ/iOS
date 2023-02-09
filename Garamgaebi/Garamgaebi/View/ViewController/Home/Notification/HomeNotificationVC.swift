@@ -10,7 +10,7 @@ import SnapKit
 
 class HomeNotificationVC: UIViewController {
 
-    let memberIdx = Int(UserDefaults.standard.string(forKey: "memberIdx")!)!
+    let memberIdx = UserDefaults.standard.integer(forKey: "memberIdx")
     var currentPage = 0
     
     public var notificationList: [NotificationInfo] = [] {

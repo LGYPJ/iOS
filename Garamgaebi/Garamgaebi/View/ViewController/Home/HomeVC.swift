@@ -12,6 +12,7 @@ import SnapKit
 class HomeVC: UIViewController {
     
     // MARK: - Variable
+    let memberIdx = UserDefaults.standard.integer(forKey: "memberIdx")
     
     public var homeSeminarInfo: [HomeSeminarInfo] = [] {
         didSet {
@@ -143,24 +144,30 @@ class HomeVC: UIViewController {
     }
     private func fetchData() {
         
-        // HomeSeminarInfo의 data를 불러옴
+        // 세미나 정보 API
         HomeViewModel.getHomeSeminarInfo { [weak self] result in
             self?.homeSeminarInfo = result
         }
-        
-        // HomeNetworkingInfo의 data를 불러옴
+        // 네트워킹 정보 API
         HomeViewModel.getHomeNetworkingInfo { [weak self] result in
             self?.homeNetworkingInfo = result
         }
-        
+        // 가람개비 유저 10명 추천 API
         HomeViewModel.getRecommendUsersInfo { [weak self] result in
             self?.recommendUsersInfo = result
         }
-        
-        HomeViewModel.getHomeMyEventInfo(memberId: 1) { [weak self] result in
+        // 내 모임 정보 API
+        HomeViewModel.getHomeMyEventInfo(memberId: memberIdx) { [weak self] result in
             self?.myEventInfo = result
         }
-
+        // 읽지 않은 알림 여부 API
+        NotificationViewModel.getIsUnreadNotifications(memberIdx: memberIdx) { [weak self] result in
+            if result.isUnreadExist {
+                self?.notificationViewButton.setImage(UIImage(named: "NotificationUnreadIcon"), for: .normal)
+            } else {
+                self?.notificationViewButton.setImage(UIImage(named: "NotificationIcon"), for: .normal)
+            }
+        }
     }
     
     func configNotificationCenter() {
@@ -170,9 +177,10 @@ class HomeVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(pushNetworkingDetail(_:)), name: Notification.Name("pushNetworkingDetailVC"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(postScrollDirection), name: Notification.Name("getScrollDirection"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(postOtherProfileMemberIdx(_:)), name: Notification.Name("postOtherProfileMemberIdx"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(pushEventPopUpView(_:)), name: Notification.Name("pushEventPopUpView"), object: nil)
         
     }
-    
+
     @objc private func pushNextView(_ sender: UIButton) {
         switch sender {
         case notificationViewButton:
@@ -208,6 +216,13 @@ class HomeVC: UIViewController {
     
     @objc private func postScrollDirection() {
         NotificationCenter.default.post(name: Notification.Name("postScrollDirection"), object: tableView.contentOffset.y)
+    }
+    
+    @objc func pushEventPopUpView(_ notification: NSNotification) {
+        let popUpVC: UIViewController = notification.object as! UIViewController
+        
+        popUpVC.modalPresentationStyle = .overFullScreen
+        present(popUpVC, animated: false)
     }
     
     
