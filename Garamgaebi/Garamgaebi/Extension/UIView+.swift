@@ -22,5 +22,21 @@ extension UIView { // textField 흔들기
         layer.add(animation, forKey: "shake")
     }
     
+    func profileTopRadiusView() {
+        self.layer.borderColor = UIColor.mainGray.cgColor
+        self.layer.borderWidth = 1
+        self.layer.cornerRadius = 12
+        
+        self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        self.layer.backgroundColor = UIColor(hex: 0xF5F5F5).cgColor
+    }
+    
+    func profileBottomRadiusView() {
+        self.layer.borderColor = UIColor.mainGray.cgColor
+        self.layer.borderWidth = 1
+        self.layer.cornerRadius = 12
+        
+        self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+    }
 }
 
