@@ -225,7 +225,6 @@ class CompleteRegisterVC: UIViewController {
         //1234
         let useruniEmail = UserDefaults.standard.string(forKey: "uniEmail")!
         let userpassword = "1234"
-        print("로그인 된 memberIdx: 36")
         print("로그인 된 uniEmail: \(useruniEmail)")
         print("로그인 된 password: \(userpassword)")
         
@@ -250,7 +249,7 @@ class CompleteRegisterVC: UIViewController {
         /// memberIdx: 36
         /// uniEmail: seutest@gachon.ac.kr
         /// passwod: 1234
-        //register()
+//        register()
         
         login()
     }

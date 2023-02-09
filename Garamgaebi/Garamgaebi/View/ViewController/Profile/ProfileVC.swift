@@ -248,6 +248,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             self?.eduData = result
             self?.showEducationDefaultLabel()
             self?.eduTableView.reloadData()
+        }
         self.getSnsData { [weak self] result in
             self?.snsData = result
             self?.showSnsDefaultLabel()

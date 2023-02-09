@@ -23,7 +23,8 @@ class LoginViewModel {
 				switch response.result {
 				case .success(let result):
 					if result.isSuccess {
-						completion(result.result)
+                        guard let passData = result.result else {return}
+                        completion(passData)
 					} else {
 						print("실패(로그인): \(result.message)")
 					}

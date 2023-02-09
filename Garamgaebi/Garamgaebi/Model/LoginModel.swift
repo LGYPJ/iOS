@@ -11,13 +11,13 @@ struct LoginModelResponse: Codable {
 	let isSuccess: Bool
 	let code: Int
 	let message: String
-	let result: LoginModel
+	let result: LoginModel?
 }
 
 struct LoginModel: Codable {
 	let grantType: String
+    let accessToken: String
+    let refreshToken: String
+    let refreshTokenExpirationTime: Int
     let memberIdx: Int
-	let accessToken: String
-	let refreshToken: String
-	let refreshTokenExpirationTime: Int
 }
