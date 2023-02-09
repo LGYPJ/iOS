@@ -48,6 +48,32 @@ class NotificationViewModel {
             }
         
     }
+   
     
+    public static func getIsUnreadNotifications(memberIdx: Int, completion: @escaping ((NotificationUnreadInfo) -> Void)) {
+        let url = "https://garamgaebi.shop/notification/unread/\(memberIdx)"
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
+        ]
+        
+        AF.request(url, method: .get, headers: headers)
+            .validate()
+            .responseDecodable(of: NotificationUnreadInfoResponse.self) { response in
+                switch response.result {
+                case .success(let result):
+                    if result.isSuccess {
+                        guard let result = result.result else {return}
+                        completion(result)
+                    } else {
+                        // 통신은 정상적으로 됐으나(200), error발생
+                        print("실패(Unread Notification 조회): \(result.message)")
+                    }
+                case .failure(let error):
+                    // 실제 HTTP에러 404
+                    print("실패(AF-Unread Notification 조회): \(error.localizedDescription)")
+                }
+            }
+        
+    }
     
 }
