@@ -20,6 +20,10 @@ class OtherProfileVC: UIViewController {
 
     let token = UserDefaults.standard.string(forKey: "BearerToken")
     
+    var snsData: [SnsResult] = []
+    var careerData: [CareerResult] = []
+    var eduData: [EducationResult] = []
+    
     // MARK: - Subviews
     lazy var headerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 71))
@@ -198,23 +202,31 @@ class OtherProfileVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
-        tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = true
         view.backgroundColor = .white
         
         // 서버 통신
         self.getOtherInfo()
-        self.getSnsData()
-        self.getCareerData()
-        self.getEducationData()
+        
+        self.getSnsData { [weak self] result in
+            self?.snsData = result
+            self?.showSnsTableView()
+            self?.snsTableView.reloadData()
+        }
+        self.getCareerData { [weak self] result in
+            self?.careerData = result
+            self?.showCareerTableView()
+            self?.careerTableView.reloadData()
+        }
+        self.getEducationData { [weak self] result in
+            self?.eduData = result
+            self?.showEducationTableView()
+            self?.eduTableView.reloadData()
+        }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        showUserHistoryBox()
     }
     
     
@@ -403,7 +415,7 @@ class OtherProfileVC: UIViewController {
     }
     
     // MARK: - [GET] SNS 조회
-    func getSnsData() {
+    func getSnsData(completion: @escaping (([SnsResult])) -> Void) {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/sns/\(memberIdx)"
@@ -428,15 +440,8 @@ class OtherProfileVC: UIViewController {
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
-//                    print("성공(SNS조회): \(response.message)")
                     let result = response.result
-
-                    let snsData = SnsData.shared
-                    
-                    // 값 넣어주기
-                    snsData.snsDataModel = result
-//                    print("받은 SNS: \(snsData.snsDataModel.count)")
-                    self.snsTableView.reloadData()
+                    completion(result)
                     
                 } else {
                     print("실패(SNS조회): \(response.message)")
@@ -448,7 +453,7 @@ class OtherProfileVC: UIViewController {
     }
     
     // MARK: - [GET] Career 조회
-    func getCareerData() {
+    func getCareerData(completion: @escaping (([CareerResult])) -> Void) {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/career/\(memberIdx)"
@@ -473,15 +478,9 @@ class OtherProfileVC: UIViewController {
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
-//                    print("성공(Career조회): \(response.message)")
-                    let result = response.result
 
-                    let careerData = CareerData.shared
-                    
-                    // 값 넣어주기
-                    careerData.careerDataModel = result
-//                    print("받은 Career: \(careerData.careerDataModel.count)")
-                    self.careerTableView.reloadData()
+                    let result = response.result
+                    completion(result)
                     
                 } else {
                     print("실패(Career조회): \(response.message)")
@@ -493,7 +492,7 @@ class OtherProfileVC: UIViewController {
     }
     
     // MARK: - [GET] Education 조회
-    func getEducationData() {
+    func getEducationData(completion: @escaping (([EducationResult])) -> Void) {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/education/\(memberIdx)"
@@ -518,15 +517,9 @@ class OtherProfileVC: UIViewController {
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
-//                    print("성공(Education조회): \(response.message)")
-                    let result = response.result
 
-                    let eduData = EducationData.shared
-                    
-                    // 값 넣어주기
-                    eduData.educationDataModel = result
-//                    print("받은 Education: \(edudata.educationDataModel.count)")
-                    self.eduTableView.reloadData()
+                    let result = response.result
+                    completion(result)
                     
                 } else {
                     print("실패(Education조회): \(response.message)")
@@ -538,34 +531,47 @@ class OtherProfileVC: UIViewController {
     }
     
     //TODO: 없을 때는 안 보여주기
-    private func showUserHistoryBox() {
-        // sns
-        let snsCount = SnsData.shared.snsDataModel.count
-        snsTableView.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
-            $0.height.equalTo(snsCount * 41)
-        }
+    private func showSnsTableView() {
+        let snsCount = snsData.count
         
-        // career
-        let careerCount = CareerData.shared.careerDataModel.count
-        careerTableView.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
-            $0.height.equalTo(careerCount * 65)
+        if (snsCount == 0) {
+            //
+        } else {
+            snsTableView.snp.makeConstraints {
+                $0.top.equalToSuperview()
+                $0.leading.trailing.equalToSuperview()
+                $0.bottom.equalToSuperview()
+                $0.height.equalTo(snsCount * 41)
+            }
         }
+    }
+    private func showCareerTableView() {
+        let careerCount = careerData.count
         
-        // education
-        let eduCount = EducationData.shared.educationDataModel.count
-        eduTableView.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
-            $0.height.equalTo(eduCount * 65)
+        if (careerCount == 0) {
+            //
+        } else {
+            careerTableView.snp.makeConstraints {
+                $0.top.equalToSuperview()
+                $0.leading.trailing.equalToSuperview()
+                $0.bottom.equalToSuperview()
+                $0.height.equalTo(careerCount * 65)
+            }
         }
+    }
+    private func showEducationTableView() {
+        let eduCount = eduData.count
         
+        if (eduCount == 0) {
+            //
+        } else {
+            eduTableView.snp.makeConstraints {
+                $0.top.equalToSuperview()
+                $0.leading.trailing.equalToSuperview()
+                $0.bottom.equalToSuperview()
+                $0.height.equalTo(eduCount * 65)
+            }
+        }
     }
     
     // 뒤로가기 버튼 did tap
@@ -576,22 +582,15 @@ class OtherProfileVC: UIViewController {
 // MARK: - Extension
 extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // 저장된 데이터 가져오기
-        let snsDataModel = SnsData.shared.snsDataModel
-        let careerDataModel = CareerData.shared.careerDataModel
-        let eduDataModel = EducationData.shared.educationDataModel
         
         if tableView == snsTableView {
-//            print("SNS 개수: \(snsDataModel.count)")
-            return snsDataModel.count
+            return snsData.count
         }
         else if tableView == careerTableView {
-//            print("Career 개수: \(careerDataModel.count)")
-            return careerDataModel.count
+            return careerData.count
         }
         else if tableView == eduTableView {
-//            print("Edu 개수: \(eduDataModel.count)")
-            return eduDataModel.count
+            return eduData.count
         }
         else { return 0 }
     }
@@ -604,15 +603,9 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        // 저장된 데이터 가져오기
-        let snsDataModel = SnsData.shared.snsDataModel
-        let careerDataModel = CareerData.shared.careerDataModel
-        let eduDataModel = EducationData.shared.educationDataModel
-        
-        
         if tableView == snsTableView {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileSNSTableViewCell.identifier, for: indexPath) as? ProfileSNSTableViewCell else { return UITableViewCell()}
-            cell.snsLabel.text = snsDataModel[indexPath.row].address
+            cell.snsLabel.text = snsData[indexPath.row].address
             cell.editButton.setImage(UIImage(named: "ProfileCopy"), for: .normal)
             
             cell.selectionStyle = .none
@@ -621,7 +614,7 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
         else if tableView == careerTableView {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileHistoryTableViewCell.identifier, for: indexPath) as? ProfileHistoryTableViewCell else {return UITableViewCell()}
             
-            let row = careerDataModel[indexPath.row]
+            let row = careerData[indexPath.row]
             
             cell.companyLabel.text = row.company
             cell.positionLabel.text = row.position
@@ -634,8 +627,8 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
         else if tableView == eduTableView {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileHistoryTableViewCell.identifier, for: indexPath) as? ProfileHistoryTableViewCell else {return UITableViewCell()}
             
-            let row = eduDataModel[indexPath.row]
-//            print(row.institution)
+            let row = eduData[indexPath.row]
+
             cell.companyLabel.text = row.institution
             cell.positionLabel.text = row.major
             cell.periodLabel.text = "\(row.startDate) ~ \(row.endDate)"
