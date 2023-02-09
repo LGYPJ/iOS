@@ -279,6 +279,7 @@ class InputEducationVC: UIViewController {
         view.backgroundColor = .white
         addSubViews()
         configLayouts()
+        configureGestureRecognizer()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -679,5 +680,20 @@ extension InputEducationVC: UIPickerViewDataSource, UIPickerViewDelegate {
         } else {
             return monthArray[row]
         }
+    }
+}
+
+extension InputEducationVC {
+    private func configureGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.isEnabled = true
+        tapGestureRecognizer.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc private func viewDidTap() {
+        self.view.endEditing(true)
     }
 }

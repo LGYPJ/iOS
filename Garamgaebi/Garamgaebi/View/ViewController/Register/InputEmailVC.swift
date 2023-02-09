@@ -99,6 +99,7 @@ class InputEmailVC: UIViewController {
         view.backgroundColor = .white
         addSubViews()
         configLayouts()
+        configureGestureRecognizer()
     }
     
     
@@ -239,5 +240,20 @@ class InputEmailVC: UIViewController {
             fatalError("Missing TextField...")
         }
 
+    }
+}
+
+extension InputEmailVC {
+    private func configureGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.isEnabled = true
+        tapGestureRecognizer.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc private func viewDidTap() {
+        self.view.endEditing(true)
     }
 }

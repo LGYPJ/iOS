@@ -190,10 +190,11 @@ class UniEmailAuthVC: UIViewController {
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        UserDefaults.standard.set("hsw1920@naver.com", forKey: "socialEmail")
         view.backgroundColor = .white
         addSubViews()
         configLayouts()
+        configureGestureRecognizer()
     }
 
     
@@ -518,7 +519,17 @@ class UniEmailAuthVC: UIViewController {
     
 }
 
-
-
-
-
+extension UniEmailAuthVC {
+    private func configureGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.isEnabled = true
+        tapGestureRecognizer.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc private func viewDidTap() {
+        self.view.endEditing(true)
+    }
+}
