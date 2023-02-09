@@ -373,9 +373,12 @@ class ProfileInputCareerVC: UIViewController {
         let isWorking = "FALSE"
         
         // 서버 연동
-        postCareer(memberIdx: memberIdx, company: company, position: position, isWorking: isWorking, startDate: startDate, endDate: endDate)
+        postCareer(memberIdx: memberIdx, company: company, position: position, isWorking: isWorking, startDate: startDate, endDate: endDate) { result in
+            if result {
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
         
-        self.navigationController?.popViewController(animated: true)
     }
     
     func setCurrentYear() {
@@ -534,7 +537,7 @@ class ProfileInputCareerVC: UIViewController {
     
     
     // MARK: - [POST] 경력 추가
-    func postCareer(memberIdx: Int, company: String, position: String, isWorking: String, startDate: String, endDate: String) {
+    func postCareer(memberIdx: Int, company: String, position: String, isWorking: String, startDate: String, endDate: String, completion: @escaping ((Bool) -> Void)) {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/career"
@@ -567,6 +570,7 @@ class ProfileInputCareerVC: UIViewController {
             case .success(let response):
                 if response.isSuccess {
                     print("성공(Career추가): \(response.message)")
+                    completion(response.result)
                 } else {
                     print("실패(Career추가): \(response.message)")
                 }

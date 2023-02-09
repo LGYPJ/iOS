@@ -198,11 +198,13 @@ class ProfileInputSNSVC: UIViewController {
     }
     
     @objc private func saveButtonDidTap(_ sender: UIButton) {
-//        print("저장하기 버튼 클릭")
         guard let address = linkTextField.text else { return }
-        postSNS(memberIdx: memberIdx, address: address)
-                       
-        self.navigationController?.popViewController(animated: true)
+        postSNS(memberIdx: memberIdx, address: address) { result in
+            if result {
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+        
     }
     
     @objc func textFieldActivated(_ sender: UITextField) {
@@ -222,7 +224,7 @@ class ProfileInputSNSVC: UIViewController {
     }
     
     // MARK: - [POST] SNS 추가
-    func postSNS(memberIdx: Int, address: String) {
+    func postSNS(memberIdx: Int, address: String, completion: @escaping ((Bool) -> Void)) {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/sns"
@@ -251,6 +253,7 @@ class ProfileInputSNSVC: UIViewController {
             case .success(let response):
                 if response.isSuccess {
                     print("성공(SNS추가): \(response.message)")
+                    completion(response.result)
                 } else {
                     print("실패(SNS추가): \(response.message)")
                 }
