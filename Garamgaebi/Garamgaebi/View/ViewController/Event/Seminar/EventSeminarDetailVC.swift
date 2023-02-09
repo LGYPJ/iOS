@@ -86,6 +86,8 @@ class EventSeminarDetailVC: UIViewController {
 		fetchSeminarInfo()
 		
 		self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+		
+		NotificationCenter.default.addObserver(self, selector: #selector(presentPopupVC(_:)), name: Notification.Name("pushSeminarPreviewPopup"), object: nil)
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -94,6 +96,14 @@ class EventSeminarDetailVC: UIViewController {
 		fetchSeminarInfo()
 	}
     
+	@objc private func presentPopupVC(_ notification: NSNotification) {
+		let data: SeminarDetailPreview = notification.object as! SeminarDetailPreview
+		let vc = SeminarPreviewPopUpVC(previewInfo: data)
+		vc.modalPresentationStyle = .overFullScreen
+		
+		self.present(vc, animated: false)
+		
+	}
 
     
 
