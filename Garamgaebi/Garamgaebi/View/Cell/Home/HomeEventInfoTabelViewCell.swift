@@ -301,16 +301,13 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         
     }
     
-    // TODO: ScrollDirection 구해서 y에 빼줘야함
-    
     @objc func presentHomeSeminarPopUpVC(_ touch: UITapGestureRecognizer) {
         NotificationCenter.default.post(name: Notification.Name("getScrollDirection"), object: nil)
         popUpX = seminarPopUpButton.layer.frame.midX - 28
         popUpY = seminarPopUpButton.layer.frame.midY + 80 - scrollDirection
         
         let vc = HomeSeminarPopUpVC(x: popUpX, y: popUpY)
-        vc.modalPresentationStyle = .overFullScreen
-        self.window?.rootViewController?.present(vc, animated: false)
+        NotificationCenter.default.post(name: Notification.Name("pushEventPopUpView"), object: vc)
     }
     
     @objc func presentHomeNetworkingPopUpVC(_ touch: UITapGestureRecognizer) {
@@ -319,8 +316,7 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         popUpY = networkingPopUpButton.layer.frame.midY + 80 - scrollDirection
         
         let vc = HomeNetworkingPopUpVC(x: popUpX, y: popUpY)
-        vc.modalPresentationStyle = .overFullScreen
-        self.window?.rootViewController?.present(vc, animated: false)
+        NotificationCenter.default.post(name: Notification.Name("pushEventPopUpView"), object: vc)
     }
     
     @objc func setScrollDirection(_ notification: NSNotification) {
@@ -386,7 +382,6 @@ extension HomeEventInfoTableViewCell: UICollectionViewDataSource, UICollectionVi
         return cell
     }
     
-    // TODO: Notification Object 구조 만들어야함
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         switch collectionView.tag {

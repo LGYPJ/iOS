@@ -177,9 +177,10 @@ class HomeVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(pushNetworkingDetail(_:)), name: Notification.Name("pushNetworkingDetailVC"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(postScrollDirection), name: Notification.Name("getScrollDirection"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(postOtherProfileMemberIdx(_:)), name: Notification.Name("postOtherProfileMemberIdx"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(pushEventPopUpView(_:)), name: Notification.Name("pushEventPopUpView"), object: nil)
         
     }
-    
+
     @objc private func pushNextView(_ sender: UIButton) {
         switch sender {
         case notificationViewButton:
@@ -215,6 +216,13 @@ class HomeVC: UIViewController {
     
     @objc private func postScrollDirection() {
         NotificationCenter.default.post(name: Notification.Name("postScrollDirection"), object: tableView.contentOffset.y)
+    }
+    
+    @objc func pushEventPopUpView(_ notification: NSNotification) {
+        let popUpVC: UIViewController = notification.object as! UIViewController
+        
+        popUpVC.modalPresentationStyle = .overFullScreen
+        present(popUpVC, animated: false)
     }
     
     
