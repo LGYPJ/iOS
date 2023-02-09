@@ -22,7 +22,10 @@ PODS:
     - RxSwift (= 6.5.0)
   - RxSwift (6.5.0)
   - SnapKit (5.6.0)
+  - SocketRocket (0.6.0)
   - Starscream (4.0.4)
+  - StompClientLib (1.4.1):
+    - SocketRocket
   - Then (3.0.0)
   - WeakMapTable (1.2.0)
 
@@ -37,6 +40,7 @@ DEPENDENCIES:
   - RxSwift
   - SnapKit (~> 5.6.0)
   - Starscream
+  - StompClientLib
   - Then
 
 SPEC REPOS:
@@ -51,7 +55,9 @@ SPEC REPOS:
     - RxRelay
     - RxSwift
     - SnapKit
+    - SocketRocket
     - Starscream
+    - StompClientLib
     - Then
     - WeakMapTable
 
@@ -66,10 +72,12 @@ SPEC CHECKSUMS:
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
+  SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
+  StompClientLib: ac40390e9660c574675f1c933bec81c8e2811a4f
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
   WeakMapTable: 05c694ce8439a7a9ebabb56187287a63c57673d6
 
-PODFILE CHECKSUM: e04d8948ad281e29531695da83324b1f289a8b24
+PODFILE CHECKSUM: 853f5cd7e5570a5528e2033d761d22ec9ac17898
 
 COCOAPODS: 1.11.3

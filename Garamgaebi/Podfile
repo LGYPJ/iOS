@@ -17,6 +17,7 @@ target 'Garamgaebi' do
   pod 'KakaoSDKUser'  # 카카오 로그인, 사용자 관리 
   pod 'ReactorKit'
   pod 'Starscream'
+  pod 'StompClientLib'
   target 'GaramgaebiTests' do
     inherit! :search_paths
     # Pods for testing
