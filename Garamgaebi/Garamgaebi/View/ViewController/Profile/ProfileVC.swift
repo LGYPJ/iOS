@@ -21,12 +21,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
 
     let token = UserDefaults.standard.string(forKey: "BearerToken")
     
-    var eduData: [EducationResult] = [] {
-        didSet {
-            self.showEducationDefaultLabel()
-            self.eduTableView.reloadData()
-        }
-    }
+    var eduData: [EducationResult] = []
     
     // MARK: - Subviews
     lazy var headerView: UIView = {
@@ -248,7 +243,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
-        
+        //view.isScrollEnabled = false
         view.register(ProfileHistoryTableViewCell.self, forCellReuseIdentifier: ProfileHistoryTableViewCell.identifier)
         view.delegate = self
         view.dataSource = self
@@ -275,49 +270,22 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
+        tabBarController?.tabBar.isHidden = false
+        showSnsDefaultLabel()
+        showCareerDefaultLabel()
+        showEducationDefaultLabel()
         // 서버 통신
-        //        print("1: viewWillAppear()")
         self.getSnsData()
         self.getCareerData()
         self.getEducationData { [weak self] result in
             self?.eduData = result
-            
-        }
-        navigationController?.navigationBar.isHidden = true
-        tabBarController?.tabBar.isHidden = false
-    }
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nil, bundle: nil)
-        getSnsData()
-        getCareerData()
-        getEducationData { [weak self] result in
-            self?.eduData = result
-            
-//                    print("받은 Education: \(eduData.eduDataModel.count)")
+            self?.showEducationDefaultLabel()
+            self?.eduTableView.reloadData()
         }
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-//        print("1: viewDidAppear()")
-        showSnsDefaultLabel()
-        showCareerDefaultLabel()
-        showEducationDefaultLabel()
-        configNotificationCenter()
-        
-    }
-    
     
     // MARK: - Functions
-    func configNotificationCenter() {
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadProfile), name: Notification.Name("profileVCRefresh"), object: nil)
-    }
     
     @objc func reloadProfile() {
         snsTableView.reloadData()
@@ -800,20 +768,15 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     }
     func showEducationDefaultLabel() {
         let eduCount = eduData.count
-//        print("eduCount \(eduCount)")
-//        print("들어가는 Edu: \(eduCount)")
-        
         if (eduCount == 0) {
-//            print("Edu 아이템이 없음")
-            eduDefaultLabel.snp.makeConstraints {
+            eduDefaultLabel.snp.updateConstraints {
                 $0.top.equalToSuperview().inset(12)
                 $0.centerX.equalToSuperview()
                 $0.bottom.equalTo(addEduBtn.snp.top).offset(-12)
             }
         }
         else {
-//            print("Edu 테이블뷰 보여주기")
-            eduTableView.snp.makeConstraints {
+            eduTableView.snp.updateConstraints {
                 $0.top.equalToSuperview()
                 $0.leading.trailing.equalToSuperview()
                 $0.bottom.equalTo(addEduBtn.snp.top).offset(-12)

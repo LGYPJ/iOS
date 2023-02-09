@@ -381,12 +381,14 @@ class ProfileInputEducationVC: UIViewController {
         let isLearning = "FALSE"
         
         // 서버 연동
-        postEducation(memberIdx: memberIdx, institution: institution, major: major, isLearning: isLearning, startDate: startDate, endDate: endDate)
-        
-        // 서버 통신 후 profileVC reload 요청
-        NotificationCenter.default.post(name: Notification.Name("profileVCRefresh"), object: nil)
-        
-        self.navigationController?.popViewController(animated: true)
+        postEducation(memberIdx: memberIdx, institution: institution, major: major, isLearning: isLearning, startDate: startDate, endDate: endDate) { result in
+            if result {
+                // 서버 통신 후 profileVC reload 요청 notification 예시
+                // NotificationCenter.default.post(name: Notification.Name("profileVCRefresh"), object: nil)
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+
     }
     
     func setCurrentYear() {
@@ -543,7 +545,7 @@ class ProfileInputEducationVC: UIViewController {
     }
     
     // MARK: - [POST] 교육 추가
-    func postEducation(memberIdx: Int, institution: String, major: String, isLearning: String, startDate: String, endDate: String) {
+    func postEducation(memberIdx: Int, institution: String, major: String, isLearning: String, startDate: String, endDate: String, completion: @escaping ((Bool) -> Void)) {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/education"
@@ -576,6 +578,7 @@ class ProfileInputEducationVC: UIViewController {
             case .success(let response):
                 if response.isSuccess {
                     print("성공(Education추가): \(response.message)")
+                    completion(response.result)
                 } else {
                     print("실패(Education추가): \(response.message)")
                 }
