@@ -14,6 +14,13 @@ struct NotificationInfoResponse: Codable {
     let result: [NotificationInfo]?
 }
 
+struct NotificationUnreadInfoResponse: Codable {
+    let isSuccess: Bool
+    let code: Int
+    let message: String
+    let result: NotificationUnreadInfo?
+}
+
 struct NotificationInfo: Codable {
     let notificationIdx: Int
     let notificationType: String
@@ -21,4 +28,8 @@ struct NotificationInfo: Codable {
     let resourceIdx: Int
     let resourceType: String
     let isRead: Bool
+}
+
+struct NotificationUnreadInfo: Codable {
+    let isUnreadExist: Bool
 }
