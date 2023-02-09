@@ -26,8 +26,8 @@ class ProfileInputSNSVC: UIViewController {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "SNS"
-        label.textColor = UIColor(hex: 0x000000,alpha: 0.8)
+        label.text = "SNS 추가하기"
+        label.textColor = UIColor.mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
         return label
     }()
@@ -43,11 +43,32 @@ class ProfileInputSNSVC: UIViewController {
         return button
     }()
     
-    lazy var subtitleLinkLabel: UILabel = {
+    lazy var subtitleTypeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "SNS 종류"
+        label.textColor = .mainBlack
+        label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        return label
+    }()
+    
+    lazy var typeTextField: UITextField = {
+        let textField = UITextField()
+        
+        textField.basicTextField()
+        textField.placeholder = "표시할 이름을 입력해주세요 (예:블로그, 깃허브 등)"
+        
+        textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+        textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+        
+        return textField
+    }()
+    
+    lazy var subtitleLinkLabel : UILabel = {
         let label = UILabel()
         label.text = "링크"
         label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        
         return label
     }()
     
@@ -56,27 +77,6 @@ class ProfileInputSNSVC: UIViewController {
         
         textField.basicTextField()
         textField.placeholder = "https://"
-        
-        textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
-        textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
-        
-        return textField
-    }()
-    
-    lazy var subtitleNameLabel : UILabel = {
-        let label = UILabel()
-        label.text = "이름"
-        label.textColor = .mainBlack
-        label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
-        
-        return label
-    }()
-    
-    lazy var nameTextField: UITextField = {
-        let textField = UITextField()
-        
-        textField.basicTextField()
-        textField.placeholder = "표시할 이름을 입력해주세요 (예:블로그, 깃허브 등)"
         
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
@@ -108,20 +108,7 @@ class ProfileInputSNSVC: UIViewController {
 
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-//        print("2: viewWillDisappear()")
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-//        print("2: viewDidDisappear()")
-    }
-    
     // MARK: - Functions
-    
     func addSubViews() {
         
         /* HeaderView */
@@ -131,12 +118,12 @@ class ProfileInputSNSVC: UIViewController {
         
         /* Buttons */
         view.addSubview(linkTextField)
-        view.addSubview(nameTextField)
+        view.addSubview(typeTextField)
         view.addSubview(saveUserProfileButton)
         
         
         /* Labels */
-        [subtitleLinkLabel,subtitleNameLabel].forEach {
+        [subtitleLinkLabel,subtitleTypeLabel].forEach {
             view.addSubview($0)
         }
     }
@@ -162,30 +149,30 @@ class ProfileInputSNSVC: UIViewController {
             make.centerY.equalToSuperview()
         }
         
-        // subtitleLinkLabel
-        subtitleLinkLabel.snp.makeConstraints { make in
+        // subtitleTypeLabel
+        subtitleTypeLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.top.equalTo(headerView.snp.bottom).offset(16)
+        }
+        
+        // typeTextField
+        typeTextField.snp.makeConstraints { make in
+            make.top.equalTo(subtitleTypeLabel.snp.bottom).offset(4)
+            make.height.equalTo(48)
+            make.left.right.equalToSuperview().inset(16)
+        }
+        
+        // subtitleLinkLabel
+        subtitleLinkLabel.snp.makeConstraints { make in
+            make.left.equalTo(subtitleTypeLabel.snp.left)
+            make.top.equalTo(typeTextField.snp.bottom).offset(28)
         }
         
         // linkTextField
         linkTextField.snp.makeConstraints { make in
             make.top.equalTo(subtitleLinkLabel.snp.bottom).offset(4)
             make.height.equalTo(48)
-            make.left.right.equalToSuperview().inset(16)
-        }
-        
-        // subtitleNameLabel
-        subtitleNameLabel.snp.makeConstraints { make in
-            make.left.equalTo(subtitleLinkLabel.snp.left)
-            make.top.equalTo(linkTextField.snp.bottom).offset(28)
-        }
-        
-        // nameTextField
-        nameTextField.snp.makeConstraints { make in
-            make.top.equalTo(subtitleNameLabel.snp.bottom).offset(4)
-            make.height.equalTo(48)
-            make.left.right.equalTo(linkTextField)
+            make.left.right.equalTo(typeTextField)
         }
         
         
@@ -219,7 +206,6 @@ class ProfileInputSNSVC: UIViewController {
     
     // 뒤로가기 버튼 did tap
     @objc private func didTapBackBarButton() {
-//        print("뒤로가기 버튼 클릭")
         self.navigationController?.popViewController(animated: true)
     }
     

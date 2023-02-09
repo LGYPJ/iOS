@@ -44,7 +44,7 @@ class ProfileInputEducationVC: UIViewController {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "교육"
+        label.text = "교육 추가하기"
         label.textColor = UIColor.mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
         return label

@@ -21,9 +21,9 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
 
     let token = UserDefaults.standard.string(forKey: "BearerToken")
     
-    var eduData: [EducationResult] = []
     var snsData: [SnsResult] = []
     var careerData: [CareerResult] = []
+    var eduData: [EducationResult] = []
     
     // MARK: - Subviews
     lazy var headerView: UIView = {
@@ -234,8 +234,6 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         
         configureLayouts()
         
-        // 서버 통신
-        getMyInfo()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -244,11 +242,8 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         tabBarController?.tabBar.isHidden = false
         
         // 서버 통신
-        self.getEducationData { [weak self] result in
-            self?.eduData = result
-            self?.showEducationDefaultLabel()
-            self?.eduTableView.reloadData()
-        }
+        getMyInfo()
+        
         self.getSnsData { [weak self] result in
             self?.snsData = result
             self?.showSnsDefaultLabel()
@@ -258,6 +253,11 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             self?.careerData = result
             self?.showCareerDefaultLabel()
             self?.careerTableView.reloadData()
+        }
+        self.getEducationData { [weak self] result in
+            self?.eduData = result
+            self?.showEducationDefaultLabel()
+            self?.eduTableView.reloadData()
         }
     }
     
@@ -328,7 +328,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         scrollView.snp.makeConstraints {
             $0.top.equalTo(headerView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-10)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
         // contentView

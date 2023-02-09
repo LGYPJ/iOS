@@ -80,7 +80,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     }
     lazy var nameTextField = UITextField().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        $0.placeholder = "닉네임을 입럭해주세요 (최대 8글자)"
+        $0.placeholder = "닉네임 (8자 이내, 영문, 숫자 사용 가능)"
         $0.basicTextField()
         
         $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
@@ -89,12 +89,12 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     }
     
     let orgLabel = UILabel().then {
-        $0.text = "소속 *"
+        $0.text = "한 줄 소개 *"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
     }
     lazy var orgTextField = UITextField().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        $0.placeholder = "소속을 입럭해주세요"
+        $0.placeholder = "한 줄 소개를 입력해주세요 (예: 프리랜서 백엔드 개발자)"
         $0.basicTextField()
         
         $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
@@ -108,7 +108,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     }
     lazy var emailTextField = UITextField().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        $0.placeholder = "이메일을 입럭해주세요"
+        $0.placeholder = "이메일 주소를 입력해주세요"
         $0.basicTextField()
         
         $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)

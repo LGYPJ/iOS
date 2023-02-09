@@ -231,11 +231,10 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     
     // 회원탈퇴 버튼 did tap
     @objc private func withdrawalButtonDidTap() {
-//        print("회원탈퇴 버튼 클릭")
         
         // 화면 전환
         let nextVC = ProfileWithdrawalVC()
-        navigationController?.pushViewController(nextVC, animated: false)
+        navigationController?.pushViewController(nextVC, animated: true)
     }
     
     @objc

@@ -45,7 +45,7 @@ class ProfileInputCareerVC: UIViewController {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "경력"
+        label.text = "경력 추가하기"
         label.textColor = UIColor.mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
         return label
