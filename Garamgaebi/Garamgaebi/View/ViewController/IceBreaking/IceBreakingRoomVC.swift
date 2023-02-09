@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import Starscream
 import Alamofire
+import StompClientLib
 
 class IceBreakingRoomVC: UIViewController {
 	
@@ -106,6 +107,7 @@ class IceBreakingRoomVC: UIViewController {
 	private var cardCount = 10
 	private var currentIndex = 0
 	private var socket: WebSocket!
+	private var socketClient = StompClientLib()
 	
     // MARK: - Life Cycle
     
@@ -115,7 +117,8 @@ class IceBreakingRoomVC: UIViewController {
 		configureCollectionView()
 		configureViews()
 		configureButtonTarget()
-		connectWebSocket()
+//		connectWebSocket()
+		registerSockect()
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -203,23 +206,52 @@ extension IceBreakingRoomVC {
 	}
 	
 	private func connectWebSocket() {
-		let url = "ws://garamgaebi.shop/ws/game"
-		var request = URLRequest(url: URL(string: url)!)
-		request.timeoutInterval = 5
-//		request.addValue("Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")", forHTTPHeaderField: "Authorization")
-//		request.addValue(url, forHTTPHeaderField: "Origin")  // HTTPUpgare error 방지
-//		request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-		self.socket = WebSocket(request: request)
-		self.socket.delegate = self
-		self.socket.connect()
+//		let url = "ws://garamgaebi.shop/ws/game"
+//		var request = URLRequest(url: URL(string: url)!)
+//		request.timeoutInterval = 5
+////		request.addValue("Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")", forHTTPHeaderField: "Authorization")
+////		request.addValue(url, forHTTPHeaderField: "Origin")  // HTTPUpgare error 방지
+////		request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+//		self.socket = WebSocket(request: request)
+//		self.socket.delegate = self
+//		self.socket.connect()
+	}
+	
+	private func registerSockect() {
+		let url = URL(string: "ws://garamgaebi.shop:8080/ws/game/websocket")!
+		socketClient.openSocketWithURLRequest(
+			request: NSURLRequest(url: url),
+			delegate: self)
+//		socketClient.openSocketWithURLRequest(
+//			request: NSURLRequest(url: url),
+//			delegate: self,
+//			connectionHeaders: [
+//				"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
+//			])
+	}
+	
+	private func subscribe() {
+		socketClient.subscribe(destination: "/topic/game/room/1")
+	}
+
+	private func sendMessage() {
+		var payloadObject : [String : Any] = [
+			"type" : "ENTER"
+		]
+			
+		socketClient.sendJSONForDict(dict: payloadObject as AnyObject, toDestination: "/app/game/message")
+	}
+	
+	func disconnect() {
+		socketClient.disconnect()
 	}
 	
 	private func disconnectWebSocket() {
-		if socket != nil {
-			socket?.disconnect()
-		} else {
-			print("실패(disconnectWebSocket): WebSocket이 연결된 상태가 아닙니다.")
-		}
+//		if socket != nil {
+//			socket?.disconnect()
+//		} else {
+//			print("실패(disconnectWebSocket): WebSocket이 연결된 상태가 아닙니다.")
+//		}
 	}
 	
 	private func requestWebSocket(index: String) {
@@ -367,6 +399,36 @@ extension IceBreakingRoomVC: WebSocketDelegate {
 		case .error(let error):
 			print("websocket is error = \(error!)")
 		}
+	}
+	
+}
+
+extension IceBreakingRoomVC: StompClientLibDelegate {
+	func stompClient(client: StompClientLib!, didReceiveMessageWithJSONBody jsonBody: AnyObject?, akaStringBody stringBody: String?, withHeader header: [String : String]?, withDestination destination: String) {
+		//
+	}
+	
+	func stompClientDidDisconnect(client: StompClientLib!) {
+		print("Stomp socket is disconnected")
+	}
+	
+	func stompClientDidConnect(client: StompClientLib!) {
+		print("Stomp socket is connected")
+			
+		subscribe()
+	}
+	
+	func serverDidSendReceipt(client: StompClientLib!, withReceiptId receiptId: String) {
+		print("Receipt : \(receiptId)")
+	}
+	
+	func serverDidSendError(client: StompClientLib!, withErrorMessage description: String, detailedErrorMessage message: String?) {
+		socketClient.disconnect()
+		registerSockect()
+	}
+	
+	func serverDidSendPing() {
+		print("Server ping")
 	}
 	
 }
