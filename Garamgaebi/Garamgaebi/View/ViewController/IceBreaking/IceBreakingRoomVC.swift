@@ -7,8 +7,8 @@
 
 import UIKit
 import SnapKit
-import Starscream
 import Alamofire
+import StompClientLib
 
 class IceBreakingRoomVC: UIViewController {
 	
@@ -105,7 +105,7 @@ class IceBreakingRoomVC: UIViewController {
 	
 	private var cardCount = 10
 	private var currentIndex = 0
-	private var socket: WebSocket!
+	private var socketClient = StompClientLib()
 	
     // MARK: - Life Cycle
     
@@ -115,7 +115,7 @@ class IceBreakingRoomVC: UIViewController {
 		configureCollectionView()
 		configureViews()
 		configureButtonTarget()
-		connectWebSocket()
+		connectSocket()
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -202,32 +202,37 @@ extension IceBreakingRoomVC {
 		nextButton.addTarget(self, action: #selector(didTapNextButton), for: .touchUpInside)
 	}
 	
-	private func connectWebSocket() {
-		let url = "ws://garamgaebi.shop/ws/game"
-		var request = URLRequest(url: URL(string: url)!)
-		request.timeoutInterval = 5
-//		request.addValue("Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")", forHTTPHeaderField: "Authorization")
-//		request.addValue(url, forHTTPHeaderField: "Origin")  // HTTPUpgare error 방지
-//		request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-		self.socket = WebSocket(request: request)
-		self.socket.delegate = self
-		self.socket.connect()
+	private func connectSocket() {
+		let url = URL(string: "ws://garamgaebi.shop:8080/ws/game/websocket")!
+		socketClient.openSocketWithURLRequest(
+			request: NSURLRequest(url: url),
+			delegate: self)
+//		socketClient.openSocketWithURLRequest(
+//			request: NSURLRequest(url: url),
+//			delegate: self,
+//			connectionHeaders: [
+//				"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
+//			])
 	}
 	
-	private func disconnectWebSocket() {
-		if socket != nil {
-			socket?.disconnect()
-		} else {
-			print("실패(disconnectWebSocket): WebSocket이 연결된 상태가 아닙니다.")
-		}
+	private func subscribeSocket() {
+		socketClient.subscribe(destination: "/topic/game/room/1")
+	}
+
+	private func sendMessageWithSocket() {
+		var payloadObject : [String : Any] = [
+			"type" : "TALK",
+			"roomId": "1",
+			"sender": "연현",
+			"message": "Test입니다."
+		]
+			
+//		socketClient.sendJSONForDict(dict: payloadObject as AnyObject, toDestination: "/app/game/message")
+		socketClient.sendMessage(message: "Test입니다", toDestination: "/app/game/message", withHeaders: nil, withReceipt: "Receipt가 머지")
 	}
 	
-	private func requestWebSocket(index: String) {
-		if socket != nil {
-			socket.write(string: index)
-		} else {
-			print("실패(requestWebSocket): WebSocket이 연결된 상태가 아닙니다.")
-		}
+	private func disconnectSocket() {
+		socketClient.disconnect()
 	}
 	
 	private func scrollToNextItem() {
@@ -252,13 +257,13 @@ extension IceBreakingRoomVC {
 	// 뒤로가기 버튼 did tap
 	@objc private func didTapBackBarButton() {
 		self.navigationController?.popViewController(animated: true)
-		disconnectWebSocket()
+		disconnectSocket()
 	}
 	
 	// 다음 카드 버튼 did tap
 	@objc private func didTapNextButton() {
 		currentIndex += 1
-		requestWebSocket(index: "\(currentIndex)")
+		sendMessageWithSocket()
 		scrollToNextItem()
 	}
 }
@@ -341,33 +346,37 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 	}
 }
 
-extension IceBreakingRoomVC: WebSocketDelegate {
-	func didReceive(event: WebSocketEvent, client: WebSocket) {
-		switch event {
-		case .connected(let headers):
-			print("websocket is connected: \(headers)")
-		case .disconnected(let reason, let code):
-			print("websocket is disconnected: \(reason) with code: \(code)")
-		case .text(let text):
-			print("received text: \(text)")
-			self.currentIndex = Int(text) ?? 0
-			scrollToNextItem()
-		case .binary(let data):
-			print("Received data: \(data.count)")
-		case .ping(_):
-			break
-		case .pong(_):
-			break
-		case .viabilityChanged(_):
-			break
-		case .reconnectSuggested(_):
-			break
-		case .cancelled:
-			print("websocket is canclled")
-		case .error(let error):
-			print("websocket is error = \(error!)")
-		}
+extension IceBreakingRoomVC: StompClientLibDelegate {
+	func stompClient(client: StompClientLib!, didReceiveMessageWithJSONBody jsonBody: AnyObject?, akaStringBody stringBody: String?, withHeader header: [String : String]?, withDestination destination: String) {
+		print(jsonBody)
+		print(stringBody)
+		print(header)
 	}
+	
+	func stompClientDidDisconnect(client: StompClientLib!) {
+		print("Stomp socket is disconnected")
+	}
+	
+	func stompClientDidConnect(client: StompClientLib!) {
+		print("Stomp socket is connected")
+			
+		subscribeSocket()
+	}
+	
+	func serverDidSendReceipt(client: StompClientLib!, withReceiptId receiptId: String) {
+		print("Receipt : \(receiptId)")
+	}
+	
+	func serverDidSendError(client: StompClientLib!, withErrorMessage description: String, detailedErrorMessage message: String?) {
+		disconnectSocket()
+		connectSocket()
+	}
+	
+	func serverDidSendPing() {
+		print("Server ping")
+	}
+	
+	
 	
 }
 

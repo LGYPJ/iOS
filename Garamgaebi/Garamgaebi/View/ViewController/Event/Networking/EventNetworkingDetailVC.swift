@@ -223,9 +223,9 @@ extension EventNetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 				cell.registerButton.layer.borderWidth = 1
 			case .CANCEL:
 				cell.registerButton.setTitle("신청취소", for: .normal)
-				cell.registerButton.setTitleColor(.white, for: .normal)
+				cell.registerButton.setTitleColor(.mainBlue, for: .normal)
 				cell.registerButton.isEnabled = true
-				cell.registerButton.backgroundColor = .mainBlue
+				cell.registerButton.backgroundColor = .white
 				cell.registerButton.layer.borderWidth = 1
 				
 			case .BEFORE_APPLY_CONFIRM:
