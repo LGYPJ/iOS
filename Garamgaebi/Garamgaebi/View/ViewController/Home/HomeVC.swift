@@ -12,6 +12,7 @@ import SnapKit
 class HomeVC: UIViewController {
     
     // MARK: - Variable
+    let memberIdx = UserDefaults.standard.integer(forKey: "memberIdx")
     
     public var homeSeminarInfo: [HomeSeminarInfo] = [] {
         didSet {
@@ -143,24 +144,30 @@ class HomeVC: UIViewController {
     }
     private func fetchData() {
         
-        // HomeSeminarInfo의 data를 불러옴
+        // 세미나 정보 API
         HomeViewModel.getHomeSeminarInfo { [weak self] result in
             self?.homeSeminarInfo = result
         }
-        
-        // HomeNetworkingInfo의 data를 불러옴
+        // 네트워킹 정보 API
         HomeViewModel.getHomeNetworkingInfo { [weak self] result in
             self?.homeNetworkingInfo = result
         }
-        
+        // 가람개비 유저 10명 추천 API
         HomeViewModel.getRecommendUsersInfo { [weak self] result in
             self?.recommendUsersInfo = result
         }
-        
-        HomeViewModel.getHomeMyEventInfo(memberId: 1) { [weak self] result in
+        // 내 모임 정보 API
+        HomeViewModel.getHomeMyEventInfo(memberId: memberIdx) { [weak self] result in
             self?.myEventInfo = result
         }
-
+        // 읽지 않은 알림 여부 API
+        NotificationViewModel.getIsUnreadNotifications(memberIdx: memberIdx) { [weak self] result in
+            if result.isUnreadExist {
+                self?.notificationViewButton.setImage(UIImage(named: "NotificationUnreadIcon"), for: .normal)
+            } else {
+                self?.notificationViewButton.setImage(UIImage(named: "NotificationIcon"), for: .normal)
+            }
+        }
     }
     
     func configNotificationCenter() {
