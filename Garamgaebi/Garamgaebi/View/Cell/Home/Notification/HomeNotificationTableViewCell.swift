@@ -52,7 +52,6 @@ class HomeNotificationTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        contentView.backgroundColor = nil
     }
     
     func configSubViewLayouts() {
@@ -92,6 +91,8 @@ class HomeNotificationTableViewCell: UITableViewCell {
 
         if item.isRead == false {
             contentView.backgroundColor = .mainLightGray
+        } else {
+            contentView.backgroundColor = .white
         }
         contentLabel.text = item.content
     }
