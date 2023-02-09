@@ -236,7 +236,7 @@ class EventApplyVC: UIViewController {
 		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
 		textField.leftViewMode = .always
 //		textField.placeholder = "닉네임을 입력해주세요"
-		textField.attributedPlaceholder = NSAttributedString(string: "닉네임을 입력해주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 14)!])
+		textField.attributedPlaceholder = NSAttributedString(string: "가입 시 닉네임을 적어주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 14)!])
 
 		
 		return textField
@@ -247,7 +247,8 @@ class EventApplyVC: UIViewController {
 		label.textColor = .red
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
 		label.text = "닉네임이 일치하지 않습니다."
-		label.isHidden = true
+//		label.isHidden = true
+		label.alpha = 0
 		
 		return label
 	}()
@@ -269,7 +270,7 @@ class EventApplyVC: UIViewController {
 		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
 		textField.leftViewMode = .always
 //		textField.placeholder = "전화번호를 입력해주세요"
-		textField.attributedPlaceholder = NSAttributedString(string: "전화번호를 입력해주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 14)!])
+		textField.attributedPlaceholder = NSAttributedString(string: "숫자만 입력해주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 14)!])
 
 		
 		return textField
@@ -280,7 +281,8 @@ class EventApplyVC: UIViewController {
 		label.textColor = .red
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
 		label.text = "번호 형식이 올바르지 않습니다."
-		label.isHidden = true
+//		label.isHidden = true
+		label.alpha = 0
 		
 		return label
 	}()
@@ -678,8 +680,12 @@ extension EventApplyVC {
 			
 			// 이름 받는 property에 저장
 		case nicknameTextField:
-			// 유저 기본 닉네임과 동일
-			self.isValidNickname = text.isValidNickName()
+			if text == UserDefaults.standard.string(forKey: "nickname") {
+				self.isValidNickname = true
+			} else {
+				self.isValidNickname = false
+			}
+			
 			//저장
 		case numberTextField:
 			let numberRegEx = "[0-9]{11}"
