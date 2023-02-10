@@ -184,25 +184,35 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EventAttendantCollectionViewCell.identifier, for: indexPath) as? EventAttendantCollectionViewCell else {return UICollectionViewCell()}
 		
 		if self.type == "SEMINAR" {
+			if String(seminarAttendants.first?.memberIdx ?? -1) == UserDefaults.standard.string(forKey: "memberIdx") ?? "" {
+				UserDefaults.standard.set(true, forKey: "programId:\(programId)")
+			} else {
+				UserDefaults.standard.set(false, forKey: "programId:\(programId)")
+			}
+
 			let cellData = self.seminarAttendants[indexPath.row]
 			cell.profileImageView.kf.indicatorType = .activity
 			cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg), placeholder: UIImage(named: "ExProfileImage"))
 			
 			cell.userNameLabel.text = cellData.nickname
 			
-			if indexPath.row == 0 && String(cellData.memberIdx) == UserDefaults.standard.string(forKey: "memberIdx") ?? "" {
-				UserDefaults.standard.set(true, forKey: "programId:\(programId)")
+			if indexPath.row == 0 && UserDefaults.standard.bool(forKey: "programId:\(programId)") {
 				cell.profileImageView.layer.borderWidth = 2
 				cell.userNameLabel.textColor = .mainBlue
 			}
 		} else {
+			if String(networkingAttendants.first?.memberIdx ?? -1) == UserDefaults.standard.string(forKey: "memberIdx") ?? "" {
+				UserDefaults.standard.set(true, forKey: "programId:\(programId)")
+			} else {
+				UserDefaults.standard.set(false, forKey: "programId:\(programId)")
+			}
+			
 			let cellData = self.networkingAttendants[indexPath.row]
 			cell.profileImageView.kf.indicatorType = .activity
 			cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg), placeholder: UIImage(named: "ExProfileImage"))
 			cell.userNameLabel.text = cellData.nickname
 			
-			if indexPath.row == 0 && String(cellData.memberIdx) == UserDefaults.standard.string(forKey: "memberIdx") ?? "" {
-				UserDefaults.standard.set(true, forKey: "programId:\(programId)")
+			if indexPath.row == 0 && UserDefaults.standard.bool(forKey: "programId:\(programId)") {
 				cell.profileImageView.layer.borderWidth = 2
 				cell.userNameLabel.textColor = .mainBlue
 			}

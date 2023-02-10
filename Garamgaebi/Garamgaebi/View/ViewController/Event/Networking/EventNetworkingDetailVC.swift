@@ -179,10 +179,8 @@ extension EventNetworkingDetailVC {
 		
 		let dateTest = Date().compare(eventDate)
 		if dateTest == .orderedDescending {  // 시작시간이 현재시간보다 이전인 경우
-			print(true)
 			return true
 		} else {
-			print(false)
 			return false
 		}
 	}
@@ -289,6 +287,7 @@ extension EventNetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 			
 			cell.entranceContainerView.addGestureRecognizer(tapGestureRecognizer)
 			
+//			let testDate = "2023-02-10T18:29:00"
 			if isAvailableNetworking(fromDate: self.networkingInfo.date) && UserDefaults.standard.bool(forKey: "programId:\(networkingId)") {
 				cell.entranceContainerView.backgroundColor = .mainBlue
 				cell.entranceContainerView.isUserInteractionEnabled = true
