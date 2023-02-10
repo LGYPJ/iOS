@@ -26,7 +26,7 @@ class InputNickNameVC: UIViewController {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "닉네임"
+        label.text = "닉네임을 입력해주세요"
         label.textColor = .black
         label.font = UIFont.NotoSansKR(type: .Bold, size: 22)
         return label
@@ -43,7 +43,7 @@ class InputNickNameVC: UIViewController {
     
     lazy var nickNameTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "닉네임을 입력해주세요"
+        label.text = "닉네임"
         label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
         return label
