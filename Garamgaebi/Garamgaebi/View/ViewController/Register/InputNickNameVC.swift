@@ -53,6 +53,7 @@ class InputNickNameVC: UIViewController {
         let textField = UITextField()
         
         textField.addLeftPadding()
+        textField.addRightPadding()
         textField.placeholder = "닉네임 (8자 이내, 영문, 숫자 사용 가능)"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12

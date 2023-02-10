@@ -54,6 +54,7 @@ class InputEmailVC: UIViewController {
         let textField = UITextField()
         
         textField.addLeftPadding()
+        textField.addRightPadding()
         textField.placeholder = "이메일 주소를 입력해주세요"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
