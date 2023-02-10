@@ -103,6 +103,11 @@ class IceBreakingRoomVC: UIViewController {
 		return label
 	}()
 	
+	private var isStart = false {
+		didSet {
+			userCollectionview.reloadData()
+		}
+	}
 	private var cardCount = 10
 	private var currentIndex = 0
 	private var socketClient = StompClientLib()
@@ -293,7 +298,7 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 		if collectionView == userCollectionview {
 			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IceBreakingUserCollectionViewCell.idetifier, for: indexPath) as? IceBreakingUserCollectionViewCell else {return UICollectionViewCell()}
 			cell.nameLabel.text = "연현"
-			if indexPath.row == currentIndex {
+			if indexPath.row == currentIndex && isStart {
 				cell.profileImageView.layer.borderWidth = 2
 			}
 			return cell
@@ -339,6 +344,7 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 				cell.titleLabel.alpha = 0
 			}, completion: { [weak self] _ in
 				self?.cardCollectionView.scrollToItem(at: IndexPath(row: self!.currentIndex, section: 1), at: .centeredHorizontally, animated: false)
+				self?.isStart = true
 				self?.nextButton.alpha = 1
 				self?.nextButton.isHidden = false
 			})
