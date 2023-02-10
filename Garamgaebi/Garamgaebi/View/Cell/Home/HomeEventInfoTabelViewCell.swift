@@ -32,11 +32,16 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     
     lazy var seminarPopUpButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "PopUpIcon"), for: .normal)
         let gesture = UITapGestureRecognizer(target: self, action: #selector(presentHomeSeminarPopUpVC(_:)))
         gesture.numberOfTapsRequired = 1
         button.addGestureRecognizer(gesture)
         return button
+    }()
+    
+    lazy var seminarPopUpButtonImage: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "PopUpIcon")
+        return view
     }()
     
     lazy var seminarViewAllLabel: UIButton = {
@@ -76,11 +81,15 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     
     lazy var networkingPopUpButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "PopUpIcon"), for: .normal)
         let gesture = UITapGestureRecognizer(target: self, action: #selector(presentHomeNetworkingPopUpVC(_:)))
         gesture.numberOfTapsRequired = 1
         button.addGestureRecognizer(gesture)
         return button
+    }()
+    lazy var networkingPopUpButtonImage: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "PopUpIcon")
+        return view
     }()
     
     lazy var networkingViewAllLabel: UIButton = {
@@ -167,11 +176,13 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         
         self.contentView.addSubview(seminarTitleLabel)
         self.contentView.addSubview(seminarPopUpButton)
+        seminarPopUpButton.addSubview(seminarPopUpButtonImage)
         self.contentView.addSubview(seminarViewAllStack)
         self.contentView.addSubview(seminarCollectionView)
         
         self.contentView.addSubview(networkingTitleLabel)
         self.contentView.addSubview(networkingPopUpButton)
+        networkingPopUpButton.addSubview(networkingPopUpButtonImage)
         self.contentView.addSubview(networkingViewAllStack)
         self.contentView.addSubview(networkingCollectionView)
         
@@ -188,8 +199,14 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         }
         seminarPopUpButton.snp.makeConstraints { make in
             make.centerY.equalTo(seminarTitleLabel.snp.centerY)
-            make.left.equalTo(seminarTitleLabel.snp.right).offset(4)
+            make.left.equalTo(seminarTitleLabel.snp.right)
+            make.height.equalTo(seminarTitleLabel.snp.height)
+            make.width.equalTo(32)
+        }
+        seminarPopUpButtonImage.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(8)
             make.width.height.equalTo(16)
+            make.centerY.equalToSuperview()
         }
         seminarViewAllStack.snp.makeConstraints { make in
             make.centerY.equalTo(seminarTitleLabel.snp.centerY)
@@ -208,8 +225,14 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         }
         networkingPopUpButton.snp.makeConstraints { make in
             make.centerY.equalTo(networkingTitleLabel.snp.centerY)
-            make.left.equalTo(networkingTitleLabel.snp.right).offset(4)
+            make.left.equalTo(networkingTitleLabel.snp.right)
+            make.height.equalTo(networkingTitleLabel.snp.height)
+            make.width.equalTo(32)
+        }
+        networkingPopUpButtonImage.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(8)
             make.width.height.equalTo(16)
+            make.centerY.equalToSuperview()
         }
         networkingViewAllStack.snp.makeConstraints { make in
             make.top.equalTo(networkingTitleLabel.snp.top)
