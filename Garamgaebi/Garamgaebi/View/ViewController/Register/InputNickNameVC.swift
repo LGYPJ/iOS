@@ -43,7 +43,7 @@ class InputNickNameVC: UIViewController {
     
     lazy var nickNameTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "닉네임"
+        label.text = "닉네임을 입력해주세요"
         label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
         return label
@@ -53,7 +53,7 @@ class InputNickNameVC: UIViewController {
         let textField = UITextField()
         
         textField.addLeftPadding()
-        textField.placeholder = "닉네임을 입력해주세요"
+        textField.placeholder = "닉네임 (8자 이내, 영문, 숫자 사용 가능)"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
         textField.textColor = .black
@@ -72,8 +72,6 @@ class InputNickNameVC: UIViewController {
     lazy var nickNameValidLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
-        //label.text = "사용 불가능한 닉네임입니다." -> 0xFF0000, 1.0
-        //label.text = "사용 가능한 닉네임입니다." -> .mainBlue
         label.textColor = UIColor(hex: 0xFF0000)
         label.isHidden = true
         return label
@@ -188,14 +186,14 @@ class InputNickNameVC: UIViewController {
     // MARK: - ValidUserInfo
     
     func validateUserInfo() {
+        self.nickNameValidLabel.isHidden = false
         if isValidNickName {
             self.nextButton.isEnabled = true
             self.nickNameTextField.layer.borderColor = UIColor.mainBlack.cgColor
             self.nickNameTextField.layer.borderWidth = 1
             UIView.animate(withDuration: 0.33) {
                 self.nextButton.backgroundColor = .mainBlue
-                self.nickNameValidLabel.text = "사용 가능한 닉네임입니다"
-                self.nickNameValidLabel.textColor = .mainBlue
+                self.nickNameValidLabel.text = ""
             }
         } else {
             self.nextButton.isEnabled = false
@@ -203,27 +201,25 @@ class InputNickNameVC: UIViewController {
             self.nickNameTextField.layer.borderWidth = 1
             UIView.animate(withDuration: 0.33) {
                 self.nextButton.backgroundColor = .mainGray
-                self.nickNameValidLabel.text = "사용 불가능한 닉네임입니다."
-                self.nickNameValidLabel.textColor = UIColor(hex: 0xFF0000)
+                if self.nickNameTextField.text?.count == 0 {
+                    self.nickNameValidLabel.text = ""
+                } else {
+                    self.nickNameValidLabel.text = "닉네임은 8자 이내 영문, 숫자만 가능합니다"
+                }
+                self.nickNameValidLabel.textColor = UIColor(hex: 0x13FF0000)
             }
         }
-        
     }
     
     @objc func textFieldActivated(_ sender: UITextField) {
-        
-        sender.layer.borderColor = UIColor.mainBlack.cgColor
-        sender.layer.borderWidth = 1
-        
-        self.nickNameValidLabel.isHidden = false
-
+        self.validateUserInfo()
     }
     
     @objc func textFieldInactivated(_ sender: UITextField) {
-        
+        self.validateUserInfo()
+        self.nickNameValidLabel.isHidden = true
         sender.layer.borderColor = UIColor.mainGray.cgColor
         sender.layer.borderWidth = 1
-        
     }
     
     @objc
