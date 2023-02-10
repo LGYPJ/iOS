@@ -321,6 +321,9 @@ class UniEmailAuthVC: UIViewController {
     func sendEmail(_ sender: UIButton) {
         let uniEmail = UniEmailAuthModel(email: "\(userId)@gachon.ac.kr")
         
+        // 메일을 보내면서 uniEmail UserDefault에 저장
+        UserDefaults.standard.set("\(userId)@gachon.ac.kr", forKey: "uniEmail")
+        
         DispatchQueue.main.async {
             UniEmailAuthViewModel.requestSendEmail(uniEmail) { [weak self] result in
                 self?.authNumber = result
@@ -423,9 +426,6 @@ class UniEmailAuthVC: UIViewController {
     
     @objc
     private func nextButtonTapped(_ sender: Any) {
-        // uniEmail UserDefault에 저장
-        UserDefaults.standard.set("\(userId)@gachon.ac.kr", forKey: "uniEmail")
-        
         // EmailVC로 화면전환
         let nextVC = InputNickNameVC()
         nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
