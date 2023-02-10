@@ -191,6 +191,7 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 			cell.userNameLabel.text = cellData.nickname
 			
 			if indexPath.row == 0 && String(cellData.memberIdx) == UserDefaults.standard.string(forKey: "memberIdx") ?? "" {
+				UserDefaults.standard.set(true, forKey: "programId:\(programId)")
 				cell.profileImageView.layer.borderWidth = 2
 				cell.userNameLabel.textColor = .mainBlue
 			}
@@ -201,6 +202,7 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 			cell.userNameLabel.text = cellData.nickname
 			
 			if indexPath.row == 0 && String(cellData.memberIdx) == UserDefaults.standard.string(forKey: "memberIdx") ?? "" {
+				UserDefaults.standard.set(true, forKey: "programId:\(programId)")
 				cell.profileImageView.layer.borderWidth = 2
 				cell.userNameLabel.textColor = .mainBlue
 			}
