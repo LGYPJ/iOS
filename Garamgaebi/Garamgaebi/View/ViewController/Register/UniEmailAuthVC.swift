@@ -192,6 +192,8 @@ class UniEmailAuthVC: UIViewController {
         super.viewDidLoad()
         UserDefaults.standard.set("hsw1920@naver.com", forKey: "socialEmail")
         view.backgroundColor = .white
+        emailTextField.delegate = self
+        authNumberTextField.delegate = self
         addSubViews()
         configLayouts()
         configureGestureRecognizer()
@@ -473,6 +475,9 @@ class UniEmailAuthVC: UIViewController {
     @objc func textFieldActivated(_ sender: UITextField) {
         sender.layer.borderColor = UIColor.mainBlack.cgColor
         sender.layer.borderWidth = 1
+        if sender == authNumberTextField {
+            authNumNotificationLabel.isHidden = true
+        }
     }
     
     @objc func textFieldInactivated(_ sender: UITextField) {
@@ -518,5 +523,25 @@ extension UniEmailAuthVC {
     
     @objc private func viewDidTap() {
         self.view.endEditing(true)
+    }
+}
+
+extension UniEmailAuthVC: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else {return false}
+        var maxLength = Int()
+        switch(textField) {
+        case emailTextField:
+            maxLength = 20
+        case authNumberTextField:
+            maxLength = 6
+        default:
+            return false
+        }
+        // 최대 글자수 이상을 입력한 이후로 입력 불가능
+        if text.count >= maxLength && range.length == 0 && range.location >= maxLength {
+            return false
+        }
+        return true
     }
 }
