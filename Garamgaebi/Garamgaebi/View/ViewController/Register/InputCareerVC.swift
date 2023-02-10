@@ -277,6 +277,8 @@ class InputCareerVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        companyTextField.delegate = self
+        positionTextField.delegate = self
         addSubViews()
         configLayouts()
         configureGestureRecognizer()
@@ -726,5 +728,23 @@ extension InputCareerVC {
     
     @objc private func viewDidTap() {
         self.view.endEditing(true)
+    }
+}
+
+extension InputCareerVC: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else {return false}
+        var maxLength = Int()
+        switch(textField) {
+        case companyTextField, positionTextField:
+            maxLength = 20
+        default:
+            return false
+        }
+        // 최대 글자수 이상을 입력한 이후로 입력 불가능
+        if text.count >= maxLength && range.length == 0 && range.location >= maxLength {
+            return false
+        }
+        return true
     }
 }

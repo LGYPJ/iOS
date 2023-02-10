@@ -277,6 +277,8 @@ class InputEducationVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        institutionTextField.delegate = self
+        majorTextField.delegate = self
         addSubViews()
         configLayouts()
         configureGestureRecognizer()
@@ -436,7 +438,7 @@ class InputEducationVC: UIViewController {
     
     @objc
     private func inputCareerButtonTapped(_ sender: UIButton) {
-        var nextVC = InputCareerVC()
+        let nextVC = InputCareerVC()
         nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
         nextVC.modalPresentationStyle = .fullScreen
         present(nextVC, animated: true)
@@ -726,5 +728,23 @@ extension InputEducationVC {
     
     @objc private func viewDidTap() {
         self.view.endEditing(true)
+    }
+}
+
+extension InputEducationVC: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else {return false}
+        var maxLength = Int()
+        switch(textField) {
+        case institutionTextField, majorTextField:
+            maxLength = 20
+        default:
+            return false
+        }
+        // 최대 글자수 이상을 입력한 이후로 입력 불가능
+        if text.count >= maxLength && range.length == 0 && range.location >= maxLength {
+            return false
+        }
+        return true
     }
 }
