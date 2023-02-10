@@ -45,7 +45,7 @@ class InputOrganizationVC: UIViewController {
         buttonTitle.textColor = .mainBlack
         
         let buttonDescription = UILabel()
-        buttonDescription.text = "가장 최근에 일한 곳\n을 알려주세요"
+        buttonDescription.text = "본인의 경력을\n적어주세요"
         buttonDescription.numberOfLines = 0
         buttonDescription.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         buttonDescription.textColor = UIColor(hex: 0x8A8A8A)
@@ -89,7 +89,7 @@ class InputOrganizationVC: UIViewController {
         buttonTitle.textColor = .mainBlack
         
         let buttonDescription = UILabel()
-        buttonDescription.text = "최근에 소속된 교육\n기관을 알려주세요"
+        buttonDescription.text = "본인이 받은 교육을\n적어주세요"
         buttonDescription.numberOfLines = 0
         buttonDescription.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         buttonDescription.textColor = UIColor(hex: 0x8A8A8A)
@@ -142,7 +142,6 @@ class InputOrganizationVC: UIViewController {
         view.backgroundColor = .white
         addSubViews()
         configLayouts()
-        configureGestureRecognizer()
     }
     
     
@@ -247,19 +246,4 @@ class InputOrganizationVC: UIViewController {
         
     }
     
-}
-
-extension InputOrganizationVC {
-    private func configureGestureRecognizer() {
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
-        tapGestureRecognizer.numberOfTapsRequired = 1
-        tapGestureRecognizer.isEnabled = true
-        tapGestureRecognizer.cancelsTouchesInView = false
-        
-        view.addGestureRecognizer(tapGestureRecognizer)
-    }
-    
-    @objc private func viewDidTap() {
-        self.view.endEditing(true)
-    }
 }
