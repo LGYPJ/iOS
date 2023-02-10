@@ -97,6 +97,7 @@ class InputEducationVC: UIViewController {
         let textField = UITextField()
         
         textField.addLeftPadding()
+        textField.addRightPadding()
         textField.placeholder = "교육기관을 입력해주세요"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
@@ -126,6 +127,7 @@ class InputEducationVC: UIViewController {
         let textField = UITextField()
         
         textField.addLeftPadding()
+        textField.addRightPadding()
         textField.placeholder = "전공/과정을 입력해주세요 (예: 웹 개발 과정)"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12

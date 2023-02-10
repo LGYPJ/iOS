@@ -97,6 +97,7 @@ class InputCareerVC: UIViewController {
         let textField = UITextField()
         
         textField.addLeftPadding()
+        textField.addRightPadding()
         textField.placeholder = "회사명을 입력해주세요"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
@@ -126,6 +127,7 @@ class InputCareerVC: UIViewController {
         let textField = UITextField()
         
         textField.addLeftPadding()
+        textField.addRightPadding()
         textField.placeholder = "직함을 입력해주세요 (예: 백엔드 개발자)"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
