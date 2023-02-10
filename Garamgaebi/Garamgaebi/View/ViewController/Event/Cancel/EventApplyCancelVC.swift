@@ -298,11 +298,19 @@ class EventApplyCancelVC: UIViewController {
 	var seminarInfo = SeminarDetailInfo(programIdx: 0, title: "", date: "", location: "", fee: 0, endDate: "", programStatus: "", userButtonStatus: "") {
 		didSet {
 			configureSeminarData()
+			if seminarInfo.fee == 0 {
+				cancelButton.isEnabled = true
+				cancelButton.backgroundColor = .mainBlue
+			}
 		}
 	}
 	var networkingInfo = NetworkingDetailInfo(programIdx: 0, title: "", date: "", location: "", fee: 0, endDate: "", programStatus: "", userButtonStatus: "") {
 		didSet {
 			configureNetworkingData()
+			if networkingInfo.fee == 0 {
+				cancelButton.isEnabled = true
+				cancelButton.backgroundColor = .mainBlue
+			}
 		}
 	}
 
@@ -497,8 +505,12 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 		
 		if self.seminarInfo.fee == 0 {
 			costStackView.isHidden = true
+			bankButton.isHidden = true
+			accountTextField.isHidden = true
 		} else {
 			costStackView.isHidden = false
+			bankButton.isHidden = false
+			accountTextField.isHidden = false
 			costInfoLabel.text = "\(self.seminarInfo.fee)원"
 		}
 		
@@ -512,8 +524,12 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 		
 		if self.networkingInfo.fee == 0 {
 			costStackView.isHidden = true
+			bankButton.isHidden = true
+			accountTextField.isHidden = true
 		} else {
 			costStackView.isHidden = false
+			bankButton.isHidden = false
+			accountTextField.isHidden = false
 			costInfoLabel.text = "\(self.networkingInfo.fee)원"
 		}
 		
@@ -558,8 +574,8 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 	
 	// 취소 완료 alert
 	@objc private func didTapRegisterCancelButton() {
-		guard let bank = self.bankButton.title(for: .normal),
-			  let account = self.accountTextField.text else {return}
+		let bank = self.bankButton.title(for: .normal) ?? ""
+		let account = self.accountTextField.text ?? ""
 		
 		EventApplyCancelViewModel.postBankAccount(memberId: self.memberId, programId: self.programId, bank: bank, account: account, completion: {[weak self] response in
 			if !response.isSuccess {

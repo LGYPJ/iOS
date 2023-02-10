@@ -430,11 +430,17 @@ extension EventApplyVC {
 		locationInfoLabel.text = seminarInfo.location
 		if seminarInfo.fee == 0 {
 			costStackView.isHidden = true
+			accountLabel.isHidden = true
+			clipBoardImageView.isHidden = true
 			descriptionTextView.isHidden = true
+			descriptionContainerView.isHidden = true
 		} else {
 			costStackView.isHidden = false
-			costInfoLabel.text = "\(seminarInfo.fee)원"
+			accountLabel.isHidden = false
+			clipBoardImageView.isHidden = false
 			descriptionTextView.isHidden = false
+			descriptionContainerView.isHidden = false
+			costInfoLabel.text = "\(networkingInfo.fee)원"
 			accountLabel.text = "\(account)"
 			descriptionTextView.text = "입금자명을 닉네임/이름(예시: 찹도/민세림)으로 해주셔야 합니다.\n\n신청 확정은 신청 마감 이후에 일괄 처리됩니다.\n신청취소는 일주일 전까지 가능합니다.(이후로는 취소 불가)\n환불은 모임 당일부터 7일 이내에 순차적으로 진행됩니다.\n\n입금이 완료되지 않으면 신청이 자동적으로 취소됩니다."
 		}
@@ -449,11 +455,17 @@ extension EventApplyVC {
 		locationInfoLabel.text = networkingInfo.location
 		if networkingInfo.fee == 0 {
 			costStackView.isHidden = true
+			accountLabel.isHidden = true
+			clipBoardImageView.isHidden = true
 			descriptionTextView.isHidden = true
+			descriptionContainerView.isHidden = true
 		} else {
 			costStackView.isHidden = false
-			costInfoLabel.text = "\(networkingInfo.fee)원"
+			accountLabel.isHidden = false
+			clipBoardImageView.isHidden = false
 			descriptionTextView.isHidden = false
+			descriptionContainerView.isHidden = false
+			costInfoLabel.text = "\(networkingInfo.fee)원"
 			accountLabel.text = "\(account)"
 			descriptionTextView.text = "입금자명을 닉네임/이름(예시: 찹도/민세림)으로 해주셔야 합니다.\n\n신청 확정은 신청 마감 이후에 일괄 처리됩니다.\n신청취소는 일주일 전까지 가능합니다.(이후로는 취소 불가)\n환불은 모임 당일부터 7일 이내에 순차적으로 진행됩니다.\n\n입금이 완료되지 않으면 신청이 자동적으로 취소됩니다."
 		}
