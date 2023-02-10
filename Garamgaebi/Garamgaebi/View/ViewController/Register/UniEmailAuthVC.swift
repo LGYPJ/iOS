@@ -39,7 +39,7 @@ class UniEmailAuthVC: UIViewController {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "가천대생 인증"
+        label.text = "가천대생 인증을 진행해주세요"
         label.textColor = .black
         label.font = UIFont.NotoSansKR(type: .Bold, size: 22)
         return label
@@ -85,7 +85,7 @@ class UniEmailAuthVC: UIViewController {
     lazy var emailLabel: UILabel = {
         let label = UILabel()
         label.text = "@gachon.ac.kr"
-        label.textColor = .mainGray
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         return label
     }()
@@ -285,7 +285,7 @@ class UniEmailAuthVC: UIViewController {
         authNumberTextField.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.top.equalTo(authNumTitleLabel.snp.bottom).offset(12)
-            make.width.equalTo(296)
+            make.right.equalTo(authNumberSendButton.snp.left).offset(-10)
             make.height.equalTo(48)
         }
         
@@ -334,7 +334,7 @@ class UniEmailAuthVC: UIViewController {
         sender.layer.borderWidth = 0.5
         authNumberTextField.isEnabled = true
         authNumberSendButton.isEnabled = true
-        var count = 300
+        var count = 180
         
         if timer != nil && timer!.isValid {
             timer?.invalidate()
@@ -471,26 +471,13 @@ class UniEmailAuthVC: UIViewController {
     }
     
     @objc func textFieldActivated(_ sender: UITextField) {
-        
         sender.layer.borderColor = UIColor.mainBlack.cgColor
         sender.layer.borderWidth = 1
-        
-        if sender == emailTextField {
-            emailLabel.textColor = .mainBlack
-        }
     }
     
     @objc func textFieldInactivated(_ sender: UITextField) {
-        
         sender.layer.borderColor = UIColor.mainGray.cgColor
         sender.layer.borderWidth = 1
-        
-        // emailTextField이 비어있을때 emailLabel을 다시 비활성
-        if sender == emailTextField
-            && emailTextField.text?.count == 0 {
-            emailLabel.textColor = .mainGray
-        }
-        
     }
     
     @objc
