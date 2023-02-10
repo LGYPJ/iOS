@@ -11,25 +11,22 @@ import SnapKit
 class UniEmailAuthVC: UIViewController {
     
     // MARK: - Propertys
-    //let timeSelector: Selector = #selector(updateTime)
     var timer: Timer?
     
     let interval = 1.0
     var authNumber = UniEmailAuthNumber(key: "")
     var userId = String()
     var isValidId = false {
-        didSet { // 프로퍼티 옵저버 :23
+        didSet {
             self.validateUserInfo()
         }
     }
     var isValidAuthNumber = false {
-        didSet { // 프로퍼티 옵저버 :
+        didSet {
             self.validateUserInfo()
         }
     }
-    
-    
-    
+ 
     // MARK: - Subviews
     
     lazy var pagingImage: UIImageView = {
@@ -313,8 +310,6 @@ class UniEmailAuthVC: UIViewController {
             make.bottom.equalToSuperview().inset(48)
             make.height.equalTo(48)
         }
-        
-        
     }
     
     @objc
@@ -330,9 +325,7 @@ class UniEmailAuthVC: UIViewController {
                 print(self?.authNumber.key)
             }
         }
-        
-        
-        
+
         sender.setTitleColor(UIColor.mainBlue, for: .normal)
         sender.backgroundColor = .white
         sender.layer.borderColor = UIColor.mainBlue.cgColor
@@ -352,20 +345,8 @@ class UniEmailAuthVC: UIViewController {
                               options: .transitionCrossDissolve,
                               animations: {
                 self.authNumTitleLabel.isHidden = false
-            })
-            UIView.transition(with: self.authNumberTextField, duration: 0.33,
-                              options: .transitionCrossDissolve,
-                              animations: {
                 self.authNumberTextField.isHidden = false
-            })
-            UIView.transition(with: self.authNumberSendButton, duration: 0.33,
-                              options: .transitionCrossDissolve,
-                              animations: {
                 self.authNumberSendButton.isHidden = false
-            })
-            UIView.transition(with: self.nextButton, duration: 0.33,
-                              options: .transitionCrossDissolve,
-                              animations: {
                 self.nextButton.isHidden = false
             })
             
@@ -405,10 +386,6 @@ class UniEmailAuthVC: UIViewController {
                 self.emailAuthSendButton.setTitleColor(.white, for: .normal)
                 self.emailAuthSendButton.backgroundColor = .mainBlue
             }
-            
-            
-            
-            
         }
         else {
             // 인증번호 틀리면
@@ -476,7 +453,14 @@ class UniEmailAuthVC: UIViewController {
         sender.layer.borderColor = UIColor.mainBlack.cgColor
         sender.layer.borderWidth = 1
         if sender == authNumberTextField {
+            sender.text = ""
             authNumNotificationLabel.isHidden = true
+            self.authNumberSendButton.isEnabled = false
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.33) {
+                    self.authNumberSendButton.backgroundColor = .mainGray
+                }
+            }
         }
     }
     
