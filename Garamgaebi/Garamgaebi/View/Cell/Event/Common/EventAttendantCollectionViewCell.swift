@@ -19,6 +19,7 @@ class EventAttendantCollectionViewCell: UICollectionViewCell {
 		imageView.layer.cornerRadius = imageSize/2
 		imageView.tintColor = .mainGray
 		imageView.clipsToBounds = true
+		imageView.layer.borderColor = UIColor.mainBlue.cgColor
 		
 		return imageView
 	}()
@@ -38,6 +39,12 @@ class EventAttendantCollectionViewCell: UICollectionViewCell {
 	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
+	}
+	
+	override func prepareForReuse() {
+		super.prepareForReuse()
+		profileImageView.layer.borderWidth = 0
+		userNameLabel.textColor = .black
 	}
 }
 

@@ -147,10 +147,12 @@ extension EventAttendantTableViewCell {
 		if self.type == "SEMINAR" {
 			SeminarDetailViewModel.requestSeminarAttendant(seminarId: self.programId, completion: {[weak self] result in
 				self?.seminarAttendants = result
+				self?.attendantCountLabel.text = "\(result.count)명"
 			})
 		} else {
 			NetworkingDetailViewModel.requestNetworkingAttendant(networkingId: self.programId, completion: {[weak self] result in
 				self?.networkingAttendants = result
+				self?.attendantCountLabel.text = "\(result.count)명"
 			})
 		}
 		
@@ -187,11 +189,21 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 			cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg), placeholder: UIImage(named: "ExProfileImage"))
 			
 			cell.userNameLabel.text = cellData.nickname
+			
+			if indexPath.row == 0 && String(cellData.memberIdx) == UserDefaults.standard.string(forKey: "memberIdx") ?? "" {
+				cell.profileImageView.layer.borderWidth = 2
+				cell.userNameLabel.textColor = .mainBlue
+			}
 		} else {
 			let cellData = self.networkingAttendants[indexPath.row]
 			cell.profileImageView.kf.indicatorType = .activity
 			cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg), placeholder: UIImage(named: "ExProfileImage"))
 			cell.userNameLabel.text = cellData.nickname
+			
+			if indexPath.row == 0 && String(cellData.memberIdx) == UserDefaults.standard.string(forKey: "memberIdx") ?? "" {
+				cell.profileImageView.layer.borderWidth = 2
+				cell.userNameLabel.textColor = .mainBlue
+			}
 		}
 		
 		
