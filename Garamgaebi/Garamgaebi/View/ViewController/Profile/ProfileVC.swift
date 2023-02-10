@@ -110,11 +110,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     // 하단 버튼
     // SNS
     let snsTopRadiusView = UIView().then {
-        $0.profileTopRadiusView()
-    }
-    let snsTitleLabel = UILabel().then {
-        $0.text = "SNS"
-        $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        $0.profileTopRadiusView(title: "SNS")
     }
     let snsDefaultLabel = UILabel().then {
         $0.text = "유저들과 소통을 위해서 SNS 주소를 남겨주세요!"
@@ -149,11 +145,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     
     // 경력
     let careerTopRadiusView = UIView().then {
-        $0.profileTopRadiusView()
-    }
-    let careerTitleLabel = UILabel().then {
-        $0.text = "경력"
-        $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        $0.profileTopRadiusView(title: "경력")
     }
     let careerDefaultLabel = UILabel().then {
         $0.text = "지금 하고 있거나\n이전에 한 일을 알려주세요"
@@ -189,11 +181,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     
     // 교육
     let eduTopRadiusView = UIView().then {
-        $0.profileTopRadiusView()
-    }
-    let eduTitleLabel = UILabel().then {
-        $0.text = "교육"
-        $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        $0.profileTopRadiusView(title: "교육")
     }
     let eduDefaultLabel = UILabel().then {
         $0.text = "지금 다니고 있거나 이전에 다녔던\n학교, 부트캠프 등 교육기관을 입력해주세요"
@@ -287,9 +275,9 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             .forEach {scrollView.addSubview($0)}
         
         // scroll - add
-        [snsTopRadiusView, snsTitleLabel, snsBottomRadiusView,
-         careerTopRadiusView, careerTitleLabel, careerBottomRadiusView,
-         eduTopRadiusView, eduTitleLabel, eduBottomRadiusView].forEach {scrollView.addSubview($0)}
+        [snsTopRadiusView, snsBottomRadiusView,
+         careerTopRadiusView, careerBottomRadiusView,
+         eduTopRadiusView, eduBottomRadiusView].forEach {scrollView.addSubview($0)}
         
         // view - sns
         [snsDefaultLabel, snsTableView, addSnsBtn].forEach { snsBottomRadiusView.addSubview($0) }
@@ -371,10 +359,6 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             $0.leading.trailing.equalTo(profileEditBtn)
             $0.height.equalTo(47)
         }
-        snsTitleLabel.snp.makeConstraints {
-            $0.centerY.equalTo(snsTopRadiusView)
-            $0.leading.trailing.equalTo(snsTopRadiusView).offset(12)
-        }
         snsBottomRadiusView.snp.makeConstraints {
             $0.top.equalTo(snsTopRadiusView.snp.bottom).offset(-1)
             $0.leading.trailing.equalTo(snsTopRadiusView)
@@ -392,10 +376,6 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             $0.top.equalTo(snsBottomRadiusView.snp.bottom).offset(16)
             $0.leading.trailing.equalTo(snsTopRadiusView)
             $0.height.equalTo(47)
-        }
-        careerTitleLabel.snp.makeConstraints {
-            $0.centerY.equalTo(careerTopRadiusView)
-            $0.leading.trailing.equalTo(careerTopRadiusView).offset(12)
         }
         careerBottomRadiusView.snp.makeConstraints {
             $0.top.equalTo(careerTopRadiusView.snp.bottom).offset(-1)
@@ -416,10 +396,6 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             $0.top.equalTo(careerBottomRadiusView.snp.bottom).offset(16)
             $0.leading.trailing.equalTo(careerBottomRadiusView)
             $0.height.equalTo(47)
-        }
-        eduTitleLabel.snp.makeConstraints {
-            $0.centerY.equalTo(eduTopRadiusView)
-            $0.leading.trailing.equalTo(eduTopRadiusView).offset(12)
         }
         eduBottomRadiusView.snp.makeConstraints {
             $0.top.equalTo(eduTopRadiusView.snp.bottom).offset(-1)

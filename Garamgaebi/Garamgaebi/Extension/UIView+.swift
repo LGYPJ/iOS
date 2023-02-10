@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SnapKit
 
 public enum BorderSide {
     case top, bottom, left, right
@@ -22,7 +23,16 @@ extension UIView { // textField 흔들기
         layer.add(animation, forKey: "shake")
     }
     
-    func profileTopRadiusView() {
+    func profileTopRadiusView(title: String) {
+        let titleLabel = UILabel()
+        titleLabel.text = title
+        titleLabel.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        self.addSubview(titleLabel)
+        titleLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(12)
+        }
+        
         self.layer.borderColor = UIColor.mainGray.cgColor
         self.layer.borderWidth = 1
         self.layer.cornerRadius = 12

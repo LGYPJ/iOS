@@ -101,11 +101,7 @@ class OtherProfileVC: UIViewController {
     // 하단 버튼
     // SNS
     let snsTopRadiusView = UIView().then {
-        $0.profileTopRadiusView()
-    }
-    let snsTitleLabel = UILabel().then {
-        $0.text = "SNS"
-        $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        $0.profileTopRadiusView(title: "SNS")
     }
     let snsBottomRadiusView = UIView().then {
         $0.profileBottomRadiusView()
@@ -131,11 +127,7 @@ class OtherProfileVC: UIViewController {
     
     // 경력
     let careerTopRadiusView = UIView().then {
-        $0.profileTopRadiusView()
-    }
-    let careerTitleLabel = UILabel().then {
-        $0.text = "경력"
-        $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        $0.profileTopRadiusView(title: "경력")
     }
     let careerBottomRadiusView = UIView().then {
         $0.profileBottomRadiusView()
@@ -160,11 +152,7 @@ class OtherProfileVC: UIViewController {
     
     // 교육
     let eduTopRadiusView = UIView().then {
-        $0.profileTopRadiusView()
-    }
-    let eduTitleLabel = UILabel().then {
-        $0.text = "교육"
-        $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        $0.profileTopRadiusView(title: "교육")
     }
     let eduBottomRadiusView = UIView().then {
         $0.profileBottomRadiusView()
@@ -246,9 +234,9 @@ class OtherProfileVC: UIViewController {
             .forEach {scrollView.addSubview($0)}
         
         // scroll - add
-        [snsTopRadiusView, snsTitleLabel, snsBottomRadiusView,
-         careerTopRadiusView, careerTitleLabel, careerBottomRadiusView,
-         eduTopRadiusView, eduTitleLabel, eduBottomRadiusView].forEach {scrollView.addSubview($0)}
+        [snsTopRadiusView, snsBottomRadiusView,
+         careerTopRadiusView, careerBottomRadiusView,
+         eduTopRadiusView, eduBottomRadiusView].forEach {scrollView.addSubview($0)}
         
         // history
         snsBottomRadiusView.addSubview(snsTableView)
@@ -315,10 +303,6 @@ class OtherProfileVC: UIViewController {
             $0.leading.trailing.equalTo(introduceTextField)
             $0.height.equalTo(47)
         }
-        snsTitleLabel.snp.makeConstraints {
-            $0.centerY.equalTo(snsTopRadiusView)
-            $0.leading.trailing.equalTo(snsTopRadiusView).offset(12)
-        }
         snsBottomRadiusView.snp.makeConstraints {
             $0.top.equalTo(snsTopRadiusView.snp.bottom).offset(-1)
             $0.leading.trailing.equalTo(snsTopRadiusView)
@@ -330,10 +314,6 @@ class OtherProfileVC: UIViewController {
             $0.leading.trailing.equalTo(snsTopRadiusView)
             $0.height.equalTo(47)
         }
-        careerTitleLabel.snp.makeConstraints {
-            $0.centerY.equalTo(careerTopRadiusView)
-            $0.leading.trailing.equalTo(careerTopRadiusView).offset(12)
-        }
         careerBottomRadiusView.snp.makeConstraints {
             $0.top.equalTo(careerTopRadiusView.snp.bottom).offset(-1)
             $0.leading.trailing.equalTo(careerTopRadiusView)
@@ -344,10 +324,6 @@ class OtherProfileVC: UIViewController {
             $0.top.equalTo(careerBottomRadiusView.snp.bottom).offset(16)
             $0.leading.trailing.equalTo(careerBottomRadiusView)
             $0.height.equalTo(47)
-        }
-        eduTitleLabel.snp.makeConstraints {
-            $0.centerY.equalTo(eduTopRadiusView)
-            $0.leading.trailing.equalTo(eduTopRadiusView).offset(12)
         }
         eduBottomRadiusView.snp.makeConstraints {
             $0.top.equalTo(eduTopRadiusView.snp.bottom).offset(-1)
@@ -378,12 +354,12 @@ class OtherProfileVC: UIViewController {
             encoding: JSONEncoding.default, // 인코딩 스타일
             headers: header // 헤더 지정
         )
-        .validate() // statusCode:  200..<300
+        .validate()
         .responseDecodable(of: ProfileResponse.self) { response in
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
-//                    print("성공(\(self.memberIdx) 프로필): \(response.message)")
+
                     let result = response.result
                     
                     // 값 넣어주기
