@@ -90,14 +90,16 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         return stackView
     }()
     
-    let introduceTextField = UITextView().then {
+    let introduceLabel = BasicPaddingLabel().then {
+        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        $0.textColor = .mainBlack
+        $0.numberOfLines = 0
+        $0.clipsToBounds = true // 요소가 삐져나가지 않도록 하는 속성
+        $0.textAlignment = .left
+        
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.mainGray.cgColor
         $0.layer.cornerRadius = 12
-        $0.textContainerInset = UIEdgeInsets(top: 12.0, left: 12.0, bottom: 12.0, right: 12.0)
-        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        $0.textColor = .mainBlack
-        $0.isUserInteractionEnabled = false
     }
     
     let profileEditBtn = UIButton().then {
@@ -271,7 +273,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         scrollView.addSubview(contentView)
         
         // scroll - profile
-        [profileImageView, profileStackView, introduceTextField, profileEditBtn]
+        [profileImageView, profileStackView, introduceLabel, profileEditBtn]
             .forEach {scrollView.addSubview($0)}
         
         // scroll - add
@@ -338,15 +340,14 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             $0.trailing.equalTo(-16)
         }
         
-        introduceTextField.snp.makeConstraints { /// 자기소개
+        introduceLabel.snp.makeConstraints { /// 자기소개
             $0.top.equalTo(profileStackView.snp.bottom).offset(16)
             $0.leading.trailing.equalTo(profileStackView)
-            $0.height.equalTo(100)
         }
         
         profileEditBtn.snp.makeConstraints { /// 프로필 편집 버튼
-            $0.top.equalTo(introduceTextField.snp.bottom).offset(16)
-            $0.leading.trailing.equalTo(introduceTextField)
+            $0.top.equalTo(introduceLabel.snp.bottom).offset(16)
+            $0.leading.trailing.equalTo(introduceLabel)
         }
         /// 버튼 클릭
         profileEditBtn.addTarget(self,action: #selector(self.editButtonDidTap(_:)), for: .touchUpInside)
@@ -416,7 +417,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         self.nameLabel.text = nickname
         self.orgLabel.text = organization
         self.emailLabel.text = email
-        self.introduceTextField.text = introduce
+        self.introduceLabel.text = introduce
     }
     
     @objc private func serviceButtonDidTap(_ sender : UIButton) {
@@ -440,7 +441,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             guard let nameString = self.nameLabel.text else { return }
             guard let orgString = self.orgLabel.text else { return }
             guard let emailString = self.emailLabel.text else { return }
-            guard let introduceString = self.introduceTextField.text else { return }
+            guard let introduceString = self.introduceLabel.text else { return }
 //            guard let image = self.profileImageView.image else { return }
             
             // 값 넘기기
@@ -515,10 +516,15 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
                     self.nameLabel.text = result.nickName
                     self.orgLabel.text = result.belong
                     self.emailLabel.text = result.profileEmail
+                    // 자기소개
                     if let userIntro = result.content { // 자기소개가 있으면
-                        self.introduceTextField.text = userIntro
-                    } else {
-                        self.introduceTextField.text = ""
+                        self.introduceLabel.text = userIntro
+                    } else { // 없으면 안 보이게
+                        self.introduceLabel.isHidden = true
+                        self.introduceLabel.snp.makeConstraints {
+                            $0.top.equalTo(self.profileStackView.snp.bottom)
+                            $0.height.equalTo(0)
+                        }
                     }
                     // 프로필 이미지
                     if let urlString = result.profileUrl {
@@ -720,7 +726,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         nameLabel.text = "코코아"
         orgLabel.text = "가천대학교 소프트웨어학과"
         emailLabel.text = "umc@gmail.com"
-        introduceTextField.text = "자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소."
+        introduceLabel.text = "자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소."
     }
 }
 // MARK: - Extension

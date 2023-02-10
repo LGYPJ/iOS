@@ -88,14 +88,16 @@ class OtherProfileVC: UIViewController {
         return stackView
     }()
     
-    let introduceTextField = UITextView().then {
+    let introduceLabel = BasicPaddingLabel().then {
+        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        $0.textColor = .mainBlack
+        $0.numberOfLines = 0
+        $0.clipsToBounds = true
+        $0.textAlignment = .left
+        
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.mainGray.cgColor
         $0.layer.cornerRadius = 12
-        $0.textContainerInset = UIEdgeInsets(top: 12.0, left: 12.0, bottom: 12.0, right: 12.0)
-        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        $0.textColor = .mainBlack
-        $0.isUserInteractionEnabled = false
     }
     
     // 하단 버튼
@@ -230,7 +232,7 @@ class OtherProfileVC: UIViewController {
         scrollView.addSubview(contentView)
         
         // scroll - profile
-        [profileImageView, profileStackView, introduceTextField]
+        [profileImageView, profileStackView, introduceLabel]
             .forEach {scrollView.addSubview($0)}
         
         // scroll - historyBox
@@ -287,16 +289,15 @@ class OtherProfileVC: UIViewController {
             $0.trailing.equalTo(-16)
         }
         
-        introduceTextField.snp.makeConstraints { /// 자기소개
+        introduceLabel.snp.makeConstraints { /// 자기소개
             $0.top.equalTo(profileStackView.snp.bottom).offset(16)
             $0.leading.trailing.equalTo(profileStackView)
-            $0.height.equalTo(100)
         }
         
         // 하단
         snsHistoryBox.snp.makeConstraints { /// SNS
-            $0.top.equalTo(introduceTextField.snp.bottom).offset(16)
-            $0.leading.trailing.equalTo(introduceTextField)
+            $0.top.equalTo(introduceLabel.snp.bottom).offset(16)
+            $0.leading.trailing.equalTo(introduceLabel)
         }
         careerHistoryBox.snp.makeConstraints { /// 경력
             $0.top.equalTo(snsHistoryBox.snp.bottom).offset(16)
@@ -345,10 +346,10 @@ class OtherProfileVC: UIViewController {
                     self.emailLabel.text = result.profileEmail
                     // 자기소개
                     if let userIntro = result.content { // 자기소개가 있으면
-                        self.introduceTextField.text = userIntro
+                        self.introduceLabel.text = userIntro
                     } else { // 없으면 안 보이게
-                        self.introduceTextField.isHidden = true
-                        self.introduceTextField.snp.makeConstraints { make in
+                        self.introduceLabel.isHidden = true
+                        self.introduceLabel.snp.makeConstraints { make in
                             make.top.equalTo(self.profileStackView.snp.bottom)
                             make.height.equalTo(0)
                         }
@@ -492,7 +493,7 @@ class OtherProfileVC: UIViewController {
         if (snsCount == 0) {
             snsHistoryBox.isHidden = true
             snsHistoryBox.snp.makeConstraints {
-                $0.top.equalTo(introduceTextField.snp.bottom)
+                $0.top.equalTo(introduceLabel.snp.bottom)
                 $0.height.equalTo(0)
             }
         } else {
