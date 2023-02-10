@@ -123,6 +123,8 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         let layout: UICollectionViewFlowLayout = {
             let layout = UICollectionViewFlowLayout()
             layout.scrollDirection = .horizontal
+            layout.itemSize = CGSize(width: 334, height: 140)
+            layout.minimumLineSpacing = 12
             return layout
         }()
         
@@ -133,6 +135,10 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         view.contentInset = .zero
         view.backgroundColor = .clear
         view.clipsToBounds = true
+        
+        view.isPagingEnabled = false
+        view.decelerationRate = .fast
+        
         view.register(HomeEventCollectionViewCell.self, forCellWithReuseIdentifier: HomeEventCollectionViewCell.identifier)
         
         return view
@@ -142,6 +148,8 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         let layout: UICollectionViewFlowLayout = {
             let layout = UICollectionViewFlowLayout()
             layout.scrollDirection = .horizontal
+            layout.itemSize = CGSize(width: 334, height: 140)
+            layout.minimumLineSpacing = 12
             return layout
         }()
         
@@ -152,6 +160,10 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         view.contentInset = .zero
         view.backgroundColor = .clear
         view.clipsToBounds = true
+        
+        view.isPagingEnabled = false
+        view.decelerationRate = .fast
+        
         view.register(HomeEventCollectionViewCell.self, forCellWithReuseIdentifier: HomeEventCollectionViewCell.identifier)
 
         return view
@@ -418,5 +430,28 @@ extension HomeEventInfoTableViewCell: UICollectionViewDataSource, UICollectionVi
         
     }
     
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        // seminar, networking 컬렉션뷰 모두 layout이 동일해서 상관없음
+        guard let layout = self.seminarCollectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+        
+        // CollectionView Item Size
+        let cellWidthIncludingSpacing = layout.itemSize.width + layout.minimumLineSpacing
+        
+        // 이동한 x좌표 값과 item의 크기를 비교 후 페이징 값 설정
+        let estimatedIndex = scrollView.contentOffset.x / cellWidthIncludingSpacing
+        let index: Int
+        
+        // 스크롤 방향 체크
+        // item 절반 사이즈 만큼 스크롤로 판단하여 올림, 내림 처리
+        if velocity.x > 0 {
+            index = Int(ceil(estimatedIndex))
+        } else if velocity.x < 0 {
+            index = Int(floor(estimatedIndex))
+        } else {
+            index = Int(round(estimatedIndex))
+        }
+        // 위 코드를 통해 페이징 될 좌표 값을 targetContentOffset에 대입
+        targetContentOffset.pointee = CGPoint(x: CGFloat(index) * cellWidthIncludingSpacing, y: 0)
+    }
 }
 
