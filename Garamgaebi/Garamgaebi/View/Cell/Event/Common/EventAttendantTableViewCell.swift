@@ -192,7 +192,7 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 
 			let cellData = self.seminarAttendants[indexPath.row]
 			cell.profileImageView.kf.indicatorType = .activity
-			cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg), placeholder: UIImage(named: "ExProfileImage"))
+			cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg ?? ""), placeholder: UIImage(named: "ExProfileImage"))
 			
 			cell.userNameLabel.text = cellData.nickname
 			
@@ -209,7 +209,7 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 			
 			let cellData = self.networkingAttendants[indexPath.row]
 			cell.profileImageView.kf.indicatorType = .activity
-			cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg), placeholder: UIImage(named: "ExProfileImage"))
+			cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg ?? ""), placeholder: UIImage(named: "ExProfileImage"))
 			cell.userNameLabel.text = cellData.nickname
 			
 			if indexPath.row == 0 && UserDefaults.standard.bool(forKey: "programId:\(programId)") {
