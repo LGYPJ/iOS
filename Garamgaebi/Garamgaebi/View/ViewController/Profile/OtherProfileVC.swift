@@ -100,11 +100,8 @@ class OtherProfileVC: UIViewController {
     
     // 하단 버튼
     // SNS
-    let snsTopRadiusView = UIView().then {
-        $0.profileTopRadiusView(title: "SNS")
-    }
-    let snsBottomRadiusView = UIView().then {
-        $0.profileBottomRadiusView()
+    let snsHistoryBox = UIView().then {
+        $0.profileHistoryBox(title: "SNS")
     }
     
     lazy var snsTableView: UITableView = {
@@ -116,6 +113,9 @@ class OtherProfileVC: UIViewController {
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
+    
+        view.layer.cornerRadius = 13 // 테스트
+        view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         
         view.register(ProfileSNSTableViewCell.self, forCellReuseIdentifier: ProfileSNSTableViewCell.identifier)
         view.delegate = self
@@ -126,11 +126,8 @@ class OtherProfileVC: UIViewController {
 
     
     // 경력
-    let careerTopRadiusView = UIView().then {
-        $0.profileTopRadiusView(title: "경력")
-    }
-    let careerBottomRadiusView = UIView().then {
-        $0.profileBottomRadiusView()
+    let careerHistoryBox = UIView().then {
+        $0.profileHistoryBox(title: "경력")
     }
     
     lazy var careerTableView: UITableView = {
@@ -143,6 +140,9 @@ class OtherProfileVC: UIViewController {
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
         
+        view.layer.cornerRadius = 14 // 테스트
+        view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        
         view.register(ProfileHistoryTableViewCell.self, forCellReuseIdentifier: ProfileHistoryTableViewCell.identifier)
         view.delegate = self
         view.dataSource = self
@@ -151,11 +151,8 @@ class OtherProfileVC: UIViewController {
     }()
     
     // 교육
-    let eduTopRadiusView = UIView().then {
-        $0.profileTopRadiusView(title: "교육")
-    }
-    let eduBottomRadiusView = UIView().then {
-        $0.profileBottomRadiusView()
+    let eduHistoryBox = UIView().then {
+        $0.profileHistoryBox(title: "교육")
     }
     
     lazy var eduTableView: UITableView = {
@@ -167,6 +164,9 @@ class OtherProfileVC: UIViewController {
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
+        
+        view.layer.cornerRadius = 15 // 테스트
+        view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         
         view.register(ProfileHistoryTableViewCell.self, forCellReuseIdentifier: ProfileHistoryTableViewCell.identifier)
         view.delegate = self
@@ -233,15 +233,13 @@ class OtherProfileVC: UIViewController {
         [profileImageView, profileStackView, introduceTextField]
             .forEach {scrollView.addSubview($0)}
         
-        // scroll - add
-        [snsTopRadiusView, snsBottomRadiusView,
-         careerTopRadiusView, careerBottomRadiusView,
-         eduTopRadiusView, eduBottomRadiusView].forEach {scrollView.addSubview($0)}
+        // scroll - historyBox
+        [snsHistoryBox, careerHistoryBox, eduHistoryBox].forEach {scrollView.addSubview($0)}
         
         // history
-        snsBottomRadiusView.addSubview(snsTableView)
-        careerBottomRadiusView.addSubview(careerTableView)
-        eduBottomRadiusView.addSubview(eduTableView)
+        snsHistoryBox.addSubview(snsTableView)
+        careerHistoryBox.addSubview(careerTableView)
+        eduHistoryBox.addSubview(eduTableView)
         
         // layer
         //headerView
@@ -295,40 +293,19 @@ class OtherProfileVC: UIViewController {
             $0.height.equalTo(100)
         }
         
-        
         // 하단
-        // SNS
-        snsTopRadiusView.snp.makeConstraints {
+        snsHistoryBox.snp.makeConstraints { /// SNS
             $0.top.equalTo(introduceTextField.snp.bottom).offset(16)
             $0.leading.trailing.equalTo(introduceTextField)
-            $0.height.equalTo(47)
         }
-        snsBottomRadiusView.snp.makeConstraints {
-            $0.top.equalTo(snsTopRadiusView.snp.bottom).offset(-1)
-            $0.leading.trailing.equalTo(snsTopRadiusView)
+        careerHistoryBox.snp.makeConstraints { /// 경력
+            $0.top.equalTo(snsHistoryBox.snp.bottom).offset(16)
+            $0.leading.trailing.equalTo(snsHistoryBox)
         }
-        
-        // Career
-        careerTopRadiusView.snp.makeConstraints {
-            $0.top.equalTo(snsBottomRadiusView.snp.bottom).offset(16)
-            $0.leading.trailing.equalTo(snsTopRadiusView)
-            $0.height.equalTo(47)
-        }
-        careerBottomRadiusView.snp.makeConstraints {
-            $0.top.equalTo(careerTopRadiusView.snp.bottom).offset(-1)
-            $0.leading.trailing.equalTo(careerTopRadiusView)
-        }
-        
-        // 교육
-        eduTopRadiusView.snp.makeConstraints {
-            $0.top.equalTo(careerBottomRadiusView.snp.bottom).offset(16)
-            $0.leading.trailing.equalTo(careerBottomRadiusView)
-            $0.height.equalTo(47)
-        }
-        eduBottomRadiusView.snp.makeConstraints {
-            $0.top.equalTo(eduTopRadiusView.snp.bottom).offset(-1)
-            $0.leading.trailing.equalTo(eduTopRadiusView)
-            $0.bottom.equalTo(scrollView).offset(-16)
+        eduHistoryBox.snp.makeConstraints { /// 교육
+            $0.top.equalTo(careerHistoryBox.snp.bottom).offset(16)
+            $0.leading.trailing.equalTo(careerHistoryBox)
+            $0.bottom.equalTo(scrollView).inset(16)
         }
     }
     
@@ -366,12 +343,17 @@ class OtherProfileVC: UIViewController {
                     self.nameLabel.text = result.nickName
                     self.orgLabel.text = result.belong
                     self.emailLabel.text = result.profileEmail
+                    // 자기소개
                     if let userIntro = result.content { // 자기소개가 있으면
                         self.introduceTextField.text = userIntro
-                    } else {
-                        self.introduceTextField.text = ""
+                    } else { // 없으면 안 보이게
+                        self.introduceTextField.isHidden = true
+                        self.introduceTextField.snp.makeConstraints { make in
+                            make.top.equalTo(self.profileStackView.snp.bottom)
+                            make.height.equalTo(0)
+                        }
                     }
-//                 // 프로필 이미지
+                    // 프로필 이미지
                     if let urlString = result.profileUrl {
                         let url = URL(string: urlString)
 
@@ -380,11 +362,9 @@ class OtherProfileVC: UIViewController {
                     }
 //                    completion(result)
                 } else {
-                    // 통신은 정상적으로 됐으나(200), error발생
                     print("실패(\(self.memberIdx) 프로필): \(response.message)")
                 }
             case .failure(let error):
-                // 실제 HTTP에러 404 또는 디코드 에러?
                 print("실패(AF-\(self.memberIdx) 프로필): \(error.localizedDescription)")
             }
         }
@@ -506,17 +486,20 @@ class OtherProfileVC: UIViewController {
         }
     }
     
-    //TODO: 없을 때는 안 보여주기
     private func showSnsTableView() {
         let snsCount = snsData.count
         
         if (snsCount == 0) {
-            //
+            snsHistoryBox.isHidden = true
+            snsHistoryBox.snp.makeConstraints {
+                $0.top.equalTo(introduceTextField.snp.bottom)
+                $0.height.equalTo(0)
+            }
         } else {
             snsTableView.snp.makeConstraints {
-                $0.top.equalToSuperview()
-                $0.leading.trailing.equalToSuperview()
-                $0.bottom.equalToSuperview()
+                $0.top.equalToSuperview().offset(47) // 헤더 크기
+                $0.leading.trailing.equalToSuperview().inset(1)
+                $0.bottom.equalToSuperview().inset(1)
                 $0.height.equalTo(snsCount * 41)
             }
         }
@@ -525,12 +508,16 @@ class OtherProfileVC: UIViewController {
         let careerCount = careerData.count
         
         if (careerCount == 0) {
-            //
+            careerHistoryBox.isHidden = true
+            careerHistoryBox.snp.makeConstraints {
+                $0.top.equalTo(snsHistoryBox.snp.bottom)
+                $0.height.equalTo(0)
+            }
         } else {
             careerTableView.snp.makeConstraints {
-                $0.top.equalToSuperview()
-                $0.leading.trailing.equalToSuperview()
-                $0.bottom.equalToSuperview()
+                $0.top.equalToSuperview().offset(47) // 헤더 크기
+                $0.leading.trailing.equalToSuperview().inset(1)
+                $0.bottom.equalToSuperview().inset(1)
                 $0.height.equalTo(careerCount * 65)
             }
         }
@@ -539,12 +526,16 @@ class OtherProfileVC: UIViewController {
         let eduCount = eduData.count
         
         if (eduCount == 0) {
-            //
+            eduHistoryBox.isHidden = true
+            eduHistoryBox.snp.makeConstraints {
+                $0.top.equalTo(careerHistoryBox.snp.bottom)
+                $0.height.equalTo(0)
+            }
         } else {
             eduTableView.snp.makeConstraints {
-                $0.top.equalToSuperview()
-                $0.leading.trailing.equalToSuperview()
-                $0.bottom.equalToSuperview()
+                $0.top.equalToSuperview().offset(47) // 헤더 크기
+                $0.leading.trailing.equalToSuperview().inset(1)
+                $0.bottom.equalToSuperview().inset(1)
                 $0.height.equalTo(eduCount * 65)
             }
         }
@@ -617,4 +608,3 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
         return UITableViewCell()
     }
 }
-
