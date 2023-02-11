@@ -10,9 +10,12 @@ import Alamofire
 
 class NotificationViewModel {
     // MARK: Request [Notification]
-    public static func getNotificationsByMemberIdx(memberIdx: Int,page: Int, completion: @escaping (([NotificationInfo]) -> Void)) {
-        let pageValue = page
-        let url = "https://garamgaebi.shop/notification/\(memberIdx)?page=\(pageValue)"
+    public static func getNotificationsByMemberIdx(memberIdx: Int, lastNotificationIdx: Int?, completion: @escaping ((NotificationInfo) -> Void)) {
+        var lastNotiIdx = ""
+        if lastNotificationIdx == nil {
+            lastNotiIdx = ""
+        } else { lastNotiIdx = String(describing: lastNotificationIdx!) }
+        let url = "https://garamgaebi.shop/notification/\(memberIdx)?lastNotificationIdx=\(lastNotiIdx)"
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
         ]
