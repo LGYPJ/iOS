@@ -185,9 +185,11 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 		
 		if self.type == "SEMINAR" {
 			if String(seminarAttendants.first?.memberIdx ?? -1) == UserDefaults.standard.string(forKey: "memberIdx") ?? "" {
-				UserDefaults.standard.set(true, forKey: "programId:\(programId)")
+//				UserDefaults.standard.set(true, forKey: "programId:\(programId)")
+				NotificationCenter.default.post(name: Notification.Name("programId:\(programId)"), object: true)
 			} else {
-				UserDefaults.standard.set(false, forKey: "programId:\(programId)")
+//				UserDefaults.standard.set(false, forKey: "programId:\(programId)")
+				NotificationCenter.default.post(name: Notification.Name("programId:\(programId)"), object: false)
 			}
 
 			let cellData = self.seminarAttendants[indexPath.row]
@@ -202,9 +204,9 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 			}
 		} else {
 			if String(networkingAttendants.first?.memberIdx ?? -1) == UserDefaults.standard.string(forKey: "memberIdx") ?? "" {
-				UserDefaults.standard.set(true, forKey: "programId:\(programId)")
+				NotificationCenter.default.post(name: Notification.Name("programId:\(programId)"), object: true)
 			} else {
-				UserDefaults.standard.set(false, forKey: "programId:\(programId)")
+				NotificationCenter.default.post(name: Notification.Name("programId:\(programId)"), object: false)
 			}
 			
 			let cellData = self.networkingAttendants[indexPath.row]
