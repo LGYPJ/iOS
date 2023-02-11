@@ -199,8 +199,8 @@ class EventApplyVC: UIViewController {
 		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
 		textField.layer.cornerRadius = 12
-		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
-		textField.leftViewMode = .always
+		textField.addLeftPadding()
+		textField.addRightPadding()
 //		textField.placeholder = "이름을 입력해주세요"
 		textField.attributedPlaceholder = NSAttributedString(string: "이름을 입력해주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 14)!])
 
@@ -233,8 +233,8 @@ class EventApplyVC: UIViewController {
 		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
 		textField.layer.cornerRadius = 12
-		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
-		textField.leftViewMode = .always
+		textField.addLeftPadding()
+		textField.addRightPadding()
 //		textField.placeholder = "닉네임을 입력해주세요"
 		textField.attributedPlaceholder = NSAttributedString(string: "가입 시 닉네임을 적어주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 14)!])
 
@@ -267,8 +267,8 @@ class EventApplyVC: UIViewController {
 		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
 		textField.layer.cornerRadius = 12
-		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
-		textField.leftViewMode = .always
+		textField.addLeftPadding()
+		textField.addRightPadding()
 //		textField.placeholder = "전화번호를 입력해주세요"
 		textField.attributedPlaceholder = NSAttributedString(string: "숫자만 입력해주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 14)!])
 

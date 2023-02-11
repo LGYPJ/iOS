@@ -189,8 +189,8 @@ class EventApplyCancelVC: UIViewController {
 		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
 		textField.layer.cornerRadius = 12
-		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
-		textField.leftViewMode = .always
+		textField.addLeftPadding()
+		textField.addRightPadding()
 //		textField.placeholder = "이름을 입력해주세요"
 		textField.attributedPlaceholder = NSAttributedString(string: "이름", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
 		textField.isEnabled = false
@@ -204,8 +204,8 @@ class EventApplyCancelVC: UIViewController {
 		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
 		textField.layer.cornerRadius = 12
-		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
-		textField.leftViewMode = .always
+		textField.addLeftPadding()
+		textField.addRightPadding()
 //		textField.placeholder = "닉네임을 입력해주세요"
 		textField.attributedPlaceholder = NSAttributedString(string: "닉네임", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
 		textField.isEnabled = false
@@ -219,8 +219,8 @@ class EventApplyCancelVC: UIViewController {
 		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
 		textField.layer.cornerRadius = 12
-		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
-		textField.leftViewMode = .always
+		textField.addLeftPadding()
+		textField.addRightPadding()
 //		textField.placeholder = "전화번호를 입력해주세요"
 		textField.attributedPlaceholder = NSAttributedString(string: "전화번호", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
 		textField.isEnabled = false
@@ -273,8 +273,8 @@ class EventApplyCancelVC: UIViewController {
 		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
 		textField.layer.cornerRadius = 12
-		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
-		textField.leftViewMode = .always
+		textField.addLeftPadding()
+		textField.addRightPadding()
 		textField.attributedPlaceholder = NSAttributedString(string: "계좌번호를 입력해주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
 		
 		return textField
