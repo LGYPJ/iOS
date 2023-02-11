@@ -528,7 +528,7 @@ class OtherProfileVC: UIViewController {
                 $0.top.equalToSuperview().offset(47) // 헤더 크기
                 $0.leading.trailing.equalToSuperview().inset(1)
                 $0.bottom.equalToSuperview().inset(1)
-                $0.height.equalTo(careerCount * 65)
+                $0.height.equalTo(careerCount * 90)
             }
         }
     }
@@ -546,7 +546,7 @@ class OtherProfileVC: UIViewController {
                 $0.top.equalToSuperview().offset(47) // 헤더 크기
                 $0.leading.trailing.equalToSuperview().inset(1)
                 $0.bottom.equalToSuperview().inset(1)
-                $0.height.equalTo(eduCount * 65)
+                $0.height.equalTo(eduCount * 90)
             }
         }
     }
@@ -574,7 +574,7 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView == snsTableView { return 41 }
-        else { return 65 }
+        else { return 90 }
     }
     
     

@@ -707,7 +707,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
                 $0.top.equalToSuperview()
                 $0.leading.trailing.equalToSuperview()
                 $0.bottom.equalTo(addCareerBtn.snp.top).offset(-12)
-                $0.height.equalTo(careerCount * 65)
+                $0.height.equalTo(careerCount * 90)
             }
         }
     }
@@ -725,7 +725,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
                 $0.top.equalToSuperview()
                 $0.leading.trailing.equalToSuperview()
                 $0.bottom.equalTo(addEduBtn.snp.top).offset(-12)
-                $0.height.equalTo(eduCount * 65)
+                $0.height.equalTo(eduCount * 90)
             }
         }
     }
@@ -759,7 +759,7 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView == snsTableView { return 41 }
-        else { return 65 }
+        else { return 90 }
     }
     
     

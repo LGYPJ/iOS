@@ -58,17 +58,17 @@ class ProfileHistoryTableViewCell: UITableViewCell {
         
         companyLabel.snp.makeConstraints {
             $0.top.equalToSuperview().inset(12)
-            $0.leading.equalToSuperview().inset(12)
+            $0.leading.trailing.equalToSuperview().inset(12)
         }
         
         positionLabel.snp.makeConstraints {
-            $0.centerY.equalTo(companyLabel)
-            $0.leading.equalTo(companyLabel.snp.trailing).offset(4)
+            $0.leading.trailing.equalTo(companyLabel)
+            $0.top.equalTo(companyLabel.snp.bottom).offset(4)
         }
         
         periodLabel.snp.makeConstraints {
-            $0.top.equalTo(companyLabel.snp.bottom).offset(4)
-            $0.leading.equalTo(companyLabel)
+            $0.top.equalTo(positionLabel.snp.bottom).offset(4)
+            $0.leading.trailing.equalTo(companyLabel)
             $0.bottom.equalToSuperview().inset(12)
         }
         
