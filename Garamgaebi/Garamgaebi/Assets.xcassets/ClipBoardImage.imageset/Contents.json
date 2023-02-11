@@ -1,11 +1,11 @@
 {
   "images" : [
     {
-      "filename" : "스크린샷 2023-02-10 16.03.03.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "content_copy.svg",
       "idiom" : "universal",
       "scale" : "2x"
     },

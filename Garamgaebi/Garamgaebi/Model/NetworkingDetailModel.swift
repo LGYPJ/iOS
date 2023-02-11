@@ -37,5 +37,5 @@ struct NetworkingDetailAttentdantResponse: Decodable {
 struct NetworkingDetailAttendant: Decodable {
 	let memberIdx: Int
 	let nickname: String
-	let profileImg: String
+	let profileImg: String?
 }

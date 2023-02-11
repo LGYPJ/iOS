@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 class SeminarPreviewPopUpVC: UIViewController {
 	
@@ -206,8 +207,8 @@ extension SeminarPreviewPopUpVC {
 		titleLabel.text = previewInfo.title
 		descriptionTextView.text = previewInfo.content
 		
-		profileImageView.image = UIImage(named: previewInfo.profileImgUrl)
-		// TODO: profileImage, 발표자료 URL 처리
+		profileImageView.kf.indicatorType = .activity
+		profileImageView.kf.setImage(with: URL(string:previewInfo.profileImgUrl), placeholder: UIImage(named: "ExProfileImage"))
 		
 		
 	}

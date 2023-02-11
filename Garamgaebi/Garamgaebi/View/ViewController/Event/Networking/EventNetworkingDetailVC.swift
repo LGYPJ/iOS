@@ -44,6 +44,7 @@ class EventNetworkingDetailVC: UIViewController {
 		tableView.allowsSelection = false
 		tableView.separatorStyle = .none
 		tableView.showsVerticalScrollIndicator = false
+		tableView.alwaysBounceVertical = false
 		
 		return tableView
 	}()
@@ -63,6 +64,7 @@ class EventNetworkingDetailVC: UIViewController {
 			tableView.reloadData()
 		}
 	}
+
 	
     
     // MARK: - Life Cycle
@@ -139,7 +141,7 @@ extension EventNetworkingDetailVC {
 //			$0.edges.equalTo(view.safeAreaLayoutGuide)
             $0.top.equalTo(headerView.snp.bottom).offset(16)
 			$0.leading.trailing.equalToSuperview().inset(16)
-			$0.bottom.equalToSuperview()
+			$0.bottom.equalToSuperview().inset(12)
 		}
 	}
 	
@@ -172,6 +174,17 @@ extension EventNetworkingDetailVC {
 		}
 	}
 	
+	private func isAvailableNetworking(fromDate: String) -> Bool {
+		guard let eventDate = fromDate.toDate() else {return false}
+		
+		let dateTest = Date().compare(eventDate)
+		if dateTest == .orderedDescending {  // 시작시간이 현재시간보다 이전인 경우
+			return true
+		} else {
+			return false
+		}
+	}
+	
 	
 	// 뒤로가기 버튼 did tap
 	@objc private func didTapBackBarButton() {
@@ -183,7 +196,7 @@ extension EventNetworkingDetailVC {
 	}
 	// 게임 참가하기 did tap
 	@objc private func didTapEntranceButton() {
-		self.navigationController?.pushViewController(IceBreakingRoomListVC(), animated: true)
+		self.navigationController?.pushViewController(IceBreakingRoomListVC(programId: self.networkingId), animated: true)
 	}
 
 
@@ -222,9 +235,9 @@ extension EventNetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 				cell.registerButton.backgroundColor = .mainBlue
 				cell.registerButton.layer.borderWidth = 1
 			case .CANCEL:
-				cell.registerButton.setTitle("신청취소", for: .normal)
+				cell.registerButton.setTitle("신청확인중", for: .normal)
 				cell.registerButton.setTitleColor(.mainBlue, for: .normal)
-				cell.registerButton.isEnabled = true
+				cell.registerButton.isEnabled = false
 				cell.registerButton.backgroundColor = .white
 				cell.registerButton.layer.borderWidth = 1
 				
@@ -266,7 +279,27 @@ extension EventNetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 			return cell
 		case 2:
 			guard let cell = tableView.dequeueReusableCell(withIdentifier: EventIceBreakingTableViewCell.identifier, for: indexPath) as? EventIceBreakingTableViewCell else {return UITableViewCell()}
-			cell.entranceButton.addTarget(self, action: #selector(didTapEntranceButton), for: .touchUpInside)
+//			cell.entranceButton.addTarget(self, action: #selector(didTapEntranceButton), for: .touchUpInside)
+			
+			let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapEntranceButton))
+			tapGestureRecognizer.numberOfTapsRequired = 1
+			tapGestureRecognizer.isEnabled = true
+			
+			cell.entranceContainerView.addGestureRecognizer(tapGestureRecognizer)
+			
+			let testDate = "2023-02-10T18:29:00"
+			if isAvailableNetworking(fromDate: testDate) && UserDefaults.standard.bool(forKey: "programId:\(networkingId)") {
+//			if isAvailableNetworking(fromDate: self.networkingInfo.date) && UserDefaults.standard.bool(forKey: "programId:\(networkingId)") {
+				cell.entranceContainerView.backgroundColor = .mainBlue
+				cell.entranceContainerView.isUserInteractionEnabled = true
+				cell.entranceLabel.textColor = .white
+				cell.entranceImageView.image = UIImage(systemName: "chevron.right.circle")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+			} else {
+				cell.entranceContainerView.backgroundColor = .mainGray
+				cell.entranceContainerView.isUserInteractionEnabled = false
+				cell.entranceLabel.textColor = UIColor(hex: 0x8A8A8A)
+				cell.entranceImageView.image = UIImage(systemName: "chevron.right.circle")?.withTintColor(UIColor(hex: 0x8A8A8A), renderingMode: .alwaysOriginal)
+			}
 			
 			return cell
 		default:

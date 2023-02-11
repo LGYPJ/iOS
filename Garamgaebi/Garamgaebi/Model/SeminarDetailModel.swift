@@ -37,7 +37,7 @@ struct SeminarDetailAttentdantResponse: Decodable {
 struct SeminarDetailAttendant: Decodable {
 	let memberIdx: Int
 	let nickname: String
-	let profileImg: String
+	let profileImg: String?
 }
 
 // MARK: 세미나 발표 미리보기 정보

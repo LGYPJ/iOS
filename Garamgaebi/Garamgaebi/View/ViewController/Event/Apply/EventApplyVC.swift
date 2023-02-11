@@ -41,8 +41,8 @@ class EventApplyVC: UIViewController {
     
 	lazy var scrollView: UIScrollView = {
 		let scrollView = UIScrollView()
-		
 		scrollView.isScrollEnabled = true
+		scrollView.showsVerticalScrollIndicator = false
 		return scrollView
 	}()
 	// 스크롤 뷰 내의 content를 표시할 view(필수임)
@@ -236,7 +236,7 @@ class EventApplyVC: UIViewController {
 		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
 		textField.leftViewMode = .always
 //		textField.placeholder = "닉네임을 입력해주세요"
-		textField.attributedPlaceholder = NSAttributedString(string: "닉네임을 입력해주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 14)!])
+		textField.attributedPlaceholder = NSAttributedString(string: "가입 시 닉네임을 적어주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 14)!])
 
 		
 		return textField
@@ -247,7 +247,8 @@ class EventApplyVC: UIViewController {
 		label.textColor = .red
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
 		label.text = "닉네임이 일치하지 않습니다."
-		label.isHidden = true
+//		label.isHidden = true
+		label.alpha = 0
 		
 		return label
 	}()
@@ -269,7 +270,7 @@ class EventApplyVC: UIViewController {
 		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
 		textField.leftViewMode = .always
 //		textField.placeholder = "전화번호를 입력해주세요"
-		textField.attributedPlaceholder = NSAttributedString(string: "전화번호를 입력해주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 14)!])
+		textField.attributedPlaceholder = NSAttributedString(string: "숫자만 입력해주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 14)!])
 
 		
 		return textField
@@ -280,23 +281,49 @@ class EventApplyVC: UIViewController {
 		label.textColor = .red
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
 		label.text = "번호 형식이 올바르지 않습니다."
-		label.isHidden = true
+//		label.isHidden = true
+		label.alpha = 0
 		
 		return label
 	}()
 	
+	lazy var accountLabel: UILabel = {
+		let label = UILabel()
+		label.font = UIFont.NotoSansKR(type: .Medium, size: 14)
+		label.textColor = .black
+		
+		return label
+	}()
+	
+	lazy var clipBoardImageView: UIImageView = {
+		let imageView = UIImageView()
+		imageView.image = UIImage(named: "ClipBoardImage")
+		imageView.contentMode = .scaleAspectFit
+		imageView.isUserInteractionEnabled = true
+		
+		return imageView
+	}()
+	
 	lazy var descriptionTextView: UITextView = {
 		let textView = UITextView()
-//		textView.layer.borderWidth = 0
 		textView.font = UIFont.NotoSansKR(type: .Medium, size: 14)
 		textView.textColor = .black
-		textView.backgroundColor = UIColor(hex: 0xF5F5F5)
+		textView.backgroundColor = .clear
 		textView.layer.cornerRadius = 12
-		textView.textContainerInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+		textView.textContainer.lineFragmentPadding = 0
+		textView.textContainerInset = .zero
 		textView.isEditable = false
 		textView.isScrollEnabled = false
 		
 		return textView
+	}()
+	
+	lazy var descriptionContainerView: UIView = {
+		let view = UIView()
+		view.layer.cornerRadius = 12
+		view.backgroundColor = UIColor(hex: 0xF5F5F5)
+		view.clipsToBounds = true
+		return view
 	}()
 	
 	lazy var registerButton: UIButton = {
@@ -313,6 +340,8 @@ class EventApplyVC: UIViewController {
 	}()
 	
 	// MARK: Properties
+	let account = "카카오뱅크 3333-22-5500352"
+	
 	var isValidName = false {
 		didSet {
 			validName()
@@ -395,38 +424,50 @@ extension EventApplyVC {
 	}
 	
 	private func configureWithSeminarData() {
-		titleLabel.text = "세미나 신청하기"
+		titleLabel.text = "세미나 신청"
 		eventNameLabel.text = seminarInfo.title
 		dateInfoLabel.text = seminarInfo.date.formattingDetailDate()
 		locationInfoLabel.text = seminarInfo.location
 		if seminarInfo.fee == 0 {
 			costStackView.isHidden = true
+			accountLabel.isHidden = true
+			clipBoardImageView.isHidden = true
 			descriptionTextView.isHidden = true
+			descriptionContainerView.isHidden = true
 		} else {
 			costStackView.isHidden = false
-			costInfoLabel.text = "\(seminarInfo.fee)원"
+			accountLabel.isHidden = false
+			clipBoardImageView.isHidden = false
 			descriptionTextView.isHidden = false
-			// TODO: 환불계좌 안내 더미데이터
-			descriptionTextView.text = "카카오뱅크 3333-22-5500352\n입금자명을 닉네임/이름(예시: 찹도/민세림)으로 해주셔야 합니다.\n\n신청 확정은 신청 마감 이후에 일괄 처리됩니다.\n신청취소는 일주일 전까지 가능합니다.(이후로는 취소 불가)\n환불은 모임 당일부터 7일 이내에 순차적으로 진행됩니다.\n\n입금이 완료되지 않으면 신청이 자동적으로 취소됩니다."
+			descriptionContainerView.isHidden = false
+			costInfoLabel.text = "\(networkingInfo.fee)원"
+			accountLabel.text = "\(account)"
+			descriptionTextView.text = "입금자명을 닉네임/이름(예시: 찹도/민세림)으로 해주셔야 합니다.\n\n신청 확정은 신청 마감 이후에 일괄 처리됩니다.\n신청취소는 일주일 전까지 가능합니다.(이후로는 취소 불가)\n환불은 모임 당일부터 7일 이내에 순차적으로 진행됩니다.\n\n입금이 완료되지 않으면 신청이 자동적으로 취소됩니다."
 		}
 		
 		deadlineInfoLabel.text = seminarInfo.endDate.formattingDetailDate()
 	}
 	
 	private func configureWithNetworkingData() {
-		self.titleLabel.text = "네트워킹 신청하기"
+		self.titleLabel.text = "네트워킹 신청"
 		eventNameLabel.text = networkingInfo.title
 		dateInfoLabel.text = networkingInfo.date.formattingDetailDate()
 		locationInfoLabel.text = networkingInfo.location
 		if networkingInfo.fee == 0 {
 			costStackView.isHidden = true
+			accountLabel.isHidden = true
+			clipBoardImageView.isHidden = true
 			descriptionTextView.isHidden = true
+			descriptionContainerView.isHidden = true
 		} else {
 			costStackView.isHidden = false
-			costInfoLabel.text = "\(networkingInfo.fee)원"
+			accountLabel.isHidden = false
+			clipBoardImageView.isHidden = false
 			descriptionTextView.isHidden = false
-			// TODO: 환불계좌 안내 더미데이터
-			descriptionTextView.text = "카카오뱅크 3333-22-5500352\n입금자명을 닉네임/이름(예시: 찹도/민세림)으로 해주셔야 합니다.\n\n신청 확정은 신청 마감 이후에 일괄 처리됩니다.\n신청취소는 일주일 전까지 가능합니다.(이후로는 취소 불가)\n환불은 모임 당일부터 7일 이내에 순차적으로 진행됩니다.\n\n입금이 완료되지 않으면 신청이 자동적으로 취소됩니다."
+			descriptionContainerView.isHidden = false
+			costInfoLabel.text = "\(networkingInfo.fee)원"
+			accountLabel.text = "\(account)"
+			descriptionTextView.text = "입금자명을 닉네임/이름(예시: 찹도/민세림)으로 해주셔야 합니다.\n\n신청 확정은 신청 마감 이후에 일괄 처리됩니다.\n신청취소는 일주일 전까지 가능합니다.(이후로는 취소 불가)\n환불은 모임 당일부터 7일 이내에 순차적으로 진행됩니다.\n\n입금이 완료되지 않으면 신청이 자동적으로 취소됩니다."
 		}
 		
 		deadlineInfoLabel.text = networkingInfo.endDate.formattingDetailDate()
@@ -487,7 +528,7 @@ extension EventApplyVC {
 			$0.edges.equalToSuperview()
 		}
 		
-		[eventInfoBackgroundView, nameTitleLabel, nameTextField, nameAlertLabel, nicknameTitleLabel, nicknameTextField, nicknameAlertLabel, numberTitleLabel, numberTextField, numberAlertLabel, descriptionTextView]
+		[eventInfoBackgroundView, nameTitleLabel, nameTextField, nameAlertLabel, nicknameTitleLabel, nicknameTextField, nicknameAlertLabel, numberTitleLabel, numberTextField, numberAlertLabel, descriptionContainerView]
 			.forEach {contentView.addSubview($0)}
 		
         // eventInfoBackgroundView
@@ -549,11 +590,10 @@ extension EventApplyVC {
 			$0.top.equalTo(numberTextField.snp.bottom).offset(4)
 		}
 		
-        // descriptionTextView
-		descriptionTextView.snp.makeConstraints {
+		descriptionContainerView.snp.makeConstraints {
 			$0.top.equalTo(numberTextField.snp.bottom).offset(44)
-			$0.leading.trailing.equalToSuperview().inset(18)
-			$0.bottom.equalToSuperview()
+			$0.leading.trailing.equalToSuperview().inset(16)
+			$0.bottom.equalToSuperview().inset(16)
 		}
 		
 		
@@ -572,6 +612,27 @@ extension EventApplyVC {
 			$0.top.equalTo(eventNameLabel.snp.bottom).offset(8)
 			$0.bottom.equalToSuperview().inset(12)
 		}
+		
+		[accountLabel, clipBoardImageView, descriptionTextView]
+			.forEach {descriptionContainerView.addSubview($0)}
+		accountLabel.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(12)
+			$0.leading.equalToSuperview().inset(12)
+		}
+		clipBoardImageView.snp.makeConstraints {
+			$0.width.equalTo(11.3)
+			$0.height.equalTo(13.3)
+			$0.leading.equalTo(accountLabel.snp.trailing).offset(4)
+			$0.centerY.equalTo(accountLabel)
+		}
+		
+		// descriptionTextView
+		descriptionTextView.snp.makeConstraints {
+			$0.top.equalTo(accountLabel.snp.bottom).offset(12)
+			$0.leading.trailing.equalToSuperview().inset(12)
+			$0.bottom.equalToSuperview().inset(12)
+		}
+		
 		
 	}
 	
@@ -653,6 +714,16 @@ extension EventApplyVC {
 		tapGestureRecognizer.cancelsTouchesInView = false
 		
 		scrollView.addGestureRecognizer(tapGestureRecognizer)
+		
+		let tapClipBoard = UITapGestureRecognizer(target: self, action: #selector(clipBoardImageViewDidTap))
+		tapClipBoard.numberOfTapsRequired = 1
+		tapClipBoard.isEnabled = true
+		
+		clipBoardImageView.addGestureRecognizer(tapClipBoard)
+	}
+	
+	@objc private func clipBoardImageViewDidTap() {
+		UIPasteboard.general.string = self.account
 	}
 	
 	@objc private func scrollViewDidTap() {
@@ -678,8 +749,12 @@ extension EventApplyVC {
 			
 			// 이름 받는 property에 저장
 		case nicknameTextField:
-			// 유저 기본 닉네임과 동일
-			self.isValidNickname = text.isValidNickName()
+			if text == UserDefaults.standard.string(forKey: "nickname") {
+				self.isValidNickname = true
+			} else {
+				self.isValidNickname = false
+			}
+			
 			//저장
 		case numberTextField:
 			let numberRegEx = "[0-9]{11}"

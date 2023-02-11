@@ -48,14 +48,31 @@ class IceBreakingRoomListVC: UIViewController {
 		
 		return collectionView
 	}()
+	
+	// MARK: Properties
+	var programId: Int
+	var roomList: [GameRoomListModel] = [] {
+		didSet {
+			collectionView.reloadData()
+		}
+	}
 
     // MARK: - Life Cycle
-    
+	init(programId: Int) {
+		self.programId = programId
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 		
 		cofigureViews()
 		configureCollectionView()
+		fetchGameRoomData()
     }
     
 
@@ -105,7 +122,12 @@ extension IceBreakingRoomListVC {
 		collectionView.delegate = self
 		collectionView.dataSource = self
 		collectionView.register(IceBreakingRoomCollectionViewCell.self, forCellWithReuseIdentifier: IceBreakingRoomCollectionViewCell.identifier)
-		
+	}
+	
+	private func fetchGameRoomData() {
+		GameRoomListViewModel.getGameRoomList(programId: self.programId, completion: {[weak self] result in
+			self?.roomList = result
+		})
 	}
 	
 	// 뒤로가기 버튼 did tap
@@ -116,12 +138,13 @@ extension IceBreakingRoomListVC {
 
 extension IceBreakingRoomListVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		return 8
+		return roomList.count
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IceBreakingRoomCollectionViewCell.identifier, for: indexPath) as? IceBreakingRoomCollectionViewCell else {return UICollectionViewCell()}
-		cell.roomTitleLabel.text = "가천관"
+		let cellData = roomList[indexPath.row]
+		cell.roomTitleLabel.text = cellData.roomId
 		
 		return cell
 	}

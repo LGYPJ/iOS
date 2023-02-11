@@ -119,7 +119,7 @@ extension EventPreviewTableViewCell: UICollectionViewDelegate, UICollectionViewD
 		let vc = SeminarPreviewPopUpVC(previewInfo: self.previews[indexPath.row])
 		vc.modalPresentationStyle = .overFullScreen
 		
-		self.window?.rootViewController?.present(vc, animated: false)
+		NotificationCenter.default.post(name: Notification.Name("pushSeminarPreviewPopup"), object: self.previews[indexPath.row])
 	}
 	
 	
