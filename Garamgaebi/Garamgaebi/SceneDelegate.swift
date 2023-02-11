@@ -31,13 +31,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         //let rootViewController = HomeNotificationVC()
         //let rootViewController = OnboardingVC()
         //let rootViewController = LoginVC()
-        let rootViewController = UniEmailAuthVC()
+//        let rootViewController = UniEmailAuthVC()
 //        let rootViewController = InputNickNameVC()
 //        let rootViewController = InputEmailVC()
 //        let rootViewController = InputOrganizationVC()
         //let rootViewController = InputCareerVC()
 //        let rootViewController = InputEducationVC()
-//        let rootViewController = CompleteRegisterVC(myCareer: nil, myEducation: nil)
+        let rootViewController = CompleteRegisterVC(myCareer: nil, myEducation: nil)
         self.window?.rootViewController = rootViewController
         self.window?.makeKeyAndVisible()
         

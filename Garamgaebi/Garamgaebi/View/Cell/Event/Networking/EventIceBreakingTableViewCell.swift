@@ -129,11 +129,13 @@ extension EventIceBreakingTableViewCell {
 			.forEach {entranceContainerView.addSubview($0)}
 		entranceLabel.snp.makeConstraints {
 			$0.top.bottom.equalToSuperview().inset(4)
+			$0.centerY.equalToSuperview()
 			$0.leading.equalToSuperview().inset(8)
 		}
 		entranceImageView.snp.makeConstraints {
 			$0.width.height.equalTo(17)
 			$0.top.bottom.equalToSuperview().inset(4)
+			$0.centerY.equalToSuperview()
 			$0.leading.equalTo(entranceLabel.snp.trailing).offset(8)
 			$0.trailing.equalToSuperview().inset(8)
 		}

@@ -192,7 +192,7 @@ class EventApplyCancelVC: UIViewController {
 		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
 		textField.leftViewMode = .always
 //		textField.placeholder = "이름을 입력해주세요"
-		textField.attributedPlaceholder = NSAttributedString(string: "정현우", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
+		textField.attributedPlaceholder = NSAttributedString(string: "이름", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
 		textField.isEnabled = false
 		textField.backgroundColor = UIColor(hex: 0xF5F5F5)
 
@@ -207,7 +207,7 @@ class EventApplyCancelVC: UIViewController {
 		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
 		textField.leftViewMode = .always
 //		textField.placeholder = "닉네임을 입력해주세요"
-		textField.attributedPlaceholder = NSAttributedString(string: "연현", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
+		textField.attributedPlaceholder = NSAttributedString(string: "닉네임", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
 		textField.isEnabled = false
 		textField.backgroundColor = UIColor(hex: 0xF5F5F5)
 		
@@ -222,7 +222,7 @@ class EventApplyCancelVC: UIViewController {
 		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
 		textField.leftViewMode = .always
 //		textField.placeholder = "전화번호를 입력해주세요"
-		textField.attributedPlaceholder = NSAttributedString(string: "010-1234-5678", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
+		textField.attributedPlaceholder = NSAttributedString(string: "전화번호", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
 		textField.isEnabled = false
 		textField.backgroundColor = UIColor(hex: 0xF5F5F5)
 		
@@ -335,6 +335,7 @@ class EventApplyCancelVC: UIViewController {
 		configureTextField()
 		configureGestureRecognizer()
 		fetchProgramData()
+		fetchUserData()
         
     }
 	override func viewWillAppear(_ animated: Bool) {
@@ -481,6 +482,14 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 		accountTextField.returnKeyType = .done
 		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+	}
+	
+	private func fetchUserData() {
+		EventApplyCancelViewModel.getUserApplyData(memberId: self.memberId, programId: self.programId, completion: {[weak self] result in
+			self?.nameTextField.attributedPlaceholder = NSAttributedString(string: result.name, attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
+			self?.nicknameTextField.attributedPlaceholder = NSAttributedString(string: result.nickname, attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
+			self?.numberTextField.attributedPlaceholder = NSAttributedString(string: result.phone, attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
+		})
 	}
 	
 	private func fetchProgramData() {
