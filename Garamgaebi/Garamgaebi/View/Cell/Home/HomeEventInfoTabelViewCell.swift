@@ -338,8 +338,8 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     
     @objc func presentHomeSeminarPopUpVC(_ touch: UITapGestureRecognizer) {
         NotificationCenter.default.post(name: Notification.Name("getScrollDirection"), object: nil)
-        popUpX = seminarPopUpButton.layer.frame.midX - 28
-        popUpY = seminarPopUpButton.layer.frame.midY + 80 - scrollDirection
+        popUpX = seminarPopUpButton.layer.frame.midX - 32
+        popUpY = seminarPopUpButton.layer.frame.midY + 90.1 - scrollDirection
         
         let vc = HomeSeminarPopUpVC(x: popUpX, y: popUpY)
         NotificationCenter.default.post(name: Notification.Name("pushEventPopUpView"), object: vc)
@@ -347,8 +347,8 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     
     @objc func presentHomeNetworkingPopUpVC(_ touch: UITapGestureRecognizer) {
         NotificationCenter.default.post(name: Notification.Name("getScrollDirection"), object: nil)
-        popUpX = networkingPopUpButton.layer.frame.midX - 28
-        popUpY = networkingPopUpButton.layer.frame.midY + 80 - scrollDirection
+        popUpX = networkingPopUpButton.layer.frame.midX - 32
+        popUpY = networkingPopUpButton.layer.frame.midY + 88.4 - scrollDirection
         
         let vc = HomeNetworkingPopUpVC(x: popUpX, y: popUpY)
         NotificationCenter.default.post(name: Notification.Name("pushEventPopUpView"), object: vc)
