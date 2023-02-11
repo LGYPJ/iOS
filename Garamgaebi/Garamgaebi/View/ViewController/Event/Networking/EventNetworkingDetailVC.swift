@@ -196,7 +196,7 @@ extension EventNetworkingDetailVC {
 	}
 	// 게임 참가하기 did tap
 	@objc private func didTapEntranceButton() {
-		self.navigationController?.pushViewController(IceBreakingRoomListVC(), animated: true)
+		self.navigationController?.pushViewController(IceBreakingRoomListVC(programId: self.networkingId), animated: true)
 	}
 
 
@@ -287,8 +287,9 @@ extension EventNetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 			
 			cell.entranceContainerView.addGestureRecognizer(tapGestureRecognizer)
 			
-//			let testDate = "2023-02-10T18:29:00"
-			if isAvailableNetworking(fromDate: self.networkingInfo.date) && UserDefaults.standard.bool(forKey: "programId:\(networkingId)") {
+			let testDate = "2023-02-10T18:29:00"
+			if isAvailableNetworking(fromDate: testDate) && UserDefaults.standard.bool(forKey: "programId:\(networkingId)") {
+//			if isAvailableNetworking(fromDate: self.networkingInfo.date) && UserDefaults.standard.bool(forKey: "programId:\(networkingId)") {
 				cell.entranceContainerView.backgroundColor = .mainBlue
 				cell.entranceContainerView.isUserInteractionEnabled = true
 				cell.entranceLabel.textColor = .white

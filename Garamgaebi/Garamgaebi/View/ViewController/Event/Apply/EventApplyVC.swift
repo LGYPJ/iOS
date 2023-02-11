@@ -41,8 +41,8 @@ class EventApplyVC: UIViewController {
     
 	lazy var scrollView: UIScrollView = {
 		let scrollView = UIScrollView()
-		
 		scrollView.isScrollEnabled = true
+		scrollView.showsVerticalScrollIndicator = false
 		return scrollView
 	}()
 	// 스크롤 뷰 내의 content를 표시할 view(필수임)
