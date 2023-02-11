@@ -71,7 +71,7 @@ class HomeNotificationTableViewCell: UITableViewCell {
        
     }
     
-    public func configure(_ item: NotificationInfo) {
+    public func configure(_ item: NotificationDetailInfo) {
         switch(item.notificationType){
         case "COLLECTIONS":
             imgView.image = UIImage(named: "supervisorAccountIcon")

@@ -11,9 +11,11 @@ import SnapKit
 class HomeNotificationVC: UIViewController {
 
     let memberIdx = UserDefaults.standard.integer(forKey: "memberIdx")
+    var lastNotificationIdx: Int? = nil
+    var hasNext = true
     var currentPage = 0
     
-    public var notificationList: [NotificationInfo] = [] {
+    public var notificationList: [NotificationDetailInfo] = [] {
         didSet {
             self.tableView.reloadData()
         }
@@ -84,7 +86,7 @@ class HomeNotificationVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
-        fetchData(page: self.currentPage)
+        fetchData(lastNotiIdx: self.lastNotificationIdx, hasNext: self.hasNext)
     }
 
     
@@ -128,19 +130,27 @@ class HomeNotificationVC: UIViewController {
         }
     }
  
-    private func fetchData(page: Int) {
-        print("currentPage: \(page)")
-        
+    private func fetchData(lastNotiIdx: Int?, hasNext: Bool?) {
         // NotificationInfoResponse를 불러옴
-        NotificationViewModel.getNotificationsByMemberIdx(memberIdx: memberIdx, page: page) { [weak self] result in
-            if page == 0 {
-                self?.notificationList = result
-            } else {
-                self?.notificationList.append(contentsOf: result)
+        if hasNext != false {
+            NotificationViewModel.getNotificationsByMemberIdx(memberIdx: memberIdx, lastNotificationIdx: lastNotiIdx) { [weak self] result in
+                if lastNotiIdx == nil {
+                    self?.notificationList = result.result!
+                } else {
+                    self?.notificationList.append(contentsOf: result.result!)
+                }
+                
+                let notiCounts = self?.notificationList.count
+                if notiCounts == 0 {
+                    self?.lastNotificationIdx = nil
+                } else {
+                    self?.lastNotificationIdx = self?.notificationList[(notiCounts!) - 1].notificationIdx
+                }
+                
+                self?.hasNext = result.hasNext
             }
         }
     }
-    
 }
 
 
@@ -170,8 +180,9 @@ extension HomeNotificationVC {
     }
     
     @objc func refreshTable(refresh: UIRefreshControl) {
-        currentPage = 0
-        fetchData(page: currentPage)
+        print(">>>upRefresh")
+        self.notificationList.removeAll()
+        fetchData(lastNotiIdx: nil, hasNext: true)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.tableView.reloadData()
             refresh.endRefreshing()
@@ -181,13 +192,13 @@ extension HomeNotificationVC {
     //MARK: - UIRefreshControl of ScrollView
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         
-        let currentOffset = scrollView.contentOffset.y // frame영역의 origin에 비교했을때의 content view의 현재 origin 위치
+        let currentOffset = scrollView.contentOffset.y  // frame영역의 origin에 비교했을때의 content view의 현재 origin 위치
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height // 화면에는 frame만큼 가득 찰 수 있기때문에 frame의 height를 빼준 것
         
         // 스크롤 할 수 있는 영역보다 더 스크롤된 경우 (하단에서 스크롤이 더 된 경우)
         if maximumOffset < currentOffset {
-            currentPage += 1
-            fetchData(page: currentPage)
+            print(">>>DownRefresh")
+            fetchData(lastNotiIdx: self.lastNotificationIdx, hasNext: self.hasNext)
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
                 self?.tableView.reloadData()
             }
@@ -216,7 +227,6 @@ extension HomeNotificationVC: UITableViewDataSource, UITableViewDelegate {
         /// log
         print("content: \(notificationList[indexPath.row].content)")
         print("resourceIdx: \(notificationList[indexPath.row].resourceIdx)")
-        
         let resourceIdx = notificationList[indexPath.row].resourceIdx
         let resourceType = notificationList[indexPath.row].resourceType
         
