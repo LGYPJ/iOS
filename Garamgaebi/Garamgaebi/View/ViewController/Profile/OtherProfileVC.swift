@@ -576,6 +576,7 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
             cell.snsLabel.text = snsData[indexPath.row].address
             cell.editButton.setImage(UIImage(named: "ProfileCopy"), for: .normal)
             
+            cell.delegate = self
             cell.selectionStyle = .none
             return cell
         }
@@ -607,5 +608,11 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
         }
         
         return UITableViewCell()
+    }
+}
+
+extension OtherProfileVC: ButtonTappedDelegate {
+    func copyButtonDidTap() {
+        //
     }
 }
