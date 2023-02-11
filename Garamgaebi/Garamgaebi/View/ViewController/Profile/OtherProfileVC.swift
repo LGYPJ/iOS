@@ -70,12 +70,16 @@ class OtherProfileVC: UIViewController {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 16)
     }
     
-    let emailLabel = UILabel().then {
+    lazy var emailLabel = UILabel().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         $0.textColor = .mainBlue
         let attributedString = NSMutableAttributedString.init(string: " ")
         attributedString.addAttribute(NSAttributedString.Key.underlineStyle, value: 1, range: NSRange.init(location: 0, length: attributedString.length))
         $0.attributedText = attributedString
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(emailLabelDidTap))
+        $0.isUserInteractionEnabled = true
+        $0.addGestureRecognizer(tapGestureRecognizer)
     }
     
     lazy var profileStackView: UIStackView = {
@@ -308,6 +312,11 @@ class OtherProfileVC: UIViewController {
             $0.leading.trailing.equalTo(careerHistoryBox)
             $0.bottom.equalTo(scrollView).inset(16)
         }
+    }
+    
+    @objc func emailLabelDidTap() {
+        guard let copyString = emailLabel.text else { return }
+        UIPasteboard.general.string = copyString
     }
     
     
