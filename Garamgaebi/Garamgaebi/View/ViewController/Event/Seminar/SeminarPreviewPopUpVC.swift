@@ -90,6 +90,9 @@ class SeminarPreviewPopUpVC: UIViewController {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
 		label.textColor = .link
+		label.numberOfLines = 0
+		label.lineBreakMode = .byCharWrapping
+		label.isUserInteractionEnabled = true
 		
 		return label
 	}()
@@ -189,7 +192,7 @@ extension SeminarPreviewPopUpVC {
 		}
 		
 		linkLabel.snp.makeConstraints {
-			$0.leading.equalToSuperview().inset(16)
+			$0.leading.trailing.equalToSuperview().inset(16)
 			$0.top.equalTo(pptLabel.snp.bottom).offset(4)
 			$0.bottom.equalToSuperview().inset(20)
 		}
@@ -210,13 +213,22 @@ extension SeminarPreviewPopUpVC {
 		profileImageView.kf.indicatorType = .activity
 		profileImageView.kf.setImage(with: URL(string:previewInfo.profileImgUrl), placeholder: UIImage(named: "ExProfileImage"))
 		
+		let text = previewInfo.presentationUrl ?? ""
+//		let text = "https://github.com/LGYPJ"
+		let attributedString = NSMutableAttributedString.init(string: text)
+		attributedString.addAttribute(NSAttributedString.Key.underlineStyle, value: 1, range: NSRange.init(location: 0, length: text.count))
+		attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.link, range: NSRange.init(location: 0, length: text.count))
+		linkLabel.attributedText = attributedString
+		
 		
 	}
 	
 	private func addGesture() {
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapCloseImageView))
 		closeImageView.addGestureRecognizer(tapGesture)
-//		.addGestureRecognizer(tapGesture)
+		
+		let tapLinkLabelGesture = UITapGestureRecognizer(target: self, action: #selector(didTapLinkLabel))
+		linkLabel.addGestureRecognizer(tapLinkLabelGesture)
 	}
 	
 	@objc private func didTapCloseImageView() {
@@ -228,5 +240,14 @@ extension SeminarPreviewPopUpVC {
 			self?.dismiss(animated: false)
 		}
 		
+	}
+	
+	@objc private func didTapLinkLabel() {
+		let urlStr = previewInfo.presentationUrl ?? ""
+//		let urlStr = "https://github.com/LGYPJ"
+		
+		guard let url = URL(string: urlStr) else {return}
+		
+		UIApplication.shared.open(url)
 	}
 }
