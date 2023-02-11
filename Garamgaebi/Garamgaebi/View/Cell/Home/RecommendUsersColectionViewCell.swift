@@ -11,12 +11,13 @@ import Kingfisher
 class RecommendUsersColectionViewCell: UICollectionViewCell {
     
     static let identifier = String(describing: RecommendUsersColectionViewCell.self)
-    public var memberIdx = Int()
     // MARK: - Subviews
     
     lazy var imageInfoView: UIImageView = {
         let view = UIImageView()
         view.backgroundColor = .mainGray
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
         return view
     }()
     
@@ -126,12 +127,11 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
     }
     
     public func configure(_ item: RecommendUsersInfo) {
-        
-        
 //        // 이미지url 이미지View에 적용
 //        //https://terry-some.tistory.com/89 참고하였음
-//        let url = URL(string: item.profileUrl)
-//        imageInfoView.kf.setImage(with: url)
+        // default Image url 필요함 -> "" 자리에 넣을거임
+        let url = URL(string: item.profileUrl ?? "")
+        imageInfoView.kf.setImage(with: url)
         
         // 닉네임
         nickNameInfoLabel.text = item.nickName
@@ -145,7 +145,6 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
             
             belongInfoLabel.text = item.belong
         default:
-            // 현재 belong으로 하나로 주는데 2개로 나눠 줘야한다고 생각함
             belongInfoLabel.isHidden = true
             groupInfoLabel.isHidden = false
             detailInfoLabel.isHidden = false
@@ -154,8 +153,5 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
             detailInfoLabel.text = item.detail
         }
 
-        // memberIdx 저장
-        memberIdx = item.memberIdx
-        
     }
 }
