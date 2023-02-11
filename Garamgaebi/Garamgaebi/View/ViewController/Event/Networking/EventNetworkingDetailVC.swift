@@ -234,9 +234,10 @@ extension EventNetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 //			cell.dateInfoLabel.text = self.networkingInfo.date
 			cell.locationInfoLabel.text = self.networkingInfo.location
 			if self.networkingInfo.fee == 0 {
-				cell.costStackView.isHidden = true
+//				cell.costStackView.isHidden = true
+				cell.costInfoLabel.text = "무료"
 			} else {
-				cell.costStackView.isHidden = false
+//				cell.costStackView.isHidden = false
 				cell.costInfoLabel.text = "\(self.networkingInfo.fee)원"
 			}
 //			cell.deadlineInfoLabel.text = self.networkingInfo.endDate

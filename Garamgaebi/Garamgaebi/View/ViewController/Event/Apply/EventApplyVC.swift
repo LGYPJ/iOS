@@ -429,13 +429,14 @@ extension EventApplyVC {
 		dateInfoLabel.text = seminarInfo.date.formattingDetailDate()
 		locationInfoLabel.text = seminarInfo.location
 		if seminarInfo.fee == 0 {
-			costStackView.isHidden = true
+//			costStackView.isHidden = true
+			costInfoLabel.text = "무료"
 			accountLabel.isHidden = true
 			clipBoardImageView.isHidden = true
 			descriptionTextView.isHidden = true
 			descriptionContainerView.isHidden = true
 		} else {
-			costStackView.isHidden = false
+//			costStackView.isHidden = false
 			accountLabel.isHidden = false
 			clipBoardImageView.isHidden = false
 			descriptionTextView.isHidden = false
@@ -454,13 +455,14 @@ extension EventApplyVC {
 		dateInfoLabel.text = networkingInfo.date.formattingDetailDate()
 		locationInfoLabel.text = networkingInfo.location
 		if networkingInfo.fee == 0 {
-			costStackView.isHidden = true
+//			costStackView.isHidden = true
+			costInfoLabel.text = "무료"
 			accountLabel.isHidden = true
 			clipBoardImageView.isHidden = true
 			descriptionTextView.isHidden = true
 			descriptionContainerView.isHidden = true
 		} else {
-			costStackView.isHidden = false
+//			costStackView.isHidden = false
 			accountLabel.isHidden = false
 			clipBoardImageView.isHidden = false
 			descriptionTextView.isHidden = false

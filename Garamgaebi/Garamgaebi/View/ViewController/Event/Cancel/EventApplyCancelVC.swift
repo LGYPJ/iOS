@@ -513,11 +513,12 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 		locationInfoLabel.text = self.seminarInfo.location
 		
 		if self.seminarInfo.fee == 0 {
-			costStackView.isHidden = true
+//			costStackView.isHidden = true
+			costInfoLabel.text = "무료"
 			bankButton.isHidden = true
 			accountTextField.isHidden = true
 		} else {
-			costStackView.isHidden = false
+//			costStackView.isHidden = false
 			bankButton.isHidden = false
 			accountTextField.isHidden = false
 			costInfoLabel.text = "\(self.seminarInfo.fee)원"
@@ -532,11 +533,12 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 		locationInfoLabel.text = self.networkingInfo.location
 		
 		if self.networkingInfo.fee == 0 {
-			costStackView.isHidden = true
+//			costStackView.isHidden = true
+			costInfoLabel.text = "무료"
 			bankButton.isHidden = true
 			accountTextField.isHidden = true
 		} else {
-			costStackView.isHidden = false
+//			costStackView.isHidden = false
 			bankButton.isHidden = false
 			accountTextField.isHidden = false
 			costInfoLabel.text = "\(self.networkingInfo.fee)원"
