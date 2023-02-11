@@ -181,12 +181,14 @@ extension HomeNotificationVC {
     
     @objc func refreshTable(refresh: UIRefreshControl) {
         print(">>>upRefresh")
-        self.notificationList.removeAll()
-        fetchData(lastNotiIdx: nil, hasNext: true)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            self.tableView.reloadData()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            self?.notificationList.removeAll()
+            self?.fetchData(lastNotiIdx: nil, hasNext: true)
+            self?.tableView.reloadData()
             refresh.endRefreshing()
         }
+        
     }
     
     //MARK: - UIRefreshControl of ScrollView
@@ -198,8 +200,8 @@ extension HomeNotificationVC {
         // 스크롤 할 수 있는 영역보다 더 스크롤된 경우 (하단에서 스크롤이 더 된 경우)
         if maximumOffset < currentOffset {
             print(">>>DownRefresh")
-            fetchData(lastNotiIdx: self.lastNotificationIdx, hasNext: self.hasNext)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now()) { [weak self] in
+                self?.fetchData(lastNotiIdx: self?.lastNotificationIdx, hasNext: self?.hasNext)
                 self?.tableView.reloadData()
             }
         }
