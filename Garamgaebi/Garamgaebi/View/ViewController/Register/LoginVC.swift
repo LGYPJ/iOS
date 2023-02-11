@@ -122,15 +122,17 @@ class LoginVC: UIViewController {
     @objc
     private func loginSuccessed(_ sender: Any) {
         if (UserApi.isKakaoTalkLoginAvailable()) {
-            //카톡 설치되어있으면 -> 카톡으로 로그인
-            UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
+            
+            //TODO: kakaoLogin 카톡 설치되어있으면 로그인 해결하면 아래 삭제
+            UserApi.shared.loginWithKakaoAccount { (oauthToken, error) in
                 if let error = error {
                     print(error)
+                    print("로그인 실패")
                 } else {
-                    print("카카오 톡으로 로그인 성공")
-                    
+                    print("카카오 계정으로 로그인 성공")
                     _ = oauthToken
-                    /// 로그인 관련 메소드 추가
+                    /// 관련 메소드 추가
+                    
                     UserApi.shared.me() {(user, error) in
                         if let error = error {
                             print(error)
@@ -141,8 +143,31 @@ class LoginVC: UIViewController {
                             self.presentNextView()
                         }
                     }
+                    
                 }
             }
+            
+//            //카톡 설치되어있으면 -> 카톡으로 로그인
+//            UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
+//                if let error = error {
+//                    print(error)
+//                } else {
+//                    print("카카오 톡으로 로그인 성공")
+//
+//                    _ = oauthToken
+//                    /// 로그인 관련 메소드 추가
+//                    UserApi.shared.me() {(user, error) in
+//                        if let error = error {
+//                            print(error)
+//                        }
+//                        else {
+//                            UserDefaults.standard.set(user?.kakaoAccount?.email, forKey: "socialEmail")
+//                            // UniEmailAuthVC로 화면전환
+//                            self.presentNextView()
+//                        }
+//                    }
+//                }
+//            }
         }
         else {
             // 카톡 없으면 -> 계정으로 로그인

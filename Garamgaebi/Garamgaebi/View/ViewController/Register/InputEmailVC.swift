@@ -27,7 +27,7 @@ class InputEmailVC: UIViewController {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "이메일"
+        label.text = "이메일을 입력해주세요"
         label.textColor = .black
         label.font = UIFont.NotoSansKR(type: .Bold, size: 22)
         return label
@@ -54,6 +54,7 @@ class InputEmailVC: UIViewController {
         let textField = UITextField()
         
         textField.addLeftPadding()
+        textField.addRightPadding()
         textField.placeholder = "이메일 주소를 입력해주세요"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
@@ -99,6 +100,7 @@ class InputEmailVC: UIViewController {
         view.backgroundColor = .white
         addSubViews()
         configLayouts()
+        configureGestureRecognizer()
     }
     
     
@@ -186,6 +188,7 @@ class InputEmailVC: UIViewController {
     // MARK: - ValidUserInfo
     
     func validateUserInfo() {
+        self.emailValidLabel.isHidden = false
         if isValidProfileEmail {
             self.nextButton.isEnabled = true
             self.profileEmailTextField.layer.borderColor = UIColor.mainBlack.cgColor
@@ -193,8 +196,7 @@ class InputEmailVC: UIViewController {
             UIView.animate(withDuration: 0.33) {
                 self.nextButton.backgroundColor = .mainBlue
 //                self.emailValidLabel.isHidden = true
-                self.emailValidLabel.text = "사용 가능한 이메일입니다"
-                self.emailValidLabel.textColor = .mainBlue
+                self.emailValidLabel.text = ""
             }
         } else {
             self.nextButton.isEnabled = false
@@ -211,19 +213,14 @@ class InputEmailVC: UIViewController {
     }
     
     @objc func textFieldActivated(_ sender: UITextField) {
-        
-        sender.layer.borderColor = UIColor(hex: 0x000000).withAlphaComponent(0.8).cgColor
-        sender.layer.borderWidth = 1
-        
-        self.emailValidLabel.isHidden = false
-
+        validateUserInfo()
     }
     
     @objc func textFieldInactivated(_ sender: UITextField) {
-        
+        validateUserInfo()
+        self.emailValidLabel.isHidden = true
         sender.layer.borderColor = UIColor.mainGray.cgColor
         sender.layer.borderWidth = 1
-        
     }
     
     @objc
@@ -239,5 +236,20 @@ class InputEmailVC: UIViewController {
             fatalError("Missing TextField...")
         }
 
+    }
+}
+
+extension InputEmailVC {
+    private func configureGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.isEnabled = true
+        tapGestureRecognizer.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc private func viewDidTap() {
+        self.view.endEditing(true)
     }
 }

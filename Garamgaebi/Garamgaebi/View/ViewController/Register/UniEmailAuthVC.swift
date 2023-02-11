@@ -11,25 +11,22 @@ import SnapKit
 class UniEmailAuthVC: UIViewController {
     
     // MARK: - Propertys
-    //let timeSelector: Selector = #selector(updateTime)
     var timer: Timer?
     
     let interval = 1.0
     var authNumber = UniEmailAuthNumber(key: "")
     var userId = String()
     var isValidId = false {
-        didSet { // 프로퍼티 옵저버 :23
+        didSet {
             self.validateUserInfo()
         }
     }
     var isValidAuthNumber = false {
-        didSet { // 프로퍼티 옵저버 :
+        didSet {
             self.validateUserInfo()
         }
     }
-    
-    
-    
+ 
     // MARK: - Subviews
     
     lazy var pagingImage: UIImageView = {
@@ -39,7 +36,7 @@ class UniEmailAuthVC: UIViewController {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "가천대생 인증"
+        label.text = "가천대생 인증을 진행해주세요"
         label.textColor = .black
         label.font = UIFont.NotoSansKR(type: .Bold, size: 22)
         return label
@@ -85,7 +82,7 @@ class UniEmailAuthVC: UIViewController {
     lazy var emailLabel: UILabel = {
         let label = UILabel()
         label.text = "@gachon.ac.kr"
-        label.textColor = .mainGray
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         return label
     }()
@@ -190,10 +187,13 @@ class UniEmailAuthVC: UIViewController {
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        UserDefaults.standard.set("hsw1920@naver.com", forKey: "socialEmail")
         view.backgroundColor = .white
+        emailTextField.delegate = self
+        authNumberTextField.delegate = self
         addSubViews()
         configLayouts()
+        configureGestureRecognizer()
     }
 
     
@@ -284,7 +284,7 @@ class UniEmailAuthVC: UIViewController {
         authNumberTextField.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.top.equalTo(authNumTitleLabel.snp.bottom).offset(12)
-            make.width.equalTo(296)
+            make.right.equalTo(authNumberSendButton.snp.left).offset(-10)
             make.height.equalTo(48)
         }
         
@@ -310,13 +310,14 @@ class UniEmailAuthVC: UIViewController {
             make.bottom.equalToSuperview().inset(48)
             make.height.equalTo(48)
         }
-        
-        
     }
     
     @objc
     func sendEmail(_ sender: UIButton) {
         let uniEmail = UniEmailAuthModel(email: "\(userId)@gachon.ac.kr")
+        
+        // 메일을 보내면서 uniEmail UserDefault에 저장
+        UserDefaults.standard.set("\(userId)@gachon.ac.kr", forKey: "uniEmail")
         
         DispatchQueue.main.async {
             UniEmailAuthViewModel.requestSendEmail(uniEmail) { [weak self] result in
@@ -324,16 +325,14 @@ class UniEmailAuthVC: UIViewController {
                 print(self?.authNumber.key)
             }
         }
-        
-        
-        
+
         sender.setTitleColor(UIColor.mainBlue, for: .normal)
         sender.backgroundColor = .white
         sender.layer.borderColor = UIColor.mainBlue.cgColor
         sender.layer.borderWidth = 0.5
         authNumberTextField.isEnabled = true
         authNumberSendButton.isEnabled = true
-        var count = 300
+        var count = 180
         
         if timer != nil && timer!.isValid {
             timer?.invalidate()
@@ -346,20 +345,8 @@ class UniEmailAuthVC: UIViewController {
                               options: .transitionCrossDissolve,
                               animations: {
                 self.authNumTitleLabel.isHidden = false
-            })
-            UIView.transition(with: self.authNumberTextField, duration: 0.33,
-                              options: .transitionCrossDissolve,
-                              animations: {
                 self.authNumberTextField.isHidden = false
-            })
-            UIView.transition(with: self.authNumberSendButton, duration: 0.33,
-                              options: .transitionCrossDissolve,
-                              animations: {
                 self.authNumberSendButton.isHidden = false
-            })
-            UIView.transition(with: self.nextButton, duration: 0.33,
-                              options: .transitionCrossDissolve,
-                              animations: {
                 self.nextButton.isHidden = false
             })
             
@@ -399,10 +386,6 @@ class UniEmailAuthVC: UIViewController {
                 self.emailAuthSendButton.setTitleColor(.white, for: .normal)
                 self.emailAuthSendButton.backgroundColor = .mainBlue
             }
-            
-            
-            
-            
         }
         else {
             // 인증번호 틀리면
@@ -420,9 +403,6 @@ class UniEmailAuthVC: UIViewController {
     
     @objc
     private func nextButtonTapped(_ sender: Any) {
-        // uniEmail UserDefault에 저장
-        UserDefaults.standard.set("\(userId)@gachon.ac.kr", forKey: "uniEmail")
-        
         // EmailVC로 화면전환
         let nextVC = InputNickNameVC()
         nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
@@ -470,26 +450,23 @@ class UniEmailAuthVC: UIViewController {
     }
     
     @objc func textFieldActivated(_ sender: UITextField) {
-        
         sender.layer.borderColor = UIColor.mainBlack.cgColor
         sender.layer.borderWidth = 1
-        
-        if sender == emailTextField {
-            emailLabel.textColor = .mainBlack
+        if sender == authNumberTextField {
+            sender.text = ""
+            authNumNotificationLabel.isHidden = true
+            self.authNumberSendButton.isEnabled = false
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.33) {
+                    self.authNumberSendButton.backgroundColor = .mainGray
+                }
+            }
         }
     }
     
     @objc func textFieldInactivated(_ sender: UITextField) {
-        
         sender.layer.borderColor = UIColor.mainGray.cgColor
         sender.layer.borderWidth = 1
-        
-        // emailTextField이 비어있을때 emailLabel을 다시 비활성
-        if sender == emailTextField
-            && emailTextField.text?.count == 0 {
-            emailLabel.textColor = .mainGray
-        }
-        
     }
     
     @objc
@@ -518,7 +495,37 @@ class UniEmailAuthVC: UIViewController {
     
 }
 
+extension UniEmailAuthVC {
+    private func configureGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.isEnabled = true
+        tapGestureRecognizer.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc private func viewDidTap() {
+        self.view.endEditing(true)
+    }
+}
 
-
-
-
+extension UniEmailAuthVC: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else {return false}
+        var maxLength = Int()
+        switch(textField) {
+        case emailTextField:
+            maxLength = 20
+        case authNumberTextField:
+            maxLength = 6
+        default:
+            return false
+        }
+        // 최대 글자수 이상을 입력한 이후로 입력 불가능
+        if text.count >= maxLength && range.length == 0 && range.location >= maxLength {
+            return false
+        }
+        return true
+    }
+}

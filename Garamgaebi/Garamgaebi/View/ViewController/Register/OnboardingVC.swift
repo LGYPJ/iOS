@@ -59,8 +59,10 @@ class OnboardingVC: UIViewController {
             for page in 0..<pageControl.numberOfPages {
                 if page == currentPage {
                     pageControl.setIndicatorImage(UIImage(named: "BluePoint"), forPage: page)
+                    pageControl.pageIndicatorTintColor = .mainBlue
                 } else {
                     pageControl.setIndicatorImage(UIImage(named: "WhitePoint"), forPage: page)
+                    pageControl.pageIndicatorTintColor = .mainBlue
                 }
             }
             if currentPage == onboardingData.count - 1 {

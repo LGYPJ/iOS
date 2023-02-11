@@ -32,11 +32,16 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     
     lazy var seminarPopUpButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "PopUpIcon"), for: .normal)
         let gesture = UITapGestureRecognizer(target: self, action: #selector(presentHomeSeminarPopUpVC(_:)))
         gesture.numberOfTapsRequired = 1
         button.addGestureRecognizer(gesture)
         return button
+    }()
+    
+    lazy var seminarPopUpButtonImage: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "PopUpIcon")
+        return view
     }()
     
     lazy var seminarViewAllLabel: UIButton = {
@@ -76,11 +81,15 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     
     lazy var networkingPopUpButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "PopUpIcon"), for: .normal)
         let gesture = UITapGestureRecognizer(target: self, action: #selector(presentHomeNetworkingPopUpVC(_:)))
         gesture.numberOfTapsRequired = 1
         button.addGestureRecognizer(gesture)
         return button
+    }()
+    lazy var networkingPopUpButtonImage: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "PopUpIcon")
+        return view
     }()
     
     lazy var networkingViewAllLabel: UIButton = {
@@ -114,6 +123,8 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         let layout: UICollectionViewFlowLayout = {
             let layout = UICollectionViewFlowLayout()
             layout.scrollDirection = .horizontal
+            layout.itemSize = CGSize(width: 334, height: 140)
+            layout.minimumLineSpacing = 12
             return layout
         }()
         
@@ -124,6 +135,10 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         view.contentInset = .zero
         view.backgroundColor = .clear
         view.clipsToBounds = true
+        
+        view.isPagingEnabled = false
+        view.decelerationRate = .fast
+        
         view.register(HomeEventCollectionViewCell.self, forCellWithReuseIdentifier: HomeEventCollectionViewCell.identifier)
         
         return view
@@ -133,6 +148,8 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         let layout: UICollectionViewFlowLayout = {
             let layout = UICollectionViewFlowLayout()
             layout.scrollDirection = .horizontal
+            layout.itemSize = CGSize(width: 334, height: 140)
+            layout.minimumLineSpacing = 12
             return layout
         }()
         
@@ -143,6 +160,10 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         view.contentInset = .zero
         view.backgroundColor = .clear
         view.clipsToBounds = true
+        
+        view.isPagingEnabled = false
+        view.decelerationRate = .fast
+        
         view.register(HomeEventCollectionViewCell.self, forCellWithReuseIdentifier: HomeEventCollectionViewCell.identifier)
 
         return view
@@ -167,11 +188,13 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         
         self.contentView.addSubview(seminarTitleLabel)
         self.contentView.addSubview(seminarPopUpButton)
+        seminarPopUpButton.addSubview(seminarPopUpButtonImage)
         self.contentView.addSubview(seminarViewAllStack)
         self.contentView.addSubview(seminarCollectionView)
         
         self.contentView.addSubview(networkingTitleLabel)
         self.contentView.addSubview(networkingPopUpButton)
+        networkingPopUpButton.addSubview(networkingPopUpButtonImage)
         self.contentView.addSubview(networkingViewAllStack)
         self.contentView.addSubview(networkingCollectionView)
         
@@ -188,8 +211,14 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         }
         seminarPopUpButton.snp.makeConstraints { make in
             make.centerY.equalTo(seminarTitleLabel.snp.centerY)
-            make.left.equalTo(seminarTitleLabel.snp.right).offset(4)
+            make.left.equalTo(seminarTitleLabel.snp.right)
+            make.height.equalTo(seminarTitleLabel.snp.height)
+            make.width.equalTo(32)
+        }
+        seminarPopUpButtonImage.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(8)
             make.width.height.equalTo(16)
+            make.centerY.equalToSuperview()
         }
         seminarViewAllStack.snp.makeConstraints { make in
             make.centerY.equalTo(seminarTitleLabel.snp.centerY)
@@ -208,8 +237,14 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         }
         networkingPopUpButton.snp.makeConstraints { make in
             make.centerY.equalTo(networkingTitleLabel.snp.centerY)
-            make.left.equalTo(networkingTitleLabel.snp.right).offset(4)
+            make.left.equalTo(networkingTitleLabel.snp.right)
+            make.height.equalTo(networkingTitleLabel.snp.height)
+            make.width.equalTo(32)
+        }
+        networkingPopUpButtonImage.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(8)
             make.width.height.equalTo(16)
+            make.centerY.equalToSuperview()
         }
         networkingViewAllStack.snp.makeConstraints { make in
             make.top.equalTo(networkingTitleLabel.snp.top)
@@ -395,5 +430,28 @@ extension HomeEventInfoTableViewCell: UICollectionViewDataSource, UICollectionVi
         
     }
     
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        // seminar, networking 컬렉션뷰 모두 layout이 동일해서 상관없음
+        guard let layout = self.seminarCollectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+        
+        // CollectionView Item Size
+        let cellWidthIncludingSpacing = layout.itemSize.width + layout.minimumLineSpacing
+        
+        // 이동한 x좌표 값과 item의 크기를 비교 후 페이징 값 설정
+        let estimatedIndex = scrollView.contentOffset.x / cellWidthIncludingSpacing
+        let index: Int
+        
+        // 스크롤 방향 체크
+        // item 절반 사이즈 만큼 스크롤로 판단하여 올림, 내림 처리
+        if velocity.x > 0 {
+            index = Int(ceil(estimatedIndex))
+        } else if velocity.x < 0 {
+            index = Int(floor(estimatedIndex))
+        } else {
+            index = Int(round(estimatedIndex))
+        }
+        // 위 코드를 통해 페이징 될 좌표 값을 targetContentOffset에 대입
+        targetContentOffset.pointee = CGPoint(x: CGFloat(index) * cellWidthIncludingSpacing, y: 0)
+    }
 }
 

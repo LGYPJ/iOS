@@ -18,10 +18,10 @@ class InputEducationVC: UIViewController {
     var yearArray: [String] = []
     
     private var monthArray = (1...12).map { String(format:"%02d", $0) }
-    private var startYearValue =  String()
-    private var startMonthValue = String()
-    private var endYearValue =  String()
-    private var endMonthValue = String()
+    private var startYearValue =  "0"
+    private var startMonthValue = "0"
+    private var endYearValue =  "0"
+    private var endMonthValue = "0"
     private var isLearning: Bool = false
     // MARK: - Subviews
     
@@ -78,7 +78,7 @@ class InputEducationVC: UIViewController {
     
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = "가장 최근에 소속되었던\n교육기관을 알려주세요"
+        label.text = "프로필에 기재할\n본인이 받은 교육을 알려주세요"
         label.numberOfLines = 0
         label.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         label.textColor = UIColor(hex: 0x8A8A8A)
@@ -97,6 +97,7 @@ class InputEducationVC: UIViewController {
         let textField = UITextField()
         
         textField.addLeftPadding()
+        textField.addRightPadding()
         textField.placeholder = "교육기관을 입력해주세요"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
@@ -126,6 +127,7 @@ class InputEducationVC: UIViewController {
         let textField = UITextField()
         
         textField.addLeftPadding()
+        textField.addRightPadding()
         textField.placeholder = "전공/과정을 입력해주세요 (예: 웹 개발 과정)"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
@@ -233,7 +235,6 @@ class InputEducationVC: UIViewController {
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 7)
         button.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
         button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
-        
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(toggleButton), for: .touchUpInside)
         button.addTarget(self, action: #selector(allTextFieldFilledIn), for: .touchUpInside)
@@ -272,13 +273,15 @@ class InputEducationVC: UIViewController {
         return button
     }()
     
-    
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        institutionTextField.delegate = self
+        majorTextField.delegate = self
         addSubViews()
         configLayouts()
+        configureGestureRecognizer()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -301,7 +304,7 @@ class InputEducationVC: UIViewController {
         view.addSubview(saveUserProfileButton)
         
         /* Labels */
-        [titleLabel,descriptionLabel,subtitleInstitutionLabel,subtitleMajorLabel,subDescriptionLabel, subtitleLearningDateLabel].forEach {
+        [titleLabel,descriptionLabel,subtitleInstitutionLabel,subtitleMajorLabel, subtitleLearningDateLabel,subDescriptionLabel].forEach {
             view.addSubview($0)
         }
     }
@@ -411,7 +414,6 @@ class InputEducationVC: UIViewController {
             make.left.equalTo(subDescriptionLabel.snp.right).offset(8)
             make.centerY.equalTo(subDescriptionLabel.snp.centerY)
         }
-        
     }
     
     func setCurrentYear() {
@@ -436,7 +438,7 @@ class InputEducationVC: UIViewController {
     
     @objc
     private func inputCareerButtonTapped(_ sender: UIButton) {
-        var nextVC = InputCareerVC()
+        let nextVC = InputCareerVC()
         nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
         nextVC.modalPresentationStyle = .fullScreen
         present(nextVC, animated: true)
@@ -469,31 +471,61 @@ class InputEducationVC: UIViewController {
     
     @objc
     func textFieldActivated(_ sender: UITextField) {
-        sender.layer.borderColor = UIColor.mainBlack.cgColor
-        sender.layer.borderWidth = 1
-        if sender == startDateTextField || sender == endDateTextField {
-            // pickerView 초기화
-            switch(sender){
-            case startDateTextField:
+        switch sender {
+        case startDateTextField:
+            let startValue = Int(startMonthValue)! + 12*Int(startYearValue)!
+            let endValue = Int(endMonthValue)! + 12*Int(endYearValue)!
+            if !(startValue > endValue
+                && !(startValue == 0 || endValue == 0)) {
                 endDateTextField.layer.borderColor = UIColor.mainGray.cgColor
                 startYearValue = yearArray[startDatePickerView.selectedRow(inComponent: 0)]
                 startMonthValue = monthArray[startDatePickerView.selectedRow(inComponent: 1)]
                 sender.text = "\(startYearValue)/\(startMonthValue)"
-            case endDateTextField:
+            } else {
+                sender.layer.borderColor = UIColor.mainBlack.cgColor
+                sender.layer.borderWidth = 1
+            }
+        case endDateTextField:
+            let startValue = Int(startMonthValue)! + 12*Int(startYearValue)!
+            let endValue = Int(endMonthValue)! + 12*Int(endYearValue)!
+            if !(startValue > endValue
+                 && !(startValue == 0 || endValue == 0)) {
                 startDateTextField.layer.borderColor = UIColor.mainGray.cgColor
                 endYearValue = yearArray[endDatePickerView.selectedRow(inComponent: 0)]
                 endMonthValue = monthArray[endDatePickerView.selectedRow(inComponent: 1)]
                 sender.text = "\(endYearValue)/\(endMonthValue)"
-            default:
-                print(">>>ERROR: InputEducationVC - pickerView error")
+            } else {
+                sender.layer.borderColor = UIColor.mainBlack.cgColor
+                sender.layer.borderWidth = 1
             }
+        default:
+            sender.layer.borderColor = UIColor.mainBlack.cgColor
+            sender.layer.borderWidth = 1
         }
     }
     
     @objc
     func textFieldInactivated(_ sender: UITextField) {
-        sender.layer.borderColor = UIColor.mainGray.cgColor
-        sender.layer.borderWidth = 1
+        switch sender{
+        case startDateTextField, endDateTextField:
+            // 반드시 [start < end] 만족해야함
+            let startValue = Int(startMonthValue)! + 12*Int(startYearValue)!
+            let endValue = Int(endMonthValue)! + 12*Int(endYearValue)!
+            
+            // 불만족시
+            if startValue > endValue
+                && !(startValue == 0 || endValue == 0) {
+                // shake 애니메이션 + borderColor: 0xFF0000
+                startDateTextField.shake()
+                endDateTextField.shake()
+            } else {
+                startDateTextField.layer.borderColor = UIColor.mainGray.cgColor
+                endDateTextField.layer.borderColor = UIColor.mainGray.cgColor
+            }
+        default:
+            sender.layer.borderColor = UIColor.mainGray.cgColor
+            sender.layer.borderWidth = 1
+        }
     }
 
     @objc
@@ -521,11 +553,15 @@ class InputEducationVC: UIViewController {
             startDatePickerView.selectRow(0, inComponent: 0, animated: false)
             startDatePickerView.selectRow(0, inComponent: 1, animated: false)
             startDateTextField.text = ""
+            startYearValue =  "0"
+            startMonthValue = "0"
         }
         else if endDateTextField.isEditing {
             endDatePickerView.selectRow(0, inComponent: 0, animated: false)
             endDatePickerView.selectRow(0, inComponent: 1, animated: false)
             endDateTextField.text = ""
+            endYearValue =  "0"
+            endMonthValue = "0"
         }
         self.view.endEditing(true)
     }
@@ -537,7 +573,7 @@ class InputEducationVC: UIViewController {
         if self.institutionTextField.text?.count != 0,
            self.majorTextField.text?.count != 0,
            self.startDateTextField.text?.count == 7,
-           self.endDateTextField.text?.count == 7 {
+           (self.endDateTextField.text?.count == 7 || self.endDateTextField.text?.count == 2) {
             
             // 재직중 버튼 활성화시 -> 무조건 활성화
             if isLearning {
@@ -553,7 +589,8 @@ class InputEducationVC: UIViewController {
                 let endValue = Int(endMonthValue)! + 12*Int(endYearValue)!
                 
                 // 불만족시
-                if startValue > endValue {
+                if (startValue > endValue
+                    && !(startValue == 0 || endValue == 0)){
                     // shake 애니메이션 + borderColor: 0xFF0000
                     startDateTextField.shake()
                     endDateTextField.shake()
@@ -569,9 +606,7 @@ class InputEducationVC: UIViewController {
                     }
                     saveUserProfileButton.isEnabled = true
                 }
-                
             }
-            
         } else {
             saveUserProfileButton.isEnabled = false
             UIView.animate(withDuration: 0.33) { [weak self] in
@@ -579,7 +614,6 @@ class InputEducationVC: UIViewController {
             }
         }
     }
-    
 }
 
 extension InputEducationVC: UIPickerViewDataSource, UIPickerViewDelegate {
@@ -679,5 +713,38 @@ extension InputEducationVC: UIPickerViewDataSource, UIPickerViewDelegate {
         } else {
             return monthArray[row]
         }
+    }
+}
+
+extension InputEducationVC {
+    private func configureGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.isEnabled = true
+        tapGestureRecognizer.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc private func viewDidTap() {
+        self.view.endEditing(true)
+    }
+}
+
+extension InputEducationVC: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else {return false}
+        var maxLength = Int()
+        switch(textField) {
+        case institutionTextField, majorTextField:
+            maxLength = 20
+        default:
+            return false
+        }
+        // 최대 글자수 이상을 입력한 이후로 입력 불가능
+        if text.count >= maxLength && range.length == 0 && range.location >= maxLength {
+            return false
+        }
+        return true
     }
 }

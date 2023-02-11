@@ -107,6 +107,7 @@ class CompleteRegisterVC: UIViewController {
         addSubViews()
         configLayouts()
         configNickname()
+        configureGestureRecognizer()
     }
     
     
@@ -231,6 +232,9 @@ class CompleteRegisterVC: UIViewController {
         LoginViewModel.postLogin(uniEmail: useruniEmail, password: userpassword, completion: { [weak self] result in
             UserDefaults.standard.set(result.accessToken, forKey: "BearerToken")
             UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
+//            UserDefaults.standard.set(7, forKey: "memberIdx")
+            
+            
             self?.presentHome()
         })
 	}
@@ -291,4 +295,19 @@ class CompleteRegisterVC: UIViewController {
         
     }
 
+}
+
+extension CompleteRegisterVC {
+    private func configureGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.isEnabled = true
+        tapGestureRecognizer.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc private func viewDidTap() {
+        self.view.endEditing(true)
+    }
 }

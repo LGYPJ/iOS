@@ -18,10 +18,10 @@ class InputCareerVC: UIViewController {
     var yearArray: [String] = []
     
     private var monthArray = (1...12).map { String(format:"%02d", $0) }
-    private var startYearValue =  String()
-    private var startMonthValue = String()
-    private var endYearValue =  String()
-    private var endMonthValue = String()
+    private var startYearValue =  "0"
+    private var startMonthValue = "0"
+    private var endYearValue =  "0"
+    private var endMonthValue = "0"
     private var isWorking: Bool = false
     // MARK: - Subviews
     
@@ -78,7 +78,7 @@ class InputCareerVC: UIViewController {
     
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = "재직 중이 아니라면\n가장 최근에 일한 곳을 알려주세요"
+        label.text = "프로필에 기재할\n본인의 경력을 알려주세요"
         label.numberOfLines = 0
         label.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         label.textColor = UIColor(hex: 0x8A8A8A)
@@ -97,6 +97,7 @@ class InputCareerVC: UIViewController {
         let textField = UITextField()
         
         textField.addLeftPadding()
+        textField.addRightPadding()
         textField.placeholder = "회사명을 입력해주세요"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
@@ -126,6 +127,7 @@ class InputCareerVC: UIViewController {
         let textField = UITextField()
         
         textField.addLeftPadding()
+        textField.addRightPadding()
         textField.placeholder = "직함을 입력해주세요 (예: 백엔드 개발자)"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
@@ -139,7 +141,6 @@ class InputCareerVC: UIViewController {
         textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
-        
         
         return textField
     }()
@@ -234,9 +235,7 @@ class InputCareerVC: UIViewController {
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 7)
         button.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
         button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
-        
         button.clipsToBounds = true
-        
         button.addTarget(self, action: #selector(toggleButton), for: .touchUpInside)
         button.addTarget(self, action: #selector(allTextFieldFilledIn), for: .touchUpInside)
         return button
@@ -267,7 +266,6 @@ class InputCareerVC: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         button.layer.cornerRadius = 12
-        button.backgroundColor = .mainBlue
         button.clipsToBounds = true
         button.isEnabled = false
         button.backgroundColor = .mainGray
@@ -275,20 +273,21 @@ class InputCareerVC: UIViewController {
         return button
     }()
     
-    
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        companyTextField.delegate = self
+        positionTextField.delegate = self
         addSubViews()
         configLayouts()
+        configureGestureRecognizer()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setCurrentYear()
     }
-    
     
     // MARK: - Functions
     
@@ -304,12 +303,10 @@ class InputCareerVC: UIViewController {
         view.addSubview(saveUserProfileButton)
         view.addSubview(inputEducationButton)
         
-
         /* Labels */
         [titleLabel,descriptionLabel,subtitleCompanyLabel,subtitlePositionLabel,subtitleWorkingDateLabel,subDescriptionLabel].forEach {
             view.addSubview($0)
         }
-        
     }
     
     func configLayouts() {
@@ -474,31 +471,61 @@ class InputCareerVC: UIViewController {
     
     @objc
     func textFieldActivated(_ sender: UITextField) {
-        sender.layer.borderColor = UIColor.mainBlack.cgColor
-        sender.layer.borderWidth = 1
-        if sender == startDateTextField || sender == endDateTextField {
-            // pickerView 초기화
-            switch(sender){
-            case startDateTextField:
+        switch sender {
+        case startDateTextField:
+            let startValue = Int(startMonthValue)! + 12*Int(startYearValue)!
+            let endValue = Int(endMonthValue)! + 12*Int(endYearValue)!
+            if !(startValue > endValue
+                && !(startValue == 0 || endValue == 0)) {
                 endDateTextField.layer.borderColor = UIColor.mainGray.cgColor
                 startYearValue = yearArray[startDatePickerView.selectedRow(inComponent: 0)]
                 startMonthValue = monthArray[startDatePickerView.selectedRow(inComponent: 1)]
                 sender.text = "\(startYearValue)/\(startMonthValue)"
-            case endDateTextField:
+            } else {
+                sender.layer.borderColor = UIColor.mainBlack.cgColor
+                sender.layer.borderWidth = 1
+            }
+        case endDateTextField:
+            let startValue = Int(startMonthValue)! + 12*Int(startYearValue)!
+            let endValue = Int(endMonthValue)! + 12*Int(endYearValue)!
+            if !(startValue > endValue
+                 && !(startValue == 0 || endValue == 0)) {
                 startDateTextField.layer.borderColor = UIColor.mainGray.cgColor
                 endYearValue = yearArray[endDatePickerView.selectedRow(inComponent: 0)]
                 endMonthValue = monthArray[endDatePickerView.selectedRow(inComponent: 1)]
                 sender.text = "\(endYearValue)/\(endMonthValue)"
-            default:
-                print(">>>ERROR: InputCareerVC - pickerView error")
+            } else {
+                sender.layer.borderColor = UIColor.mainBlack.cgColor
+                sender.layer.borderWidth = 1
             }
+        default:
+            sender.layer.borderColor = UIColor.mainBlack.cgColor
+            sender.layer.borderWidth = 1
         }
     }
     
     @objc
     func textFieldInactivated(_ sender: UITextField) {
-        sender.layer.borderColor = UIColor.mainGray.cgColor
-        sender.layer.borderWidth = 1
+        switch sender{
+        case startDateTextField, endDateTextField:
+            // 반드시 [start < end] 만족해야함
+            let startValue = Int(startMonthValue)! + 12*Int(startYearValue)!
+            let endValue = Int(endMonthValue)! + 12*Int(endYearValue)!
+            
+            // 불만족시
+            if startValue > endValue
+                && !(startValue == 0 || endValue == 0) {
+                // shake 애니메이션 + borderColor: 0xFF0000
+                startDateTextField.shake()
+                endDateTextField.shake()
+            } else {
+                startDateTextField.layer.borderColor = UIColor.mainGray.cgColor
+                endDateTextField.layer.borderColor = UIColor.mainGray.cgColor
+            }
+        default:
+            sender.layer.borderColor = UIColor.mainGray.cgColor
+            sender.layer.borderWidth = 1
+        }
     }
     
     @objc
@@ -526,11 +553,15 @@ class InputCareerVC: UIViewController {
             startDatePickerView.selectRow(0, inComponent: 0, animated: false)
             startDatePickerView.selectRow(0, inComponent: 1, animated: false)
             startDateTextField.text = ""
+            startYearValue =  "0"
+            startMonthValue = "0"
         }
         else if endDateTextField.isEditing {
             endDatePickerView.selectRow(0, inComponent: 0, animated: false)
             endDatePickerView.selectRow(0, inComponent: 1, animated: false)
             endDateTextField.text = ""
+            endYearValue =  "0"
+            endMonthValue = "0"
         }
         self.view.endEditing(true)
     }
@@ -541,8 +572,8 @@ class InputCareerVC: UIViewController {
         /* 모든 textField가 채워졌으면 프로필 저장 버튼 활성화 */
         if self.companyTextField.text?.count != 0,
            self.positionTextField.text?.count != 0,
-           self.startDateTextField.text?.count != 0,
-           self.endDateTextField.text?.count != 0 {
+           self.startDateTextField.text?.count == 7,
+           (self.endDateTextField.text?.count == 7 || self.endDateTextField.text?.count == 2) {
             
             // 재직중 버튼 활성화시 -> 무조건 활성화
             if isWorking {
@@ -558,7 +589,8 @@ class InputCareerVC: UIViewController {
                 let endValue = Int(endMonthValue)! + 12*Int(endYearValue)!
                 
                 // 불만족시
-                if startValue > endValue {
+                if (startValue > endValue
+                    && !(startValue == 0 || endValue == 0)) {
                     // shake 애니메이션 + borderColor: 0xFF0000
                     startDateTextField.shake()
                     endDateTextField.shake()
@@ -574,9 +606,7 @@ class InputCareerVC: UIViewController {
                     }
                     saveUserProfileButton.isEnabled = true
                 }
-                
             }
-            
         } else {
             saveUserProfileButton.isEnabled = false
             UIView.animate(withDuration: 0.33) { [weak self] in
@@ -584,7 +614,6 @@ class InputCareerVC: UIViewController {
             }
         }
     }
-
 }
 
 extension InputCareerVC: UIPickerViewDataSource, UIPickerViewDelegate {
@@ -676,7 +705,6 @@ extension InputCareerVC: UIPickerViewDataSource, UIPickerViewDelegate {
                 endDateTextField.text = "\(endYearValue)/\(endMonthValue)"
             }
         }
-        
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
@@ -685,5 +713,38 @@ extension InputCareerVC: UIPickerViewDataSource, UIPickerViewDelegate {
         } else {
             return monthArray[row]
         }
+    }
+}
+
+extension InputCareerVC {
+    private func configureGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.isEnabled = true
+        tapGestureRecognizer.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc private func viewDidTap() {
+        self.view.endEditing(true)
+    }
+}
+
+extension InputCareerVC: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else {return false}
+        var maxLength = Int()
+        switch(textField) {
+        case companyTextField, positionTextField:
+            maxLength = 20
+        default:
+            return false
+        }
+        // 최대 글자수 이상을 입력한 이후로 입력 불가능
+        if text.count >= maxLength && range.length == 0 && range.location >= maxLength {
+            return false
+        }
+        return true
     }
 }
