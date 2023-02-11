@@ -21,9 +21,9 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
 
     let token = UserDefaults.standard.string(forKey: "BearerToken")
     
-    var eduData: [EducationResult] = []
     var snsData: [SnsResult] = []
     var careerData: [CareerResult] = []
+    var eduData: [EducationResult] = []
     
     // MARK: - Subviews
     lazy var headerView: UIView = {
@@ -72,12 +72,16 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 16)
     }
     
-    let emailLabel = UILabel().then {
+    lazy var emailLabel = UILabel().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         $0.textColor = .mainBlue
         let attributedString = NSMutableAttributedString.init(string: " ")
         attributedString.addAttribute(NSAttributedString.Key.underlineStyle, value: 1, range: NSRange.init(location: 0, length: attributedString.length))
         $0.attributedText = attributedString
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(emailLabelDidTap))
+        $0.isUserInteractionEnabled = true
+        $0.addGestureRecognizer(tapGestureRecognizer)
     }
     
     lazy var profileStackView: UIStackView = {
@@ -90,14 +94,16 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         return stackView
     }()
     
-    let introduceTextField = UITextView().then {
+    let introduceLabel = BasicPaddingLabel().then {
+        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        $0.textColor = .mainBlack
+        $0.numberOfLines = 0
+        $0.clipsToBounds = true // 요소가 삐져나가지 않도록 하는 속성
+        $0.textAlignment = .left
+        
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.mainGray.cgColor
         $0.layer.cornerRadius = 12
-        $0.textContainerInset = UIEdgeInsets(top: 12.0, left: 12.0, bottom: 12.0, right: 12.0)
-        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        $0.textColor = .mainBlack
-        $0.isUserInteractionEnabled = false
     }
     
     let profileEditBtn = UIButton().then {
@@ -110,11 +116,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     // 하단 버튼
     // SNS
     let snsTopRadiusView = UIView().then {
-        $0.profileTopRadiusView()
-    }
-    let snsTitleLabel = UILabel().then {
-        $0.text = "SNS"
-        $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        $0.profileTopRadiusView(title: "SNS")
     }
     let snsDefaultLabel = UILabel().then {
         $0.text = "유저들과 소통을 위해서 SNS 주소를 남겨주세요!"
@@ -149,11 +151,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     
     // 경력
     let careerTopRadiusView = UIView().then {
-        $0.profileTopRadiusView()
-    }
-    let careerTitleLabel = UILabel().then {
-        $0.text = "경력"
-        $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        $0.profileTopRadiusView(title: "경력")
     }
     let careerDefaultLabel = UILabel().then {
         $0.text = "지금 하고 있거나\n이전에 한 일을 알려주세요"
@@ -189,11 +187,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     
     // 교육
     let eduTopRadiusView = UIView().then {
-        $0.profileTopRadiusView()
-    }
-    let eduTitleLabel = UILabel().then {
-        $0.text = "교육"
-        $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        $0.profileTopRadiusView(title: "교육")
     }
     let eduDefaultLabel = UILabel().then {
         $0.text = "지금 다니고 있거나 이전에 다녔던\n학교, 부트캠프 등 교육기관을 입력해주세요"
@@ -234,8 +228,6 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         
         configureLayouts()
         
-        // 서버 통신
-        getMyInfo()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -244,11 +236,8 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         tabBarController?.tabBar.isHidden = false
         
         // 서버 통신
-        self.getEducationData { [weak self] result in
-            self?.eduData = result
-            self?.showEducationDefaultLabel()
-            self?.eduTableView.reloadData()
-        }
+        getMyInfo()
+        
         self.getSnsData { [weak self] result in
             self?.snsData = result
             self?.showSnsDefaultLabel()
@@ -258,6 +247,11 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             self?.careerData = result
             self?.showCareerDefaultLabel()
             self?.careerTableView.reloadData()
+        }
+        self.getEducationData { [weak self] result in
+            self?.eduData = result
+            self?.showEducationDefaultLabel()
+            self?.eduTableView.reloadData()
         }
     }
     
@@ -283,13 +277,13 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         scrollView.addSubview(contentView)
         
         // scroll - profile
-        [profileImageView, profileStackView, introduceTextField, profileEditBtn]
+        [profileImageView, profileStackView, introduceLabel, profileEditBtn]
             .forEach {scrollView.addSubview($0)}
         
         // scroll - add
-        [snsTopRadiusView, snsTitleLabel, snsBottomRadiusView,
-         careerTopRadiusView, careerTitleLabel, careerBottomRadiusView,
-         eduTopRadiusView, eduTitleLabel, eduBottomRadiusView].forEach {scrollView.addSubview($0)}
+        [snsTopRadiusView, snsBottomRadiusView,
+         careerTopRadiusView, careerBottomRadiusView,
+         eduTopRadiusView, eduBottomRadiusView].forEach {scrollView.addSubview($0)}
         
         // view - sns
         [snsDefaultLabel, snsTableView, addSnsBtn].forEach { snsBottomRadiusView.addSubview($0) }
@@ -328,7 +322,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         scrollView.snp.makeConstraints {
             $0.top.equalTo(headerView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-10)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
         // contentView
@@ -350,15 +344,14 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             $0.trailing.equalTo(-16)
         }
         
-        introduceTextField.snp.makeConstraints { /// 자기소개
+        introduceLabel.snp.makeConstraints { /// 자기소개
             $0.top.equalTo(profileStackView.snp.bottom).offset(16)
             $0.leading.trailing.equalTo(profileStackView)
-            $0.height.equalTo(100)
         }
         
         profileEditBtn.snp.makeConstraints { /// 프로필 편집 버튼
-            $0.top.equalTo(introduceTextField.snp.bottom).offset(16)
-            $0.leading.trailing.equalTo(introduceTextField)
+            $0.top.equalTo(introduceLabel.snp.bottom).offset(16)
+            $0.leading.trailing.equalTo(introduceLabel)
         }
         /// 버튼 클릭
         profileEditBtn.addTarget(self,action: #selector(self.editButtonDidTap(_:)), for: .touchUpInside)
@@ -370,10 +363,6 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             $0.top.equalTo(profileEditBtn.snp.bottom).offset(16)
             $0.leading.trailing.equalTo(profileEditBtn)
             $0.height.equalTo(47)
-        }
-        snsTitleLabel.snp.makeConstraints {
-            $0.centerY.equalTo(snsTopRadiusView)
-            $0.leading.trailing.equalTo(snsTopRadiusView).offset(12)
         }
         snsBottomRadiusView.snp.makeConstraints {
             $0.top.equalTo(snsTopRadiusView.snp.bottom).offset(-1)
@@ -392,10 +381,6 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             $0.top.equalTo(snsBottomRadiusView.snp.bottom).offset(16)
             $0.leading.trailing.equalTo(snsTopRadiusView)
             $0.height.equalTo(47)
-        }
-        careerTitleLabel.snp.makeConstraints {
-            $0.centerY.equalTo(careerTopRadiusView)
-            $0.leading.trailing.equalTo(careerTopRadiusView).offset(12)
         }
         careerBottomRadiusView.snp.makeConstraints {
             $0.top.equalTo(careerTopRadiusView.snp.bottom).offset(-1)
@@ -417,10 +402,6 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             $0.leading.trailing.equalTo(careerBottomRadiusView)
             $0.height.equalTo(47)
         }
-        eduTitleLabel.snp.makeConstraints {
-            $0.centerY.equalTo(eduTopRadiusView)
-            $0.leading.trailing.equalTo(eduTopRadiusView).offset(12)
-        }
         eduBottomRadiusView.snp.makeConstraints {
             $0.top.equalTo(eduTopRadiusView.snp.bottom).offset(-1)
             $0.leading.trailing.equalTo(eduTopRadiusView)
@@ -440,7 +421,12 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         self.nameLabel.text = nickname
         self.orgLabel.text = organization
         self.emailLabel.text = email
-        self.introduceTextField.text = introduce
+        self.introduceLabel.text = introduce
+    }
+    
+    @objc func emailLabelDidTap() {
+        guard let copyString = emailLabel.text else { return }
+        UIPasteboard.general.string = copyString
     }
     
     @objc private func serviceButtonDidTap(_ sender : UIButton) {
@@ -464,7 +450,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             guard let nameString = self.nameLabel.text else { return }
             guard let orgString = self.orgLabel.text else { return }
             guard let emailString = self.emailLabel.text else { return }
-            guard let introduceString = self.introduceTextField.text else { return }
+            guard let introduceString = self.introduceLabel.text else { return }
 //            guard let image = self.profileImageView.image else { return }
             
             // 값 넘기기
@@ -539,10 +525,15 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
                     self.nameLabel.text = result.nickName
                     self.orgLabel.text = result.belong
                     self.emailLabel.text = result.profileEmail
+                    // 자기소개
                     if let userIntro = result.content { // 자기소개가 있으면
-                        self.introduceTextField.text = userIntro
-                    } else {
-                        self.introduceTextField.text = ""
+                        self.introduceLabel.text = userIntro
+                    } else { // 없으면 안 보이게
+                        self.introduceLabel.isHidden = true
+                        self.introduceLabel.snp.makeConstraints {
+                            $0.top.equalTo(self.profileStackView.snp.bottom)
+                            $0.height.equalTo(0)
+                        }
                     }
                     // 프로필 이미지
                     if let urlString = result.profileUrl {
@@ -716,7 +707,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
                 $0.top.equalToSuperview()
                 $0.leading.trailing.equalToSuperview()
                 $0.bottom.equalTo(addCareerBtn.snp.top).offset(-12)
-                $0.height.equalTo(careerCount * 65)
+                $0.height.equalTo(careerCount * 90)
             }
         }
     }
@@ -734,7 +725,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
                 $0.top.equalToSuperview()
                 $0.leading.trailing.equalToSuperview()
                 $0.bottom.equalTo(addEduBtn.snp.top).offset(-12)
-                $0.height.equalTo(eduCount * 65)
+                $0.height.equalTo(eduCount * 90)
             }
         }
     }
@@ -744,7 +735,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
         nameLabel.text = "코코아"
         orgLabel.text = "가천대학교 소프트웨어학과"
         emailLabel.text = "umc@gmail.com"
-        introduceTextField.text = "자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소."
+        introduceLabel.text = "자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소."
     }
 }
 // MARK: - Extension
@@ -768,7 +759,7 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView == snsTableView { return 41 }
-        else { return 65 }
+        else { return 90 }
     }
     
     

@@ -11,8 +11,10 @@ import Then
 
 class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     
-    // MARK: - Subviews
+    // MARK: - Properties
+    private var isChecking: Bool = false
     
+    // MARK: - Subviews
     lazy var headerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 71))
         view.backgroundColor = .systemBackground
@@ -34,6 +36,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         button.clipsToBounds = true
         button.tintColor = UIColor.mainBlack
+        
         button.addTarget(self, action: #selector(didTapBackBarButton), for: .touchUpInside)
         
         return button
@@ -50,6 +53,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         $0.basicTextField()
         $0.placeholder = "답변 받을 이메일 주소"
         
+        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
     }
@@ -72,6 +76,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
         $0.addTarget(self, action: #selector(showBottomSheet), for: .editingDidBegin)
+        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
     }
     
     let textViewPlaceHolder = "내용을 적어주세요"
@@ -84,6 +89,8 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         $0.text = textViewPlaceHolder
         $0.textColor = .mainGray
         $0.delegate = self // <-
+        
+//        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .touchUpInside)
     }
     
     lazy var agreeCheckBtn = UIButton().then {
@@ -97,6 +104,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         
         $0.clipsToBounds = true
         $0.addTarget(self, action: #selector(toggleButton), for: .touchUpInside)
+        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .touchUpInside)
     }
     
     let agreemsgLabel = UILabel().then {
@@ -109,6 +117,8 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     let sendBtn = UIButton().then {
         $0.basicButton()
         $0.setTitle("보내기", for: .normal)
+        $0.backgroundColor = .mainGray
+        $0.isEnabled = false
     }
     
     let logoutLabel = UIButton().then {
@@ -117,10 +127,12 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         $0.setTitleColor(UIColor(hex: 0xAEAEAE), for: .normal)
     }
     
-    let withdrawalLabel = UIButton().then {
+    lazy var withdrawalLabel = UIButton().then {
         $0.setTitle("회원탈퇴", for: .normal)
         $0.titleLabel?.font = UIFont.NotoSansKR(type: .Bold, size: 16)
         $0.setTitleColor(UIColor(hex: 0xAEAEAE), for: .normal)
+        
+        $0.addTarget(self, action: #selector(withdrawalButtonDidTap), for: .touchUpInside)
     }
     
     // MARK: - LifeCycles
@@ -212,7 +224,6 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
             $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
             $0.centerX.equalToSuperview()
         }
-        withdrawalLabel.addTarget(self, action: #selector(withdrawalButtonDidTap), for: .touchUpInside)
         
         
     }
@@ -231,11 +242,10 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     
     // 회원탈퇴 버튼 did tap
     @objc private func withdrawalButtonDidTap() {
-//        print("회원탈퇴 버튼 클릭")
         
         // 화면 전환
         let nextVC = ProfileWithdrawalVC()
-        navigationController?.pushViewController(nextVC, animated: false)
+        navigationController?.pushViewController(nextVC, animated: true)
     }
     
     @objc
@@ -254,7 +264,6 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
 
     // 뒤로가기 버튼 did tap
     @objc private func didTapBackBarButton() {
-//        print("뒤로가기 버튼 클릭")
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -266,34 +275,59 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     @objc func textFieldInactivated(_ sender: UITextField) {
         sender.layer.borderColor = UIColor.mainGray.cgColor
     }
+    
+    @objc func allTextFieldFilledIn() {
+        
+        /* 모든 textField가 채워졌으면 고객센터 버튼 활성화 */
+        if self.emailTextField.text?.count != 0,
+           self.questionTypeTextField.text?.count != 0 {
+            
+            if isChecking { // 정보 제공 동의 필수
+                UIView.animate(withDuration: 0.33) { [weak self] in
+                    self?.sendBtn.backgroundColor = .mainBlue
+                }
+                sendBtn.isEnabled = true
+            }
+            else { // 체크 안 했으면 무조건 비활성화
+                sendBtn.isEnabled = false
+                UIView.animate(withDuration: 0.33) { [weak self] in
+                    self?.sendBtn.backgroundColor = .mainGray
+                }
+            }
+        } else {
+            sendBtn.isEnabled = false
+            UIView.animate(withDuration: 0.33) { [weak self] in
+                self?.sendBtn.backgroundColor = .mainGray
+            }
+        }
+    }
 }
 
 extension ProfileServiceVC: UITextViewDelegate {
+    // TextView Place Holder
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == textViewPlaceHolder {
             textView.text = nil
             textView.textColor = .mainBlack
+            
+            textView.layer.borderColor = UIColor.mainBlack.cgColor
         }
     }
 
+    // TextView Place Holder
     func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            textView.text = textViewPlaceHolder
-            textView.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-            textView.textColor = .mainGray
-            //updateCountLabel(characterCount: 0)
+        if contentTextField.text.isEmpty {
+            contentTextField.text = textViewPlaceHolder
+            contentTextField.textColor = .mainGray
+            contentTextField.layer.borderColor = UIColor.mainGray.cgColor
         }
     }
 
+    // TextView 글자수 제한
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        let inputString = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard let oldString = textView.text, let newRange = Range(range, in: oldString) else { return true }
-        let newString = oldString.replacingCharacters(in: newRange, with: inputString).trimmingCharacters(in: .whitespacesAndNewlines)
-
-        let characterCount = newString.count
-        guard characterCount <= 100 else { return false }
-        //updateCountLabel(characterCount: characterCount)
-
-        return true
+        guard let str = textView.text else { return true }
+        let newLenght = str.count + text.count - range.length
+        
+        return newLenght <= 100
     }
 }

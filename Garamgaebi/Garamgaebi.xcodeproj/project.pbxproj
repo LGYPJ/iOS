@@ -47,6 +47,7 @@
 		4614A1732984BA9500D12108 /* ProfileSNSTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4614A1722984BA9500D12108 /* ProfileSNSTableViewCell.swift */; };
 		462183F5297C51B800B9A035 /* ServiceBottomSheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462183F4297C51B800B9A035 /* ServiceBottomSheetVC.swift */; };
 		462C4D65297D34BD00F2E0C6 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462C4D64297D34BD00F2E0C6 /* UIButton+.swift */; };
+		4668726C299633EA00469D0E /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4668726B299633EA00469D0E /* UILabel+.swift */; };
 		46704AEA297F9D2B005E63EA /* ProfileHistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46704AE9297F9D2B005E63EA /* ProfileHistoryTableViewCell.swift */; };
 		46828A4229752EF80037AB8C /* ProfileInputEducationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46828A4129752EF80037AB8C /* ProfileInputEducationVC.swift */; };
 		46876C6729732053000BA1B6 /* ProfileWithdrawalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46876C6629732053000BA1B6 /* ProfileWithdrawalVC.swift */; };
@@ -191,6 +192,7 @@
 		4614A1722984BA9500D12108 /* ProfileSNSTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSNSTableViewCell.swift; sourceTree = "<group>"; };
 		462183F4297C51B800B9A035 /* ServiceBottomSheetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceBottomSheetVC.swift; sourceTree = "<group>"; };
 		462C4D64297D34BD00F2E0C6 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
+		4668726B299633EA00469D0E /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		46704AE9297F9D2B005E63EA /* ProfileHistoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHistoryTableViewCell.swift; sourceTree = "<group>"; };
 		46828A4129752EF80037AB8C /* ProfileInputEducationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInputEducationVC.swift; sourceTree = "<group>"; };
 		46876C6629732053000BA1B6 /* ProfileWithdrawalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileWithdrawalVC.swift; sourceTree = "<group>"; };
@@ -810,6 +812,7 @@
 				462C4D64297D34BD00F2E0C6 /* UIButton+.swift */,
 				60EC530F298900700068BD5F /* Date+.swift */,
 				60D0CFBF298FC443008C24F3 /* UIView+.swift */,
+				4668726B299633EA00469D0E /* UILabel+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -1147,6 +1150,7 @@
 				2CDD9509297657FE004B8D56 /* BankListCollectionViewCell.swift in Sources */,
 				60F4C1562987E330004D9FCD /* NetworkingModel.swift in Sources */,
 				60DCC895298A45AD002E7714 /* ViewAllViewModel.swift in Sources */,
+				4668726C299633EA00469D0E /* UILabel+.swift in Sources */,
 				2CDD94E529712E8E004B8D56 /* IceBreakingCardCollectionViewCell.swift in Sources */,
 				2CDD9502297551C4004B8D56 /* IceBreakingStartCardCollectionViewCell.swift in Sources */,
 				2CDD94FE2973BAB9004B8D56 /* CustomFlowLayout.swift in Sources */,
@@ -1375,7 +1379,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = QNLYL4GD4K;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Garamgaebi/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 공유 및 저장을 위해 접근 권한을 허용해 주세요.";
@@ -1409,7 +1413,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = QNLYL4GD4K;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Garamgaebi/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 공유 및 저장을 위해 접근 권한을 허용해 주세요.";

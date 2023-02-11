@@ -57,10 +57,13 @@ class ProfileWithdrawalVC: UIViewController {
     
     let emailTextField = UITextField().then {
         $0.basicTextField()
-        $0.backgroundColor = .mainGray
+        $0.backgroundColor = UIColor(hex: 0xF5F5F5)
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        $0.text = "umc@gmail.com"
-        $0.isUserInteractionEnabled = false
+        $0.text = "uniEmail@gachon.ac.com"
+        $0.textColor = UIColor(hex: 0xAEAEAE)
+        $0.isUserInteractionEnabled = false // uniEmail 수정 불가
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = UIColor.mainGray.cgColor
     }
     
     let reasonTitleLabel = UILabel().then {
@@ -90,7 +93,7 @@ class ProfileWithdrawalVC: UIViewController {
         //$0.delegate = self // <-
     }
     
-    let agreeCheckBtn = UIButton().then {
+    lazy var agreeCheckBtn = UIButton().then {
         $0.setTitle("회원 탈퇴에 관한 모든 내용을 숙지하고,", for: .normal)
         $0.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.setImage(UIImage(systemName: "square")?.withTintColor(UIColor(hex: 0xAEAEAE), renderingMode: .alwaysOriginal), for: .normal)
@@ -125,6 +128,8 @@ class ProfileWithdrawalVC: UIViewController {
     
     // MARK: - Functions
     private func configureLayouts() {
+        view.backgroundColor = .white
+        
         // addSubview
         [headerView, noticeTitleLabel, noticeLabel, emailTitleLabel, emailTextField, reasonTitleLabel, reasonTypeTextField, typeSelectBtn, contentTextField, agreeCheckBtn, agreemsgLabel, sendBtn]
             .forEach {view.addSubview($0)}
@@ -158,7 +163,7 @@ class ProfileWithdrawalVC: UIViewController {
             $0.leading.trailing.equalToSuperview().inset(16)
         }
         noticeLabel.snp.makeConstraints { /// 안내
-            $0.top.equalTo(noticeTitleLabel.snp.bottom).offset(10)
+            $0.top.equalTo(noticeTitleLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalTo(noticeTitleLabel)
         }
         
@@ -211,14 +216,11 @@ class ProfileWithdrawalVC: UIViewController {
     }
     
     @objc private func didTapBackBarButton() {
-//        print("뒤로가기 버튼 클릭")
         self.navigationController?.popViewController(animated: false)
     }
     
     // 회원탈퇴 버튼 did tap
     @objc private func withdrawalButtonDidTap() {
-//        print("회원탈퇴 버튼 클릭")
-        
         self.navigationController?.popViewController(animated: false)
     }
     
