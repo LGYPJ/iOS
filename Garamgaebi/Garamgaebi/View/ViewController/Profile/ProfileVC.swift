@@ -456,7 +456,7 @@ class ProfileVC: UIViewController {
             guard let image = self.profileImageView.image else { return }
             
             // 값 넘기기
-            nextVC.nameTextField.text = nameString
+            nextVC.nickNameTextField.text = nameString
             nextVC.orgTextField.text = orgString
             nextVC.emailTextField.text = emailString
             nextVC.introduceTextField.text = introduceString
