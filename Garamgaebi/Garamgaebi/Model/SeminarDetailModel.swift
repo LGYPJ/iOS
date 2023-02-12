@@ -31,7 +31,12 @@ struct SeminarDetailAttentdantResponse: Decodable {
 	let isSuccess: Bool
 	let code: Int
 	let message: String
-	let result: [SeminarDetailAttendant]?
+	let result: SeminarAttendantResult?
+}
+
+struct SeminarAttendantResult: Decodable {
+	let participantList: [SeminarDetailAttendant]?
+	let isApply: Bool
 }
 
 struct SeminarDetailAttendant: Decodable {

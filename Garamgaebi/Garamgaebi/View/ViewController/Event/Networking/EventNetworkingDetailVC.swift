@@ -156,6 +156,9 @@ extension EventNetworkingDetailVC {
 		NetworkingDetailViewModel.requestNetworkingDetailInfo(memberId: self.memberId, networkingId: self.networkingId, completion: {[weak self] result in
 			self?.networkingInfo = result
 		})
+		NetworkingDetailViewModel.requestNetworkingAttendant(networkingId: self.networkingId, completion: { [weak self] result in
+			self?.isUserApplyProgram = result.isApply
+		})
 	}
 	
 	// 서버에서 받은 status string을 enum에서 정의한 타입으로 변경

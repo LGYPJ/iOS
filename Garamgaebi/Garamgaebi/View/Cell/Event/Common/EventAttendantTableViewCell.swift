@@ -87,6 +87,8 @@ class EventAttendantTableViewCell: UITableViewCell {
 		}
 	}
 	
+	var isUserApply = false
+	
 
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -146,13 +148,16 @@ extension EventAttendantTableViewCell {
 	private func fetchAttendant() {
 		if self.type == "SEMINAR" {
 			SeminarDetailViewModel.requestSeminarAttendant(seminarId: self.programId, completion: {[weak self] result in
-				self?.seminarAttendants = result
-				self?.attendantCountLabel.text = "\(result.count)명"
+				self?.seminarAttendants = result.participantList ?? []
+				self?.isUserApply = result.isApply
+				self?.attendantCountLabel.text = "\(result.participantList?.count ?? 0)명"
 			})
 		} else {
 			NetworkingDetailViewModel.requestNetworkingAttendant(networkingId: self.programId, completion: {[weak self] result in
-				self?.networkingAttendants = result
-				self?.attendantCountLabel.text = "\(result.count)명"
+				self?.networkingAttendants = result.participantList ?? []
+				self?.isUserApply = result.isApply
+				self?.attendantCountLabel.text = "\(result.participantList?.count ?? 0)명"
+				
 			})
 		}
 		
@@ -184,26 +189,18 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EventAttendantCollectionViewCell.identifier, for: indexPath) as? EventAttendantCollectionViewCell else {return UICollectionViewCell()}
 		
 		if self.type == "SEMINAR" {
-			if String(seminarAttendants.first?.memberIdx ?? -1) == UserDefaults.standard.string(forKey: "memberIdx") ?? "" {
-//				UserDefaults.standard.set(true, forKey: "programId:\(programId)")
-				NotificationCenter.default.post(name: Notification.Name("programId:\(programId)"), object: true)
-			} else {
-//				UserDefaults.standard.set(false, forKey: "programId:\(programId)")
-				NotificationCenter.default.post(name: Notification.Name("programId:\(programId)"), object: false)
-			}
-
 			let cellData = self.seminarAttendants[indexPath.row]
 			cell.profileImageView.kf.indicatorType = .activity
 			cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg ?? ""), placeholder: UIImage(named: "ExProfileImage"))
 			
 			cell.userNameLabel.text = cellData.nickname
 			
-			if indexPath.row == 0 && UserDefaults.standard.bool(forKey: "programId:\(programId)") {
+			if indexPath.row == 0 && isUserApply {
 				cell.profileImageView.layer.borderWidth = 2
 				cell.userNameLabel.textColor = .mainBlue
 			}
 		} else {
-			if String(networkingAttendants.first?.memberIdx ?? -1) == UserDefaults.standard.string(forKey: "memberIdx") ?? "" {
+			if isUserApply {
 				NotificationCenter.default.post(name: Notification.Name("programId:\(programId)"), object: true)
 			} else {
 				NotificationCenter.default.post(name: Notification.Name("programId:\(programId)"), object: false)
@@ -214,19 +211,11 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 			cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg ?? ""), placeholder: UIImage(named: "ExProfileImage"))
 			cell.userNameLabel.text = cellData.nickname
 			
-			if indexPath.row == 0 && UserDefaults.standard.bool(forKey: "programId:\(programId)") {
+			if indexPath.row == 0 && isUserApply {
 				cell.profileImageView.layer.borderWidth = 2
 				cell.userNameLabel.textColor = .mainBlue
 			}
 		}
-		
-		
-		
-//		if indexPath.row == 0{
-//			cell.profileImageView.image = UIImage(named: "ExProfileImage")
-//		} else {
-//			cell.profileImageView.image = UIImage(systemName: "person.circle")
-//		}
 		
 		return cell
 	}
