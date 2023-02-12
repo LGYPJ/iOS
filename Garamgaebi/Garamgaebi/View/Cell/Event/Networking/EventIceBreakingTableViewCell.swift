@@ -16,7 +16,7 @@ class EventIceBreakingTableViewCell: UITableViewCell {
 		let label = UILabel()
 		label.text = "아이스 브레이킹"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 18)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -25,7 +25,7 @@ class EventIceBreakingTableViewCell: UITableViewCell {
 		let label = UILabel()
 		label.text = "아이스브레이킹 참여는\n네트워킹 당일 정해진 시간에 오픈합니다."
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		label.numberOfLines = 2
 		
 		return label

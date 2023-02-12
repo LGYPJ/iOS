@@ -62,7 +62,7 @@ class EventApplyCancelVC: UIViewController {
 	lazy var programNameLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -71,7 +71,7 @@ class EventApplyCancelVC: UIViewController {
 		let label = UILabel()
 		label.text = "일시"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -79,7 +79,7 @@ class EventApplyCancelVC: UIViewController {
 	lazy var dateInfoLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -88,7 +88,7 @@ class EventApplyCancelVC: UIViewController {
 		let label = UILabel()
 		label.text = "장소"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -96,7 +96,7 @@ class EventApplyCancelVC: UIViewController {
 	lazy var locationInfoLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -105,7 +105,7 @@ class EventApplyCancelVC: UIViewController {
 		let label = UILabel()
 		label.text = "참가비"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -113,7 +113,7 @@ class EventApplyCancelVC: UIViewController {
 	lazy var costInfoLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -122,7 +122,7 @@ class EventApplyCancelVC: UIViewController {
 		let label = UILabel()
 		label.text = "신청 마감"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -130,7 +130,7 @@ class EventApplyCancelVC: UIViewController {
 	lazy var deadlineInfoLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -263,7 +263,7 @@ class EventApplyCancelVC: UIViewController {
 	lazy var downImageView: UIImageView = {
 		let imageView = UIImageView()
 		imageView.image = UIImage(systemName: "chevron.down")
-		imageView.tintColor = .black
+		imageView.tintColor = .mainBlack
 		
 		return imageView
 	}()
@@ -641,7 +641,7 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 	
 	func sendBankName(name: String) {
 		bankButton.setTitle(name, for: .normal)
-		bankButton.setTitleColor(.black, for: .normal)
+		bankButton.setTitleColor(.mainBlack, for: .normal)
 
 		textFieldDidChange(textField: accountTextField)
 	}

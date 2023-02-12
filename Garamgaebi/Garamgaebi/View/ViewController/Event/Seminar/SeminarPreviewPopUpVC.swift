@@ -41,7 +41,7 @@ class SeminarPreviewPopUpVC: UIViewController {
 	lazy var userNameLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -49,7 +49,7 @@ class SeminarPreviewPopUpVC: UIViewController {
 	lazy var belongLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 16)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -57,7 +57,7 @@ class SeminarPreviewPopUpVC: UIViewController {
 	lazy var titleLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -65,7 +65,7 @@ class SeminarPreviewPopUpVC: UIViewController {
 	lazy var descriptionTextView: UITextView = {
 		let textView = UITextView()
 		textView.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		textView.textColor = .black
+		textView.textColor = .mainBlack
 		textView.isEditable = false
 		textView.isScrollEnabled = false
 		// textView와 text사이의 좌우 여백 제거
@@ -80,7 +80,7 @@ class SeminarPreviewPopUpVC: UIViewController {
 	lazy var pptLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		label.text = "발표자료"
 		
 		return label
@@ -100,7 +100,7 @@ class SeminarPreviewPopUpVC: UIViewController {
 	lazy var closeImageView: UIImageView = {
 		let imageView = UIImageView()
 		imageView.image = UIImage(systemName: "xmark")
-		imageView.tintColor = .black
+		imageView.tintColor = .mainBlack
 		imageView.contentMode = .scaleAspectFit
 		imageView.isUserInteractionEnabled = true
 		

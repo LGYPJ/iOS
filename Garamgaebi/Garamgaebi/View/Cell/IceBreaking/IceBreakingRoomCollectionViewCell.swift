@@ -15,7 +15,7 @@ class IceBreakingRoomCollectionViewCell: UICollectionViewCell {
 	lazy var roomTitleLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 18)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -23,7 +23,7 @@ class IceBreakingRoomCollectionViewCell: UICollectionViewCell {
 	lazy var entranceButton: UIButton = {
 		let button = UIButton()
 		button.setImage(UIImage(systemName: "chevron.right"), for: .normal)
-		button.tintColor = .black
+		button.tintColor = .mainBlack
 		
 		return button
 	}()

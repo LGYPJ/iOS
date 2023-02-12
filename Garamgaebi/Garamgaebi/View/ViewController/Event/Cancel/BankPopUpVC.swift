@@ -34,7 +34,7 @@ class BankPopUpVC: UIViewController {
 		let label = UILabel()
 		label.text = "은행을 선택해주세요"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()

@@ -16,7 +16,7 @@ class EventInfoTableViewCell: UITableViewCell {
 	lazy var eventNameLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -33,7 +33,7 @@ class EventInfoTableViewCell: UITableViewCell {
 		let label = UILabel()
 		label.text = "일시"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -41,7 +41,7 @@ class EventInfoTableViewCell: UITableViewCell {
 	lazy var dateInfoLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -50,7 +50,7 @@ class EventInfoTableViewCell: UITableViewCell {
 		let label = UILabel()
 		label.text = "장소"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -58,7 +58,7 @@ class EventInfoTableViewCell: UITableViewCell {
 	lazy var locationInfoLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -67,7 +67,7 @@ class EventInfoTableViewCell: UITableViewCell {
 		let label = UILabel()
 		label.text = "참가비"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -75,7 +75,7 @@ class EventInfoTableViewCell: UITableViewCell {
 	lazy var costInfoLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -84,7 +84,7 @@ class EventInfoTableViewCell: UITableViewCell {
 		let label = UILabel()
 		label.text = "신청 마감"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -92,7 +92,7 @@ class EventInfoTableViewCell: UITableViewCell {
 	lazy var deadlineInfoLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()

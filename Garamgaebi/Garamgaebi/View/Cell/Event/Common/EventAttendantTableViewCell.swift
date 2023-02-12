@@ -17,7 +17,7 @@ class EventAttendantTableViewCell: UITableViewCell {
 		let label = UILabel()
 		label.text = "참석자"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 18)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -25,7 +25,7 @@ class EventAttendantTableViewCell: UITableViewCell {
 	lazy var attendantCountLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()

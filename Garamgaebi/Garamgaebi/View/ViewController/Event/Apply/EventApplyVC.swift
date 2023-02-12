@@ -63,7 +63,7 @@ class EventApplyVC: UIViewController {
 	lazy var eventNameLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -72,7 +72,7 @@ class EventApplyVC: UIViewController {
 		let label = UILabel()
 		label.text = "일시"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -80,7 +80,7 @@ class EventApplyVC: UIViewController {
 	lazy var dateInfoLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -89,7 +89,7 @@ class EventApplyVC: UIViewController {
 		let label = UILabel()
 		label.text = "장소"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -97,7 +97,7 @@ class EventApplyVC: UIViewController {
 	lazy var locationInfoLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -106,7 +106,7 @@ class EventApplyVC: UIViewController {
 		let label = UILabel()
 		label.text = "참가비"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -114,7 +114,7 @@ class EventApplyVC: UIViewController {
 	lazy var costInfoLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -123,7 +123,7 @@ class EventApplyVC: UIViewController {
 		let label = UILabel()
 		label.text = "신청 마감"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -131,7 +131,7 @@ class EventApplyVC: UIViewController {
 	lazy var deadlineInfoLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -189,7 +189,7 @@ class EventApplyVC: UIViewController {
 		let label = UILabel()
 		label.text = "이름"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -223,7 +223,7 @@ class EventApplyVC: UIViewController {
 		let label = UILabel()
 		label.text = "닉네임"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -257,7 +257,7 @@ class EventApplyVC: UIViewController {
 		let label = UILabel()
 		label.text = "전화번호"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -290,7 +290,7 @@ class EventApplyVC: UIViewController {
 	lazy var accountLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Medium, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -307,7 +307,7 @@ class EventApplyVC: UIViewController {
 	lazy var descriptionTextView: UITextView = {
 		let textView = UITextView()
 		textView.font = UIFont.NotoSansKR(type: .Medium, size: 14)
-		textView.textColor = .black
+		textView.textColor = .mainBlack
 		textView.backgroundColor = .clear
 		textView.layer.cornerRadius = 12
 		textView.textContainer.lineFragmentPadding = 0
@@ -712,7 +712,7 @@ extension EventApplyVC {
 	private func HideAlert(textField: UITextField, alertLabel: UILabel) {
 		
 		UIView.animate(withDuration: 0.3) {
-			textField.layer.borderColor = UIColor.black.cgColor
+			textField.layer.borderColor = UIColor.mainBlack.cgColor
 //			alertLabel.isHidden = true
 			alertLabel.alpha = 0
 		}

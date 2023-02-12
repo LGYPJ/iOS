@@ -21,7 +21,7 @@ class EventPreviewCollectionViewCell: UICollectionViewCell {
 	lazy var titleLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 18)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		label.numberOfLines = 2
 		label.lineBreakMode = .byCharWrapping
 		
