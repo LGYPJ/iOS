@@ -233,7 +233,7 @@ extension HomeNotificationVC: UITableViewDataSource, UITableViewDelegate {
         let resourceType = notificationList[indexPath.row].resourceType
         
         // 홈으로 pop후
-        self.navigationController?.popViewController(animated: true)
+        //self.navigationController?.popViewController(animated: true)
         // 해당 되는 view로 push
         switch resourceType {
         case "SEMINAR":
