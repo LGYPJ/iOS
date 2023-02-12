@@ -212,7 +212,6 @@ extension EventNetworkingDetailVC {
 	
 	@objc private func validUserApplyProgram(_ notification: NSNotification) {
 		let notiData: Bool = notification.object as! Bool
-		print(notiData)
 		self.isUserApplyProgram = notiData
 	}
 

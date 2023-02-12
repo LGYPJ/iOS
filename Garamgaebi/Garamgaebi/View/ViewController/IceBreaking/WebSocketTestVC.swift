@@ -191,10 +191,12 @@ extension WebSocketTestVC: StompClientLibDelegate {
 	
 	func stompClientDidDisconnect(client: StompClientLib!) {
 		print("Stomp socket is disconnected")
+		messageLabel.text = "연결해제됐어용"
 	}
 	
 	func stompClientDidConnect(client: StompClientLib!) {
 		print("Stomp socket is connected")
+		messageLabel.text = "연결됐어용"
 			
 		subscribeSocket()
 	}

@@ -110,10 +110,20 @@ class IceBreakingRoomVC: UIViewController {
 	}
 	private var cardCount = 10
 	private var currentIndex = 0
+	private var roomId: Int
 	private var socketClient = StompClientLib()
 	
     // MARK: - Life Cycle
-    
+	
+	init(roomId: Int) {
+		self.roomId = roomId
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		disconnectSocket()
@@ -212,24 +222,18 @@ extension IceBreakingRoomVC {
 		socketClient.openSocketWithURLRequest(
 			request: NSURLRequest(url: url),
 			delegate: self)
-//		socketClient.openSocketWithURLRequest(
-//			request: NSURLRequest(url: url),
-//			delegate: self,
-//			connectionHeaders: [
-//				"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-//			])
 	}
 	
 	private func subscribeSocket() {
-		socketClient.subscribe(destination: "/topic/game/room/1")
+		socketClient.subscribe(destination: "/topic/game/room/\(self.roomId)")
 	}
 
-	private func sendMessageWithSocket() {
+	private func sendMessageWithSocket(type: String, message: String) {
 		var payloadObject : [String : Any] = [
-			"type" : "TALK",
-			"roomId": "1",
-			"sender": "연현",
-			"message": "\(self.currentIndex)"
+			"type" : type,
+			"roomId": self.roomId,
+			"sender": UserDefaults.standard.string(forKey: "nickname")!,
+			"message": message
 		]
 			
 		socketClient.sendJSONForDict(dict: payloadObject as AnyObject, toDestination: "/app/game/message")
@@ -268,7 +272,7 @@ extension IceBreakingRoomVC {
 	// 다음 카드 버튼 did tap
 	@objc private func didTapNextButton() {
 		currentIndex += 1
-		sendMessageWithSocket()
+		sendMessageWithSocket(type: "TALK", message: "NEXT")
 		scrollToNextItem()
 	}
 }
@@ -354,9 +358,36 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 
 extension IceBreakingRoomVC: StompClientLibDelegate {
 	func stompClient(client: StompClientLib!, didReceiveMessageWithJSONBody jsonBody: AnyObject?, akaStringBody stringBody: String?, withHeader header: [String : String]?, withDestination destination: String) {
-		print("jsonBody: \(String(describing: jsonBody))")
-		print("stringBody: \(String(describing: stringBody))")
-		print("header: \(String(describing: header))")
+		guard let json = jsonBody as? [String: String] else {
+			print("error in decode jsonBody")
+			return
+		}
+		
+		guard let jsonType = json["type"] else {
+			print("error: there is no type named \"type\"")
+			return
+		}
+		
+		guard let jsonMessage = json["message"] else {
+			print("error: there is no type named \"message\"")
+			return
+		}
+		
+		switch jsonType{
+		case "ENTER":
+			print("memberId: \(jsonMessage)번이 입장하셨습니다!")
+		case "TYPE":
+			if jsonMessage == "NEXT" {
+				currentIndex += 1
+				scrollToNextItem()
+			} else {
+				
+			}
+		default:
+			return
+		}
+		
+		
 	}
 	
 	func stompClientDidDisconnect(client: StompClientLib!) {
@@ -365,8 +396,8 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 	
 	func stompClientDidConnect(client: StompClientLib!) {
 		print("Stomp socket is connected")
-			
 		subscribeSocket()
+		sendMessageWithSocket(type: "ENTER", message: "\(UserDefaults.standard.integer(forKey: "memberIdx"))")
 	}
 	
 	func serverDidSendReceipt(client: StompClientLib!, withReceiptId receiptId: String) {
