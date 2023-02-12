@@ -22,7 +22,7 @@ class OnboardingCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "가천대생 개발자들의\n모임 참여를 보다 간편하게"
         label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
-        label.textColor = .black
+        label.textColor = .mainBlack
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
         label.numberOfLines = 2
@@ -33,7 +33,7 @@ class OnboardingCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "모임의 시작에서 끝까지 개가천선으로 확인해요"
         label.font = UIFont.NotoSansKR(type: .Regular, size: 16)
-        label.textColor = .black
+        label.textColor = .mainBlack
         label.numberOfLines = 1
         return label
     }()

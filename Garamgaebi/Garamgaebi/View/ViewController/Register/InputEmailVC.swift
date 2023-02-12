@@ -28,7 +28,7 @@ class InputEmailVC: UIViewController {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "이메일을 입력해주세요"
-        label.textColor = .black
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 22)
         return label
     }()
@@ -58,7 +58,7 @@ class InputEmailVC: UIViewController {
         textField.placeholder = "이메일 주소를 입력해주세요"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
-        textField.textColor = .black
+        textField.textColor = .mainBlack
         textField.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         textField.autocapitalizationType = .none
         
@@ -166,7 +166,7 @@ class InputEmailVC: UIViewController {
         nextButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
-            make.bottom.equalToSuperview().inset(48)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(14)
             make.height.equalTo(48)
         }
         

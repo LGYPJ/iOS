@@ -26,7 +26,7 @@ class CompleteRegisterVC: UIViewController {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "가입이\n완료되었습니다"
-        label.textColor = .black
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 32)
         label.numberOfLines = 0
         return label
@@ -37,7 +37,7 @@ class CompleteRegisterVC: UIViewController {
         label.text = "찹도님, 환영합니다"
         label.numberOfLines = 0
         label.font = UIFont.NotoSansKR(type: .Regular, size: 25)
-        label.textColor = .black
+        label.textColor = .mainBlack
         return label
     }()
     
@@ -146,7 +146,7 @@ class CompleteRegisterVC: UIViewController {
         presentHomeButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
-            make.bottom.equalToSuperview().inset(48)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(14)
             make.height.equalTo(48)
         }
         

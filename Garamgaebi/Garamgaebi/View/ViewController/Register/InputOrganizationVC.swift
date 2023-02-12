@@ -21,7 +21,7 @@ class InputOrganizationVC: UIViewController {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "소속을 입력해주세요"
-        label.textColor = .black
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 22)
         return label
     }()
@@ -133,6 +133,7 @@ class InputOrganizationVC: UIViewController {
         button.backgroundColor = .mainGray // 비활성화
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
+        button.isEnabled = false
         return button
     }()
     
@@ -201,7 +202,7 @@ class InputOrganizationVC: UIViewController {
         // nextButton
         nextButton.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(16)
-            make.bottom.equalToSuperview().inset(48)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(14)
             make.height.equalTo(48)
         }
     }
