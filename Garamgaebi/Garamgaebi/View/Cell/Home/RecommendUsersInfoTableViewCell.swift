@@ -129,11 +129,7 @@ extension RecommendUsersInfoTableViewCell: UICollectionViewDataSource, UICollect
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let availableWidth = collectionView.bounds.width/390*120
-        let widthPerItem = availableWidth / itemsPerRow
-        let heightPerItem = widthPerItem/120*184
-        
-        return CGSize(width: widthPerItem, height: heightPerItem)
+        return CGSize(width: 120, height: 184)
     }
     
     func collectionView(_ collectionView: UICollectionView,

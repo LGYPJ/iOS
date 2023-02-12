@@ -1,5 +1,5 @@
 //
-//  ServiceBottomSheetVC.swift
+//  BottomSheetVC.swift
 //  Garamgaebi
 //
 //  Created by 김나현 on 2023/01/22.
@@ -10,13 +10,19 @@ import UIKit
 import SnapKit
 
 protocol SelectServiceDataDelegate:  AnyObject {
-    func typeSelect(questype: String)
+    func typeSelect(type: String)
 }
 
-class ServiceBottomSheetVC: UIViewController {
+class BottomSheetVC: UIViewController {
     
     // MARK: - Properties
     weak var delegate: SelectServiceDataDelegate?
+    
+    lazy var titleText = ""
+    var T1 = ""
+    var T2 = ""
+    var T3 = ""
+    var T4 = ""
     
     // MARK: - Subviews
     // 기존 화면을 흐려지게 만들기 위한 뷰
@@ -41,7 +47,7 @@ class ServiceBottomSheetVC: UIViewController {
     // dismiss Indicator View UI 구성 부분
     private let dismissIndicatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemGray2
+        view.backgroundColor = .mainBlack
         view.layer.cornerRadius = 3
         
         return view
@@ -49,31 +55,26 @@ class ServiceBottomSheetVC: UIViewController {
     
     // 바텀시트 내부 구성
     let titleLabel = UILabel().then {
-        $0.text = "질문 유형을 선택해주세요"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 20)
         $0.textColor = .mainBlack
     }
     
     let type1Label = UILabel().then {
-        $0.text = "이용문의"
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 18)
         $0.textColor = .mainBlack
     }
     
     let type2Label = UILabel().then {
-        $0.text = "오류신고"
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 18)
         $0.textColor = .mainBlack
     }
     
     let type3Label = UILabel().then {
-        $0.text = "서비스 제안"
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 18)
         $0.textColor = .mainBlack
     }
     
     let etcLabel = UILabel().then {
-        $0.text = "기타"
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 18)
         $0.textColor = .mainBlack
     }
@@ -113,6 +114,12 @@ class ServiceBottomSheetVC: UIViewController {
         
         [titleLabel, type1Label, type2Label, type3Label, etcLabel]
             .forEach { bottomSheetView.addSubview($0) }
+        
+        titleLabel.text = titleText
+        type1Label.text = T1
+        type2Label.text = T2
+        type3Label.text = T3
+        etcLabel.text = T4
         
         dimmedBackView.alpha = 0.0
         configureLayout()
@@ -259,26 +266,26 @@ class ServiceBottomSheetVC: UIViewController {
         guard let type = type1Label.text else { return }
         
         // 선택된 질문 유형 넘기기
-        self.delegate?.typeSelect(questype: type)
+        self.delegate?.typeSelect(type: type)
         // 바텀시트 내리기
         hideBottomSheetAndGoBack()
     }
     @objc func type2DidTap() { // 오류신고
         guard let type = type2Label.text else { return }
         
-        self.delegate?.typeSelect(questype: type)
+        self.delegate?.typeSelect(type: type)
         hideBottomSheetAndGoBack()
     }
     @objc func type3DidTap() { // 서비스 제안
         guard let type = type3Label.text else { return }
         
-        self.delegate?.typeSelect(questype: type)
+        self.delegate?.typeSelect(type: type)
         hideBottomSheetAndGoBack()
     }
     @objc func etcDidTap() { // 기타
         guard let type = etcLabel.text else { return }
         
-        self.delegate?.typeSelect(questype: type)
+        self.delegate?.typeSelect(type: type)
         hideBottomSheetAndGoBack()
     }
 }

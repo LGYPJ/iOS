@@ -10,7 +10,7 @@ import UIKit
 import Then
 import Alamofire
 
-class ProfileInputSNSVC: UIViewController {
+class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
 
     // MARK: - Properties
     lazy var memberIdx: Int = 0
@@ -59,6 +59,7 @@ class ProfileInputSNSVC: UIViewController {
         
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+        textField.addTarget(self, action: #selector(showBottomSheet), for: .editingDidBegin)
         
         return textField
     }()
@@ -182,6 +183,25 @@ class ProfileInputSNSVC: UIViewController {
             make.right.equalToSuperview().inset(16)
             make.bottom.equalToSuperview().inset(48)
         }
+    }
+    
+    func typeSelect(type: String) {
+        self.typeTextField.text = type
+    }
+    
+    // 바텀시트 나타내기
+    @objc private func showBottomSheet() {
+        let bottomSheetVC = BottomSheetVC()
+
+        bottomSheetVC.modalPresentationStyle = .overFullScreen
+        bottomSheetVC.delegate = self
+        
+        bottomSheetVC.titleText = "SNS 종류"
+        bottomSheetVC.T1 = "인스타"
+        bottomSheetVC.T2 = "블로그"
+        bottomSheetVC.T3 = "깃허브"
+        bottomSheetVC.T4 = "직접 입력"
+        self.present(bottomSheetVC, animated: false, completion: nil)
     }
     
     @objc private func saveButtonDidTap(_ sender: UIButton) {

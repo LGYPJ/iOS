@@ -13,15 +13,9 @@ import Alamofire
 import PhotosUI
 
 
-protocol EditProfileDataDelegate: AnyObject {
-    func editData(image: String, nickname: String, organization: String, email: String, introduce: String)
-}
-
 class ProfileEditVC: UIViewController, UITextFieldDelegate {
     
     // MARK: - Properties
-    weak var delegate: EditProfileDataDelegate?
-    
     var memberIdx: Int = 0
     var token = UserDefaults.standard.string(forKey: "BearerToken")
     
@@ -349,28 +343,22 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     
     // 완료하기 버튼 did tap
     @objc private func doneButtonDidTap() {
-//        print("완료하기 버튼 클릭")
         
-        // 텍스트값 가져오기
         guard let editName = nameTextField.text else { return }
         guard let editOrg = orgTextField.text else { return }
         guard let editEmail = emailTextField.text else { return }
         guard let editIntroduce = introduceTextField.text else { return }
         guard let profileImage = profileImageView.image else { return }
         
-        // 임시
-        let profileUrl = "ExProfileImage"
-        
-        // 변경된 이름값 담기
-        self.delegate?.editData(image: profileUrl, nickname: editName, organization: editOrg, email: editEmail, introduce: editIntroduce)
-        
-        postMyInfo(memberIdx: memberIdx, nickName: editName, belong: editOrg, profileEmail: editEmail, content: editIntroduce, profileImage: profileImage)
-        
-        self.navigationController?.popViewController(animated: true)
+        postMyInfo(memberIdx: memberIdx, nickName: editName, belong: editOrg, profileEmail: editEmail, content: editIntroduce, profileImage: profileImage) { result in
+            if result {
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
     }
     
     // MARK: - [POST] 유저 정보 수정
-    func postMyInfo(memberIdx: Int, nickName: String, belong: String, profileEmail: String, content: String, profileImage: UIImage?) {
+    func postMyInfo(memberIdx: Int, nickName: String, belong: String, profileEmail: String, content: String, profileImage: UIImage?, completion: @escaping ((Bool) -> Void)) {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/edit/\(memberIdx)"
@@ -378,11 +366,11 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         // http 요청 헤더 지정
         let header : HTTPHeaders = [
             "Content-Type": "multipart/form-data",
-            "Authorization": "Bearer \(token ?? "")"
+            "Authorization": "Bearer \(token)"
         ]
         
-        let bodyData: Parameters = [
-            "memberIdx": memberIdx,
+        let parameters: [String : Any] = [
+            "memberIdx": String(memberIdx),
             "nickName": nickName,
             "belong" : belong,
             "profileEmail" : profileEmail,
@@ -390,13 +378,16 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         ]
         
         AF.upload(multipartFormData: { multipartFormData in
-            for (key, value) in bodyData { // 요청 바디에 있는 key, value 값을 for문을 통해 각각 multipartFormData 에 추가해서 전송
-                multipartFormData.append("\(value)".data(using: .utf8)!, withName: key)
+            for (key, value) in parameters { // 요청 바디에 있는 key, value 값을 for문을 통해 각각 multipartFormData 에 추가해서 전송
+                multipartFormData.append("\(value)".data(using: .utf8)!, withName: key, mimeType: "text/plain")
             }
-            if let image = profileImage?.pngData() {
-                multipartFormData.append(image, withName: "profileImage", fileName: "\(image).png", mimeType: "image/png")
+            if let imageData = profileImage?.pngData() {
+//                print("이미지 있음")
+                multipartFormData.append(imageData, withName: "image", fileName: "\(imageData).png", mimeType: "image/png")
             }
-        }, to: url, usingThreshold: UInt64.init(), method: .post, headers: header).responseDecodable(of: ProfilePostResponse.self) { response in
+        }, to: url, method: .post, headers: header)
+        .validate()
+        .responseDecodable(of: ProfileEditResponse.self) { response in
             switch response.result {
             case .success(let response):
                 if response.isSuccess {

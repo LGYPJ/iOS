@@ -20,7 +20,18 @@ class HomeSeminarPopUpVC: UIViewController {
     
     lazy var seminarPopUpView: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "SeminarPopUp")
+        let img = UIImage(named: "SeminarPopUp")
+        let transparentImage = img?.image(alpha: 0.94)
+        transparentImage?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        view.image = transparentImage
+        view.contentMode = .scaleAspectFill
+        view.layer.borderWidth = 1
+        view.layer.borderColor = UIColor.clear.cgColor
+        view.layer.masksToBounds = false
+        view.layer.shadowColor = UIColor.mainBlack.cgColor
+        view.layer.shadowOffset = CGSize(width: 0, height: 5)
+        view.layer.shadowOpacity = 0.25
+        view.layer.shadowRadius = 12
         return view
     }()
     

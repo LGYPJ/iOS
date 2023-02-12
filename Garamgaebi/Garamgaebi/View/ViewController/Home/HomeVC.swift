@@ -33,6 +33,8 @@ class HomeVC: UIViewController {
     public var recommendUsersInfo: [RecommendUsersInfo] = [] {
         didSet {
             // notification -> Cell
+            // API에서 얻는 11명중 본인을 필터링 한 후 10명을 생성 (전체유저가 10명 미만이라면 Error 가능성 있음)
+            recommendUsersInfo = Array(recommendUsersInfo.filter{$0.memberIdx != memberIdx}[0..<10])
             NotificationCenter.default.post(name: Notification.Name("presentRecommendUsersInfo"), object: recommendUsersInfo)
             self.tableView.reloadData()
         }

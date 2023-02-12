@@ -12,7 +12,7 @@ import Then
 import Alamofire
 import Kingfisher
 
-class ProfileVC: UIViewController, EditProfileDataDelegate {
+class ProfileVC: UIViewController {
     
     // MARK: - Properties
     
@@ -226,6 +226,8 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print(memberIdx)
+        print(token)
         configureLayouts()
         
     }
@@ -451,7 +453,7 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             guard let orgString = self.orgLabel.text else { return }
             guard let emailString = self.emailLabel.text else { return }
             guard let introduceString = self.introduceLabel.text else { return }
-//            guard let image = self.profileImageView.image else { return }
+            guard let image = self.profileImageView.image else { return }
             
             // 값 넘기기
             nextVC.nameTextField.text = nameString
@@ -459,12 +461,11 @@ class ProfileVC: UIViewController, EditProfileDataDelegate {
             nextVC.emailTextField.text = emailString
             nextVC.introduceTextField.text = introduceString
             nextVC.introduceTextField.textColor = .mainBlack
-//            nextVC.profileImageView.image = image
+            nextVC.profileImageView.image = image
             
             // 사용자
             nextVC.memberIdx = self.memberIdx
-            
-            nextVC.delegate = self
+
             self.navigationController?.pushViewController(nextVC, animated: true)
         }
         

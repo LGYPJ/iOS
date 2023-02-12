@@ -11,12 +11,13 @@ import Kingfisher
 class RecommendUsersColectionViewCell: UICollectionViewCell {
     
     static let identifier = String(describing: RecommendUsersColectionViewCell.self)
-    public var memberIdx = Int()
     // MARK: - Subviews
     
     lazy var imageInfoView: UIImageView = {
         let view = UIImageView()
         view.backgroundColor = .mainGray
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
         return view
     }()
     
@@ -28,7 +29,7 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
     lazy var nickNameInfoLabel: UILabel = {
         let label = UILabel()
         label.text = "nickname dummy"
-        label.font = UIFont.NotoSansKR(type: .Medium, size: 16)
+        label.font = UIFont.NotoSansKR(type: .Medium, size: 14)
         label.textColor = .mainBlack
         label.textAlignment = .center
         return label
@@ -37,7 +38,7 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
     lazy var belongInfoLabel: UILabel = {
         let label = UILabel()
         label.text = "belong dummy"
-        label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 10)
         label.textColor = .mainBlack
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -47,7 +48,7 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
     lazy var groupInfoLabel: UILabel = {
         let label = UILabel()
         label.text = "group dummy"
-        label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 10)
         label.textColor = .mainBlack
         label.textAlignment = .center
         return label
@@ -56,7 +57,7 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
     lazy var detailInfoLabel: UILabel = {
         let label = UILabel()
         label.text = "detail dummy"
-        label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 10)
         label.textColor = .mainBlack
         label.textAlignment = .center
         return label
@@ -89,17 +90,19 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
     func configSubViewLayouts() {
         imageInfoView.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.width.equalTo(120)
+            make.left.right.equalToSuperview()
             make.height.equalTo(100)
         }
+        
         contentInfoView.snp.makeConstraints { make in
             make.top.equalTo(imageInfoView.snp.bottom)
-            make.left.right.equalToSuperview().inset(12)
-            make.centerX.equalToSuperview()
+            make.left.right.equalToSuperview().inset(6)
             make.bottom.equalToSuperview()
         }
+        
         nickNameInfoLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(8)
+            make.top.equalToSuperview().inset(8)
+            make.height.equalTo(20)
             make.left.right.equalToSuperview()
             make.centerX.equalToSuperview()
         }
@@ -112,7 +115,7 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
         }
         
         groupInfoLabel.snp.makeConstraints { make in
-            make.top.equalTo(nickNameInfoLabel.snp.bottom).offset(8)
+            make.bottom.equalTo(detailInfoLabel.snp.top)
             make.left.right.equalToSuperview()
             make.centerX.equalToSuperview()
         }
@@ -126,12 +129,11 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
     }
     
     public func configure(_ item: RecommendUsersInfo) {
-        
-        
 //        // 이미지url 이미지View에 적용
 //        //https://terry-some.tistory.com/89 참고하였음
-//        let url = URL(string: item.profileUrl)
-//        imageInfoView.kf.setImage(with: url)
+        // default Image url 필요함 -> "" 자리에 넣을거임
+        let url = URL(string: item.profileUrl ?? "")
+        imageInfoView.kf.setImage(with: url)
         
         // 닉네임
         nickNameInfoLabel.text = item.nickName
@@ -145,7 +147,6 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
             
             belongInfoLabel.text = item.belong
         default:
-            // 현재 belong으로 하나로 주는데 2개로 나눠 줘야한다고 생각함
             belongInfoLabel.isHidden = true
             groupInfoLabel.isHidden = false
             detailInfoLabel.isHidden = false
@@ -154,8 +155,5 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
             detailInfoLabel.text = item.detail
         }
 
-        // memberIdx 저장
-        memberIdx = item.memberIdx
-        
     }
 }
