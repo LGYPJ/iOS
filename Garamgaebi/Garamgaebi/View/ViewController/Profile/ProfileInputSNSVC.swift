@@ -57,8 +57,8 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         textField.basicTextField()
         textField.placeholder = "표시할 이름을 입력해주세요 (예:블로그, 깃허브 등)"
         
-        textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+        textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(showBottomSheet), for: .editingDidBegin)
         
         return textField
@@ -106,7 +106,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         
         addSubViews()
         configLayouts()
-
+        configureGestureRecognizer()
     }
     
     // MARK: - Functions
@@ -202,6 +202,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         bottomSheetVC.T3 = "깃허브"
         bottomSheetVC.T4 = "직접 입력"
         self.present(bottomSheetVC, animated: false, completion: nil)
+        self.view.endEditing(true)
     }
     
     @objc private func saveButtonDidTap(_ sender: UIButton) {
@@ -267,5 +268,20 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
                 print("실패(AF-SNS추가): \(error.localizedDescription)")
             }
         }
+    }
+}
+// MARK: - Extension
+extension ProfileInputSNSVC {
+    private func configureGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.isEnabled = true
+        tapGestureRecognizer.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc private func viewDidTap() {
+        self.view.endEditing(true)
     }
 }

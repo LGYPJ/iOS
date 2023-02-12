@@ -233,6 +233,7 @@ class ProfileInputEducationVC: UIViewController {
         
         addSubViews()
         configLayouts()
+        configureGestureRecognizer()
 
 //        print(token) // 토큰 확인
     }
@@ -681,5 +682,19 @@ extension ProfileInputEducationVC: UIPickerViewDataSource, UIPickerViewDelegate 
         } else {
             return monthArray[row]
         }
+    }
+}
+extension ProfileInputEducationVC {
+    private func configureGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.isEnabled = true
+        tapGestureRecognizer.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc private func viewDidTap() {
+        self.view.endEditing(true)
     }
 }

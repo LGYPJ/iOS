@@ -158,6 +158,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         tabBarController?.tabBar.isHidden = true
         
         configureLayouts()
+        configureGestureRecognizer()
         
     }
     
@@ -274,6 +275,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         bottomSheetVC.T4 = "기타"
         
         self.present(bottomSheetVC, animated: false, completion: nil)
+        self.view.endEditing(false)
     }
     
     // 회원탈퇴 버튼 did tap
@@ -339,15 +341,15 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     }
 }
 
+// MARK: - Extension
 extension ProfileServiceVC: UITextViewDelegate {
     // TextView Place Holder
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == textViewPlaceHolder {
             textView.text = nil
             textView.textColor = .mainBlack
-            
-            textView.layer.borderColor = UIColor.mainBlack.cgColor
         }
+        textView.layer.borderColor = UIColor.mainBlack.cgColor
     }
 
     // TextView Place Holder
@@ -365,5 +367,19 @@ extension ProfileServiceVC: UITextViewDelegate {
         let newLenght = str.count + text.count - range.length
         
         return newLenght <= 100
+    }
+}
+extension ProfileServiceVC {
+    private func configureGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.isEnabled = true
+        tapGestureRecognizer.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc private func viewDidTap() {
+        self.view.endEditing(true)
     }
 }

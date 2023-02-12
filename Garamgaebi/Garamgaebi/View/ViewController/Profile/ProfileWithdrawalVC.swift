@@ -122,6 +122,7 @@ class ProfileWithdrawalVC: UIViewController {
         super.viewDidLoad()
 
         configureLayouts()
+        configureGestureRecognizer()
     }
     
     
@@ -235,6 +236,19 @@ class ProfileWithdrawalVC: UIViewController {
             agreemsgLabel.textColor = UIColor(hex: 0x8A8A8A)
         }
     }
+}
+// MARK: - Extension
+extension ProfileWithdrawalVC {
+    private func configureGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.isEnabled = true
+        tapGestureRecognizer.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
     
-
+    @objc private func viewDidTap() {
+        self.view.endEditing(true)
+    }
 }
