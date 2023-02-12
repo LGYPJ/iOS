@@ -116,7 +116,7 @@ class IceBreakingRoomVC: UIViewController {
     
 	override func viewDidLoad() {
 		super.viewDidLoad()
-
+		disconnectSocket()
 		configureCollectionView()
 		configureViews()
 		configureButtonTarget()
@@ -229,11 +229,11 @@ extension IceBreakingRoomVC {
 			"type" : "TALK",
 			"roomId": "1",
 			"sender": "연현",
-			"message": "Test입니다."
+			"message": "\(self.currentIndex)"
 		]
 			
-//		socketClient.sendJSONForDict(dict: payloadObject as AnyObject, toDestination: "/app/game/message")
-		socketClient.sendMessage(message: "Test입니다", toDestination: "/app/game/message", withHeaders: nil, withReceipt: "Receipt가 머지")
+		socketClient.sendJSONForDict(dict: payloadObject as AnyObject, toDestination: "/app/game/message")
+//		socketClient.sendMessage(message: "Test입니다", toDestination: "/app/game/message", withHeaders: nil, withReceipt: "Receipt가 머지")
 	}
 	
 	private func disconnectSocket() {
@@ -261,8 +261,8 @@ extension IceBreakingRoomVC {
 	
 	// 뒤로가기 버튼 did tap
 	@objc private func didTapBackBarButton() {
-		self.navigationController?.popViewController(animated: true)
 		disconnectSocket()
+		self.navigationController?.popViewController(animated: true)
 	}
 	
 	// 다음 카드 버튼 did tap
@@ -354,9 +354,9 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 
 extension IceBreakingRoomVC: StompClientLibDelegate {
 	func stompClient(client: StompClientLib!, didReceiveMessageWithJSONBody jsonBody: AnyObject?, akaStringBody stringBody: String?, withHeader header: [String : String]?, withDestination destination: String) {
-		print(jsonBody)
-		print(stringBody)
-		print(header)
+		print("jsonBody: \(String(describing: jsonBody))")
+		print("stringBody: \(String(describing: stringBody))")
+		print("header: \(String(describing: header))")
 	}
 	
 	func stompClientDidDisconnect(client: StompClientLib!) {

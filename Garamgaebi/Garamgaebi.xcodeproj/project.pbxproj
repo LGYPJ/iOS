@@ -10,6 +10,7 @@
 		07387C389AB3203B5F1B6292 /* Pods_Garamgaebi_GaramgaebiUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */; };
 		2A5DAD14EE12541BAE988EB7 /* Pods_Garamgaebi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8CB1AB7E398B75581977FAF /* Pods_Garamgaebi.framework */; };
 		2C0538F4296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0538F3296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift */; };
+		2C4083112997CE67000747DF /* WebSocketTestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4083102997CE67000747DF /* WebSocketTestVC.swift */; };
 		2C65943929968B63007D3619 /* GameRoomListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C65943829968B63007D3619 /* GameRoomListViewModel.swift */; };
 		2C65943B29968BB5007D3619 /* GameRoomListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C65943A29968BB5007D3619 /* GameRoomListModel.swift */; };
 		2C65943D29975E85007D3619 /* EventUserApplyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C65943C29975E85007D3619 /* EventUserApplyModel.swift */; };
@@ -155,6 +156,7 @@
 
 /* Begin PBXFileReference section */
 		2C0538F3296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPreviewCollectionViewCell.swift; sourceTree = "<group>"; };
+		2C4083102997CE67000747DF /* WebSocketTestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketTestVC.swift; sourceTree = "<group>"; };
 		2C65943829968B63007D3619 /* GameRoomListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomListViewModel.swift; sourceTree = "<group>"; };
 		2C65943A29968BB5007D3619 /* GameRoomListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomListModel.swift; sourceTree = "<group>"; };
 		2C65943C29975E85007D3619 /* EventUserApplyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventUserApplyModel.swift; sourceTree = "<group>"; };
@@ -636,6 +638,7 @@
 				2CDD94FD2973BAB9004B8D56 /* CustomFlowLayout.swift */,
 				2CDD94F72971A388004B8D56 /* IceBreakingRoomListVC.swift */,
 				2CDD94E229711EB3004B8D56 /* IceBreakingRoomVC.swift */,
+				2C4083102997CE67000747DF /* WebSocketTestVC.swift */,
 			);
 			path = IceBreaking;
 			sourceTree = "<group>";
@@ -1148,6 +1151,7 @@
 				6055D84529701F5700C86D53 /* InputCareerVC.swift in Sources */,
 				60C6371A2984E1F100D2C814 /* HomeNetworkingPopUpVC.swift in Sources */,
 				2CED690D2989426A00C838BD /* EventApplyModel.swift in Sources */,
+				2C4083112997CE67000747DF /* WebSocketTestVC.swift in Sources */,
 				60F91401296D2F3D00626C40 /* ViewAllVC.swift in Sources */,
 				2CED690529867F3300C838BD /* NetworkingDetailModel.swift in Sources */,
 				2CED690729878AB200C838BD /* EventApplyCancelViewModel.swift in Sources */,
