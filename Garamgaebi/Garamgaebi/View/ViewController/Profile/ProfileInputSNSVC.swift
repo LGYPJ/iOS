@@ -158,7 +158,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         
         // typeTextField
         typeTextField.snp.makeConstraints { make in
-            make.top.equalTo(subtitleTypeLabel.snp.bottom).offset(4)
+            make.top.equalTo(subtitleTypeLabel.snp.bottom).offset(8)
             make.height.equalTo(48)
             make.left.right.equalToSuperview().inset(16)
         }
@@ -171,7 +171,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         
         // linkTextField
         linkTextField.snp.makeConstraints { make in
-            make.top.equalTo(subtitleLinkLabel.snp.bottom).offset(4)
+            make.top.equalTo(subtitleLinkLabel.snp.bottom).offset(8)
             make.height.equalTo(48)
             make.left.right.equalTo(typeTextField)
         }
