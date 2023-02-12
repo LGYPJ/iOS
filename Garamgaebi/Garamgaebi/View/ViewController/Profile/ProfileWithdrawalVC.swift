@@ -84,13 +84,13 @@ class ProfileWithdrawalVC: UIViewController {
     let textViewPlaceHolder = "내용을 적어주세요"
     lazy var contentTextField = UITextView().then {
         $0.layer.borderWidth = 1
-        $0.layer.borderColor = UIColor.mainGray.cgColor // UIColor.lightGray.withAlphaComponent(0.7).cgColor
+        $0.layer.borderColor = UIColor.mainGray.cgColor
         $0.layer.cornerRadius = 12
-        // $0.textContainerInset = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 16.0, right: 12.0)
-        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14) // .systemFont(ofSize: 18)
+         $0.textContainerInset = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 16.0, right: 12.0)
+        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.text = textViewPlaceHolder
         $0.textColor = .mainGray
-        //$0.delegate = self // <-
+        $0.delegate = self // <-
     }
     
     lazy var agreeCheckBtn = UIButton().then {
@@ -238,6 +238,33 @@ class ProfileWithdrawalVC: UIViewController {
     }
 }
 // MARK: - Extension
+extension ProfileWithdrawalVC: UITextViewDelegate {
+    // TextView Place Holder
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == textViewPlaceHolder {
+            textView.text = nil
+            textView.textColor = .mainBlack
+        }
+        textView.layer.borderColor = UIColor.mainBlack.cgColor
+    }
+
+    // TextView Place Holder
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if contentTextField.text.isEmpty {
+            contentTextField.text = textViewPlaceHolder
+            contentTextField.textColor = .mainGray
+        }
+        contentTextField.layer.borderColor = UIColor.mainGray.cgColor
+    }
+
+    // TextView 글자수 제한
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        guard let str = textView.text else { return true }
+        let newLenght = str.count + text.count - range.length
+        
+        return newLenght <= 100
+    }
+}
 extension ProfileWithdrawalVC {
     private func configureGestureRecognizer() {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
