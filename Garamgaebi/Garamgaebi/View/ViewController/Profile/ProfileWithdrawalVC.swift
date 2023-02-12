@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
-class ProfileWithdrawalVC: UIViewController {
+class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
     
     // MARK: - Subviews
     
@@ -72,14 +72,22 @@ class ProfileWithdrawalVC: UIViewController {
         $0.text = "탈퇴 사유"
     }
     
-    let reasonTypeTextField = UITextField().then {
+    lazy var reasonTypeTextField = UITextField().then {
         $0.basicTextField()
-        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.placeholder = "탈퇴 사유를 선택해주세요"
-    }
-    let typeSelectBtn = UIButton().then {
-        $0.setImage(UIImage(systemName: "chevron.down"), for: .normal)
-        $0.tintColor = .black
+        
+        let typeSelectBtn = UIButton()
+        typeSelectBtn.setImage(UIImage(systemName: "chevron.down"), for: .normal)
+        typeSelectBtn.tintColor = .mainBlack
+        
+        $0.addSubview(typeSelectBtn)
+        typeSelectBtn.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(12)
+            $0.width.height.equalTo(35)
+        }
+
+        $0.addTarget(self, action: #selector(showBottomSheet), for: .editingDidBegin)
     }
     
     let textViewPlaceHolder = "내용을 적어주세요"
@@ -133,7 +141,7 @@ class ProfileWithdrawalVC: UIViewController {
         view.backgroundColor = .white
         
         // addSubview
-        [headerView, noticeTitleLabel, noticeLabel, emailTitleLabel, emailTextField, reasonTitleLabel, reasonTypeTextField, typeSelectBtn, contentTextField, agreeCheckBtn, agreemsgLabel, sendBtn]
+        [headerView, noticeTitleLabel, noticeLabel, emailTitleLabel, emailTextField, reasonTitleLabel, reasonTypeTextField, contentTextField, agreeCheckBtn, agreemsgLabel, sendBtn]
             .forEach {view.addSubview($0)}
         
         [titleLabel, backButton]
@@ -189,11 +197,6 @@ class ProfileWithdrawalVC: UIViewController {
             $0.height.equalTo(48)
         }
         
-        typeSelectBtn.snp.makeConstraints { /// 유형 선택 화살표
-            $0.centerY.equalTo(reasonTypeTextField)
-            $0.trailing.equalTo(reasonTypeTextField.snp.trailing).inset(7)
-        }
-        
         contentTextField.snp.makeConstraints { /// 내용 입력
             $0.top.equalTo(reasonTypeTextField.snp.bottom).offset(16)
             $0.leading.trailing.equalTo(emailTextField)
@@ -215,6 +218,26 @@ class ProfileWithdrawalVC: UIViewController {
         }
         sendBtn.addTarget(self, action: #selector(withdrawalButtonDidTap), for: .touchUpInside)
         
+    }
+    
+    func typeSelect(type: String) {
+        self.reasonTypeTextField.text = type
+    }
+    
+    // 바텀시트 나타내기
+    @objc private func showBottomSheet() {
+        let bottomSheetVC = BottomSheetVC()
+        bottomSheetVC.modalPresentationStyle = .overFullScreen
+        bottomSheetVC.delegate = self
+        
+        bottomSheetVC.titleText = "탈퇴 사유를 선택해주세요"
+        bottomSheetVC.T1 = "이용이 불편해서"
+        bottomSheetVC.T2 = "사용 빈도가 낮아서"
+        bottomSheetVC.T3 = "콘텐츠 내용이 부족해서"
+        bottomSheetVC.T4 = "기타"
+        
+        self.present(bottomSheetVC, animated: false, completion: nil)
+        self.view.endEditing(false)
     }
     
     @objc private func didTapBackBarButton() {
