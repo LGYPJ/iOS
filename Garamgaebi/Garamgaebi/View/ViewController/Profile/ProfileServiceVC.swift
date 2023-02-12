@@ -42,6 +42,11 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         return button
     }()
     
+    let noticeSubtitleLabel = UILabel().then {
+        $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        $0.textColor = UIColor.mainBlack
+        $0.text = "고객센터 안내"
+    }
     let noticeLabel = UILabel().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.numberOfLines = 0
@@ -49,6 +54,11 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         $0.text = "휴일을 제외한 평일에는 하루 이내에 답변을 드릴게요.\n혹시 하루가 지나도 답변이 오지 않으면, 스팸 메일함을 확인해주세요."
     }
     
+    let emailSubtitleLabel = UILabel().then {
+        $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        $0.textColor = UIColor.mainBlack
+        $0.text = "답변받을 이메일"
+    }
     lazy var emailTextField = UITextField().then {
         $0.basicTextField()
         $0.placeholder = "답변 받을 이메일 주소"
@@ -58,6 +68,11 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
     }
     
+    let questionTypeSubtitleLabel = UILabel().then {
+        $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        $0.textColor = UIColor.mainBlack
+        $0.text = "문의 사유"
+    }
     lazy var questionTypeTextField = UITextField().then {
         $0.basicTextField()
         $0.placeholder = "질문 유형을 선택해주세요"
@@ -150,7 +165,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     // MARK: - Functions
     private func configureLayouts() {
         // addSubview
-        [headerView, noticeLabel, emailTextField, questionTypeTextField, contentTextField, agreeCheckBtn, agreemsgLabel, sendBtn, logoutLabel, withdrawalLabel]
+        [headerView, noticeSubtitleLabel, noticeLabel, emailSubtitleLabel, emailTextField, questionTypeSubtitleLabel, questionTypeTextField, contentTextField, agreeCheckBtn, agreemsgLabel, sendBtn, logoutLabel, withdrawalLabel]
             .forEach {view.addSubview($0)}
         
         [titleLabel, backButton]
@@ -177,21 +192,34 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
             make.centerY.equalToSuperview()
         }
         
-        noticeLabel.snp.makeConstraints { /// 안내
+        noticeSubtitleLabel.snp.makeConstraints { /// 고객센터 안내
             $0.top.equalTo(headerView.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview().inset(16)
 
         }
+        noticeLabel.snp.makeConstraints {
+            $0.top.equalTo(noticeSubtitleLabel.snp.bottom).offset(8)
+            $0.leading.trailing.equalTo(noticeSubtitleLabel)
+
+        }
         
-        emailTextField.snp.makeConstraints { /// 답변 받을 이메일 주소
+        emailSubtitleLabel.snp.makeConstraints { /// 답변 받을 이메일 주소
             $0.top.equalTo(noticeLabel.snp.bottom).offset(16)
             $0.leading.trailing.equalTo(noticeLabel)
+        }
+        emailTextField.snp.makeConstraints {
+            $0.top.equalTo(emailSubtitleLabel.snp.bottom).offset(8)
+            $0.leading.trailing.equalTo(emailSubtitleLabel)
             $0.height.equalTo(48)
         }
         
-        questionTypeTextField.snp.makeConstraints { /// 질문 유형 선택
+        questionTypeSubtitleLabel.snp.makeConstraints { /// 질문 유형 선택
             $0.top.equalTo(emailTextField.snp.bottom).offset(12)
             $0.leading.trailing.equalTo(emailTextField)
+        }
+        questionTypeTextField.snp.makeConstraints {
+            $0.top.equalTo(questionTypeSubtitleLabel.snp.bottom).offset(12)
+            $0.leading.trailing.equalTo(questionTypeSubtitleLabel)
             $0.height.equalTo(48)
         }
         
@@ -212,11 +240,12 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         
         sendBtn.snp.makeConstraints { /// 메일 보내기 버튼
             $0.top.equalTo(agreemsgLabel.snp.bottom).offset(40)
+//            $0.bottom.equalTo(logoutLabel.snp.top).offset(-20)
             $0.leading.trailing.equalTo(emailTextField)
         }
         
         logoutLabel.snp.makeConstraints { /// 로그아웃
-            $0.bottom.equalTo(withdrawalLabel.snp.top)
+            $0.bottom.equalTo(withdrawalLabel.snp.top).offset(5)
             $0.centerX.equalTo(withdrawalLabel)
         }
         
@@ -326,8 +355,8 @@ extension ProfileServiceVC: UITextViewDelegate {
         if contentTextField.text.isEmpty {
             contentTextField.text = textViewPlaceHolder
             contentTextField.textColor = .mainGray
-            contentTextField.layer.borderColor = UIColor.mainGray.cgColor
         }
+        contentTextField.layer.borderColor = UIColor.mainGray.cgColor
     }
 
     // TextView 글자수 제한
