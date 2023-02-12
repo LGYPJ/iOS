@@ -9,23 +9,35 @@ import UIKit
 import SnapKit
 
 class InputEducationVC: UIViewController {
-    var currentYear: Int = 0 {
+    private var currentYear: Int = 0 {
         didSet {
             yearArray = (1950...currentYear).reversed().map { String($0) }
         }
     }
-    var currentYearMonth: Int = 0
-    var yearArray: [String] = []
-    
+    private var currentYearMonth: Int = 0
+    private var yearArray: [String] = []
     private var monthArray = (1...12).map { String(format:"%02d", $0) }
     private var startYearValue =  "0"
     private var startMonthValue = "0"
     private var endYearValue =  "0"
     private var endMonthValue = "0"
     private var isLearning: Bool = false
+    private var scrollOffset : CGFloat = 0
+    private var distance : CGFloat = 0
+    
     // MARK: - Subviews
     
-    private var toolbar: UIToolbar {
+    lazy var scrollView: UIScrollView = {
+        let view = UIScrollView()
+        return view
+    }()
+    
+    lazy var contentView: UIView = {
+        let view = UIView()
+        return view
+    }()
+    
+    lazy var toolbar: UIToolbar = {
         let toolBar = UIToolbar(frame: CGRect(x:0, y:0, width:100, height:35))
         toolBar.tintColor = .mainBlack
         toolBar.backgroundColor = .mainLightGray
@@ -45,7 +57,7 @@ class InputEducationVC: UIViewController {
         cancelBtn.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.NotoSansKR(type: .Regular, size: 16)!, NSAttributedString.Key.foregroundColor: UIColor(hex: 0xFF0000)], for: .normal)
         toolBar.setItems([cancelBtn,flexSpace,exitBtn], animated: true)
         return toolBar
-    }
+    }()
     
     lazy var startDatePickerView: UIPickerView = {
         let picker = UIPickerView()
@@ -287,36 +299,59 @@ class InputEducationVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setCurrentYear()
+        setKeyboardObserver()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        setKeyboardObserverRemove()
     }
     
     // MARK: - Functions
     
     func addSubViews() {
-        /* Buttons */
-        view.addSubview(pagingImage)
-        view.addSubview(institutionTextField)
-        view.addSubview(majorTextField)
-        view.addSubview(startDateTextField)
-        view.addSubview(endDateTextField)
-        view.addSubview(betweenTildLabel)
-        view.addSubview(checkIsLearningButton)
-        view.addSubview(inputCareerButton)
-        view.addSubview(saveUserProfileButton)
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        
+        contentView.addSubview(pagingImage)
+        contentView.addSubview(institutionTextField)
+        contentView.addSubview(majorTextField)
+        contentView.addSubview(startDateTextField)
+        contentView.addSubview(endDateTextField)
+        contentView.addSubview(betweenTildLabel)
+        contentView.addSubview(checkIsLearningButton)
+        contentView.addSubview(saveUserProfileButton)
+        contentView.addSubview(inputCareerButton)
         
         /* Labels */
         [titleLabel,descriptionLabel,subtitleInstitutionLabel,subtitleMajorLabel, subtitleLearningDateLabel,subDescriptionLabel].forEach {
-            view.addSubview($0)
+            contentView.addSubview($0)
         }
     }
     
     func configLayouts() {
+        //scrollView
+        scrollView.snp.makeConstraints { make in
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        //contentView
+        contentView.snp.makeConstraints { make in
+            make.left.right.equalTo(view)
+            make.top.bottom.equalTo(scrollView)
+            make.width.equalTo(scrollView)
+            make.height.equalTo(scrollView)
+        }
         
         //pagingImage
         pagingImage.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.width.equalTo(72)
             make.height.equalTo(12)
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(28)
+            make.top.equalToSuperview().inset(28)
         }
         
         // titleLabel
@@ -328,7 +363,7 @@ class InputEducationVC: UIViewController {
         // descriptionLabel
         descriptionLabel.snp.makeConstraints { make in
             make.left.equalTo(titleLabel.snp.left)
-            make.right.equalToSuperview().offset(16)
+            make.right.equalToSuperview().inset(16)
             make.top.equalTo(titleLabel.snp.bottom).offset(9)
         }
         
@@ -747,4 +782,56 @@ extension InputEducationVC: UITextFieldDelegate {
         }
         return true
     }
+}
+
+extension InputEducationVC {
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            
+            var safeArea = self.view.frame
+            safeArea.size.height += scrollView.contentOffset.y
+            safeArea.size.height -= keyboardSize.height + (UIScreen.main.bounds.height*0.04) // Adjust buffer to your liking
+            
+            // determine which UIView was selected and if it is covered by keyboard
+            
+            let activeField: UIView? = [institutionTextField, majorTextField, startDateTextField, endDateTextField].first { $0.isFirstResponder }
+            if let activeField = activeField {
+                if safeArea.contains(CGPoint(x: 0, y: activeField.frame.maxY)) {
+                    print("No need to Scroll")
+                    return
+                } else {
+                    distance = activeField.frame.maxY - safeArea.size.height
+                    scrollOffset = scrollView.contentOffset.y
+                    self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset + distance), animated: true)
+                }
+            }
+            // prevent scrolling while typing
+            print(distance)
+            print(scrollOffset)
+            scrollView.isScrollEnabled = false
+        }
+    }
+    
+    @objc private func keyboardWillHide() {
+        
+        if distance == 0 {
+            return
+        }
+        // return to origin scrollOffset
+//        self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset), animated: true)
+        self.scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        scrollOffset = 0
+        distance = 0
+        scrollView.isScrollEnabled = true
+    }
+    
+    func setKeyboardObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    func setKeyboardObserverRemove() {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
 }
