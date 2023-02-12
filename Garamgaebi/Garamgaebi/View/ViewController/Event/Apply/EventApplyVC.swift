@@ -644,6 +644,15 @@ extension EventApplyVC {
 		nicknameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
 		numberTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
 		
+		nameTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+		nameTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+		
+		nicknameTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+		nicknameTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+		
+		numberTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+		numberTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+		
 		nameTextField.delegate = self
 		nicknameTextField.delegate = self
 		numberTextField.delegate = self
@@ -722,6 +731,46 @@ extension EventApplyVC {
 		tapClipBoard.isEnabled = true
 		
 		clipBoardImageView.addGestureRecognizer(tapClipBoard)
+	}
+	
+	@objc func textFieldActivated(_ sender: UITextField) {
+		switch sender {
+		case nameTextField:
+			if isValidName || sender.text == "" {
+				sender.layer.borderColor = UIColor.mainBlack.cgColor
+			}
+		case nicknameTextField:
+			if isValidNickname || sender.text == "" {
+				sender.layer.borderColor = UIColor.mainBlack.cgColor
+			}
+		case numberTextField:
+			if isValidNumber || sender.text == "" {
+				sender.layer.borderColor = UIColor.mainBlack.cgColor
+			}
+		default:
+			return
+		}
+		
+		
+	}
+	
+	@objc func textFieldInactivated(_ sender: UITextField) {
+		switch sender {
+		case nameTextField:
+			if isValidName {
+				sender.layer.borderColor = UIColor.mainGray.cgColor
+			}
+		case nicknameTextField:
+			if isValidNickname {
+				sender.layer.borderColor = UIColor.mainGray.cgColor
+			}
+		case numberTextField:
+			if isValidNumber {
+				sender.layer.borderColor = UIColor.mainGray.cgColor
+			}
+		default:
+			return
+		}
 	}
 	
 	@objc private func clipBoardImageViewDidTap() {
@@ -807,8 +856,8 @@ extension EventApplyVC {
 	
 	@objc func keyboardWillHide(notification: NSNotification) {
 		let contentInset = UIEdgeInsets.zero
-			scrollView.contentInset = contentInset
-			scrollView.scrollIndicatorInsets = contentInset
+		scrollView.contentInset = contentInset
+		scrollView.scrollIndicatorInsets = contentInset
 	}
 }
 
@@ -817,5 +866,9 @@ extension EventApplyVC: UITextFieldDelegate {
 		textField.resignFirstResponder()
 		return true
 	}
+	
+	
+	
+	
 }
 
