@@ -56,10 +56,11 @@ class ProfileWithdrawalVC: UIViewController {
     }
     
     let emailTextField = UITextField().then {
+        guard let uniEmail = UserDefaults.standard.string(forKey: "uniEmail") else { return }
         $0.basicTextField()
         $0.backgroundColor = UIColor(hex: 0xF5F5F5)
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        $0.text = "uniEmail@gachon.ac.com"
+        $0.text = uniEmail
         $0.textColor = UIColor(hex: 0xAEAEAE)
         $0.isUserInteractionEnabled = false // uniEmail 수정 불가
         $0.layer.borderWidth = 1
