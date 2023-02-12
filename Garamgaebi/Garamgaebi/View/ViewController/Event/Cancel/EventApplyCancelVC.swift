@@ -482,6 +482,9 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 		accountTextField.returnKeyType = .done
 		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+		
+		accountTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+		accountTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
 	}
 	
 	private func fetchUserData() {
@@ -554,6 +557,14 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 		tapGestureRecognizer.cancelsTouchesInView = false
 		
 		scrollView.addGestureRecognizer(tapGestureRecognizer)
+	}
+	
+	@objc func textFieldActivated(_ sender: UITextField) {
+		sender.layer.borderColor = UIColor.mainBlack.cgColor
+	}
+	
+	@objc func textFieldInactivated(_ sender: UITextField) {
+		sender.layer.borderColor = UIColor.mainGray.cgColor
 	}
 	
 	@objc private func scrollViewDidTap() {
