@@ -95,7 +95,7 @@ class OnboardingVC: UIViewController {
         nextButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
-            make.bottom.equalToSuperview().inset(48)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(14)
             make.height.equalTo(48)
         }
         
@@ -111,7 +111,7 @@ class OnboardingVC: UIViewController {
     private func setAttributes() {
         pageControl.numberOfPages = onboardingData.count
         pageControl.currentPageIndicatorTintColor = .mainBlue
-        pageControl.pageIndicatorTintColor = .mainGray
+        pageControl.pageIndicatorTintColor = .mainBlue
     }
     
     private func setCollectionView() {
@@ -120,7 +120,7 @@ class OnboardingVC: UIViewController {
         
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.bottom.equalTo(pageControl.snp.top).offset(-123)
+            make.centerY.equalToSuperview().offset(-15)
             make.height.equalTo(350)
             make.width.equalToSuperview()
         }
@@ -183,6 +183,10 @@ extension OnboardingVC: UICollectionViewDataSource, UICollectionViewDelegateFlow
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+        return CGSize(width: collectionView.bounds.width, height: collectionView.bounds.height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
     }
 }
