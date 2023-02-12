@@ -382,11 +382,7 @@ extension HomeEventInfoTableViewCell: UICollectionViewDataSource, UICollectionVi
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let availableWidth = collectionView.bounds.width/390*334
-        let widthPerItem = availableWidth / itemsPerRow
-        let heightPerItem = widthPerItem/334*140
-        
-        return CGSize(width: widthPerItem, height: heightPerItem)
+        return CGSize(width: 334, height: 140)
     }
     
     func collectionView(_ collectionView: UICollectionView,
