@@ -228,15 +228,22 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         
     }
     
-    func typeSelect(questype: String) {
-        self.questionTypeTextField.text = questype
+    func typeSelect(type: String) {
+        self.questionTypeTextField.text = type
     }
     
     // 바텀시트 나타내기
     @objc private func showBottomSheet() {
-        let bottomSheetVC = ServiceBottomSheetVC()
+        let bottomSheetVC = BottomSheetVC()
         bottomSheetVC.modalPresentationStyle = .overFullScreen
         bottomSheetVC.delegate = self
+        
+        bottomSheetVC.titleText = "질문 유형을 선택해주세요"
+        bottomSheetVC.T1 = "이용문의"
+        bottomSheetVC.T2 = "오류신고"
+        bottomSheetVC.T3 = "서비스 제안"
+        bottomSheetVC.T4 = "기타"
+        
         self.present(bottomSheetVC, animated: false, completion: nil)
     }
     
