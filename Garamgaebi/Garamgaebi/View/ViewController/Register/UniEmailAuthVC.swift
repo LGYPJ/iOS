@@ -48,7 +48,7 @@ class UniEmailAuthVC: UIViewController {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "가천대생 인증을 진행해주세요"
-        label.textColor = .black
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 22)
         return label
     }()
@@ -78,7 +78,7 @@ class UniEmailAuthVC: UIViewController {
         textField.placeholder = "example"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
-        textField.textColor = .black
+        textField.textColor = .mainBlack
         textField.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         textField.autocapitalizationType = .none
         
@@ -116,7 +116,7 @@ class UniEmailAuthVC: UIViewController {
         textField.placeholder = "인증번호 6자리"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
-        textField.textColor = .black
+        textField.textColor = .mainBlack
         textField.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         
         textField.layer.borderColor = UIColor.mainGray.cgColor
@@ -348,7 +348,7 @@ class UniEmailAuthVC: UIViewController {
         nextButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
-            make.bottom.equalToSuperview().inset(48)
+            make.bottom.equalToSuperview().inset(14)
             make.height.equalTo(48)
         }
     }

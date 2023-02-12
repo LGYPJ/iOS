@@ -221,7 +221,7 @@ class InputEducationVC: UIViewController {
         textField.placeholder = "종료년월"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
-        textField.textColor = .black
+        textField.textColor = .mainBlack
         textField.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         textField.autocapitalizationType = .none
         
@@ -434,7 +434,7 @@ class InputEducationVC: UIViewController {
         saveUserProfileButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
-            make.bottom.equalToSuperview().inset(48)
+            make.bottom.equalToSuperview().inset(14)
             make.height.equalTo(48)
         }
         

@@ -16,7 +16,7 @@ class LoginVC: UIViewController {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "가람개비"
-        label.textColor = .black
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 36)
         return label
     }()
@@ -24,7 +24,7 @@ class LoginVC: UIViewController {
     lazy var subTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "가천대생들을 위한 커뮤니티"
-        label.textColor = .black
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 22)
         return label
     }()
@@ -34,7 +34,7 @@ class LoginVC: UIViewController {
         label.text = "가람개비에서\n가천대 선후배를 찾아봐요!"
         label.numberOfLines = 0
         label.font = UIFont.NotoSansKR(type: .Medium, size: 18)
-        label.textColor = .black
+        label.textColor = .mainBlack
         return label
     }()
     
