@@ -141,7 +141,7 @@ class UniEmailAuthVC: UIViewController {
         button.clipsToBounds = true
         button.layer.cornerRadius = 12
         button.backgroundColor = .mainGray // 비활성화
-        
+        button.isEnabled = false
         button.addTarget(self, action: #selector(sendEmail), for: .touchUpInside)
         
         return button
@@ -168,7 +168,7 @@ class UniEmailAuthVC: UIViewController {
         button.backgroundColor = .mainGray // 비활성화
         
         button.addTarget(self, action: #selector(authSuccessed), for: .touchUpInside)
-        
+        button.isEnabled = false
         button.isHidden = true
         return button
     }()

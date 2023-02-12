@@ -133,6 +133,7 @@ class InputOrganizationVC: UIViewController {
         button.backgroundColor = .mainGray // 비활성화
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
+        button.isEnabled = false
         return button
     }()
     
