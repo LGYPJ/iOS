@@ -736,15 +736,15 @@ extension EventApplyVC {
 	@objc func textFieldActivated(_ sender: UITextField) {
 		switch sender {
 		case nameTextField:
-			if isValidName || sender.text == "" {
+			if isValidName {
 				sender.layer.borderColor = UIColor.mainBlack.cgColor
 			}
 		case nicknameTextField:
-			if isValidNickname || sender.text == "" {
+			if isValidNickname {
 				sender.layer.borderColor = UIColor.mainBlack.cgColor
 			}
 		case numberTextField:
-			if isValidNumber || sender.text == "" {
+			if isValidNumber {
 				sender.layer.borderColor = UIColor.mainBlack.cgColor
 			}
 		default:
@@ -865,6 +865,45 @@ extension EventApplyVC: UITextFieldDelegate {
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		textField.resignFirstResponder()
 		return true
+	}
+	
+	func textFieldDidBeginEditing(_ textField: UITextField) {
+		switch textField {
+		case nameTextField:
+			if isValidName {
+				textField.layer.borderColor = UIColor.mainBlack.cgColor
+			}
+		case nicknameTextField:
+			if isValidNickname {
+				textField.layer.borderColor = UIColor.mainBlack.cgColor
+			}
+		case numberTextField:
+			if isValidNumber {
+				textField.layer.borderColor = UIColor.mainBlack.cgColor
+			}
+		default:
+			return
+		}
+	}
+	
+	func textFieldDidEndEditing(_ textField: UITextField) {
+		switch textField {
+		case nameTextField:
+			if isValidName {
+				textField.layer.borderColor = UIColor.mainGray.cgColor
+			}
+		case nicknameTextField:
+			if isValidNickname {
+				textField.layer.borderColor = UIColor.mainGray.cgColor
+			}
+		case numberTextField:
+			if isValidNumber {
+				textField.layer.borderColor = UIColor.mainGray.cgColor
+			}
+		default:
+			return
+		}
+		
 	}
 	
 	
