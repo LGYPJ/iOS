@@ -156,7 +156,8 @@ extension IceBreakingRoomListVC: UICollectionViewDelegate, UICollectionViewDataS
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		navigationController?.pushViewController(IceBreakingRoomVC(), animated: true)
+		navigationController?.pushViewController(IceBreakingRoomVC(roomId: roomList[indexPath.row].gameRoomIdx), animated: true)
+//		navigationController?.pushViewController(WebSocketTestVC(), animated: true)
 	}
 	
 	

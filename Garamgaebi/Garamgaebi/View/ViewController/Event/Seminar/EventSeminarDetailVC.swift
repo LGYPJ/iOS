@@ -214,9 +214,10 @@ extension EventSeminarDetailVC: UITableViewDelegate, UITableViewDataSource {
 			cell.eventNameLabel.text = self.seminarInfo.title
 			cell.locationInfoLabel.text = self.seminarInfo.location
 			if self.seminarInfo.fee == 0 {
-				cell.costStackView.isHidden = true
+//				cell.costStackView.isHidden = true
+				cell.costInfoLabel.text = "무료"
 			} else {
-				cell.costStackView.isHidden = false
+//				cell.costStackView.isHidden = false
 				cell.costInfoLabel.text = "\(self.seminarInfo.fee)원"
 			}
 			

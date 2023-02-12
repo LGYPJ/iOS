@@ -16,7 +16,7 @@ class EventPreviewTableViewCell: UITableViewCell {
 		let label = UILabel()
 		label.text = "발표 미리보기"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 18)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()

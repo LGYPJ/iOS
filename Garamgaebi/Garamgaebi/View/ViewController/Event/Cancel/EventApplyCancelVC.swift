@@ -62,7 +62,7 @@ class EventApplyCancelVC: UIViewController {
 	lazy var programNameLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -71,7 +71,7 @@ class EventApplyCancelVC: UIViewController {
 		let label = UILabel()
 		label.text = "일시"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -79,7 +79,7 @@ class EventApplyCancelVC: UIViewController {
 	lazy var dateInfoLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -88,7 +88,7 @@ class EventApplyCancelVC: UIViewController {
 		let label = UILabel()
 		label.text = "장소"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -96,7 +96,7 @@ class EventApplyCancelVC: UIViewController {
 	lazy var locationInfoLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -105,7 +105,7 @@ class EventApplyCancelVC: UIViewController {
 		let label = UILabel()
 		label.text = "참가비"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -113,7 +113,7 @@ class EventApplyCancelVC: UIViewController {
 	lazy var costInfoLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -122,7 +122,7 @@ class EventApplyCancelVC: UIViewController {
 		let label = UILabel()
 		label.text = "신청 마감"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -130,7 +130,7 @@ class EventApplyCancelVC: UIViewController {
 	lazy var deadlineInfoLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -189,10 +189,10 @@ class EventApplyCancelVC: UIViewController {
 		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
 		textField.layer.cornerRadius = 12
-		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
-		textField.leftViewMode = .always
+		textField.addLeftPadding()
+		textField.addRightPadding()
 //		textField.placeholder = "이름을 입력해주세요"
-		textField.attributedPlaceholder = NSAttributedString(string: "정현우", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
+		textField.attributedPlaceholder = NSAttributedString(string: "이름", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
 		textField.isEnabled = false
 		textField.backgroundColor = UIColor(hex: 0xF5F5F5)
 
@@ -204,10 +204,10 @@ class EventApplyCancelVC: UIViewController {
 		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
 		textField.layer.cornerRadius = 12
-		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
-		textField.leftViewMode = .always
+		textField.addLeftPadding()
+		textField.addRightPadding()
 //		textField.placeholder = "닉네임을 입력해주세요"
-		textField.attributedPlaceholder = NSAttributedString(string: "연현", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
+		textField.attributedPlaceholder = NSAttributedString(string: "닉네임", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
 		textField.isEnabled = false
 		textField.backgroundColor = UIColor(hex: 0xF5F5F5)
 		
@@ -219,10 +219,10 @@ class EventApplyCancelVC: UIViewController {
 		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
 		textField.layer.cornerRadius = 12
-		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
-		textField.leftViewMode = .always
+		textField.addLeftPadding()
+		textField.addRightPadding()
 //		textField.placeholder = "전화번호를 입력해주세요"
-		textField.attributedPlaceholder = NSAttributedString(string: "010-1234-5678", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
+		textField.attributedPlaceholder = NSAttributedString(string: "전화번호", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
 		textField.isEnabled = false
 		textField.backgroundColor = UIColor(hex: 0xF5F5F5)
 		
@@ -263,7 +263,7 @@ class EventApplyCancelVC: UIViewController {
 	lazy var downImageView: UIImageView = {
 		let imageView = UIImageView()
 		imageView.image = UIImage(systemName: "chevron.down")
-		imageView.tintColor = .black
+		imageView.tintColor = .mainBlack
 		
 		return imageView
 	}()
@@ -273,8 +273,8 @@ class EventApplyCancelVC: UIViewController {
 		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
 		textField.layer.cornerRadius = 12
-		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
-		textField.leftViewMode = .always
+		textField.addLeftPadding()
+		textField.addRightPadding()
 		textField.attributedPlaceholder = NSAttributedString(string: "계좌번호를 입력해주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
 		
 		return textField
@@ -335,6 +335,7 @@ class EventApplyCancelVC: UIViewController {
 		configureTextField()
 		configureGestureRecognizer()
 		fetchProgramData()
+		fetchUserData()
         
     }
 	override func viewWillAppear(_ animated: Bool) {
@@ -481,6 +482,17 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 		accountTextField.returnKeyType = .done
 		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+		
+		accountTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+		accountTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+	}
+	
+	private func fetchUserData() {
+		EventApplyCancelViewModel.getUserApplyData(memberId: self.memberId, programId: self.programId, completion: {[weak self] result in
+			self?.nameTextField.attributedPlaceholder = NSAttributedString(string: result.name, attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
+			self?.nicknameTextField.attributedPlaceholder = NSAttributedString(string: result.nickname, attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
+			self?.numberTextField.attributedPlaceholder = NSAttributedString(string: result.phone, attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
+		})
 	}
 	
 	private func fetchProgramData() {
@@ -504,11 +516,12 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 		locationInfoLabel.text = self.seminarInfo.location
 		
 		if self.seminarInfo.fee == 0 {
-			costStackView.isHidden = true
+//			costStackView.isHidden = true
+			costInfoLabel.text = "무료"
 			bankButton.isHidden = true
 			accountTextField.isHidden = true
 		} else {
-			costStackView.isHidden = false
+//			costStackView.isHidden = false
 			bankButton.isHidden = false
 			accountTextField.isHidden = false
 			costInfoLabel.text = "\(self.seminarInfo.fee)원"
@@ -523,11 +536,12 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 		locationInfoLabel.text = self.networkingInfo.location
 		
 		if self.networkingInfo.fee == 0 {
-			costStackView.isHidden = true
+//			costStackView.isHidden = true
+			costInfoLabel.text = "무료"
 			bankButton.isHidden = true
 			accountTextField.isHidden = true
 		} else {
-			costStackView.isHidden = false
+//			costStackView.isHidden = false
 			bankButton.isHidden = false
 			accountTextField.isHidden = false
 			costInfoLabel.text = "\(self.networkingInfo.fee)원"
@@ -543,6 +557,14 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 		tapGestureRecognizer.cancelsTouchesInView = false
 		
 		scrollView.addGestureRecognizer(tapGestureRecognizer)
+	}
+	
+	@objc func textFieldActivated(_ sender: UITextField) {
+		sender.layer.borderColor = UIColor.mainBlack.cgColor
+	}
+	
+	@objc func textFieldInactivated(_ sender: UITextField) {
+		sender.layer.borderColor = UIColor.mainGray.cgColor
 	}
 	
 	@objc private func scrollViewDidTap() {
@@ -619,7 +641,7 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 	
 	func sendBankName(name: String) {
 		bankButton.setTitle(name, for: .normal)
-		bankButton.setTitleColor(.black, for: .normal)
+		bankButton.setTitleColor(.mainBlack, for: .normal)
 
 		textFieldDidChange(textField: accountTextField)
 	}

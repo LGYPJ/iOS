@@ -27,7 +27,7 @@ class EventAttendantCollectionViewCell: UICollectionViewCell {
 	lazy var userNameLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -44,7 +44,7 @@ class EventAttendantCollectionViewCell: UICollectionViewCell {
 	override func prepareForReuse() {
 		super.prepareForReuse()
 		profileImageView.layer.borderWidth = 0
-		userNameLabel.textColor = .black
+		userNameLabel.textColor = .mainBlack
 	}
 }
 

@@ -64,6 +64,12 @@ class EventNetworkingDetailVC: UIViewController {
 			tableView.reloadData()
 		}
 	}
+	
+	var isUserApplyProgram = false {
+		didSet {
+			tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .none)
+		}
+	}
 
 	
     
@@ -83,6 +89,7 @@ class EventNetworkingDetailVC: UIViewController {
         
 		configureViews()
 		configureTableView()
+		configureNotification()
 		fetchNetworkingInfo()
 		
 		self.navigationController?.interactivePopGestureRecognizer?.delegate = self
@@ -185,6 +192,10 @@ extension EventNetworkingDetailVC {
 		}
 	}
 	
+	private func configureNotification() {
+		NotificationCenter.default.addObserver(self, selector: #selector(validUserApplyProgram(_:)), name: Notification.Name("programId:\(networkingId)"), object: nil)
+	}
+	
 	
 	// 뒤로가기 버튼 did tap
 	@objc private func didTapBackBarButton() {
@@ -197,6 +208,11 @@ extension EventNetworkingDetailVC {
 	// 게임 참가하기 did tap
 	@objc private func didTapEntranceButton() {
 		self.navigationController?.pushViewController(IceBreakingRoomListVC(programId: self.networkingId), animated: true)
+	}
+	
+	@objc private func validUserApplyProgram(_ notification: NSNotification) {
+		let notiData: Bool = notification.object as! Bool
+		self.isUserApplyProgram = notiData
 	}
 
 
@@ -217,9 +233,10 @@ extension EventNetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 //			cell.dateInfoLabel.text = self.networkingInfo.date
 			cell.locationInfoLabel.text = self.networkingInfo.location
 			if self.networkingInfo.fee == 0 {
-				cell.costStackView.isHidden = true
+//				cell.costStackView.isHidden = true
+				cell.costInfoLabel.text = "무료"
 			} else {
-				cell.costStackView.isHidden = false
+//				cell.costStackView.isHidden = false
 				cell.costInfoLabel.text = "\(self.networkingInfo.fee)원"
 			}
 //			cell.deadlineInfoLabel.text = self.networkingInfo.endDate
@@ -288,7 +305,7 @@ extension EventNetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 			cell.entranceContainerView.addGestureRecognizer(tapGestureRecognizer)
 			
 			let testDate = "2023-02-10T18:29:00"
-			if isAvailableNetworking(fromDate: testDate) && UserDefaults.standard.bool(forKey: "programId:\(networkingId)") {
+			if isAvailableNetworking(fromDate: testDate) && isUserApplyProgram {
 //			if isAvailableNetworking(fromDate: self.networkingInfo.date) && UserDefaults.standard.bool(forKey: "programId:\(networkingId)") {
 				cell.entranceContainerView.backgroundColor = .mainBlue
 				cell.entranceContainerView.isUserInteractionEnabled = true

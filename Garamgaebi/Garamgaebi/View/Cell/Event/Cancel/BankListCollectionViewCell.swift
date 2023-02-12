@@ -23,7 +23,7 @@ class BankListCollectionViewCell: UICollectionViewCell {
 	lazy var nameLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()

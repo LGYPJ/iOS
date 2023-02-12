@@ -63,7 +63,7 @@ class EventApplyVC: UIViewController {
 	lazy var eventNameLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -72,7 +72,7 @@ class EventApplyVC: UIViewController {
 		let label = UILabel()
 		label.text = "일시"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -80,7 +80,7 @@ class EventApplyVC: UIViewController {
 	lazy var dateInfoLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -89,7 +89,7 @@ class EventApplyVC: UIViewController {
 		let label = UILabel()
 		label.text = "장소"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -97,7 +97,7 @@ class EventApplyVC: UIViewController {
 	lazy var locationInfoLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -106,7 +106,7 @@ class EventApplyVC: UIViewController {
 		let label = UILabel()
 		label.text = "참가비"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -114,7 +114,7 @@ class EventApplyVC: UIViewController {
 	lazy var costInfoLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -123,7 +123,7 @@ class EventApplyVC: UIViewController {
 		let label = UILabel()
 		label.text = "신청 마감"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -131,7 +131,7 @@ class EventApplyVC: UIViewController {
 	lazy var deadlineInfoLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -189,7 +189,7 @@ class EventApplyVC: UIViewController {
 		let label = UILabel()
 		label.text = "이름"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -199,8 +199,8 @@ class EventApplyVC: UIViewController {
 		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
 		textField.layer.cornerRadius = 12
-		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
-		textField.leftViewMode = .always
+		textField.addLeftPadding()
+		textField.addRightPadding()
 //		textField.placeholder = "이름을 입력해주세요"
 		textField.attributedPlaceholder = NSAttributedString(string: "이름을 입력해주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 14)!])
 
@@ -223,7 +223,7 @@ class EventApplyVC: UIViewController {
 		let label = UILabel()
 		label.text = "닉네임"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -233,8 +233,8 @@ class EventApplyVC: UIViewController {
 		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
 		textField.layer.cornerRadius = 12
-		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
-		textField.leftViewMode = .always
+		textField.addLeftPadding()
+		textField.addRightPadding()
 //		textField.placeholder = "닉네임을 입력해주세요"
 		textField.attributedPlaceholder = NSAttributedString(string: "가입 시 닉네임을 적어주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 14)!])
 
@@ -257,7 +257,7 @@ class EventApplyVC: UIViewController {
 		let label = UILabel()
 		label.text = "전화번호"
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -267,8 +267,8 @@ class EventApplyVC: UIViewController {
 		textField.layer.borderColor = UIColor.mainGray.cgColor
 		textField.layer.borderWidth = 1
 		textField.layer.cornerRadius = 12
-		textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
-		textField.leftViewMode = .always
+		textField.addLeftPadding()
+		textField.addRightPadding()
 //		textField.placeholder = "전화번호를 입력해주세요"
 		textField.attributedPlaceholder = NSAttributedString(string: "숫자만 입력해주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 14)!])
 
@@ -290,7 +290,7 @@ class EventApplyVC: UIViewController {
 	lazy var accountLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.NotoSansKR(type: .Medium, size: 14)
-		label.textColor = .black
+		label.textColor = .mainBlack
 		
 		return label
 	}()
@@ -307,7 +307,7 @@ class EventApplyVC: UIViewController {
 	lazy var descriptionTextView: UITextView = {
 		let textView = UITextView()
 		textView.font = UIFont.NotoSansKR(type: .Medium, size: 14)
-		textView.textColor = .black
+		textView.textColor = .mainBlack
 		textView.backgroundColor = .clear
 		textView.layer.cornerRadius = 12
 		textView.textContainer.lineFragmentPadding = 0
@@ -429,13 +429,14 @@ extension EventApplyVC {
 		dateInfoLabel.text = seminarInfo.date.formattingDetailDate()
 		locationInfoLabel.text = seminarInfo.location
 		if seminarInfo.fee == 0 {
-			costStackView.isHidden = true
+//			costStackView.isHidden = true
+			costInfoLabel.text = "무료"
 			accountLabel.isHidden = true
 			clipBoardImageView.isHidden = true
 			descriptionTextView.isHidden = true
 			descriptionContainerView.isHidden = true
 		} else {
-			costStackView.isHidden = false
+//			costStackView.isHidden = false
 			accountLabel.isHidden = false
 			clipBoardImageView.isHidden = false
 			descriptionTextView.isHidden = false
@@ -454,13 +455,14 @@ extension EventApplyVC {
 		dateInfoLabel.text = networkingInfo.date.formattingDetailDate()
 		locationInfoLabel.text = networkingInfo.location
 		if networkingInfo.fee == 0 {
-			costStackView.isHidden = true
+//			costStackView.isHidden = true
+			costInfoLabel.text = "무료"
 			accountLabel.isHidden = true
 			clipBoardImageView.isHidden = true
 			descriptionTextView.isHidden = true
 			descriptionContainerView.isHidden = true
 		} else {
-			costStackView.isHidden = false
+//			costStackView.isHidden = false
 			accountLabel.isHidden = false
 			clipBoardImageView.isHidden = false
 			descriptionTextView.isHidden = false
@@ -642,6 +644,15 @@ extension EventApplyVC {
 		nicknameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
 		numberTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
 		
+		nameTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+		nameTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+		
+		nicknameTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+		nicknameTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+		
+		numberTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+		numberTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+		
 		nameTextField.delegate = self
 		nicknameTextField.delegate = self
 		numberTextField.delegate = self
@@ -701,7 +712,7 @@ extension EventApplyVC {
 	private func HideAlert(textField: UITextField, alertLabel: UILabel) {
 		
 		UIView.animate(withDuration: 0.3) {
-			textField.layer.borderColor = UIColor.black.cgColor
+			textField.layer.borderColor = UIColor.mainBlack.cgColor
 //			alertLabel.isHidden = true
 			alertLabel.alpha = 0
 		}
@@ -720,6 +731,46 @@ extension EventApplyVC {
 		tapClipBoard.isEnabled = true
 		
 		clipBoardImageView.addGestureRecognizer(tapClipBoard)
+	}
+	
+	@objc func textFieldActivated(_ sender: UITextField) {
+		switch sender {
+		case nameTextField:
+			if isValidName || sender.text == "" {
+				sender.layer.borderColor = UIColor.mainBlack.cgColor
+			}
+		case nicknameTextField:
+			if isValidNickname || sender.text == "" {
+				sender.layer.borderColor = UIColor.mainBlack.cgColor
+			}
+		case numberTextField:
+			if isValidNumber || sender.text == "" {
+				sender.layer.borderColor = UIColor.mainBlack.cgColor
+			}
+		default:
+			return
+		}
+		
+		
+	}
+	
+	@objc func textFieldInactivated(_ sender: UITextField) {
+		switch sender {
+		case nameTextField:
+			if isValidName {
+				sender.layer.borderColor = UIColor.mainGray.cgColor
+			}
+		case nicknameTextField:
+			if isValidNickname {
+				sender.layer.borderColor = UIColor.mainGray.cgColor
+			}
+		case numberTextField:
+			if isValidNumber {
+				sender.layer.borderColor = UIColor.mainGray.cgColor
+			}
+		default:
+			return
+		}
 	}
 	
 	@objc private func clipBoardImageViewDidTap() {
@@ -805,8 +856,8 @@ extension EventApplyVC {
 	
 	@objc func keyboardWillHide(notification: NSNotification) {
 		let contentInset = UIEdgeInsets.zero
-			scrollView.contentInset = contentInset
-			scrollView.scrollIndicatorInsets = contentInset
+		scrollView.contentInset = contentInset
+		scrollView.scrollIndicatorInsets = contentInset
 	}
 }
 
@@ -815,5 +866,9 @@ extension EventApplyVC: UITextFieldDelegate {
 		textField.resignFirstResponder()
 		return true
 	}
+	
+	
+	
+	
 }
 
