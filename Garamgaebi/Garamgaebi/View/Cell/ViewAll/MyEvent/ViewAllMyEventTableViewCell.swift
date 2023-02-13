@@ -13,6 +13,11 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    enum SettingButtonStatus{
+        case READY
+        case CLOSED
+    }
+    
     // MARK: - Properties
     static let identifier = String(describing: ViewAllMyEventTableViewCell.self)
     static let cellHeight = 428.0 // 지워야함
@@ -67,10 +72,9 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
     
     lazy var settingButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "moreHorizon"), for: .normal)
+        button.setImage(UIImage(named: "moreHorizon")?.withTintColor(.mainBlue), for: .normal)
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         button.clipsToBounds = true
-        button.tintColor = UIColor(hex: 0x1C1B1F)
         
         let detail = UIAction(
             title: "상세보기",
@@ -189,8 +193,45 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
         }
     }
     
+    private func settingButtonConfig(_ status: SettingButtonStatus) {
+        let detail = UIAction(
+            title: "상세보기",
+            image: UIImage(named: "searchIcon")?.withTintColor(UIColor(hex: 0x1C1B1F)),
+            handler: { _ in
+                // 선택한 cell의 정보를 detailView에 전달
+                NotificationCenter.default.post(name: Notification.Name("pushEventDetailVC"), object: self.cellEventInfo)
+            }
+        )
+        
+        let cancel = UIAction(
+            title: "신청취소",
+            image: UIImage(named: "deleteIcon")?.withTintColor(UIColor(hex: 0x1C1B1F)),
+            handler: { _ in
+                // 선택한 cell의 정보를 detailView에 전달
+                NotificationCenter.default.post(name: Notification.Name("pushEventApplyCancelVC"), object: self.cellEventInfo)
+            }
+        )
+        
+        settingButton.showsMenuAsPrimaryAction = true
+        
+        switch status {
+        case .READY:
+            settingButton.menu = UIMenu(
+                                 identifier: nil,
+                                 options: .displayInline, // .destructive
+                                 children: [detail, cancel])
+            settingButton.setImage(UIImage(named: "moreHorizon")?.withTintColor(.mainBlue), for: .normal)
+        case .CLOSED:
+            settingButton.menu = UIMenu(
+                                 identifier: nil,
+                                 options: .displayInline, // .destructive
+                                 children: [detail])
+            settingButton.setImage(UIImage(named: "moreHorizon")?.withTintColor(UIColor(hex: 0x1C1B1F)), for: .normal)
+        }
+    }
+    
     public func configureReady(_ item: MyEventInfoReady) {
-        // TODO: 나중에 해줘야할 수 있음
+        settingButtonConfig(SettingButtonStatus.READY)
         baseView.isHidden = false
         zeroDataBackgroundView.isHidden = true
         settingButton.isHidden = false
@@ -217,7 +258,7 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
     }
     
     public func configureClose(_ item: MyEventInfoClose) {
-        // TODO: 나중에 해줘야할 수 있음
+        settingButtonConfig(SettingButtonStatus.CLOSED)
         baseView.isHidden = false
         zeroDataBackgroundView.isHidden = true
         settingButton.isHidden = true
