@@ -223,7 +223,6 @@ class InputEmailVC: UIViewController {
         validateUserInfo()
         self.emailValidLabel.isHidden = true
         sender.layer.borderColor = UIColor.mainGray.cgColor
-        sender.layer.borderWidth = 1
     }
     
     @objc
