@@ -774,6 +774,7 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
                 cell.snsTypeLable.text = type
             } else { cell.snsTypeLable.text = "기타" }
             cell.snsLinkLabel.text = snsData[indexPath.row].address
+            cell.copyButton.isHidden = true
             
             cell.selectionStyle = .none
 

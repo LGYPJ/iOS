@@ -588,7 +588,7 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
                 cell.snsTypeLable.text = type
             } else { cell.snsTypeLable.text = "기타" }
             cell.snsLinkLabel.text = snsData[indexPath.row].address
-            cell.editButton.setImage(UIImage(named: "ProfileCopy"), for: .normal)
+            cell.editButton.isHidden = true
             
             cell.delegate = self
             cell.selectionStyle = .none
@@ -626,6 +626,10 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
 }
 
 extension OtherProfileVC: ButtonTappedDelegate {
+    func editButtonDidTap() {
+        //
+    }
+    
     func copyButtonDidTap() {
         //
     }

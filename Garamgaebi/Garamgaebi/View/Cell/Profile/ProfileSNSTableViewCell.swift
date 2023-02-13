@@ -11,6 +11,7 @@ import SnapKit
 import Then
 
 protocol ButtonTappedDelegate: class {
+    func editButtonDidTap()
     func copyButtonDidTap()
 }
 
@@ -40,6 +41,11 @@ class ProfileSNSTableViewCell: UITableViewCell {
     lazy var editButton = UIButton().then {
         $0.setImage(UIImage(named: "ProfileEdit"), for: .normal)
         
+        $0.addTarget(self, action: #selector(editButtonDidTap), for: .touchUpInside)
+    }
+    lazy var copyButton = UIButton().then {
+        $0.setImage(UIImage(named: "ProfileCopy"), for: .normal)
+        
         $0.addTarget(self, action: #selector(copyButtonDidTap), for: .touchUpInside)
     }
     
@@ -50,6 +56,7 @@ class ProfileSNSTableViewCell: UITableViewCell {
         self.contentView.addSubview(snsTypeLable)
         self.contentView.addSubview(snsLinkLabel)
         self.contentView.addSubview(editButton)
+        self.contentView.addSubview(copyButton)
       
         configureSubViewLayouts()
         
@@ -66,13 +73,22 @@ class ProfileSNSTableViewCell: UITableViewCell {
             $0.leading.equalTo(snsTypeLable.snp.trailing).offset(4)
 //            $0.trailing.equalTo(editButton.snp.leading).offset(-12)
         }
-        
+        copyButton.snp.makeConstraints {
+            $0.centerY.equalTo(snsLinkLabel)
+            $0.trailing.equalToSuperview().inset(12)
+            $0.height.width.equalTo(16)
+        }
         editButton.snp.makeConstraints {
             $0.centerY.equalTo(snsLinkLabel)
             $0.trailing.equalToSuperview().inset(12)
             $0.height.width.equalTo(16)
         }
        
+    }
+    
+    @objc private func editButtonDidTap() {
+        delegate?.editButtonDidTap()
+        
     }
     
     @objc private func copyButtonDidTap() {
