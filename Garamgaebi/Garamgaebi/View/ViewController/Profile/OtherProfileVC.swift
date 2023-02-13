@@ -582,7 +582,12 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
         
         if tableView == snsTableView {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileSNSTableViewCell.identifier, for: indexPath) as? ProfileSNSTableViewCell else { return UITableViewCell()}
-            cell.snsLabel.text = snsData[indexPath.row].address
+            
+            let type = snsData[indexPath.row].type
+            if type != nil {
+                cell.snsTypeLable.text = type
+            } else { cell.snsTypeLable.text = "기타" }
+            cell.snsLinkLabel.text = snsData[indexPath.row].address
             cell.editButton.setImage(UIImage(named: "ProfileCopy"), for: .normal)
             
             cell.delegate = self

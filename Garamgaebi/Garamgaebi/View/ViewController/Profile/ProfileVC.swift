@@ -456,7 +456,7 @@ class ProfileVC: UIViewController {
             guard let image = self.profileImageView.image else { return }
             
             // 값 넘기기
-            nextVC.nameTextField.text = nameString
+            nextVC.nickNameTextField.text = nameString
             nextVC.orgTextField.text = orgString
             nextVC.emailTextField.text = emailString
             nextVC.introduceTextField.text = introduceString
@@ -768,7 +768,12 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
 
         if tableView == snsTableView {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileSNSTableViewCell.identifier, for: indexPath) as? ProfileSNSTableViewCell else { return UITableViewCell()}
-            cell.snsLabel.text = snsData[indexPath.row].address
+            
+            let type = snsData[indexPath.row].type
+            if type != nil {
+                cell.snsTypeLable.text = type
+            } else { cell.snsTypeLable.text = "기타" }
+            cell.snsLinkLabel.text = snsData[indexPath.row].address
             
             cell.selectionStyle = .none
 

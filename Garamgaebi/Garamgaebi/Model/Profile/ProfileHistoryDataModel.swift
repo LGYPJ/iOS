@@ -17,6 +17,7 @@ struct SnsResponse: Decodable {
 struct SnsResult: Decodable {
     let snsIdx: Int
     let address: String
+    let type: String?
 }
 
 class SnsData {

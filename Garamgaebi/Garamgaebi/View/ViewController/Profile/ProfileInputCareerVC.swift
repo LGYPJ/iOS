@@ -106,7 +106,7 @@ class ProfileInputCareerVC: UIViewController {
     lazy var subtitleCompanyLabel: UILabel = {
         let label = UILabel()
         label.text = "회사"
-        label.textColor = .black.withAlphaComponent(0.8)
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
         return label
     }()
@@ -127,7 +127,7 @@ class ProfileInputCareerVC: UIViewController {
     lazy var subtitlePositionLabel : UILabel = {
         let label = UILabel()
         label.text = "직함"
-        label.textColor = .black.withAlphaComponent(0.8)
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
         
         return label
@@ -149,7 +149,7 @@ class ProfileInputCareerVC: UIViewController {
     lazy var subtitleWorkingDateLabel: UILabel = {
         let label = UILabel()
         label.text = "재직 기간"
-        label.textColor = .black.withAlphaComponent(0.8)
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
         return label
     }()
@@ -233,7 +233,7 @@ class ProfileInputCareerVC: UIViewController {
         
         addSubViews()
         configLayouts()
-        
+        configureGestureRecognizer()
         //        print(token) // 토큰 확인
     }
     
@@ -298,7 +298,7 @@ class ProfileInputCareerVC: UIViewController {
         
         // companyTextField
         companyTextField.snp.makeConstraints { make in
-            make.top.equalTo(subtitleCompanyLabel.snp.bottom).offset(4)
+            make.top.equalTo(subtitleCompanyLabel.snp.bottom).offset(8)
             make.height.equalTo(48)
             make.left.right.equalToSuperview().inset(16)
         }
@@ -311,7 +311,7 @@ class ProfileInputCareerVC: UIViewController {
         
         // positionTextField
         positionTextField.snp.makeConstraints { make in
-            make.top.equalTo(subtitlePositionLabel.snp.bottom).offset(4)
+            make.top.equalTo(subtitlePositionLabel.snp.bottom).offset(8)
             make.height.equalTo(48)
             make.left.right.equalTo(companyTextField)
         }
@@ -327,7 +327,7 @@ class ProfileInputCareerVC: UIViewController {
             make.centerX.equalToSuperview()
             make.width.equalTo(38)
             make.height.equalTo(48)
-            make.top.equalTo(subtitleWorkingDateLabel.snp.bottom).offset(4)
+            make.top.equalTo(subtitleWorkingDateLabel.snp.bottom).offset(8)
         }
         
         // startDateTextField
@@ -680,5 +680,19 @@ extension ProfileInputCareerVC: UIPickerViewDataSource, UIPickerViewDelegate {
         } else {
             return monthArray[row]
         }
+    }
+}
+extension ProfileInputCareerVC {
+    private func configureGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.isEnabled = true
+        tapGestureRecognizer.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc private func viewDidTap() {
+        self.view.endEditing(true)
     }
 }

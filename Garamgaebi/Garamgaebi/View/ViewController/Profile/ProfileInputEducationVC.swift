@@ -105,7 +105,7 @@ class ProfileInputEducationVC: UIViewController {
     lazy var subtitleInstitutionLabel: UILabel = {
         let label = UILabel()
         label.text = "교육 기관"
-        label.textColor = .black.withAlphaComponent(0.8)
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
         return label
     }()
@@ -126,7 +126,7 @@ class ProfileInputEducationVC: UIViewController {
     lazy var subtitleMajorLabel : UILabel = {
         let label = UILabel()
         label.text = "전공/과정"
-        label.textColor = .black.withAlphaComponent(0.8)
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
         
         return label
@@ -149,7 +149,7 @@ class ProfileInputEducationVC: UIViewController {
     lazy var subtitleLearningDateLabel: UILabel = {
         let label = UILabel()
         label.text = "교육 기간"
-        label.textColor = .black.withAlphaComponent(0.8)
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 16)
         return label
     }()
@@ -233,6 +233,7 @@ class ProfileInputEducationVC: UIViewController {
         
         addSubViews()
         configLayouts()
+        configureGestureRecognizer()
 
 //        print(token) // 토큰 확인
     }
@@ -298,7 +299,7 @@ class ProfileInputEducationVC: UIViewController {
 
         // companyTextField
         institutionTextField.snp.makeConstraints { make in
-            make.top.equalTo(subtitleInstitutionLabel.snp.bottom).offset(4)
+            make.top.equalTo(subtitleInstitutionLabel.snp.bottom).offset(8)
             make.height.equalTo(48)
             make.left.right.equalToSuperview().inset(16)
         }
@@ -311,7 +312,7 @@ class ProfileInputEducationVC: UIViewController {
 
         // positionTextField
         majorTextField.snp.makeConstraints { make in
-            make.top.equalTo(subtitleMajorLabel.snp.bottom).offset(4)
+            make.top.equalTo(subtitleMajorLabel.snp.bottom).offset(8)
             make.height.equalTo(48)
             make.left.right.equalTo(institutionTextField)
         }
@@ -327,7 +328,7 @@ class ProfileInputEducationVC: UIViewController {
             make.centerX.equalToSuperview()
             make.width.equalTo(38)
             make.height.equalTo(48)
-            make.top.equalTo(subtitleLearningDateLabel.snp.bottom).offset(4)
+            make.top.equalTo(subtitleLearningDateLabel.snp.bottom).offset(8)
         }
 
         // startDateTextField
@@ -681,5 +682,19 @@ extension ProfileInputEducationVC: UIPickerViewDataSource, UIPickerViewDelegate 
         } else {
             return monthArray[row]
         }
+    }
+}
+extension ProfileInputEducationVC {
+    private func configureGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.isEnabled = true
+        tapGestureRecognizer.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc private func viewDidTap() {
+        self.view.endEditing(true)
     }
 }

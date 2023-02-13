@@ -57,8 +57,9 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         textField.basicTextField()
         textField.placeholder = "표시할 이름을 입력해주세요 (예:블로그, 깃허브 등)"
         
-        textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+        textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(showBottomSheet), for: .editingDidBegin)
         
         return textField
@@ -79,9 +80,9 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         textField.basicTextField()
         textField.placeholder = "https://"
         
+        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
-        
         
         return textField
     }()
@@ -91,9 +92,50 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         
         button.basicButton()
         button.setTitle("저장하기", for: .normal)
+        button.backgroundColor = .mainGray
+        button.isEnabled = false
         
         button.addTarget(self, action: #selector(saveButtonDidTap), for: .touchUpInside)
         return button
+    }()
+    
+    // 편집용
+    lazy var editDeleteButton: UIButton = {
+        let button = UIButton()
+        
+        button.setTitle("삭제하기", for: .normal)
+        button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
+        button.setTitleColor(.mainBlue, for: .normal)
+        button.tintColor = .mainBlue
+        
+        button.layer.borderColor = UIColor.mainBlue.cgColor
+        button.layer.borderWidth = 1
+        button.layer.cornerRadius = 12
+        
+        return button
+    }()
+    lazy var editSaveButton: UIButton = {
+        let button = UIButton()
+        
+        button.basicButton()
+        button.setTitle("저장하기", for: .normal)
+        
+        //        button.addTarget(self, action: #selector(saveButtonDidTap), for: .touchUpInside)
+        return button
+    }()
+    lazy var editButtonStackView: UIStackView = {
+        let stackView = UIStackView()
+        [editDeleteButton, editSaveButton].forEach {
+            stackView.addArrangedSubview($0)
+        }
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
+        stackView.distribution = .fillEqually
+        stackView.spacing = 6
+        
+        stackView.isHidden = true
+        
+        return stackView
     }()
     
     
@@ -106,7 +148,10 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         
         addSubViews()
         configLayouts()
-
+        configureGestureRecognizer()
+        
+        // SNS 링크 글자수 제한 (140자)
+        NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: UITextField.textDidChangeNotification, object: linkTextField)
     }
     
     // MARK: - Functions
@@ -121,6 +166,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         view.addSubview(linkTextField)
         view.addSubview(typeTextField)
         view.addSubview(saveUserProfileButton)
+        view.addSubview(editButtonStackView)
         
         
         /* Labels */
@@ -158,7 +204,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         
         // typeTextField
         typeTextField.snp.makeConstraints { make in
-            make.top.equalTo(subtitleTypeLabel.snp.bottom).offset(4)
+            make.top.equalTo(subtitleTypeLabel.snp.bottom).offset(8)
             make.height.equalTo(48)
             make.left.right.equalToSuperview().inset(16)
         }
@@ -171,7 +217,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         
         // linkTextField
         linkTextField.snp.makeConstraints { make in
-            make.top.equalTo(subtitleLinkLabel.snp.bottom).offset(4)
+            make.top.equalTo(subtitleLinkLabel.snp.bottom).offset(8)
             make.height.equalTo(48)
             make.left.right.equalTo(typeTextField)
         }
@@ -182,6 +228,13 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
             make.bottom.equalToSuperview().inset(48)
+        }
+        
+        // editButtonStackView
+        editButtonStackView.snp.makeConstraints { make in
+            make.left.right.equalTo(saveUserProfileButton)
+            make.bottom.equalTo(saveUserProfileButton.snp.top).offset(-16)
+            make.height.equalTo(48)
         }
     }
     
@@ -202,16 +255,38 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         bottomSheetVC.T3 = "깃허브"
         bottomSheetVC.T4 = "직접 입력"
         self.present(bottomSheetVC, animated: false, completion: nil)
+        self.view.endEditing(true)
     }
     
     @objc private func saveButtonDidTap(_ sender: UIButton) {
+        guard let type = typeTextField.text else { return }
         guard let address = linkTextField.text else { return }
-        postSNS(memberIdx: memberIdx, address: address) { result in
+        postSNS(memberIdx: memberIdx, type: type, address: address ) { result in
             if result {
                 self.navigationController?.popViewController(animated: true)
             }
         }
         
+    }
+    
+    @objc func allTextFieldFilledIn() {
+        
+        /* 모든 textField가 채워졌으면 SNS 저장 버튼 활성화 */
+        if self.typeTextField.text?.count != 0,
+           self.linkTextField.text?.count != 0 {
+
+            // 저장버튼 활성화
+            UIView.animate(withDuration: 0.33) { [weak self] in
+                self?.saveUserProfileButton.backgroundColor = .mainBlue
+            }
+            saveUserProfileButton.isEnabled = true
+            
+        } else { // 저장버튼 비활성화
+            saveUserProfileButton.isEnabled = false
+            UIView.animate(withDuration: 0.33) { [weak self] in
+                self?.saveUserProfileButton.backgroundColor = .mainGray
+            }
+        }
     }
     
     @objc func textFieldActivated(_ sender: UITextField) {
@@ -224,13 +299,33 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         sender.layer.borderWidth = 1
     }
     
+    @objc private func textDidChange(_ notification: Notification) {
+            if let textField = notification.object as? UITextField {
+                let maxLength = 140
+                if let text = textField.text {
+                    
+                    if text.count > maxLength {
+                        // 140글자 넘어가면 자동으로 키보드 내려감
+                        textField.resignFirstResponder()
+                    }
+                    
+                    // 초과되는 텍스트 제거
+                    if text.count >= maxLength {
+                        let index = text.index(text.startIndex, offsetBy: maxLength)
+                        let newString = text[text.startIndex..<index]
+                        textField.text = String(newString)
+                    }
+                }
+            }
+        }
+    
     // 뒤로가기 버튼 did tap
     @objc private func didTapBackBarButton() {
         self.navigationController?.popViewController(animated: true)
     }
     
     // MARK: - [POST] SNS 추가
-    func postSNS(memberIdx: Int, address: String, completion: @escaping ((Bool) -> Void)) {
+    func postSNS(memberIdx: Int, type: String, address: String, completion: @escaping ((Bool) -> Void)) {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/sns"
@@ -243,6 +338,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         let bodyData: Parameters = [
             "memberIdx": memberIdx,
             "address": address,
+            "type": type
         ]
         
         // httpBody 에 parameters 추가
@@ -267,5 +363,20 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
                 print("실패(AF-SNS추가): \(error.localizedDescription)")
             }
         }
+    }
+}
+// MARK: - Extension
+extension ProfileInputSNSVC {
+    private func configureGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.isEnabled = true
+        tapGestureRecognizer.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc private func viewDidTap() {
+        self.view.endEditing(true)
     }
 }

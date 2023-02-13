@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
-class ProfileWithdrawalVC: UIViewController {
+class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
     
     // MARK: - Subviews
     
@@ -56,10 +56,11 @@ class ProfileWithdrawalVC: UIViewController {
     }
     
     let emailTextField = UITextField().then {
+        guard let uniEmail = UserDefaults.standard.string(forKey: "uniEmail") else { return }
         $0.basicTextField()
         $0.backgroundColor = UIColor(hex: 0xF5F5F5)
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        $0.text = "uniEmail@gachon.ac.com"
+        $0.text = uniEmail
         $0.textColor = UIColor(hex: 0xAEAEAE)
         $0.isUserInteractionEnabled = false // uniEmail 수정 불가
         $0.layer.borderWidth = 1
@@ -71,26 +72,34 @@ class ProfileWithdrawalVC: UIViewController {
         $0.text = "탈퇴 사유"
     }
     
-    let reasonTypeTextField = UITextField().then {
+    lazy var reasonTypeTextField = UITextField().then {
         $0.basicTextField()
-        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.placeholder = "탈퇴 사유를 선택해주세요"
-    }
-    let typeSelectBtn = UIButton().then {
-        $0.setImage(UIImage(systemName: "chevron.down"), for: .normal)
-        $0.tintColor = .black
+        
+        let typeSelectBtn = UIButton()
+        typeSelectBtn.setImage(UIImage(systemName: "chevron.down"), for: .normal)
+        typeSelectBtn.tintColor = .mainBlack
+        
+        $0.addSubview(typeSelectBtn)
+        typeSelectBtn.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(12)
+            $0.width.height.equalTo(35)
+        }
+
+        $0.addTarget(self, action: #selector(showBottomSheet), for: .editingDidBegin)
     }
     
     let textViewPlaceHolder = "내용을 적어주세요"
     lazy var contentTextField = UITextView().then {
         $0.layer.borderWidth = 1
-        $0.layer.borderColor = UIColor.mainGray.cgColor // UIColor.lightGray.withAlphaComponent(0.7).cgColor
+        $0.layer.borderColor = UIColor.mainGray.cgColor
         $0.layer.cornerRadius = 12
-        // $0.textContainerInset = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 16.0, right: 12.0)
-        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14) // .systemFont(ofSize: 18)
+         $0.textContainerInset = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 16.0, right: 12.0)
+        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.text = textViewPlaceHolder
         $0.textColor = .mainGray
-        //$0.delegate = self // <-
+        $0.delegate = self // <-
     }
     
     lazy var agreeCheckBtn = UIButton().then {
@@ -122,6 +131,7 @@ class ProfileWithdrawalVC: UIViewController {
         super.viewDidLoad()
 
         configureLayouts()
+        configureGestureRecognizer()
     }
     
     
@@ -131,7 +141,7 @@ class ProfileWithdrawalVC: UIViewController {
         view.backgroundColor = .white
         
         // addSubview
-        [headerView, noticeTitleLabel, noticeLabel, emailTitleLabel, emailTextField, reasonTitleLabel, reasonTypeTextField, typeSelectBtn, contentTextField, agreeCheckBtn, agreemsgLabel, sendBtn]
+        [headerView, noticeTitleLabel, noticeLabel, emailTitleLabel, emailTextField, reasonTitleLabel, reasonTypeTextField, contentTextField, agreeCheckBtn, agreemsgLabel, sendBtn]
             .forEach {view.addSubview($0)}
         
         [titleLabel, backButton]
@@ -187,15 +197,10 @@ class ProfileWithdrawalVC: UIViewController {
             $0.height.equalTo(48)
         }
         
-        typeSelectBtn.snp.makeConstraints { /// 유형 선택 화살표
-            $0.centerY.equalTo(reasonTypeTextField)
-            $0.trailing.equalTo(reasonTypeTextField.snp.trailing).inset(7)
-        }
-        
         contentTextField.snp.makeConstraints { /// 내용 입력
             $0.top.equalTo(reasonTypeTextField.snp.bottom).offset(16)
             $0.leading.trailing.equalTo(emailTextField)
-            $0.height.equalTo(160)
+            $0.height.equalTo(152)
         }
         
         agreeCheckBtn.snp.makeConstraints { /// 회원탈퇴 내용 숙지
@@ -213,6 +218,26 @@ class ProfileWithdrawalVC: UIViewController {
         }
         sendBtn.addTarget(self, action: #selector(withdrawalButtonDidTap), for: .touchUpInside)
         
+    }
+    
+    func typeSelect(type: String) {
+        self.reasonTypeTextField.text = type
+    }
+    
+    // 바텀시트 나타내기
+    @objc private func showBottomSheet() {
+        let bottomSheetVC = BottomSheetVC()
+        bottomSheetVC.modalPresentationStyle = .overFullScreen
+        bottomSheetVC.delegate = self
+        
+        bottomSheetVC.titleText = "탈퇴 사유를 선택해주세요"
+        bottomSheetVC.T1 = "이용이 불편해서"
+        bottomSheetVC.T2 = "사용 빈도가 낮아서"
+        bottomSheetVC.T3 = "콘텐츠 내용이 부족해서"
+        bottomSheetVC.T4 = "기타"
+        
+        self.present(bottomSheetVC, animated: false, completion: nil)
+        self.view.endEditing(false)
     }
     
     @objc private func didTapBackBarButton() {
@@ -235,6 +260,46 @@ class ProfileWithdrawalVC: UIViewController {
             agreemsgLabel.textColor = UIColor(hex: 0x8A8A8A)
         }
     }
-    
+}
+// MARK: - Extension
+extension ProfileWithdrawalVC: UITextViewDelegate {
+    // TextView Place Holder
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == textViewPlaceHolder {
+            textView.text = nil
+            textView.textColor = .mainBlack
+        }
+        textView.layer.borderColor = UIColor.mainBlack.cgColor
+    }
 
+    // TextView Place Holder
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if contentTextField.text.isEmpty {
+            contentTextField.text = textViewPlaceHolder
+            contentTextField.textColor = .mainGray
+        }
+        contentTextField.layer.borderColor = UIColor.mainGray.cgColor
+    }
+
+    // TextView 글자수 제한
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        guard let str = textView.text else { return true }
+        let newLenght = str.count + text.count - range.length
+        
+        return newLenght <= 100
+    }
+}
+extension ProfileWithdrawalVC {
+    private func configureGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.isEnabled = true
+        tapGestureRecognizer.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc private func viewDidTap() {
+        self.view.endEditing(true)
+    }
 }
