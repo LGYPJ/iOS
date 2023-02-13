@@ -17,6 +17,23 @@ class InputCareerVC: UIViewController {
     private var currentYearMonth: Int = 0
     private var yearArray: [String] = []
     private var monthArray = (1...12).map { String(format:"%02d", $0) }
+    private let maxTextCount = 22
+    private var companyTextCount = 0 {
+        didSet {
+            if companyTextCount > maxTextCount {
+                companyTextCount -= 1
+            }
+            companyTextCountLabel.text = "\(companyTextCount)/\(maxTextCount)"
+        }
+    }
+    private var positionTextCount = 0 {
+        didSet{
+            if positionTextCount > maxTextCount {
+                positionTextCount -= 1
+            }
+            positionTextCountLabel.text = "\(positionTextCount)/\(maxTextCount)"
+        }
+    }
     private var startYearValue =  "0"
     private var startMonthValue = "0"
     private var endYearValue =  "0"
@@ -105,6 +122,14 @@ class InputCareerVC: UIViewController {
         return label
     }()
     
+    lazy var companyTextCountLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor(hex: 0xAEAEAE)
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        label.text = "\(companyTextCount)/\(maxTextCount)"
+        return label
+    }()
+
     lazy var companyTextField: UITextField = {
         let textField = UITextField()
         
@@ -120,6 +145,7 @@ class InputCareerVC: UIViewController {
         textField.layer.borderColor = UIColor.mainGray.cgColor
         textField.layer.borderWidth = 1
         
+        textField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
         textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
@@ -132,6 +158,14 @@ class InputCareerVC: UIViewController {
         label.text = "직함"
         label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 18)
+        return label
+    }()
+    
+    lazy var positionTextCountLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor(hex: 0xAEAEAE)
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        label.text = "\(positionTextCount)/\(maxTextCount)"
         return label
     }()
     
@@ -150,6 +184,7 @@ class InputCareerVC: UIViewController {
         textField.layer.borderColor = UIColor.mainGray.cgColor
         textField.layer.borderWidth = 1
         
+        textField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
         textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
@@ -289,8 +324,6 @@ class InputCareerVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        companyTextField.delegate = self
-        positionTextField.delegate = self
         addSubViews()
         configLayouts()
         configureGestureRecognizer()
@@ -300,6 +333,7 @@ class InputCareerVC: UIViewController {
         super.viewWillAppear(animated)
         setCurrentYear()
         setKeyboardObserver()
+        setObserver()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -322,6 +356,8 @@ class InputCareerVC: UIViewController {
         contentView.addSubview(checkIsWorkingButton)
         contentView.addSubview(saveUserProfileButton)
         contentView.addSubview(inputEducationButton)
+        contentView.addSubview(companyTextCountLabel)
+        contentView.addSubview(positionTextCountLabel)
         
         /* Labels */
         [titleLabel,descriptionLabel,subtitleCompanyLabel,subtitlePositionLabel,subtitleWorkingDateLabel,subDescriptionLabel].forEach {
@@ -373,6 +409,12 @@ class InputCareerVC: UIViewController {
             make.top.equalTo(descriptionLabel.snp.bottom).offset(28)
         }
         
+        // companyTextCountLabel
+        companyTextCountLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(subtitleCompanyLabel.snp.centerY)
+            make.right.equalToSuperview().inset(16)
+        }
+        
         // companyTextField
         companyTextField.snp.makeConstraints { make in
             make.top.equalTo(subtitleCompanyLabel.snp.bottom).offset(4)
@@ -384,6 +426,12 @@ class InputCareerVC: UIViewController {
         subtitlePositionLabel.snp.makeConstraints { make in
             make.left.equalTo(titleLabel.snp.left)
             make.top.equalTo(companyTextField.snp.bottom).offset(28)
+        }
+        
+        // positionTextCountLabel
+        positionTextCountLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(subtitlePositionLabel.snp.centerY)
+            make.right.equalToSuperview().inset(16)
         }
         
         // positionTextField
@@ -649,6 +697,20 @@ class InputCareerVC: UIViewController {
             }
         }
     }
+    
+    @objc
+    private func textDidChange(_ sender: UITextField) {
+        switch sender {
+        case companyTextField:
+            companyTextCount = companyTextField.text?.count ?? 0
+            NotificationCenter.default.post(name: Notification.Name("textDidChange"), object: sender)
+        case positionTextField:
+            positionTextCount = positionTextField.text?.count ?? 0
+            NotificationCenter.default.post(name: Notification.Name("textDidChange"), object: sender)
+        default:
+            print(">>>ERROR: typeText InputCareerVC")
+        }
+    }
 }
 
 extension InputCareerVC: UIPickerViewDataSource, UIPickerViewDelegate {
@@ -766,21 +828,26 @@ extension InputCareerVC {
     }
 }
 
-extension InputCareerVC: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        guard let text = textField.text else {return false}
-        var maxLength = Int()
-        switch(textField) {
-        case companyTextField, positionTextField:
-            maxLength = 20
-        default:
-            return false
+extension InputCareerVC {
+    func setObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(validTextCount(_:)), name: Notification.Name("textDidChange"), object: nil)
+    }
+    
+    @objc private func validTextCount(_ notification: Notification) {
+        if let textField = notification.object as? UITextField {
+            if let text = textField.text {
+                if text.count > maxTextCount {
+                    // 22글자 넘어가면 자동으로 키보드 내려감
+                    textField.resignFirstResponder()
+                }
+                // 초과되는 텍스트 제거
+                if text.count >= maxTextCount {
+                    let index = text.index(text.startIndex, offsetBy: maxTextCount)
+                    let newString = text[text.startIndex..<index]
+                    textField.text = String(newString)
+                }
+            }
         }
-        // 최대 글자수 이상을 입력한 이후로 입력 불가능
-        if text.count >= maxLength && range.length == 0 && range.location >= maxLength {
-            return false
-        }
-        return true
     }
 }
 

@@ -17,6 +17,23 @@ class InputEducationVC: UIViewController {
     private var currentYearMonth: Int = 0
     private var yearArray: [String] = []
     private var monthArray = (1...12).map { String(format:"%02d", $0) }
+    private let maxTextCount = 22
+    private var institutionTextCount = 0 {
+        didSet {
+            if institutionTextCount > maxTextCount {
+                institutionTextCount -= 1
+            }
+            institutionTextCountLabel.text = "\(institutionTextCount)/\(maxTextCount)"
+        }
+    }
+    private var majorTextCount = 0 {
+        didSet{
+            if majorTextCount > maxTextCount {
+                majorTextCount -= 1
+            }
+            majorTextCountLabel.text = "\(majorTextCount)/\(maxTextCount)"
+        }
+    }
     private var startYearValue =  "0"
     private var startMonthValue = "0"
     private var endYearValue =  "0"
@@ -105,6 +122,14 @@ class InputEducationVC: UIViewController {
         return label
     }()
     
+    lazy var institutionTextCountLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor(hex: 0xAEAEAE)
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        label.text = "\(institutionTextCount)/\(maxTextCount)"
+        return label
+    }()
+    
     lazy var institutionTextField: UITextField = {
         let textField = UITextField()
         
@@ -120,6 +145,7 @@ class InputEducationVC: UIViewController {
         textField.layer.borderColor = UIColor.mainGray.cgColor
         textField.layer.borderWidth = 1
         
+        textField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
         textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
@@ -132,6 +158,14 @@ class InputEducationVC: UIViewController {
         label.text = "전공/과정"
         label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 18)
+        return label
+    }()
+    
+    lazy var majorTextCountLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor(hex: 0xAEAEAE)
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        label.text = "\(majorTextCount)/\(maxTextCount)"
         return label
     }()
     
@@ -150,6 +184,7 @@ class InputEducationVC: UIViewController {
         textField.layer.borderColor = UIColor.mainGray.cgColor
         textField.layer.borderWidth = 1
         
+        textField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
         textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
@@ -289,8 +324,6 @@ class InputEducationVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        institutionTextField.delegate = self
-        majorTextField.delegate = self
         addSubViews()
         configLayouts()
         configureGestureRecognizer()
@@ -300,6 +333,7 @@ class InputEducationVC: UIViewController {
         super.viewWillAppear(animated)
         setCurrentYear()
         setKeyboardObserver()
+        setObserver()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -322,6 +356,8 @@ class InputEducationVC: UIViewController {
         contentView.addSubview(checkIsLearningButton)
         contentView.addSubview(saveUserProfileButton)
         contentView.addSubview(inputCareerButton)
+        contentView.addSubview(institutionTextCountLabel)
+        contentView.addSubview(majorTextCountLabel)
         
         /* Labels */
         [titleLabel,descriptionLabel,subtitleInstitutionLabel,subtitleMajorLabel, subtitleLearningDateLabel,subDescriptionLabel].forEach {
@@ -373,6 +409,12 @@ class InputEducationVC: UIViewController {
             make.top.equalTo(descriptionLabel.snp.bottom).offset(28)
         }
         
+        // institutionTextCountLabel
+        institutionTextCountLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(subtitleInstitutionLabel.snp.centerY)
+            make.right.equalToSuperview().inset(16)
+        }
+        
         // institutionTextField
         institutionTextField.snp.makeConstraints { make in
             make.top.equalTo(subtitleInstitutionLabel.snp.bottom).offset(4)
@@ -384,6 +426,12 @@ class InputEducationVC: UIViewController {
         subtitleMajorLabel.snp.makeConstraints { make in
             make.left.equalTo(titleLabel.snp.left)
             make.top.equalTo(institutionTextField.snp.bottom).offset(28)
+        }
+        
+        // majorTextCountLabel
+        majorTextCountLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(subtitleMajorLabel.snp.centerY)
+            make.right.equalToSuperview().inset(16)
         }
         
         // majorTextField
@@ -649,6 +697,20 @@ class InputEducationVC: UIViewController {
             }
         }
     }
+    
+    @objc
+    private func textDidChange(_ sender: UITextField) {
+        switch sender {
+        case institutionTextField:
+            institutionTextCount = institutionTextField.text?.count ?? 0
+            NotificationCenter.default.post(name: Notification.Name("textDidChange"), object: sender)
+        case majorTextField:
+            majorTextCount = majorTextField.text?.count ?? 0
+            NotificationCenter.default.post(name: Notification.Name("textDidChange"), object: sender)
+        default:
+            print(">>>ERROR: typeText InputCareerVC")
+        }
+    }
 }
 
 extension InputEducationVC: UIPickerViewDataSource, UIPickerViewDelegate {
@@ -766,21 +828,26 @@ extension InputEducationVC {
     }
 }
 
-extension InputEducationVC: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        guard let text = textField.text else {return false}
-        var maxLength = Int()
-        switch(textField) {
-        case institutionTextField, majorTextField:
-            maxLength = 20
-        default:
-            return false
+extension InputEducationVC {
+    func setObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(validTextCount(_:)), name: Notification.Name("textDidChange"), object: nil)
+    }
+    
+    @objc private func validTextCount(_ notification: Notification) {
+        if let textField = notification.object as? UITextField {
+            if let text = textField.text {
+                if text.count > maxTextCount {
+                    // maxTextCount 넘어가면 자동으로 키보드 내려감
+                    textField.resignFirstResponder()
+                }
+                // 초과되는 텍스트 제거
+                if text.count >= maxTextCount {
+                    let index = text.index(text.startIndex, offsetBy: maxTextCount)
+                    let newString = text[text.startIndex..<index]
+                    textField.text = String(newString)
+                }
+            }
         }
-        // 최대 글자수 이상을 입력한 이후로 입력 불가능
-        if text.count >= maxLength && range.length == 0 && range.location >= maxLength {
-            return false
-        }
-        return true
     }
 }
 
