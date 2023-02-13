@@ -99,6 +99,45 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         return button
     }()
     
+    // 편집용
+    lazy var editDeleteButton: UIButton = {
+        let button = UIButton()
+        
+        button.setTitle("삭제하기", for: .normal)
+        button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
+        button.setTitleColor(.mainBlue, for: .normal)
+        button.tintColor = .mainBlue
+        
+        button.layer.borderColor = UIColor.mainBlue.cgColor
+        button.layer.borderWidth = 1
+        button.layer.cornerRadius = 12
+        
+        return button
+    }()
+    lazy var editSaveButton: UIButton = {
+        let button = UIButton()
+        
+        button.basicButton()
+        button.setTitle("저장하기", for: .normal)
+        
+        //        button.addTarget(self, action: #selector(saveButtonDidTap), for: .touchUpInside)
+        return button
+    }()
+    lazy var editButtonStackView: UIStackView = {
+        let stackView = UIStackView()
+        [editDeleteButton, editSaveButton].forEach {
+            stackView.addArrangedSubview($0)
+        }
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
+        stackView.distribution = .fillEqually
+        stackView.spacing = 6
+        
+        stackView.isHidden = true
+        
+        return stackView
+    }()
+    
     
     // MARK: Life Cycle
     override func viewDidLoad() {
@@ -127,6 +166,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         view.addSubview(linkTextField)
         view.addSubview(typeTextField)
         view.addSubview(saveUserProfileButton)
+        view.addSubview(editButtonStackView)
         
         
         /* Labels */
@@ -188,6 +228,13 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
             make.bottom.equalToSuperview().inset(48)
+        }
+        
+        // editButtonStackView
+        editButtonStackView.snp.makeConstraints { make in
+            make.left.right.equalTo(saveUserProfileButton)
+            make.bottom.equalTo(saveUserProfileButton.snp.top).offset(-16)
+            make.height.equalTo(48)
         }
     }
     
