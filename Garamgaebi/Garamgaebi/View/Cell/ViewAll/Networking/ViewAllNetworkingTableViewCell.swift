@@ -206,12 +206,12 @@ class ViewAllNetworkingTableViewCell: UITableViewCell {
         dateInfoLabel.text = dateResult
         
         switch item.isOpen {
-        case "BEFORE_OPEN":
+        case "OPEN":
             contentView.isUserInteractionEnabled = true
             var dDayCount: Int = 0
             dDayCount = (Calendar.current.dateComponents([.day], from: date ?? Date(), to: Date()).day ?? 0) - 1
             stateInfoLabel.text = String("D\(dDayCount)")
-        case "OPEN":
+        case "BEFORE_OPEN":
             contentView.isUserInteractionEnabled = false
             stateInfoLabel.text = "오픈예정"
         default:

@@ -11,7 +11,6 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
 
     static let identifier = "HomeEventCollectionViewCell"
     
-    
     // MARK: - Subviews
     
     lazy var statusInfoLabel: UIButton = {
@@ -86,7 +85,6 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    
     // MARK: - Life Cycles
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -98,12 +96,9 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
         dDayInfoLabel.isHidden = false
     }
     
-
     override func layoutSubviews() {
         super.layoutSubviews()
         contentView.layer.cornerRadius = 12
-//        contentView.backgroundColor = UIColor(hex: 0x356EFF, alpha: 0.8)
-        
         configAddSubView()
         configSubViewLayouts()
     }
@@ -162,8 +157,16 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    
     public func configureSeminarInfo(_ item: HomeSeminarInfo) {
+        titleInfoLabel.text = item.title
+        locationInfoLabel.text = item.location
+        // item.date -> (String -> Date)
+        let date = item.date.toDate()
+        let dateformatter = DateFormatter()
+        // (Date -> String)
+        dateformatter.dateFormat = "yyyy-MM-dd"
+        let dateResult = dateformatter.string(from: date ?? Date())
+        dateInfoLabel.text = dateResult
         
         switch item.status {
         case "THIS_MONTH":
@@ -191,8 +194,7 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
         default:
             print("fatal error in (item.state) in 'HomeEventCollectionViewCell'"  )
         }
-        
-        
+
         switch item.payment {
         case "FREE":
             paymentInfoLabel.setTitle("무료", for: .normal)
@@ -204,13 +206,21 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
             paymentInfoLabel.setTitle("ERROR", for: .normal)
         }
         
-        
+        switch item.isOpen {
+        case "OPEN":
+            var dDayCount: Int = 0
+            dDayCount = (Calendar.current.dateComponents([.day], from: date ?? Date(), to: Date()).day ?? 0) - 1
+            dDayInfoLabel.text = String("D\(dDayCount)")
+        case "BEFORE_OPEN":
+            dDayInfoLabel.text = "오픈예정"
+        default:
+            print(">>>ERROR: isOpen value - \(self)")
+        }
+    }
+
+    public func configureNetworkingInfo(_ item: HomeNetworkingInfo) {
         titleInfoLabel.text = item.title
-        
-        
         locationInfoLabel.text = item.location
-        
-        
         // item.date -> (String -> Date)
         let date = item.date.toDate()
         let dateformatter = DateFormatter()
@@ -218,16 +228,6 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
         dateformatter.dateFormat = "yyyy-MM-dd"
         let dateResult = dateformatter.string(from: date ?? Date())
         dateInfoLabel.text = dateResult
-        
-        
-        var dDayCount: Int = 0
-        dDayCount = (Calendar.current.dateComponents([.day], from: date ?? Date(), to: Date()).day ?? 0) - 1
-        dDayInfoLabel.text = String("D\(dDayCount)")
-    }
-    
-    
- 
-    public func configureNetworkingInfo(_ item: HomeNetworkingInfo) {
         
         switch item.status {
         case "THIS_MONTH":
@@ -256,7 +256,6 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
             print("fatal error in (item.state) in 'HomeEventCollectionViewCell'"  )
         }
         
-        
         switch item.payment {
         case "FREE":
             paymentInfoLabel.setTitle("무료", for: .normal)
@@ -268,25 +267,16 @@ class HomeEventCollectionViewCell: UICollectionViewCell {
             paymentInfoLabel.setTitle("ERROR", for: .normal)
         }
         
-        
-        titleInfoLabel.text = item.title
-        
-        
-        locationInfoLabel.text = item.location
-        
-        
-        // item.date -> (String -> Date)
-        let date = item.date.toDate()
-        let dateformatter = DateFormatter()
-        // (Date -> String)
-        dateformatter.dateFormat = "yyyy-MM-dd"
-        let dateResult = dateformatter.string(from: date ?? Date())
-        dateInfoLabel.text = dateResult
-        
-        
-        var dDayCount: Int = 0
-        dDayCount = (Calendar.current.dateComponents([.day], from: date ?? Date(), to: Date()).day ?? 0) - 1
-        dDayInfoLabel.text = String("D\(dDayCount)")
+        switch item.isOpen {
+        case "OPEN":
+            var dDayCount: Int = 0
+            dDayCount = (Calendar.current.dateComponents([.day], from: date ?? Date(), to: Date()).day ?? 0) - 1
+            dDayInfoLabel.text = String("D\(dDayCount)")
+        case "BEFORE_OPEN":
+            dDayInfoLabel.text = "오픈예정"
+        default:
+            print(">>>ERROR: isOpen value - \(self)")
+        }
     }
     
 }

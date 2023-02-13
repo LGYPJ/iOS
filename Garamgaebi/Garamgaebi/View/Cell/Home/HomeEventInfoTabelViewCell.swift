@@ -417,13 +417,16 @@ extension HomeEventInfoTableViewCell: UICollectionViewDataSource, UICollectionVi
         
         switch collectionView.tag {
         case 0:
-            NotificationCenter.default.post(name: Notification.Name("pushSeminarDetailVC"), object: MyEventToDetailInfo(programIdx: seminarList[indexPath.row].programIdx, type: seminarList[indexPath.row].type))
+            if seminarList[indexPath.row].isOpen == "OPEN" {
+                NotificationCenter.default.post(name: Notification.Name("pushSeminarDetailVC"), object: MyEventToDetailInfo(programIdx: seminarList[indexPath.row].programIdx, type: seminarList[indexPath.row].type))
+            }
         case 1:
-            NotificationCenter.default.post(name: Notification.Name("pushNetworkingDetailVC"), object: MyEventToDetailInfo(programIdx: networkingList[indexPath.row].programIdx, type: networkingList[indexPath.row].type))
+            if networkingList[indexPath.row].isOpen == "OPEN" {
+                NotificationCenter.default.post(name: Notification.Name("pushNetworkingDetailVC"), object: MyEventToDetailInfo(programIdx: networkingList[indexPath.row].programIdx, type: networkingList[indexPath.row].type))
+            }
         default:
             print(">>>error: HomeEventInfoTableViewCell didSelectRowAt")
         }
-        
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {

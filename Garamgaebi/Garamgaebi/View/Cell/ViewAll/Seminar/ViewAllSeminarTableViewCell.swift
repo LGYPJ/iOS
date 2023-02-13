@@ -206,13 +206,11 @@ class ViewAllSeminarTableViewCell: UITableViewCell {
         dateInfoLabel.text = dateResult
         
         switch item.isOpen {
-        case "BEFORE_OPEN":
-            contentView.isUserInteractionEnabled = true
+        case "OPEN":
             var dDayCount: Int = 0
             dDayCount = (Calendar.current.dateComponents([.day], from: date ?? Date(), to: Date()).day ?? 0) - 1
             stateInfoLabel.text = String("D\(dDayCount)")
-        case "OPEN":
-            contentView.isUserInteractionEnabled = false
+        case "BEFORE_OPEN":
             stateInfoLabel.text = "오픈예정"
         default:
             print(">>>ERROR: 프로그램 오픈 여부 - \(self)")

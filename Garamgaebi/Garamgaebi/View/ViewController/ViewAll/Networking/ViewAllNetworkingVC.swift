@@ -220,7 +220,7 @@ extension ViewAllNetworkingVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         if indexPath.section == 1,
-           dataList2[indexPath.row].isOpen == "OPEN" {
+           dataList2[indexPath.row].isOpen == "BEFORE_OPEN" {
             return nil
         }
         return indexPath
