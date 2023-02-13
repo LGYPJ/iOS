@@ -40,7 +40,7 @@ struct CareerResult: Decodable {
     let position: String
     let isWorking: String
     let startDate: String // 2023-02-04T01:04:23.436Z
-    let endDate: String
+    let endDate: String?
 }
 
 class CareerData {
@@ -63,7 +63,7 @@ struct EducationResult: Decodable {
     let major: String
     let isLearning: String
     let startDate: String
-    let endDate: String
+    let endDate: String?
 }
 
 class EducationData {

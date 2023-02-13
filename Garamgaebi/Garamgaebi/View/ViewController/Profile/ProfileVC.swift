@@ -784,10 +784,24 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileHistoryTableViewCell.identifier, for: indexPath) as? ProfileHistoryTableViewCell else {return UITableViewCell()}
             
             let row = careerData[indexPath.row]
+            var endDate = ""
+//            if let endDate = row.endDate {
+//                cell.periodLabel.text = "\(row.startDate) ~ \(endDate)"
+//            } else {
+////                if (row.isWorking == "TRUE") {
+////                    cell.periodLabel.text = "\(row.startDate) ~ 현재"
+////                }
+//                cell.periodLabel.text = "\(row.startDate) ~ 현재"
+//            }
+            if row.isWorking == "TRUE" { // endDate가 nil이 옴
+                endDate = "현재"
+            } else {
+                endDate = row.endDate ?? ""
+            }
             
+            cell.periodLabel.text = "\(row.startDate) ~ \(endDate)"
             cell.companyLabel.text = row.company
             cell.positionLabel.text = row.position
-            cell.periodLabel.text = "\(row.startDate) ~ \(row.endDate)"
             
             cell.selectionStyle = .none
 
@@ -797,10 +811,17 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileHistoryTableViewCell.identifier, for: indexPath) as? ProfileHistoryTableViewCell else {return UITableViewCell()}
             
             let row = eduData[indexPath.row]
+            var endDate = ""
+            
+            if row.isLearning == "TRUE" { // endDate가 nil이 옴
+                endDate = "현재"
+            } else {
+                endDate = row.endDate ?? ""
+            }
             
             cell.companyLabel.text = row.institution
             cell.positionLabel.text = row.major
-            cell.periodLabel.text = "\(row.startDate) ~ \(row.endDate)"
+            cell.periodLabel.text = "\(row.startDate) ~ \(endDate)"
             
             cell.selectionStyle = .none
             return cell

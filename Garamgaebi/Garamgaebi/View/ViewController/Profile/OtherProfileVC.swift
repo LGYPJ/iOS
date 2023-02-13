@@ -598,10 +598,17 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileHistoryTableViewCell.identifier, for: indexPath) as? ProfileHistoryTableViewCell else {return UITableViewCell()}
             
             let row = careerData[indexPath.row]
+            var endDate = ""
+            
+            if row.isWorking == "TRUE" { // endDate가 nil이 옴
+                endDate = "현재"
+            } else {
+                endDate = row.endDate ?? ""
+            }
             
             cell.companyLabel.text = row.company
             cell.positionLabel.text = row.position
-            cell.periodLabel.text = "\(row.startDate) ~ \(row.endDate)"
+            cell.periodLabel.text = "\(row.startDate) ~ \(endDate)"
             cell.editButton.isHidden = true
   
             cell.selectionStyle = .none
@@ -611,10 +618,17 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileHistoryTableViewCell.identifier, for: indexPath) as? ProfileHistoryTableViewCell else {return UITableViewCell()}
             
             let row = eduData[indexPath.row]
+            var endDate = ""
+            
+            if row.isLearning == "TRUE" { // endDate가 nil이 옴
+                endDate = "현재"
+            } else {
+                endDate = row.endDate ?? ""
+            }
 
             cell.companyLabel.text = row.institution
             cell.positionLabel.text = row.major
-            cell.periodLabel.text = "\(row.startDate) ~ \(row.endDate)"
+            cell.periodLabel.text = "\(row.startDate) ~ \(endDate)"
             cell.editButton.isHidden = true
             
             cell.selectionStyle = .none
