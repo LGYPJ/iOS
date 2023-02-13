@@ -27,9 +27,14 @@ class ProfileSNSTableViewCell: UITableViewCell {
     
     
     // MARK: - Subviews
-    lazy var snsLabel = UILabel().then {
+    lazy var snsTypeLable = UILabel().then {
+        $0.font = UIFont.NotoSansKR(type: .Bold, size: 14)
+        $0.textColor = .mainBlack
+    }
+    lazy var snsLinkLabel = UILabel().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.textColor = .mainBlack
+        $0.textAlignment = .left
     }
     
     lazy var editButton = UIButton().then {
@@ -42,7 +47,8 @@ class ProfileSNSTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
 //        contentView
-        self.contentView.addSubview(snsLabel)
+        self.contentView.addSubview(snsTypeLable)
+        self.contentView.addSubview(snsLinkLabel)
         self.contentView.addSubview(editButton)
       
         configureSubViewLayouts()
@@ -51,14 +57,18 @@ class ProfileSNSTableViewCell: UITableViewCell {
     
     func configureSubViewLayouts() {
         
-        snsLabel.snp.makeConstraints {
+        snsTypeLable.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().inset(12)
-            $0.trailing.equalTo(editButton.snp.leading).offset(-12)
+        }
+        snsLinkLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(snsTypeLable.snp.trailing).offset(4)
+//            $0.trailing.equalTo(editButton.snp.leading).offset(-12)
         }
         
         editButton.snp.makeConstraints {
-            $0.centerY.equalTo(snsLabel)
+            $0.centerY.equalTo(snsLinkLabel)
             $0.trailing.equalToSuperview().inset(12)
             $0.height.width.equalTo(16)
         }
@@ -68,7 +78,7 @@ class ProfileSNSTableViewCell: UITableViewCell {
     @objc private func copyButtonDidTap() {
         delegate?.copyButtonDidTap()
         
-        guard let copyString = snsLabel.text else { return }
+        guard let copyString = snsLinkLabel.text else { return }
         UIPasteboard.general.string = copyString
         
         print("클립보드 복사: \(copyString)")

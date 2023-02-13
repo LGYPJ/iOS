@@ -212,8 +212,9 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
     }
     
     @objc private func saveButtonDidTap(_ sender: UIButton) {
+        guard let type = typeTextField.text else { return }
         guard let address = linkTextField.text else { return }
-        postSNS(memberIdx: memberIdx, address: address) { result in
+        postSNS(memberIdx: memberIdx, type: type, address: address ) { result in
             if result {
                 self.navigationController?.popViewController(animated: true)
             }
@@ -277,7 +278,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
     }
     
     // MARK: - [POST] SNS 추가
-    func postSNS(memberIdx: Int, address: String, completion: @escaping ((Bool) -> Void)) {
+    func postSNS(memberIdx: Int, type: String, address: String, completion: @escaping ((Bool) -> Void)) {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/sns"
@@ -290,6 +291,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         let bodyData: Parameters = [
             "memberIdx": memberIdx,
             "address": address,
+            "type": type
         ]
         
         // httpBody 에 parameters 추가
