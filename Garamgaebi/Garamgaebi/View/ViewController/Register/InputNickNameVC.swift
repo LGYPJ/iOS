@@ -54,7 +54,7 @@ class InputNickNameVC: UIViewController {
         
         textField.addLeftPadding()
         textField.addRightPadding()
-        textField.placeholder = "닉네임 (8자 이내, 영문, 숫자 사용 가능)"
+        textField.placeholder = "닉네임 (8자 이내, 한글, 영문, 숫자 사용 가능)"
         textField.setPlaceholderColor(.mainGray)
         textField.layer.cornerRadius = 12
         textField.textColor = .mainBlack
@@ -198,17 +198,26 @@ class InputNickNameVC: UIViewController {
             }
         } else {
             self.nextButton.isEnabled = false
-            self.nickNameTextField.layer.borderColor = UIColor(hex: 0xFF0000).cgColor
-            self.nickNameTextField.layer.borderWidth = 1
-            UIView.animate(withDuration: 0.33) {
-                self.nextButton.backgroundColor = .mainGray
-                if self.nickNameTextField.text?.count == 0 {
-                    self.nickNameValidLabel.text = ""
-                } else {
-                    self.nickNameValidLabel.text = "닉네임은 8자 이내 영문, 숫자만 가능합니다"
-                }
-                self.nickNameValidLabel.textColor = UIColor(hex: 0x13FF0000)
+            self.nextButton.backgroundColor = .mainGray
+            // textFiled가 비어있을 때
+            if self.nickNameTextField.text?.count == 0 {
+                self.nickNameValidLabel.text = ""
+                self.nickNameTextField.layer.borderColor = UIColor.mainBlack.cgColor
             }
+            else {
+                // 글자 수 맞으면
+                if self.nickNameTextField.text!.count > 0,
+                   self.nickNameTextField.text!.count <= 8 {
+                    self.nickNameValidLabel.text = "사용할 수 없는 닉네임입니다"
+                }
+                // 글자 수 안 맞으면
+                else {
+                    self.nickNameValidLabel.text = "8자 이내로 입력해주세요"
+                }
+                
+                self.nickNameTextField.layer.borderColor = UIColor(hex: 0xFF0000).cgColor
+            }
+            self.nickNameValidLabel.textColor = UIColor(hex: 0xFF0000)
         }
     }
     
