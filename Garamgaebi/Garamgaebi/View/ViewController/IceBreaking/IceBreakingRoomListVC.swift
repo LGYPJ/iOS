@@ -56,6 +56,7 @@ class IceBreakingRoomListVC: UIViewController {
 			collectionView.reloadData()
 		}
 	}
+	let roomNameList: [String] = ["이길여 총장님", "AI 공학관", "비전타워", "스타덤 광장", "바람개비 동산", "무당이", "가천관", "무한대 동상"]
 
     // MARK: - Life Cycle
 	init(programId: Int) {
@@ -143,8 +144,8 @@ extension IceBreakingRoomListVC: UICollectionViewDelegate, UICollectionViewDataS
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IceBreakingRoomCollectionViewCell.identifier, for: indexPath) as? IceBreakingRoomCollectionViewCell else {return UICollectionViewCell()}
-		let cellData = roomList[indexPath.row]
-		cell.roomTitleLabel.text = cellData.roomId
+		let cellData = roomNameList[indexPath.row]
+		cell.roomTitleLabel.text = cellData
 		
 		return cell
 	}
@@ -156,7 +157,7 @@ extension IceBreakingRoomListVC: UICollectionViewDelegate, UICollectionViewDataS
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		navigationController?.pushViewController(IceBreakingRoomVC(roomId: roomList[indexPath.row].gameRoomIdx), animated: true)
+		navigationController?.pushViewController(IceBreakingRoomVC(roomId: roomList[indexPath.row].programGameRoomIdx, roomName: roomNameList[indexPath.row]), animated: true)
 //		navigationController?.pushViewController(WebSocketTestVC(), animated: true)
 	}
 	

@@ -313,6 +313,9 @@ class EventApplyCancelVC: UIViewController {
 			}
 		}
 	}
+	
+	private var distance : CGFloat = 0
+	private var scrollOffset : CGFloat = 0
 
     // MARK: - Life Cycle
 	init(type: String, programId: Int) {
@@ -538,8 +541,9 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 		if self.networkingInfo.fee == 0 {
 //			costStackView.isHidden = true
 			costInfoLabel.text = "무료"
-			bankButton.isHidden = true
-			accountTextField.isHidden = true
+			// TODO: 임시 주석처리 나중에 삭제해야함
+//			bankButton.isHidden = true
+//			accountTextField.isHidden = true
 		} else {
 //			costStackView.isHidden = false
 			bankButton.isHidden = false
@@ -572,13 +576,34 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 	}
 	
 	@objc func keyboardWillShow(notification: NSNotification) {
-		guard let userInfo = notification.userInfo,
-			  let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {return}
+//		guard let userInfo = notification.userInfo,
+//			  let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {return}
+//
+//		let contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardFrame.size.height - 48 - 48, right: 0.0)
+//		scrollView.contentInset = contentInset
+//		scrollView.scrollIndicatorInsets = contentInset
 		
-		let contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardFrame.size.height, right: 0.0)
-		scrollView.contentInset = contentInset
-		scrollView.scrollIndicatorInsets = contentInset
-		
+		if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+			
+			var safeArea = self.view.frame
+			safeArea.size.height += scrollView.contentOffset.y
+			safeArea.size.height -= keyboardSize.height + (UIScreen.main.bounds.height*0.04) // Adjust buffer to your liking
+			
+			// determine which UIView was selected and if it is covered by keyboard
+			
+			let activeField: UIView? = [accountTextField].first { $0.isFirstResponder }
+			if let activeField = activeField {
+				if safeArea.contains(CGPoint(x: 0, y: activeField.frame.maxY+48)) {  // 48은 텍스트 필드 높이
+					print("No need to Scroll")
+					return
+				} else {
+					distance = activeField.frame.maxY - safeArea.size.height
+					scrollOffset = scrollView.contentOffset.y
+					// 48: 버튼 높이, 버튼 bottom ~ superview bottom
+					self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset + distance + 48 + 48), animated: true)
+				}
+			}
+		}
 	}
 	
 	@objc func keyboardWillHide(notification: NSNotification) {

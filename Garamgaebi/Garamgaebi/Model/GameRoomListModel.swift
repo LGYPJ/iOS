@@ -15,7 +15,7 @@ struct GameRoomListModelResponse: Codable {
 }
 
 struct GameRoomListModel: Codable {
-	let gameRoomIdx: Int
+	let programGameRoomIdx: Int
 	let programIdx: Int
 	let roomId: String
 }
