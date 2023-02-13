@@ -430,9 +430,8 @@ class UniEmailAuthVC: UIViewController {
         }
         else {
             // 인증번호 틀리면
-            // 빨갛게
-            authNumberTextField.layer.borderColor = UIColor(hex: 0xFF0000).cgColor
-            authNumberTextField.layer.borderWidth = 1
+            // 빨갛게, shake
+            authNumberTextField.shake()
             //"인증번호가 올바르지 않습니다"
             UIView.transition(with: self.authNumNotificationLabel, duration: 0.33,
                               options: .transitionCrossDissolve,
