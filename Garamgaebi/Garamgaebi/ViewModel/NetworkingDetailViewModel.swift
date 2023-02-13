@@ -41,7 +41,7 @@ class NetworkingDetailViewModel {
 	}
 	
 	// 네트워킹 참가자 request
-	public static func requestNetworkingAttendant(networkingId: Int, completion: @escaping ([NetworkingDetailAttendant]) -> Void) {
+	public static func requestNetworkingAttendant(networkingId: Int, completion: @escaping (NetworkingAttendantResult) -> Void) {
 //		let dummyData = [ NetworkingDetailAttendant(memberIdx: 0, nickname: "연현", profileImg: "person.circle"),
 //						  NetworkingDetailAttendant(memberIdx: 1, nickname: "연현2", profileImg: "person"),
 //						  NetworkingDetailAttendant(memberIdx: 2,nickname: "연현3", profileImg: "person.fill"),

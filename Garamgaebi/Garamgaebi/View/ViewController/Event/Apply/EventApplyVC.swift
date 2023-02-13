@@ -361,6 +361,8 @@ class EventApplyVC: UIViewController {
 	var type: String
 	var memberId: Int
 	var programId: Int
+	private var distance : CGFloat = 0
+	private var scrollOffset : CGFloat = 0
 	
 	var seminarInfo: SeminarDetailInfo = .init(programIdx: 0, title: "", date: "", location: "", fee: 0, endDate: "", programStatus: "", userButtonStatus: "") {
 		didSet {
@@ -441,7 +443,7 @@ extension EventApplyVC {
 			clipBoardImageView.isHidden = false
 			descriptionTextView.isHidden = false
 			descriptionContainerView.isHidden = false
-			costInfoLabel.text = "\(networkingInfo.fee)원"
+			costInfoLabel.text = "\(seminarInfo.fee)원"
 			accountLabel.text = "\(account)"
 			descriptionTextView.text = "입금자명을 닉네임/이름(예시: 찹도/민세림)으로 해주셔야 합니다.\n\n신청 확정은 신청 마감 이후에 일괄 처리됩니다.\n신청취소는 일주일 전까지 가능합니다.(이후로는 취소 불가)\n환불은 모임 당일부터 7일 이내에 순차적으로 진행됩니다.\n\n입금이 완료되지 않으면 신청이 자동적으로 취소됩니다."
 		}
@@ -644,14 +646,14 @@ extension EventApplyVC {
 		nicknameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
 		numberTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
 		
-		nameTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
-		nameTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
-		
-		nicknameTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
-		nicknameTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
-		
-		numberTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
-		numberTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+//		nameTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+//		nameTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+//
+//		nicknameTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+//		nicknameTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+//
+//		numberTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+//		numberTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
 		
 		nameTextField.delegate = self
 		nicknameTextField.delegate = self
@@ -733,45 +735,45 @@ extension EventApplyVC {
 		clipBoardImageView.addGestureRecognizer(tapClipBoard)
 	}
 	
-	@objc func textFieldActivated(_ sender: UITextField) {
-		switch sender {
-		case nameTextField:
-			if isValidName || sender.text == "" {
-				sender.layer.borderColor = UIColor.mainBlack.cgColor
-			}
-		case nicknameTextField:
-			if isValidNickname || sender.text == "" {
-				sender.layer.borderColor = UIColor.mainBlack.cgColor
-			}
-		case numberTextField:
-			if isValidNumber || sender.text == "" {
-				sender.layer.borderColor = UIColor.mainBlack.cgColor
-			}
-		default:
-			return
-		}
-		
-		
-	}
-	
-	@objc func textFieldInactivated(_ sender: UITextField) {
-		switch sender {
-		case nameTextField:
-			if isValidName {
-				sender.layer.borderColor = UIColor.mainGray.cgColor
-			}
-		case nicknameTextField:
-			if isValidNickname {
-				sender.layer.borderColor = UIColor.mainGray.cgColor
-			}
-		case numberTextField:
-			if isValidNumber {
-				sender.layer.borderColor = UIColor.mainGray.cgColor
-			}
-		default:
-			return
-		}
-	}
+//	@objc func textFieldActivated(_ sender: UITextField) {
+//		switch sender {
+//		case nameTextField:
+//			if isValidName {
+//				sender.layer.borderColor = UIColor.mainBlack.cgColor
+//			}
+//		case nicknameTextField:
+//			if isValidNickname {
+//				sender.layer.borderColor = UIColor.mainBlack.cgColor
+//			}
+//		case numberTextField:
+//			if isValidNumber {
+//				sender.layer.borderColor = UIColor.mainBlack.cgColor
+//			}
+//		default:
+//			return
+//		}
+//
+//
+//	}
+//
+//	@objc func textFieldInactivated(_ sender: UITextField) {
+//		switch sender {
+//		case nameTextField:
+//			if isValidName {
+//				sender.layer.borderColor = UIColor.mainGray.cgColor
+//			}
+//		case nicknameTextField:
+//			if isValidNickname {
+//				sender.layer.borderColor = UIColor.mainGray.cgColor
+//			}
+//		case numberTextField:
+//			if isValidNumber {
+//				sender.layer.borderColor = UIColor.mainGray.cgColor
+//			}
+//		default:
+//			return
+//		}
+//	}
 	
 	@objc private func clipBoardImageViewDidTap() {
 		UIPasteboard.general.string = self.account
@@ -845,19 +847,51 @@ extension EventApplyVC {
 	}
 	
 	@objc func keyboardWillShow(notification: NSNotification) {
-		guard let userInfo = notification.userInfo,
-			  let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {return}
+//		guard let userInfo = notification.userInfo,
+//			  let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {return}
+//
+//		let contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardFrame.size.height - 48 - 48, right: 0.0)  // 48: 버튼 높이, 버튼 bottom ~ superview bottom
+//		scrollView.setContentOffset(CGPoint(x: 0, y: keyboardFrame.size.height - 48 - 48), animated: true)
+//		scrollView.contentInset = contentInset
+//		scrollView.scrollIndicatorInsets = contentInset
 		
-		let contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardFrame.size.height, right: 0.0)
-		scrollView.contentInset = contentInset
-		scrollView.scrollIndicatorInsets = contentInset
-		
+		if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+			
+			var safeArea = self.view.frame
+			safeArea.size.height += scrollView.contentOffset.y
+			safeArea.size.height -= keyboardSize.height + (UIScreen.main.bounds.height*0.04) // Adjust buffer to your liking
+			
+			// determine which UIView was selected and if it is covered by keyboard
+			
+			let activeField: UIView? = [nameTextField, nicknameTextField, numberTextField].first { $0.isFirstResponder }
+			if let activeField = activeField {
+				if safeArea.contains(CGPoint(x: 0, y: activeField.frame.maxY+48)) {  // 48은 텍스트 필드 높이
+					print("No need to Scroll")
+					return
+				} else {
+					distance = activeField.frame.maxY - safeArea.size.height
+					scrollOffset = scrollView.contentOffset.y
+					// 48: 버튼 높이, 버튼 bottom ~ superview bottom
+					self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset + distance + 48 + 48), animated: true)
+				}
+			}
+		}
+				
 	}
 	
 	@objc func keyboardWillHide(notification: NSNotification) {
-		let contentInset = UIEdgeInsets.zero
-		scrollView.contentInset = contentInset
-		scrollView.scrollIndicatorInsets = contentInset
+//		let contentInset = UIEdgeInsets.zero
+//		scrollView.contentInset = contentInset
+//		scrollView.scrollIndicatorInsets = contentInset
+		
+		if distance == 0 {
+			return
+		}
+		// return to origin scrollOffset
+//        self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset), animated: true)
+		self.scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+		scrollOffset = 0
+		distance = 0
 	}
 }
 
@@ -865,6 +899,45 @@ extension EventApplyVC: UITextFieldDelegate {
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		textField.resignFirstResponder()
 		return true
+	}
+	
+	func textFieldDidBeginEditing(_ textField: UITextField) {
+		switch textField {
+		case nameTextField:
+			if isValidName {
+				textField.layer.borderColor = UIColor.mainBlack.cgColor
+			}
+		case nicknameTextField:
+			if isValidNickname {
+				textField.layer.borderColor = UIColor.mainBlack.cgColor
+			}
+		case numberTextField:
+			if isValidNumber {
+				textField.layer.borderColor = UIColor.mainBlack.cgColor
+			}
+		default:
+			return
+		}
+	}
+	
+	func textFieldDidEndEditing(_ textField: UITextField) {
+		switch textField {
+		case nameTextField:
+			if isValidName {
+				textField.layer.borderColor = UIColor.mainGray.cgColor
+			}
+		case nicknameTextField:
+			if isValidNickname {
+				textField.layer.borderColor = UIColor.mainGray.cgColor
+			}
+		case numberTextField:
+			if isValidNumber {
+				textField.layer.borderColor = UIColor.mainGray.cgColor
+			}
+		default:
+			return
+		}
+		
 	}
 	
 	

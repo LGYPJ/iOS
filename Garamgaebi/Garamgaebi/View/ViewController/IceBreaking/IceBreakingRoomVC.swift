@@ -23,7 +23,7 @@ class IceBreakingRoomVC: UIViewController {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "가천관"
+//        label.text = "가천관"
         label.textColor = UIColor(hex: 0x000000,alpha: 0.8)
         label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
         return label
@@ -110,13 +110,15 @@ class IceBreakingRoomVC: UIViewController {
 	}
 	private var cardCount = 10
 	private var currentIndex = 0
-	private var roomId: Int
+	private let roomId: Int
+	private let roomName: String
 	private var socketClient = StompClientLib()
 	
     // MARK: - Life Cycle
 	
-	init(roomId: Int) {
+	init(roomId: Int, roomName: String) {
 		self.roomId = roomId
+		self.roomName = roomName
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -156,6 +158,7 @@ extension IceBreakingRoomVC {
 	}
 	
 	private func configureViews() {
+		self.titleLabel.text = self.roomName
 		view.backgroundColor = .white
         [headerView, userCollectionview, separator, cardCollectionView, nextButton]
 			.forEach {view.addSubview($0)}
@@ -358,12 +361,12 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 
 extension IceBreakingRoomVC: StompClientLibDelegate {
 	func stompClient(client: StompClientLib!, didReceiveMessageWithJSONBody jsonBody: AnyObject?, akaStringBody stringBody: String?, withHeader header: [String : String]?, withDestination destination: String) {
-		guard let json = jsonBody as? [String: String] else {
+		guard let json = jsonBody as? [String: String?] else { // type, sender, roomId, profileUrl, message
 			print("error in decode jsonBody")
 			return
 		}
 		
-		guard let jsonType = json["type"] else {
+		guard let jsonType = json["type"] else {  // ENTER, TALK, EXIT
 			print("error: there is no type named \"type\"")
 			return
 		}
@@ -376,13 +379,15 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 		switch jsonType{
 		case "ENTER":
 			print("memberId: \(jsonMessage)번이 입장하셨습니다!")
-		case "TYPE":
+		case "TALK":
 			if jsonMessage == "NEXT" {
 				currentIndex += 1
 				scrollToNextItem()
 			} else {
 				
 			}
+		case "EXIT":
+			return
 		default:
 			return
 		}

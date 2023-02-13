@@ -42,7 +42,7 @@ class SeminarDetailViewModel {
 	}
 	
 	// 세미나 참가자 request
-	public static func requestSeminarAttendant(seminarId: Int, completion: @escaping ([SeminarDetailAttendant]) -> Void) {
+	public static func requestSeminarAttendant(seminarId: Int, completion: @escaping (SeminarAttendantResult) -> Void) {
 //		let dummyData = [ SeminarDetailAttendant(memberIdx: 0, nickname: "연현", profileImg: "ExProfileImage"),
 //						  SeminarDetailAttendant(memberIdx: 1, nickname: "연현2", profileImg: "ExProfileImage"),
 //						  SeminarDetailAttendant(memberIdx: 2,nickname: "연현3", profileImg: "ExProfileImage"),

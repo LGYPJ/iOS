@@ -31,7 +31,12 @@ struct NetworkingDetailAttentdantResponse: Decodable {
 	let isSuccess: Bool
 	let code: Int
 	let message: String
-	let result: [NetworkingDetailAttendant]?
+	let result: NetworkingAttendantResult?
+}
+
+struct NetworkingAttendantResult: Decodable {
+	let participantList: [NetworkingDetailAttendant]?
+	let isApply: Bool
 }
 
 struct NetworkingDetailAttendant: Decodable {
