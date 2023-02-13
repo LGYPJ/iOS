@@ -191,7 +191,6 @@ class InputNickNameVC: UIViewController {
         if isValidNickName {
             self.nextButton.isEnabled = true
             self.nickNameTextField.layer.borderColor = UIColor.mainBlack.cgColor
-            self.nickNameTextField.layer.borderWidth = 1
             UIView.animate(withDuration: 0.33) {
                 self.nextButton.backgroundColor = .mainBlue
                 self.nickNameValidLabel.text = ""
@@ -229,7 +228,6 @@ class InputNickNameVC: UIViewController {
         self.validateUserInfo()
         self.nickNameValidLabel.isHidden = true
         sender.layer.borderColor = UIColor.mainGray.cgColor
-        sender.layer.borderWidth = 1
     }
     
     @objc
