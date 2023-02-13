@@ -25,7 +25,7 @@ struct NetworkingNextMonthInfoResponse: Decodable {
     let isSuccess: Bool
     let code: Int
     let message: String
-    let result: NetworkingNextMonthInfo?
+    let result: NetworkingReadyInfo?
 }
 
 struct NetworkingClosedInfoResponse: Decodable {
@@ -57,7 +57,7 @@ struct NetworkingThisMonthInfo: Decodable {
     let isOpen: String
 }
 
-struct NetworkingNextMonthInfo: Decodable {
+struct NetworkingReadyInfo: Decodable {
     let programIdx: Int
     let title: String
     let date: String

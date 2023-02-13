@@ -186,7 +186,7 @@ class ViewAllNetworkingTableViewCell: UITableViewCell {
         stateInfoLabel.text = String("D\(dDayCount)")
     }
     
-    public func configureNextMonthInfo(_ item: NetworkingNextMonthInfo) {
+    public func configureReadyInfo(_ item: NetworkingReadyInfo) {
         baseView.isHidden = false
         zeroDataBackgroundView.isHidden = true
         
@@ -205,7 +205,18 @@ class ViewAllNetworkingTableViewCell: UITableViewCell {
         let dateResult = dateformatter.string(from: date ?? Date())
         dateInfoLabel.text = dateResult
         
-        stateInfoLabel.text = "오픈예정"
+        switch item.isOpen {
+        case "BEFORE_OPEN":
+            contentView.isUserInteractionEnabled = true
+            var dDayCount: Int = 0
+            dDayCount = (Calendar.current.dateComponents([.day], from: date ?? Date(), to: Date()).day ?? 0) - 1
+            stateInfoLabel.text = String("D\(dDayCount)")
+        case "OPEN":
+            contentView.isUserInteractionEnabled = false
+            stateInfoLabel.text = "오픈예정"
+        default:
+            print(">>>ERROR: 프로그램 오픈 여부 - \(self)")
+        }
     }
     
     public func configureClosedInfo(_ item: NetworkingClosedInfo) {
