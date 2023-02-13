@@ -57,6 +57,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         textField.basicTextField()
         textField.placeholder = "표시할 이름을 입력해주세요 (예:블로그, 깃허브 등)"
         
+        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(showBottomSheet), for: .editingDidBegin)
@@ -79,9 +80,9 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         textField.basicTextField()
         textField.placeholder = "https://"
         
+        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
-        
         
         return textField
     }()
@@ -91,6 +92,8 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         
         button.basicButton()
         button.setTitle("저장하기", for: .normal)
+        button.backgroundColor = .mainGray
+        button.isEnabled = false
         
         button.addTarget(self, action: #selector(saveButtonDidTap), for: .touchUpInside)
         return button
@@ -107,6 +110,9 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         addSubViews()
         configLayouts()
         configureGestureRecognizer()
+        
+        // SNS 링크 글자수 제한 (140자)
+        NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: UITextField.textDidChangeNotification, object: linkTextField)
     }
     
     // MARK: - Functions
@@ -215,6 +221,26 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         
     }
     
+    @objc func allTextFieldFilledIn() {
+        
+        /* 모든 textField가 채워졌으면 SNS 저장 버튼 활성화 */
+        if self.typeTextField.text?.count != 0,
+           self.linkTextField.text?.count != 0 {
+
+            // 저장버튼 활성화
+            UIView.animate(withDuration: 0.33) { [weak self] in
+                self?.saveUserProfileButton.backgroundColor = .mainBlue
+            }
+            saveUserProfileButton.isEnabled = true
+            
+        } else { // 저장버튼 비활성화
+            saveUserProfileButton.isEnabled = false
+            UIView.animate(withDuration: 0.33) { [weak self] in
+                self?.saveUserProfileButton.backgroundColor = .mainGray
+            }
+        }
+    }
+    
     @objc func textFieldActivated(_ sender: UITextField) {
         sender.layer.borderColor = UIColor.mainBlack.cgColor
         sender.layer.borderWidth = 1
@@ -224,6 +250,26 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         sender.layer.borderColor = UIColor.mainGray.cgColor
         sender.layer.borderWidth = 1
     }
+    
+    @objc private func textDidChange(_ notification: Notification) {
+            if let textField = notification.object as? UITextField {
+                let maxLength = 140
+                if let text = textField.text {
+                    
+                    if text.count > maxLength {
+                        // 140글자 넘어가면 자동으로 키보드 내려감
+                        textField.resignFirstResponder()
+                    }
+                    
+                    // 초과되는 텍스트 제거
+                    if text.count >= maxLength {
+                        let index = text.index(text.startIndex, offsetBy: maxLength)
+                        let newString = text[text.startIndex..<index]
+                        textField.text = String(newString)
+                    }
+                }
+            }
+        }
     
     // 뒤로가기 버튼 did tap
     @objc private func didTapBackBarButton() {
