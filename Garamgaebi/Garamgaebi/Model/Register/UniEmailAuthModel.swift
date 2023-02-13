@@ -11,13 +11,29 @@ struct UniEmailAuthModelResponse: Codable {
     let isSuccess: Bool
     let code: Int
     let message: String
-    let result: UniEmailAuthNumber
+    let result: UniEmailAuthModelResult?
 }
 
 struct UniEmailAuthModel: Codable {
     let email: String
 }
 
-struct UniEmailAuthNumber: Codable {
+struct UniEmailAuthModelResult: Codable {
+    let message: String
+}
+
+struct UniEmailAuthNumberModelResponse: Codable {
+    let isSuccess: Bool
+    let code: Int
+    let message: String
+    let result: UniEmailAuthNumberModelResult?
+}
+
+struct UniEmailAuthNumberModel: Codable {
+    let email: String
     let key: String
+}
+
+struct UniEmailAuthNumberModelResult: Codable {
+    let message: String
 }
