@@ -192,21 +192,24 @@ class InputEmailVC: UIViewController {
         if isValidProfileEmail {
             self.nextButton.isEnabled = true
             self.profileEmailTextField.layer.borderColor = UIColor.mainBlack.cgColor
-            self.profileEmailTextField.layer.borderWidth = 1
             UIView.animate(withDuration: 0.33) {
                 self.nextButton.backgroundColor = .mainBlue
-//                self.emailValidLabel.isHidden = true
                 self.emailValidLabel.text = ""
             }
         } else {
             self.nextButton.isEnabled = false
-            self.profileEmailTextField.layer.borderColor = UIColor(hex: 0xFF0000).cgColor
-            self.profileEmailTextField.layer.borderWidth = 1
-//            self.emailValidLabel.isHidden = true
-            UIView.animate(withDuration: 0.33) {
-                self.nextButton.backgroundColor = .mainGray
-                self.emailValidLabel.text = "이메일 형식이 올바르지 않습니다"
-                self.emailValidLabel.textColor = UIColor(hex: 0xFF0000)
+            // textFiled가 비어있을 때
+            if profileEmailTextField.text?.count == 0 {
+                self.emailValidLabel.text = ""
+                self.profileEmailTextField.layer.borderColor = UIColor.mainBlack.cgColor
+            }
+            // textFiled가 비어있지 않을 때
+            else {
+                self.profileEmailTextField.layer.borderColor = UIColor(hex: 0xFF0000).cgColor
+                UIView.animate(withDuration: 0.33) {
+                    self.nextButton.backgroundColor = .mainGray
+                    self.emailValidLabel.text = "이메일 형식이 올바르지 않습니다"
+                }
             }
         }
         
