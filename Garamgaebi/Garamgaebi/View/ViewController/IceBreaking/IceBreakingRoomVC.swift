@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import Alamofire
 import StompClientLib
+import Kingfisher
 
 class IceBreakingRoomVC: UIViewController {
 	
@@ -112,13 +113,21 @@ class IceBreakingRoomVC: UIViewController {
 	private var currentIndex = 0
 	private let roomId: String
 	private let roomName: String
-	let memberId: Int
+	private let memberId: Int
+	private let nickname: String
 	private var socketClient = StompClientLib()
+	private var userList: [IceBrakingCurrentUserModel] = [] {
+		didSet {
+			self.userCollectionview.reloadData()
+			print(userList.count)
+		}
+	}
 	
     // MARK: - Life Cycle
 	
 	init(roomId: String, roomName: String) {
 		self.memberId = UserDefaults.standard.integer(forKey: "memberIdx")
+		self.nickname = UserDefaults.standard.string(forKey: "nickname")!
 		self.roomId = roomId
 		self.roomName = roomName
 		super.init(nibName: nil, bundle: nil)
@@ -230,17 +239,18 @@ extension IceBreakingRoomVC {
 	}
 	
 	private func subscribeSocket() {
-//		socketClient.subscribe(destination: "/topic/game/room/\(self.roomId)")
-		socketClient.subscribe(destination: "/topic/game/room/1")
+		socketClient.subscribe(destination: "/topic/game/room/\(self.roomId)")
+//		socketClient.subscribe(destination: "/topic/game/room/1")
 	}
 
-	private func sendMessageWithSocket(type: String, message: String) {
+	private func sendMessageWithSocket(type: String, message: String, profileUrl: String) {
 		var payloadObject : [String : Any] = [
 			"type" : type,
-//			"roomId": self.roomId,
-			"roomId": "1",
-			"sender": UserDefaults.standard.string(forKey: "nickname")!,
-			"message": message
+			"roomId": self.roomId,
+//			"sender": self.nickname,
+			"sender": "연현이아님",
+			"message": message,
+			"profileUrl": profileUrl
 		]
 			
 		socketClient.sendJSONForDict(dict: payloadObject as AnyObject, toDestination: "/app/game/message")
@@ -248,6 +258,8 @@ extension IceBreakingRoomVC {
 	}
 	
 	private func disconnectSocket() {
+		userList = []
+		sendMessageWithSocket(type: "EXIT", message: "", profileUrl: "")
 		socketClient.disconnect()
 	}
 	
@@ -255,7 +267,7 @@ extension IceBreakingRoomVC {
 		if currentIndex < cardCount {
 			// 해당 인덱스로 스크롤
 			cardCollectionView.scrollToItem(at: IndexPath(row: currentIndex, section: 1), at: .centeredHorizontally, animated: true)
-			userCollectionview.scrollToItem(at: IndexPath(row: currentIndex, section: 0), at: .centeredHorizontally, animated: true)
+			userCollectionview.scrollToItem(at: IndexPath(row: currentIndex % userList.count, section: 0), at: .centeredHorizontally, animated: true)
 			
 			cardCollectionView.reloadData()
 			userCollectionview.reloadData()
@@ -272,28 +284,26 @@ extension IceBreakingRoomVC {
 	
 	// 뒤로가기 버튼 did tap
 	@objc private func didTapBackBarButton() {
-		disconnectSocket()
+		IcebreakingViewModel.deleteGameUser(roomId: self.roomId, memberId: self.memberId+1, completion: {
+			self.disconnectSocket()
+		})
 		self.navigationController?.popViewController(animated: true)
 	}
 	
 	// 다음 카드 버튼 did tap
 	@objc private func didTapNextButton() {
-		currentIndex += 1
-		sendMessageWithSocket(type: "TALK", message: "NEXT")
-		scrollToNextItem()
+		sendMessageWithSocket(type: "TALK", message: "NEXT", profileUrl: "")
 	}
 }
 
+// MARK: CollectionView
 extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 	func numberOfSections(in collectionView: UICollectionView) -> Int {
 		return 2
 	}
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		if collectionView == userCollectionview {
-			switch section {
-			case 0: return cardCount
-			default: return 0
-			}
+			return userList.count
 		} else if collectionView == cardCollectionView {
 			switch section {
 			case 0: return 1
@@ -308,7 +318,9 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		if collectionView == userCollectionview {
 			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IceBreakingUserCollectionViewCell.idetifier, for: indexPath) as? IceBreakingUserCollectionViewCell else {return UICollectionViewCell()}
-			cell.nameLabel.text = "연현"
+			let cellData = userList[indexPath.row]
+			cell.nameLabel.text = cellData.nickname
+//			cell.profileImageView.kf.setImage(with: URL(string: cellData.profileUrl ?? ""), placeholder: UIImage(named: "ExProfileImage"))
 			if indexPath.row == currentIndex && isStart {
 				cell.profileImageView.layer.borderWidth = 2
 			}
@@ -363,26 +375,30 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 	}
 }
 
+// MARK: StompClientLibDelegate
 extension IceBreakingRoomVC: StompClientLibDelegate {
 	func stompClient(client: StompClientLib!, didReceiveMessageWithJSONBody jsonBody: AnyObject?, akaStringBody stringBody: String?, withHeader header: [String : String]?, withDestination destination: String) {
-		guard let json = jsonBody as? [String: String?] else { // type, sender, roomId, profileUrl, message
+		guard let json = jsonBody as? [String: String] else { // type, sender, roomId, profileUrl, message
 			print("error in decode jsonBody")
 			return
 		}
-		
-		guard let jsonType = json["type"] else {  // ENTER, TALK, EXIT
-			print("error: there is no type named \"type\"")
-			return
-		}
-		
-		guard let jsonMessage = json["message"] else {
-			print("error: there is no type named \"message\"")
+		// 빈 값 전송할 경우 빈 문자열로 전송(nil X -> "" O)
+		guard let jsonType = json["type"], // ENTER, TALK, EXIT
+			  let jsonNickname = json["sender"],
+			  let jsonMessage = json["message"],
+			  let jsonProfileUrl = json["profileUrl"]
+		else {
+			print("error(socket): json decode error")
 			return
 		}
 		
 		switch jsonType{
 		case "ENTER":
-			print("memberId: \(jsonMessage)번이 입장하셨습니다!")
+			print("socket: \(jsonNickname)님이 입장하셨습니다!")
+			IcebreakingViewModel.getCurrentGameUserWithPost(roomId: self.roomId, completion: { result in
+				self.userList = result
+			})
+			
 		case "TALK":
 			if jsonMessage == "NEXT" {
 				currentIndex += 1
@@ -391,7 +407,11 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 				
 			}
 		case "EXIT":
-			return
+			print("socket: \(jsonNickname)님이 퇴장하셨습니다!")
+			IcebreakingViewModel.getCurrentGameUserWithPost(roomId: self.roomId, completion: { result in
+				self.userList = result
+			})
+			
 		default:
 			return
 		}
@@ -406,9 +426,15 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 	func stompClientDidConnect(client: StompClientLib!) {
 		print("Stomp socket is connected")
 		subscribeSocket()
-
-		
-		sendMessageWithSocket(type: "ENTER", message: "\(UserDefaults.standard.integer(forKey: "memberIdx"))")
+//		self.sendMessageWithSocket(type: "ENTER", message: "", profileUrl: "")
+		IcebreakingViewModel.postGameUser(roomId: self.roomId, memberId: self.memberId+1, completion: {
+			IcebreakingViewModel.getCurrentGameUserWithPost(roomId: self.roomId, completion: { result in
+				self.userList = result
+				print(result)
+				// TODO: 나의 이미지 Url 얻어올 방법?
+				self.sendMessageWithSocket(type: "ENTER", message: "", profileUrl: "")
+			})
+		})
 	}
 	
 	func serverDidSendReceipt(client: StompClientLib!, withReceiptId receiptId: String) {

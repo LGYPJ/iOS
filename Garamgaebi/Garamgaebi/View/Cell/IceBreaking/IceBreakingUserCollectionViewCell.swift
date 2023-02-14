@@ -44,6 +44,8 @@ class IceBreakingUserCollectionViewCell: UICollectionViewCell {
 	override func prepareForReuse() {
 		super.prepareForReuse()
 		profileImageView.layer.borderWidth = 0
+		profileImageView.image = UIImage(systemName: "person.circle")
+		nameLabel.text = ""
 	}
 	
 }

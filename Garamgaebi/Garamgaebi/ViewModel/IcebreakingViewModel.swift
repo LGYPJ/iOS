@@ -28,11 +28,11 @@ struct IceBrakingCurrentUserModelResponse: Codable {
 struct IceBrakingCurrentUserModel: Codable {
 	let memberIdx: Int
 	let nickname: String
-	let profileUrl: String
+	let profileUrl: String?
 }
 
 struct IcebreakingViewModel {
-	public static func postGameUser(roomId: String, memberId: Int) {
+	public static func postGameUser(roomId: String, memberId: Int, completion: @escaping (() -> Void)) {
 		let url = "https://garamgaebi.shop/game/member"
 		let headers: HTTPHeaders = [
 			"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
@@ -42,13 +42,14 @@ struct IcebreakingViewModel {
 			"memberIdx": memberId
 		]
 		
-		AF.request(url, method: .post, parameters: body, headers: headers)
+		AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers)
 			.validate()
 			.responseDecodable(of: IceBreakingChangeUserModelResposne.self) { response in
 				switch response.result {
 				case .success(let result):
 					if result.isSuccess {
 						print("성공(게임 방 유저 추가): roomId: \(roomId)")
+						completion()
 					} else {
 						print("실패(게임 방 유저 추가): \(result.message)")
 					}
@@ -58,13 +59,16 @@ struct IcebreakingViewModel {
 			}
 	}
 	
-	public static func getCurrentGameUser(roomId: String, completion: @escaping (([IceBrakingCurrentUserModel]) -> Void)) {
-		let url = "https://garamgaebi.shop/game/members?roomId=\(roomId)"
+	public static func getCurrentGameUserWithPost(roomId: String, completion: @escaping (([IceBrakingCurrentUserModel]) -> Void)) {
+		let url = "https://garamgaebi.shop/game/members"
 		let headers: HTTPHeaders = [
 			"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
 		]
+		let body: [String: String] = [
+			"roomId": roomId
+		]
 		
-		AF.request(url, method: .get, headers: headers)
+		AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers)
 			.validate()
 			.responseDecodable(of: IceBrakingCurrentUserModelResponse.self) { response in
 				switch response.result {
@@ -80,7 +84,7 @@ struct IcebreakingViewModel {
 			}
 	}
 	
-	public static func deleteGameUser(roomId: String, memberId: Int) {
+	public static func deleteGameUser(roomId: String, memberId: Int, completion: @escaping (() -> Void)) {
 		let url = "https://garamgaebi.shop/game/member"
 		let headers: HTTPHeaders = [
 			"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
@@ -90,13 +94,14 @@ struct IcebreakingViewModel {
 			"memberIdx": memberId
 		]
 		
-		AF.request(url, method: .delete, parameters: body, headers: headers)
+		AF.request(url, method: .delete, parameters: body, encoding: JSONEncoding.default, headers: headers)
 			.validate()
 			.responseDecodable(of: IceBreakingChangeUserModelResposne.self) { response in
 				switch response.result {
 				case .success(let result):
 					if result.isSuccess {
 						print("성공(게임 방 유저 삭제): roomId: \(roomId)")
+						completion()
 					} else {
 						print("실패(게임 방 유저 삭제): \(result.message)")
 					}
