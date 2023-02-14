@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-protocol ButtonTappedDelegate: class {
+protocol ButtonTappedDelegate: AnyObject {
     func editButtonDidTap(snsIdx: Int)
     func copyButtonDidTap()
 }
@@ -25,7 +25,7 @@ class ProfileSNSTableViewCell: UITableViewCell {
     // MARK: - Properties
     static let identifier = String(describing: ProfileSNSTableViewCell.self)
     weak var delegate: ButtonTappedDelegate?
-    
+    var snsIdx: Int?
     
     // MARK: - Subviews
     lazy var snsTypeLable = UILabel().then {
@@ -87,7 +87,7 @@ class ProfileSNSTableViewCell: UITableViewCell {
     }
     
     @objc private func editButtonDidTap() {
-        delegate?.editButtonDidTap(snsIdx: 0)
+        delegate?.editButtonDidTap(snsIdx: snsIdx ?? 0)
         
         print("편집 버튼 클릭")
     }

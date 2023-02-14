@@ -779,8 +779,9 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             cell.snsLinkLabel.text = row.address
             cell.copyButton.isHidden = true
             
-            snsIdx = row.snsIdx
-            print("cellForRowAt: \(snsIdx)")
+            // 편집 데이터 넘기기
+            cell.snsIdx = row.snsIdx
+            
             cell.delegate = self
             
             cell.selectionStyle = .none
@@ -829,30 +830,23 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
         
         return UITableViewCell()
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-//        if (tableView == snsTableView) {
-//            if let delegate = ButtonTappedDelegate.self {
-//
-//                let snsIdx = snsData[indexPath.row].snsIdx
-//                delegate.editButtonDidTap(snsIdx)
-//                print("sendIdx : \(snsIdx)")
-//            }
-//        }
-    }
 }
 
 extension ProfileVC: ButtonTappedDelegate {
     func editButtonDidTap(snsIdx: Int) {
         // 화면 전환
+        print("받은 snsIdx: \(snsIdx)")
         let nextVC = ProfileInputSNSVC()
-        nextVC.memberIdx = memberIdx
-        nextVC.snsIdx = snsIdx
+        
+        // 편집 모드
         nextVC.titleLabel.text = "SNS 편집하기"
         nextVC.editButtonStackView.isHidden = false
         nextVC.saveUserProfileButton.isHidden = true
         
+        // 값 넘기기
+        nextVC.memberIdx = memberIdx
+        nextVC.snsIdx = snsIdx
+
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
