@@ -113,6 +113,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 12
         
+        button.addTarget(self, action: #selector(deleteButtonDidTap), for: .touchUpInside)
         return button
     }()
     lazy var editSaveButton: UIButton = {
@@ -280,6 +281,14 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
             }
         }
     }
+    // sns 삭제 버튼
+    @objc private func deleteButtonDidTap(_ sender: UIButton) {
+        deleteSNS(snsIdx: snsIdx) { result in
+            if result {
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+    }
     
     @objc func allTextFieldFilledIn() {
         
@@ -376,7 +385,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
             }
         }
     }
-    // MARK: - [PATCH] SNS 삭제
+    // MARK: - [PATCH] SNS 수정
     func patchSNS(snsIdx: Int, type: String, address: String, completion: @escaping ((Bool) -> Void)) {
         
         // http 요청 주소 지정
@@ -413,6 +422,40 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
                 }
             case .failure(let error):
                 print("실패(AF-SNS수정): \(error.localizedDescription)")
+            }
+        }
+    }
+    // MARK: - [DELETE] SNS 삭제
+    func deleteSNS(snsIdx: Int, completion: @escaping ((Bool) -> Void)) {
+        
+        // http 요청 주소 지정
+        let url = "https://garamgaebi.shop/profile/sns/\(snsIdx)"
+        
+        // http 요청 헤더 지정
+        let header : HTTPHeaders = [
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(token ?? "")"
+        ]
+        
+        // httpBody 에 parameters 추가
+        AF.request(
+            url,
+            method: .delete,
+            encoding: JSONEncoding.default,
+            headers: header
+        )
+        .validate()
+        .responseDecodable(of: ProfilePostResponse.self) { response in
+            switch response.result {
+            case .success(let response):
+                if response.isSuccess {
+                    print("성공(SNS삭제): \(response.message)")
+                    completion(response.result)
+                } else {
+                    print("실패(SNS삭제): \(response.message)")
+                }
+            case .failure(let error):
+                print("실패(AF-SNS삭제): \(error.localizedDescription)")
             }
         }
     }
