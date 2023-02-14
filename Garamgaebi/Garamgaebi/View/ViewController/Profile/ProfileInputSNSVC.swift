@@ -229,7 +229,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         saveUserProfileButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
-            make.bottom.equalToSuperview().inset(48)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(48)
         }
         
         // editButtonStackView
@@ -252,7 +252,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         bottomSheetVC.delegate = self
         
         bottomSheetVC.titleText = "SNS 종류"
-        bottomSheetVC.T1 = "인스타"
+        bottomSheetVC.T1 = "인스타그램"
         bottomSheetVC.T2 = "블로그"
         bottomSheetVC.T3 = "깃허브"
         bottomSheetVC.T4 = "직접 입력"

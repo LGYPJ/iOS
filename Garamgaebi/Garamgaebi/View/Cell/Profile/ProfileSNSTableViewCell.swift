@@ -34,7 +34,7 @@ class ProfileSNSTableViewCell: UITableViewCell {
     }
     lazy var snsLinkLabel = UILabel().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        $0.textColor = .mainBlack
+        $0.textColor = .mainBlue
         $0.textAlignment = .left
     }
     
@@ -65,21 +65,21 @@ class ProfileSNSTableViewCell: UITableViewCell {
     func configureSubViewLayouts() {
         
         snsTypeLable.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
+            $0.top.equalToSuperview().inset(12)
             $0.leading.equalToSuperview().inset(12)
         }
         snsLinkLabel.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.leading.equalTo(snsTypeLable.snp.trailing).offset(4)
-//            $0.trailing.equalTo(editButton.snp.leading).offset(-12)
+            $0.top.equalTo(snsTypeLable.snp.bottom).offset(4)
+            $0.leading.equalTo(snsTypeLable)
+            $0.bottom.equalToSuperview().inset(12)
         }
         copyButton.snp.makeConstraints {
-            $0.centerY.equalTo(snsLinkLabel)
+            $0.centerY.equalTo(editButton)
             $0.trailing.equalToSuperview().inset(12)
             $0.height.width.equalTo(16)
         }
         editButton.snp.makeConstraints {
-            $0.centerY.equalTo(snsLinkLabel)
+            $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(12)
             $0.height.width.equalTo(16)
         }

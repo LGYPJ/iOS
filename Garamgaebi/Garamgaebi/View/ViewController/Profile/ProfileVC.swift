@@ -691,7 +691,7 @@ class ProfileVC: UIViewController {
                 $0.top.equalToSuperview()
                 $0.leading.trailing.equalToSuperview()
                 $0.bottom.equalTo(addSnsBtn.snp.top).offset(-12)
-                $0.height.equalTo(snsCount * 41)
+                $0.height.equalTo(snsCount * 65)
             }
         }
     }
@@ -761,7 +761,7 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if tableView == snsTableView { return 41 }
+        if tableView == snsTableView { return 65 }
         else { return 90 }
     }
     
