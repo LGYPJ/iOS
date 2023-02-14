@@ -17,20 +17,38 @@ class ProfileInputCareerVC: UIViewController {
     lazy var token = UserDefaults.standard.string(forKey: "BearerToken")
     lazy var memberIdx: Int = 0
     
-    var currentYear: Int = 0 {
+    private var currentYear: Int = 0 {
         didSet {
-            yearArray = (1950...currentYear).reversed().map { String($0)}
+            yearArray = (1950...currentYear).reversed().map { String($0) }
         }
     }
-    var currentYearMonth: Int = 0
-    var yearArray: [String] = []
-    
+    private var currentYearMonth: Int = 0
+    private var yearArray: [String] = []
     private var monthArray = (1...12).map { String(format:"%02d", $0) }
-    private var startYearValue = String()
-    private var startMonthValue =  String()
-    private var endYearValue = String()
-    private var endMonthValue = String()
+    private let maxTextCount = 22
+    private var companyTextCount = 0 {
+        didSet {
+            if companyTextCount > maxTextCount {
+                companyTextCount -= 1
+            }
+            companyTextCountLabel.text = "\(companyTextCount)/\(maxTextCount)"
+        }
+    }
+    private var positionTextCount = 0 {
+        didSet{
+            if positionTextCount > maxTextCount {
+                positionTextCount -= 1
+            }
+            positionTextCountLabel.text = "\(positionTextCount)/\(maxTextCount)"
+        }
+    }
+    private var startYearValue =  "0"
+    private var startMonthValue = "0"
+    private var endYearValue =  "0"
+    private var endMonthValue = "0"
     private var isWorking: Bool = false
+    private var scrollOffset : CGFloat = 0
+    private var distance : CGFloat = 0
     
     
     // MARK: - Subviews
@@ -60,6 +78,16 @@ class ProfileInputCareerVC: UIViewController {
         button.addTarget(self, action: #selector(didTapBackBarButton), for: .touchUpInside)
         
         return button
+    }()
+    
+    lazy var scrollView: UIScrollView = {
+        let view = UIScrollView()
+        return view
+    }()
+    
+    lazy var contentView: UIView = {
+        let view = UIView()
+        return view
     }()
     
     // 데이트 피커
@@ -111,12 +139,21 @@ class ProfileInputCareerVC: UIViewController {
         return label
     }()
     
+    lazy var companyTextCountLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor(hex: 0xAEAEAE)
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        label.text = "\(companyTextCount)/\(maxTextCount)"
+        return label
+    }()
+    
     lazy var companyTextField: UITextField = {
         let textField = UITextField()
         
         textField.placeholder = "회사명을 입력해주세요"
         textField.basicTextField()
         
+        textField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
         textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
@@ -133,12 +170,21 @@ class ProfileInputCareerVC: UIViewController {
         return label
     }()
     
+    lazy var positionTextCountLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor(hex: 0xAEAEAE)
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        label.text = "\(positionTextCount)/\(maxTextCount)"
+        return label
+    }()
+    
     lazy var positionTextField: UITextField = {
         let textField = UITextField()
         
         textField.placeholder = "직함을 입력해주세요 (예: 백엔드 개발자)"
         textField.basicTextField()
         
+        textField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
         textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
@@ -222,9 +268,7 @@ class ProfileInputCareerVC: UIViewController {
         return button
     }()
     
-    
     // MARK: Life Cycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -239,10 +283,15 @@ class ProfileInputCareerVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         setCurrentYear()
+        setKeyboardObserver()
+        setObserver()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        setKeyboardObserverRemove()
+    }
     
     // MARK: - Functions
     
@@ -252,21 +301,25 @@ class ProfileInputCareerVC: UIViewController {
         view.addSubview(headerView)
         [titleLabel, backButton]
             .forEach {headerView.addSubview($0)}
+            
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
         
         /* Buttons */
-        view.addSubview(companyTextField)
-        view.addSubview(positionTextField)
-        view.addSubview(startDateTextField)
-        view.addSubview(endDateTextField)
-        view.addSubview(betweenTildLabel)
-        view.addSubview(checkIsWorkingButton)
-        view.addSubview(saveUserProfileButton)
+        contentView.addSubview(companyTextCountLabel)
+        contentView.addSubview(companyTextField)
+        contentView.addSubview(positionTextCountLabel)
+        contentView.addSubview(positionTextField)
+        contentView.addSubview(startDateTextField)
+        contentView.addSubview(endDateTextField)
+        contentView.addSubview(betweenTildLabel)
+        contentView.addSubview(checkIsWorkingButton)
+        contentView.addSubview(saveUserProfileButton)
         
         /* Labels */
         [subtitleCompanyLabel,subtitlePositionLabel,subtitleWorkingDateLabel].forEach {
-            view.addSubview($0)
+            contentView.addSubview($0)
         }
-        
     }
     
     func configLayouts() {
@@ -290,10 +343,32 @@ class ProfileInputCareerVC: UIViewController {
             make.centerY.equalToSuperview()
         }
         
+        //scrollView
+        scrollView.snp.makeConstraints { make in
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            make.top.equalTo(headerView.snp.bottom)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        //contentView
+        contentView.snp.makeConstraints { make in
+            make.left.right.equalTo(view)
+            make.top.bottom.equalTo(scrollView)
+            make.width.equalTo(scrollView)
+            make.height.equalTo(scrollView)
+        }
+        
         // subtitleCompanyLabel
         subtitleCompanyLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.top.equalTo(headerView.snp.bottom).offset(16)
+        }
+        
+        // companyTextCountLabel
+        companyTextCountLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(subtitleCompanyLabel.snp.centerY)
+            make.right.equalToSuperview().inset(16)
         }
         
         // companyTextField
@@ -309,6 +384,11 @@ class ProfileInputCareerVC: UIViewController {
             make.top.equalTo(companyTextField.snp.bottom).offset(28)
         }
         
+        // positionTextCountLabel
+        positionTextCountLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(subtitlePositionLabel.snp.centerY)
+            make.right.equalToSuperview().inset(16)
+        }
         // positionTextField
         positionTextField.snp.makeConstraints { make in
             make.top.equalTo(subtitlePositionLabel.snp.bottom).offset(8)
@@ -418,31 +498,61 @@ class ProfileInputCareerVC: UIViewController {
     
     @objc
     func textFieldActivated(_ sender: UITextField) {
-        sender.layer.borderColor = UIColor.mainBlack.cgColor
-        sender.layer.borderWidth = 1
-        if sender == startDateTextField || sender == endDateTextField {
-            // pickerView 초기화
-            switch(sender){
-            case startDateTextField:
+        switch sender {
+        case startDateTextField:
+            let startValue = Int(startMonthValue)! + 12*Int(startYearValue)!
+            let endValue = Int(endMonthValue)! + 12*Int(endYearValue)!
+            if !(startValue > endValue
+                && !(startValue == 0 || endValue == 0)) {
                 endDateTextField.layer.borderColor = UIColor.mainGray.cgColor
                 startYearValue = yearArray[startDatePickerView.selectedRow(inComponent: 0)]
                 startMonthValue = monthArray[startDatePickerView.selectedRow(inComponent: 1)]
                 sender.text = "\(startYearValue)/\(startMonthValue)"
-            case endDateTextField:
+            } else {
+                sender.layer.borderColor = UIColor.mainBlack.cgColor
+                sender.layer.borderWidth = 1
+            }
+        case endDateTextField:
+            let startValue = Int(startMonthValue)! + 12*Int(startYearValue)!
+            let endValue = Int(endMonthValue)! + 12*Int(endYearValue)!
+            if !(startValue > endValue
+                 && !(startValue == 0 || endValue == 0)) {
                 startDateTextField.layer.borderColor = UIColor.mainGray.cgColor
                 endYearValue = yearArray[endDatePickerView.selectedRow(inComponent: 0)]
                 endMonthValue = monthArray[endDatePickerView.selectedRow(inComponent: 1)]
                 sender.text = "\(endYearValue)/\(endMonthValue)"
-            default:
-                print(">>>ERROR: InputCareerVC - pickerView error")
+            } else {
+                sender.layer.borderColor = UIColor.mainBlack.cgColor
+                sender.layer.borderWidth = 1
             }
+        default:
+            sender.layer.borderColor = UIColor.mainBlack.cgColor
+            sender.layer.borderWidth = 1
         }
     }
     
     @objc
     func textFieldInactivated(_ sender: UITextField) {
-        sender.layer.borderColor = UIColor.mainGray.cgColor
-        sender.layer.borderWidth = 1
+        switch sender{
+        case startDateTextField, endDateTextField:
+            // 반드시 [start < end] 만족해야함
+            let startValue = Int(startMonthValue)! + 12*Int(startYearValue)!
+            let endValue = Int(endMonthValue)! + 12*Int(endYearValue)!
+            
+            // 불만족시
+            if startValue > endValue
+                && !(startValue == 0 || endValue == 0) {
+                // shake 애니메이션 + borderColor: 0xFF0000
+                startDateTextField.shake()
+                endDateTextField.shake()
+            } else {
+                startDateTextField.layer.borderColor = UIColor.mainGray.cgColor
+                endDateTextField.layer.borderColor = UIColor.mainGray.cgColor
+            }
+        default:
+            sender.layer.borderColor = UIColor.mainGray.cgColor
+            sender.layer.borderWidth = 1
+        }
     }
     
     @objc
@@ -470,11 +580,15 @@ class ProfileInputCareerVC: UIViewController {
             startDatePickerView.selectRow(0, inComponent: 0, animated: false)
             startDatePickerView.selectRow(0, inComponent: 1, animated: false)
             startDateTextField.text = ""
+            startYearValue =  "0"
+            startMonthValue = "0"
         }
         else if endDateTextField.isEditing {
             endDatePickerView.selectRow(0, inComponent: 0, animated: false)
             endDatePickerView.selectRow(0, inComponent: 1, animated: false)
             endDateTextField.text = ""
+            endYearValue =  "0"
+            endMonthValue = "0"
         }
         self.view.endEditing(true)
     }
@@ -485,8 +599,8 @@ class ProfileInputCareerVC: UIViewController {
         /* 모든 textField가 채워졌으면 프로필 저장 버튼 활성화 */
         if self.companyTextField.text?.count != 0,
            self.positionTextField.text?.count != 0,
-           self.startDateTextField.text?.count != 0,
-           self.endDateTextField.text?.count != 0 {
+           self.startDateTextField.text?.count == 7,
+           (self.endDateTextField.text?.count == 7 || self.endDateTextField.text?.count == 2) {
             
             // 재직중 버튼 활성화시 -> 무조건 활성화
             if isWorking {
@@ -502,7 +616,8 @@ class ProfileInputCareerVC: UIViewController {
                 let endValue = Int(endMonthValue)! + 12*Int(endYearValue)!
                 
                 // 불만족시
-                if startValue > endValue {
+                if (startValue > endValue
+                    && !(startValue == 0 || endValue == 0)) {
                     // shake 애니메이션 + borderColor: 0xFF0000
                     startDateTextField.shake()
                     endDateTextField.shake()
@@ -518,9 +633,7 @@ class ProfileInputCareerVC: UIViewController {
                     }
                     saveUserProfileButton.isEnabled = true
                 }
-                
             }
-            
         } else {
             saveUserProfileButton.isEnabled = false
             UIView.animate(withDuration: 0.33) { [weak self] in
@@ -580,6 +693,19 @@ class ProfileInputCareerVC: UIViewController {
         }
     }
     
+    @objc
+    private func textDidChange(_ sender: UITextField) {
+        switch sender {
+        case companyTextField:
+            companyTextCount = companyTextField.text?.count ?? 0
+            NotificationCenter.default.post(name: Notification.Name("textDidChange"), object: sender)
+        case positionTextField:
+            positionTextCount = positionTextField.text?.count ?? 0
+            NotificationCenter.default.post(name: Notification.Name("textDidChange"), object: sender)
+        default:
+            print(">>>ERROR: typeText InputCareerVC")
+        }
+    }
 }
     
 extension ProfileInputCareerVC: UIPickerViewDataSource, UIPickerViewDelegate {
@@ -695,4 +821,80 @@ extension ProfileInputCareerVC {
     @objc private func viewDidTap() {
         self.view.endEditing(true)
     }
+}
+
+extension ProfileInputCareerVC {
+    func setObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(validTextCount(_:)), name: Notification.Name("textDidChange"), object: nil)
+    }
+    
+    @objc private func validTextCount(_ notification: Notification) {
+        if let textField = notification.object as? UITextField {
+            if let text = textField.text {
+                if text.count > maxTextCount {
+                    // 22글자 넘어가면 자동으로 키보드 내려감
+                    textField.resignFirstResponder()
+                }
+                // 초과되는 텍스트 제거
+                if text.count >= maxTextCount {
+                    let index = text.index(text.startIndex, offsetBy: maxTextCount)
+                    let newString = text[text.startIndex..<index]
+                    textField.text = String(newString)
+                }
+            }
+        }
+    }
+}
+
+extension ProfileInputCareerVC {
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            
+            var safeArea = self.view.frame
+            safeArea.size.height += headerView.frame.maxY
+            safeArea.size.height += scrollView.contentOffset.y
+            safeArea.size.height -= keyboardSize.height + (UIScreen.main.bounds.height*0.04) // Adjust buffer to your liking
+            
+            // determine which UIView was selected and if it is covered by keyboard
+            
+            let activeField: UIView? = [companyTextField, positionTextField, startDateTextField, endDateTextField].first { $0.isFirstResponder }
+            if let activeField = activeField {
+                if safeArea.contains(CGPoint(x: 0, y: activeField.frame.maxY)) {
+                    print("No need to Scroll")
+                    return
+                } else {
+                    distance = activeField.frame.maxY - safeArea.size.height
+                    scrollOffset = scrollView.contentOffset.y
+                    self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset + distance), animated: true)
+                }
+            }
+            // prevent scrolling while typing
+            print(distance)
+            print(scrollOffset)
+            scrollView.isScrollEnabled = false
+        }
+    }
+    
+    @objc private func keyboardWillHide() {
+        
+        if distance == 0 {
+            return
+        }
+        // return to origin scrollOffset
+//        self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset), animated: true)
+        self.scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        scrollOffset = 0
+        distance = 0
+        scrollView.isScrollEnabled = true
+    }
+    
+    func setKeyboardObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    func setKeyboardObserverRemove() {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
 }
