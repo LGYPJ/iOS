@@ -110,13 +110,15 @@ class IceBreakingRoomVC: UIViewController {
 	}
 	private var cardCount = 10
 	private var currentIndex = 0
-	private let roomId: Int
+	private let roomId: String
 	private let roomName: String
+	let memberId: Int
 	private var socketClient = StompClientLib()
 	
     // MARK: - Life Cycle
 	
-	init(roomId: Int, roomName: String) {
+	init(roomId: String, roomName: String) {
+		self.memberId = UserDefaults.standard.integer(forKey: "memberIdx")
 		self.roomId = roomId
 		self.roomName = roomName
 		super.init(nibName: nil, bundle: nil)
@@ -404,6 +406,8 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 	func stompClientDidConnect(client: StompClientLib!) {
 		print("Stomp socket is connected")
 		subscribeSocket()
+
+		
 		sendMessageWithSocket(type: "ENTER", message: "\(UserDefaults.standard.integer(forKey: "memberIdx"))")
 	}
 	
