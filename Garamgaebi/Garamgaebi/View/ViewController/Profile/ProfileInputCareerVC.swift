@@ -474,6 +474,10 @@ class ProfileInputCareerVC: UIViewController {
     @objc
     private func toggleButton(_ sender: UIButton) {
         sender.isSelected.toggle()
+        checkButtonValid(sender)
+    }
+    
+    private func checkButtonValid(_ sender: UIButton){
         switch sender.isSelected {
         case true:
             // cornerCase에서 토글시
@@ -481,13 +485,11 @@ class ProfileInputCareerVC: UIViewController {
             endDateTextField.layer.borderColor = UIColor.mainGray.cgColor
             
             sender.setTitleColor(.mainBlack, for: .normal)
-            endDateTextField.isEnabled = false
             endDateTextField.text = "현재"
             endYearValue = String(Int(yearArray[0])!+1)
             endMonthValue = monthArray[0]
         case false:
             sender.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
-            endDateTextField.isEnabled = true
             endDatePickerView.selectRow(0, inComponent: 0, animated: false)
             endDatePickerView.selectRow(0, inComponent: 1, animated: false)
             endYearValue = yearArray[0]
@@ -498,13 +500,13 @@ class ProfileInputCareerVC: UIViewController {
     
     @objc
     func textFieldActivated(_ sender: UITextField) {
+        sender.layer.borderColor = UIColor.mainBlack.cgColor
         switch sender {
         case startDateTextField:
             let startValue = Int(startMonthValue)! + 12*Int(startYearValue)!
             let endValue = Int(endMonthValue)! + 12*Int(endYearValue)!
             if !(startValue > endValue
                 && !(startValue == 0 || endValue == 0)) {
-                endDateTextField.layer.borderColor = UIColor.mainGray.cgColor
                 startYearValue = yearArray[startDatePickerView.selectedRow(inComponent: 0)]
                 startMonthValue = monthArray[startDatePickerView.selectedRow(inComponent: 1)]
                 sender.text = "\(startYearValue)/\(startMonthValue)"
@@ -513,11 +515,14 @@ class ProfileInputCareerVC: UIViewController {
                 sender.layer.borderWidth = 1
             }
         case endDateTextField:
+            if checkIsWorkingButton.isSelected {
+                checkIsWorkingButton.isSelected = false
+                checkButtonValid(checkIsWorkingButton)
+            }
             let startValue = Int(startMonthValue)! + 12*Int(startYearValue)!
             let endValue = Int(endMonthValue)! + 12*Int(endYearValue)!
             if !(startValue > endValue
                  && !(startValue == 0 || endValue == 0)) {
-                startDateTextField.layer.borderColor = UIColor.mainGray.cgColor
                 endYearValue = yearArray[endDatePickerView.selectedRow(inComponent: 0)]
                 endMonthValue = monthArray[endDatePickerView.selectedRow(inComponent: 1)]
                 sender.text = "\(endYearValue)/\(endMonthValue)"
@@ -526,8 +531,7 @@ class ProfileInputCareerVC: UIViewController {
                 sender.layer.borderWidth = 1
             }
         default:
-            sender.layer.borderColor = UIColor.mainBlack.cgColor
-            sender.layer.borderWidth = 1
+            print(">>>Front: textFieldActivated")
         }
     }
     
