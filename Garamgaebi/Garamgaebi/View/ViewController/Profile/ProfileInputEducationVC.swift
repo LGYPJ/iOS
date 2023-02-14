@@ -440,7 +440,7 @@ class ProfileInputEducationVC: UIViewController {
         saveUserProfileButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
-            make.bottom.equalToSuperview().inset(48)
+            make.bottom.equalToSuperview().inset(14)
         }
     }
 
