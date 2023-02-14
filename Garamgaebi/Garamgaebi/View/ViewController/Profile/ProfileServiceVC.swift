@@ -14,6 +14,14 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     // MARK: - Properties
     private var isChecking: Bool = false
     
+    // 이메일 유효성 검사
+    var email = String()
+    var isValidEmail = false {
+        didSet {
+            self.validateEmail()
+        }
+    }
+    
     // MARK: - Subviews
     lazy var headerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 71))
@@ -63,6 +71,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         $0.basicTextField()
         $0.placeholder = "답변 받을 이메일 주소"
         
+        $0.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
         $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
@@ -104,8 +113,6 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         $0.text = textViewPlaceHolder
         $0.textColor = .mainGray
         $0.delegate = self // <-
-        
-//        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .touchUpInside)
     }
     
     lazy var agreeCheckBtn = UIButton().then {
@@ -339,6 +346,37 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
             }
         }
     }
+    
+    @objc func textFieldEditingChanged(_ sender: UITextField) {
+        let text = sender.text ?? ""
+        
+        switch sender {
+        case emailTextField:
+            self.isValidEmail = text.isValidEmail()
+            self.email = text
+        
+        default:
+            fatalError("Missing TextField...")
+        }
+    }
+    
+    func validateEmail() {
+        if isValidEmail {
+            self.sendBtn.isEnabled = true
+            self.emailTextField.layer.borderColor = UIColor.mainBlack.cgColor
+            self.emailTextField.layer.borderWidth = 1
+            UIView.animate(withDuration: 0.33) {
+                self.sendBtn.backgroundColor = .mainBlue
+            }
+        } else {
+            self.sendBtn.isEnabled = false
+            self.sendBtn.layer.borderColor = UIColor(hex: 0xFF0000).cgColor
+            self.emailTextField.layer.borderWidth = 1
+            UIView.animate(withDuration: 0.33) {
+                self.sendBtn.backgroundColor = .mainGray
+            }
+        }
+    }
 }
 
 // MARK: - Extension
@@ -366,6 +404,17 @@ extension ProfileServiceVC: UITextViewDelegate {
         guard let str = textView.text else { return true }
         let newLenght = str.count + text.count - range.length
         
+        if contentTextField.text.isEmpty {
+            sendBtn.backgroundColor = .mainGray
+            sendBtn.isEnabled = false
+        }
+        if isValidEmail,
+           questionTypeTextField.text?.count != 0,
+           isChecking {
+            sendBtn.backgroundColor = .mainBlue
+            sendBtn.isEnabled = true
+        }
+
         return newLenght <= 100
     }
 }

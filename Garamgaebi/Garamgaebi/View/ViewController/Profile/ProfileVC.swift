@@ -25,6 +25,8 @@ class ProfileVC: UIViewController {
     var careerData: [CareerResult] = []
     var eduData: [EducationResult] = []
     
+    var snsIdx: Int = 0
+    
     // MARK: - Subviews
     lazy var headerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 71))
@@ -769,11 +771,17 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
         if tableView == snsTableView {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileSNSTableViewCell.identifier, for: indexPath) as? ProfileSNSTableViewCell else { return UITableViewCell()}
             
-            let type = snsData[indexPath.row].type
+            let row = snsData[indexPath.row]
+            let type = row.type
             if type != nil {
                 cell.snsTypeLable.text = type
             } else { cell.snsTypeLable.text = "기타" }
-            cell.snsLinkLabel.text = snsData[indexPath.row].address
+            cell.snsLinkLabel.text = row.address
+            cell.copyButton.isHidden = true
+            
+            snsIdx = row.snsIdx
+            print("cellForRowAt: \(snsIdx)")
+            cell.delegate = self
             
             cell.selectionStyle = .none
 
@@ -783,10 +791,17 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileHistoryTableViewCell.identifier, for: indexPath) as? ProfileHistoryTableViewCell else {return UITableViewCell()}
             
             let row = careerData[indexPath.row]
+            var endDate = ""
             
+            if row.isWorking == "TRUE" { // endDate가 nil이 옴
+                endDate = "현재"
+            } else {
+                endDate = row.endDate ?? ""
+            }
+            
+            cell.periodLabel.text = "\(row.startDate) ~ \(endDate)"
             cell.companyLabel.text = row.company
             cell.positionLabel.text = row.position
-            cell.periodLabel.text = "\(row.startDate) ~ \(row.endDate)"
             
             cell.selectionStyle = .none
 
@@ -796,15 +811,52 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileHistoryTableViewCell.identifier, for: indexPath) as? ProfileHistoryTableViewCell else {return UITableViewCell()}
             
             let row = eduData[indexPath.row]
+            var endDate = ""
+            
+            if row.isLearning == "TRUE" { // endDate가 nil이 옴
+                endDate = "현재"
+            } else {
+                endDate = row.endDate ?? ""
+            }
             
             cell.companyLabel.text = row.institution
             cell.positionLabel.text = row.major
-            cell.periodLabel.text = "\(row.startDate) ~ \(row.endDate)"
+            cell.periodLabel.text = "\(row.startDate) ~ \(endDate)"
             
             cell.selectionStyle = .none
             return cell
         }
         
         return UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+//        if (tableView == snsTableView) {
+//            if let delegate = ButtonTappedDelegate.self {
+//
+//                let snsIdx = snsData[indexPath.row].snsIdx
+//                delegate.editButtonDidTap(snsIdx)
+//                print("sendIdx : \(snsIdx)")
+//            }
+//        }
+    }
+}
+
+extension ProfileVC: ButtonTappedDelegate {
+    func editButtonDidTap(snsIdx: Int) {
+        // 화면 전환
+        let nextVC = ProfileInputSNSVC()
+        nextVC.memberIdx = memberIdx
+        nextVC.snsIdx = snsIdx
+        nextVC.titleLabel.text = "SNS 편집하기"
+        nextVC.editButtonStackView.isHidden = false
+        nextVC.saveUserProfileButton.isHidden = true
+        
+        navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
+    func copyButtonDidTap() {
+        //
     }
 }

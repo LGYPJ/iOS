@@ -15,6 +15,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
     // MARK: - Properties
     lazy var memberIdx: Int = 0
     lazy var token = UserDefaults.standard.string(forKey: "BearerToken")
+    var snsIdx: Int = 0
     
     // MARK: - Subviews
     lazy var headerView: UIView = {
@@ -143,6 +144,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print("snsIdx: \(snsIdx)")
         view.backgroundColor = .white
         tabBarController?.tabBar.isHidden = true
         
@@ -233,7 +235,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         // editButtonStackView
         editButtonStackView.snp.makeConstraints { make in
             make.left.right.equalTo(saveUserProfileButton)
-            make.bottom.equalTo(saveUserProfileButton.snp.top).offset(-16)
+            make.bottom.equalTo(saveUserProfileButton)
             make.height.equalTo(48)
         }
     }

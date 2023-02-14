@@ -555,7 +555,7 @@ extension ProfileEditVC: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == textViewPlaceHolder {
             textView.text = nil
-            textView.textColor = .black
+            textView.textColor = .mainBlack
         }
     }
     
@@ -563,7 +563,7 @@ extension ProfileEditVC: UITextViewDelegate {
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             textView.text = textViewPlaceHolder
             textView.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-            textView.textColor = .systemGray5
+            textView.textColor = .mainGray
             //updateCountLabel(characterCount: 0)
         }
     }
