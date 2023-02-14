@@ -148,10 +148,12 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         $0.isEnabled = false
     }
     
-    let logoutLabel = UIButton().then {
+    lazy var logoutLabel = UIButton().then {
         $0.setTitle("로그아웃", for: .normal)
         $0.titleLabel?.font = UIFont.NotoSansKR(type: .Bold, size: 16)
         $0.setTitleColor(UIColor(hex: 0xAEAEAE), for: .normal)
+        
+        $0.addTarget(self, action: #selector(logoutButtonDidTap), for: .touchUpInside)
     }
     
     lazy var withdrawalLabel = UIButton().then {
@@ -293,6 +295,16 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         
         self.present(bottomSheetVC, animated: false, completion: nil)
         self.view.endEditing(false)
+    }
+    
+    // 로그아웃 버튼 did tap
+    @objc private func logoutButtonDidTap() {
+        
+        // 로그아웃 버튼 누르면 로그인 화면으로
+        let nextVC = LoginVC()
+        // 호출하는 화면의 크기와 동일한 화면크기로 불려짐. 기존의 뷰들은 아예 삭제
+        nextVC.modalPresentationStyle = .currentContext
+        present(nextVC, animated: true)
     }
     
     // 회원탈퇴 버튼 did tap
