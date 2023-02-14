@@ -224,7 +224,8 @@ class HomeVC: UIViewController {
         let popUpVC: UIViewController = notification.object as! UIViewController
         
         popUpVC.modalPresentationStyle = .overFullScreen
-        present(popUpVC, animated: false)
+        popUpVC.modalTransitionStyle = .crossDissolve
+        present(popUpVC, animated: true)
     }
     
     
