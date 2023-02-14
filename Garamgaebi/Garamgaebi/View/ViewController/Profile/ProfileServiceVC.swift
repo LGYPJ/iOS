@@ -14,6 +14,14 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     // MARK: - Properties
     private var isChecking: Bool = false
     
+    // 이메일 유효성 검사
+    var email = String()
+    var isValidEmail = false {
+        didSet {
+            self.validateEmail()
+        }
+    }
+    
     // MARK: - Subviews
     lazy var headerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 71))
@@ -63,7 +71,8 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         $0.basicTextField()
         $0.placeholder = "답변 받을 이메일 주소"
         
-        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
+        $0.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
+//        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
     }
@@ -91,7 +100,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
         $0.addTarget(self, action: #selector(showBottomSheet), for: .editingDidBegin)
-        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
+//        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
     }
     
     let textViewPlaceHolder = "내용을 적어주세요"
@@ -119,7 +128,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         
         $0.clipsToBounds = true
         $0.addTarget(self, action: #selector(toggleButton), for: .touchUpInside)
-        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .touchUpInside)
+//        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .touchUpInside)
     }
     
     let agreemsgLabel = UILabel().then {
@@ -336,6 +345,37 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
             sendBtn.isEnabled = false
             UIView.animate(withDuration: 0.33) { [weak self] in
                 self?.sendBtn.backgroundColor = .mainGray
+            }
+        }
+    }
+    
+    @objc func textFieldEditingChanged(_ sender: UITextField) {
+        let text = sender.text ?? ""
+        
+        switch sender {
+        case emailTextField:
+            self.isValidEmail = text.isValidEmail()
+            self.email = text
+        
+        default:
+            fatalError("Missing TextField...")
+        }
+    }
+    
+    func validateEmail() {
+        if isValidEmail {
+            self.sendBtn.isEnabled = true
+            self.emailTextField.layer.borderColor = UIColor.mainBlack.cgColor
+            self.emailTextField.layer.borderWidth = 1
+            UIView.animate(withDuration: 0.33) {
+                self.sendBtn.backgroundColor = .mainBlue
+            }
+        } else {
+            self.sendBtn.isEnabled = false
+            self.sendBtn.layer.borderColor = UIColor(hex: 0xFF0000).cgColor
+            self.emailTextField.layer.borderWidth = 1
+            UIView.animate(withDuration: 0.33) {
+                self.sendBtn.backgroundColor = .mainGray
             }
         }
     }
