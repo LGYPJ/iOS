@@ -31,6 +31,13 @@ struct IceBrakingCurrentUserModel: Codable {
 	let profileUrl: String?
 }
 
+struct IceBreakingImageModelResponse: Codable {
+	let isSuccess: Bool
+	let code: Int
+	let message: String
+	let result: [String]?
+}
+
 struct IcebreakingViewModel {
 	public static func postGameUser(roomId: String, memberId: Int, completion: @escaping (() -> Void)) {
 		let url = "https://garamgaebi.shop/game/member"
@@ -117,6 +124,19 @@ struct IcebreakingViewModel {
 			"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
 		]
 		
-//		AF.request(url, method: .get, )
+		AF.request(url, method: .get, headers: headers)
+			.validate()
+			.responseDecodable(of: IceBreakingImageModelResponse.self) { response in
+				switch response.result {
+				case .success(let result):
+					if result.isSuccess {
+						completion(result.result ?? [])
+					} else {
+						print("실패(게임 이미지 GET): \(result.message)")
+					}
+				case .failure(let error):
+					print("실패(AF-게임 이미지 GET): \(error.localizedDescription)")
+				}
+			}
 	}
 }

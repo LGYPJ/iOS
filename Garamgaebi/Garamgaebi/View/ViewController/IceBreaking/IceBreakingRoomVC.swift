@@ -109,8 +109,9 @@ class IceBreakingRoomVC: UIViewController {
 			userCollectionview.reloadData()
 		}
 	}
-	private var cardCount = 10
+//	private var cardCount = 10
 	private var currentIndex = 0
+	private let programId: Int
 	private let roomId: String
 	private let roomName: String
 	private let memberId: Int
@@ -119,15 +120,20 @@ class IceBreakingRoomVC: UIViewController {
 	private var userList: [IceBrakingCurrentUserModel] = [] {
 		didSet {
 			self.userCollectionview.reloadData()
-			print(userList)
+		}
+	}
+	private var imageList: [String] = [] {
+		didSet {
+			self.cardCollectionView.reloadData()
 		}
 	}
 	
     // MARK: - Life Cycle
 	
-	init(roomId: String, roomName: String) {
+	init(programId: Int ,roomId: String, roomName: String) {
 		self.memberId = UserDefaults.standard.integer(forKey: "memberIdx")
 		self.nickname = UserDefaults.standard.string(forKey: "nickname")!
+		self.programId = programId
 		self.roomId = roomId
 		self.roomName = roomName
 		super.init(nibName: nil, bundle: nil)
@@ -143,6 +149,7 @@ class IceBreakingRoomVC: UIViewController {
 		configureCollectionView()
 		configureViews()
 		configureButtonTarget()
+		fetchGameImage()
 		connectSocket()
 	}
 	
@@ -231,6 +238,12 @@ extension IceBreakingRoomVC {
 		nextButton.addTarget(self, action: #selector(didTapNextButton), for: .touchUpInside)
 	}
 	
+	private func fetchGameImage() {
+		IcebreakingViewModel.getGameImage(programId: self.programId, completion: { result in
+			self.imageList = result
+		})
+	}
+	
 	private func connectSocket() {
 		let url = URL(string: "ws://garamgaebi.shop:8080/ws/game/websocket")!
 		socketClient.openSocketWithURLRequest(
@@ -244,7 +257,7 @@ extension IceBreakingRoomVC {
 	}
 
 	private func sendMessageWithSocket(type: String, message: String, profileUrl: String) {
-		var payloadObject : [String : Any] = [
+		let payloadObject : [String : Any] = [
 			"type" : type,
 			"roomId": self.roomId,
 			"sender": self.nickname,
@@ -263,7 +276,7 @@ extension IceBreakingRoomVC {
 	}
 	
 	private func scrollToNextItem() {
-		if currentIndex < cardCount {
+		if currentIndex < (imageList.count - 1) {
 			// 해당 인덱스로 스크롤
 			cardCollectionView.scrollToItem(at: IndexPath(row: currentIndex, section: 1), at: .centeredHorizontally, animated: true)
 			userCollectionview.scrollToItem(at: IndexPath(row: currentIndex % userList.count, section: 0), at: .centeredHorizontally, animated: true)
@@ -272,18 +285,19 @@ extension IceBreakingRoomVC {
 			userCollectionview.reloadData()
 		}
 		// 다음 버튼 서서히 사라지는 애니메이션
-		if currentIndex == (cardCount - 1) {
+		if currentIndex == (imageList.count - 1) {
 			UIView.animate(withDuration: 0.5, animations: {
 				self.nextButton.alpha = 0
 			}, completion: { [weak self] _ in
 				self?.nextButton.isEnabled = false
 			})
 		}
+		currentIndex += 1
 	}
 	
 	// 뒤로가기 버튼 did tap
 	@objc private func didTapBackBarButton() {
-		IcebreakingViewModel.deleteGameUser(roomId: self.roomId, memberId: self.memberId+2, completion: {
+		IcebreakingViewModel.deleteGameUser(roomId: self.roomId, memberId: self.memberId, completion: {
 			self.disconnectSocket()
 		})
 		self.navigationController?.popViewController(animated: true)
@@ -309,7 +323,8 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 		} else if collectionView == cardCollectionView {
 			switch section {
 			case 0: return 1
-			case 1: return cardCount
+//			case 1: return cardCount
+			case 1: return imageList.count
 			default: return 0
 			}
 		} else {
@@ -335,7 +350,9 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 				return cell
 			case 1:
 				guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IceBreakingCardCollectionViewCell.identifier, for: indexPath) as? IceBreakingCardCollectionViewCell else {return UICollectionViewCell()}
-				cell.contentImageView.image = UIImage(named: "ExIceBreakingCardText")
+//				cell.contentImageView.image = UIImage(named: "ExIceBreakingCardText")
+				let url = URL(string: imageList[indexPath.row])
+				cell.contentImageView.kf.setImage(with: url)
 				
 				// 현재 셀, 앞 뒤 셀들만 보여지고 나머지는 숨김
 				if (currentIndex-1)...(currentIndex+1) ~= (indexPath.row) {
@@ -403,7 +420,6 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 			
 		case "TALK":
 			if jsonMessage == "NEXT" {
-				currentIndex += 1
 				scrollToNextItem()
 			} else {
 				
@@ -429,7 +445,7 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 		print("Stomp socket is connected")
 		subscribeSocket()
 //		self.sendMessageWithSocket(type: "ENTER", message: "", profileUrl: "")
-		IcebreakingViewModel.postGameUser(roomId: self.roomId, memberId: self.memberId+2, completion: {
+		IcebreakingViewModel.postGameUser(roomId: self.roomId, memberId: self.memberId, completion: {
 			// TODO: 나의 이미지 Url 얻어올 방법?
 			self.sendMessageWithSocket(type: "ENTER", message: "", profileUrl: "")
 		})
