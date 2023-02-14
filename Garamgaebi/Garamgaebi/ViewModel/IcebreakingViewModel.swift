@@ -110,4 +110,13 @@ struct IcebreakingViewModel {
 				}
 			}
 	}
+	
+	public static func getGameImage(programId: Int, completion: @escaping (([String]) -> Void)) {
+		let url = "https://garamgaebi.shop/game/\(programId)/images"
+		let headers: HTTPHeaders = [
+			"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
+		]
+		
+//		AF.request(url, method: .get, )
+	}
 }

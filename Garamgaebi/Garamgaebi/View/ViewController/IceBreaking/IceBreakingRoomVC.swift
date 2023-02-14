@@ -119,7 +119,7 @@ class IceBreakingRoomVC: UIViewController {
 	private var userList: [IceBrakingCurrentUserModel] = [] {
 		didSet {
 			self.userCollectionview.reloadData()
-			print(userList.count)
+			print(userList)
 		}
 	}
 	
@@ -247,8 +247,7 @@ extension IceBreakingRoomVC {
 		var payloadObject : [String : Any] = [
 			"type" : type,
 			"roomId": self.roomId,
-//			"sender": self.nickname,
-			"sender": "연현이아님",
+			"sender": self.nickname,
 			"message": message,
 			"profileUrl": profileUrl
 		]
@@ -284,7 +283,7 @@ extension IceBreakingRoomVC {
 	
 	// 뒤로가기 버튼 did tap
 	@objc private func didTapBackBarButton() {
-		IcebreakingViewModel.deleteGameUser(roomId: self.roomId, memberId: self.memberId+1, completion: {
+		IcebreakingViewModel.deleteGameUser(roomId: self.roomId, memberId: self.memberId, completion: {
 			self.disconnectSocket()
 		})
 		self.navigationController?.popViewController(animated: true)
@@ -303,7 +302,10 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 	}
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		if collectionView == userCollectionview {
-			return userList.count
+			switch section {
+			case 0: return userList.count
+			default: return 0
+			}
 		} else if collectionView == cardCollectionView {
 			switch section {
 			case 0: return 1
@@ -427,13 +429,9 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 		print("Stomp socket is connected")
 		subscribeSocket()
 //		self.sendMessageWithSocket(type: "ENTER", message: "", profileUrl: "")
-		IcebreakingViewModel.postGameUser(roomId: self.roomId, memberId: self.memberId+1, completion: {
-			IcebreakingViewModel.getCurrentGameUserWithPost(roomId: self.roomId, completion: { result in
-				self.userList = result
-				print(result)
-				// TODO: 나의 이미지 Url 얻어올 방법?
-				self.sendMessageWithSocket(type: "ENTER", message: "", profileUrl: "")
-			})
+		IcebreakingViewModel.postGameUser(roomId: self.roomId, memberId: self.memberId, completion: {
+			// TODO: 나의 이미지 Url 얻어올 방법?
+			self.sendMessageWithSocket(type: "ENTER", message: "", profileUrl: "")
 		})
 	}
 	
