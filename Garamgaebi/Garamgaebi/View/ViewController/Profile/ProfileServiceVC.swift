@@ -114,6 +114,11 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         $0.textColor = .mainGray
         $0.delegate = self // <-
     }
+    lazy var contentLengthLabel = UILabel().then {
+        $0.font = UIFont.NotoSansKR(type: .Bold, size: 12)
+        $0.textColor = UIColor(hex: 0xAEAEAE)
+        $0.text = "0/100"
+    }
     
     lazy var agreeCheckBtn = UIButton().then {
         $0.setTitle("이메일 정보 제공 동의", for: .normal)
@@ -179,6 +184,8 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         [titleLabel, backButton]
             .forEach {headerView.addSubview($0)}
         
+        view.addSubview(contentLengthLabel)
+        
         // layout
         
         //headerView
@@ -235,6 +242,9 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
             $0.top.equalTo(questionTypeTextField.snp.bottom).offset(12)
             $0.leading.trailing.equalTo(emailTextField)
             $0.height.equalTo(152)
+        }
+        contentLengthLabel.snp.makeConstraints { /// 글자수 계산
+            $0.trailing.bottom.equalTo(contentTextField).inset(12)
         }
         
         agreeCheckBtn.snp.makeConstraints { /// 이메일 정보 제공 동의
@@ -415,6 +425,7 @@ extension ProfileServiceVC: UITextViewDelegate {
             sendBtn.isEnabled = true
         }
 
+        contentLengthLabel.text = "\(str.count)/100"
         return newLenght <= 100
     }
 }
