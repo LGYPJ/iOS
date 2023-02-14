@@ -121,7 +121,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         button.basicButton()
         button.setTitle("저장하기", for: .normal)
         
-        //        button.addTarget(self, action: #selector(saveButtonDidTap), for: .touchUpInside)
+        button.addTarget(self, action: #selector(editButtonDidTap), for: .touchUpInside)
         return button
     }()
     lazy var editButtonStackView: UIStackView = {
@@ -260,6 +260,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         self.view.endEditing(true)
     }
     
+    // sns 추가 버튼
     @objc private func saveButtonDidTap(_ sender: UIButton) {
         guard let type = typeTextField.text else { return }
         guard let address = linkTextField.text else { return }
@@ -268,7 +269,16 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
                 self.navigationController?.popViewController(animated: true)
             }
         }
-        
+    }
+    // sns 수정 버튼
+    @objc private func editButtonDidTap(_ sender: UIButton) {
+        guard let type = typeTextField.text else { return }
+        guard let address = linkTextField.text else { return }
+        patchSNS(snsIdx: snsIdx, type: type, address: address ) { result in
+            if result {
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
     }
     
     @objc func allTextFieldFilledIn() {
@@ -366,7 +376,48 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
             }
         }
     }
+    // MARK: - [PATCH] SNS 삭제
+    func patchSNS(snsIdx: Int, type: String, address: String, completion: @escaping ((Bool) -> Void)) {
+        
+        // http 요청 주소 지정
+        let url = "https://garamgaebi.shop/profile/sns"
+        
+        // http 요청 헤더 지정
+        let header : HTTPHeaders = [
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(token ?? "")"
+        ]
+        let bodyData: Parameters = [
+            "snsIdx": snsIdx,
+            "address": address,
+            "type": type
+        ]
+        
+        // httpBody 에 parameters 추가
+        AF.request(
+            url,
+            method: .patch,
+            parameters: bodyData,
+            encoding: JSONEncoding.default,
+            headers: header
+        )
+        .validate()
+        .responseDecodable(of: ProfilePostResponse.self) { response in
+            switch response.result {
+            case .success(let response):
+                if response.isSuccess {
+                    print("성공(SNS수정): \(response.message)")
+                    completion(response.result)
+                } else {
+                    print("실패(SNS수정): \(response.message)")
+                }
+            case .failure(let error):
+                print("실패(AF-SNS수정): \(error.localizedDescription)")
+            }
+        }
+    }
 }
+
 // MARK: - Extension
 extension ProfileInputSNSVC {
     private func configureGestureRecognizer() {
