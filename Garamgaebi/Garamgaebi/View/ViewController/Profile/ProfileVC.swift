@@ -38,7 +38,7 @@ class ProfileVC: UIViewController {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "내 프로필"
-        label.textColor = .black.withAlphaComponent(0.8)
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 24)
         return label
     }()
@@ -67,19 +67,19 @@ class ProfileVC: UIViewController {
     }
     
     let nameLabel = UILabel().then {
+        $0.textColor = .mainBlack
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 20)
     }
     
     let orgLabel = UILabel().then {
+        $0.textColor = .mainBlack
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 16)
     }
     
     lazy var emailLabel = UILabel().then {
+        $0.textColor = .mainBlack
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         $0.textColor = .mainBlue
-        let attributedString = NSMutableAttributedString.init(string: " ")
-        attributedString.addAttribute(NSAttributedString.Key.underlineStyle, value: 1, range: NSRange.init(location: 0, length: attributedString.length))
-        $0.attributedText = attributedString
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(emailLabelDidTap))
         $0.isUserInteractionEnabled = true
@@ -138,6 +138,7 @@ class ProfileVC: UIViewController {
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
+        view.isScrollEnabled = false
         
         view.register(ProfileSNSTableViewCell.self, forCellReuseIdentifier: ProfileSNSTableViewCell.identifier)
         view.delegate = self
@@ -174,6 +175,7 @@ class ProfileVC: UIViewController {
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
+        view.isScrollEnabled = false
         
         view.register(ProfileHistoryTableViewCell.self, forCellReuseIdentifier: ProfileHistoryTableViewCell.identifier)
         view.delegate = self
@@ -210,7 +212,8 @@ class ProfileVC: UIViewController {
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
-        //view.isScrollEnabled = false
+        view.isScrollEnabled = false
+        
         view.register(ProfileHistoryTableViewCell.self, forCellReuseIdentifier: ProfileHistoryTableViewCell.identifier)
         view.delegate = self
         view.dataSource = self
@@ -434,8 +437,6 @@ class ProfileVC: UIViewController {
     }
     
     @objc private func serviceButtonDidTap(_ sender : UIButton) {
-//        print("고객센터 버튼 클릭")
-        
         // 화면 전환
         let nextVC = ProfileServiceVC()
         navigationController?.pushViewController(nextVC, animated: true)
@@ -443,7 +444,6 @@ class ProfileVC: UIViewController {
     
     @objc private func editButtonDidTap(_ sender : UIButton) {
 //        print("프로필 편집 버튼 클릭")
-        
         
         // 다음 화면으로 넘길 텍스트
         DispatchQueue.main.async {

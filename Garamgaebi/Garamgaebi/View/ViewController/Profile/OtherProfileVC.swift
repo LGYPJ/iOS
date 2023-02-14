@@ -63,19 +63,18 @@ class OtherProfileVC: UIViewController {
     }
     
     let nameLabel = UILabel().then {
+        $0.textColor = .mainBlack
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 20)
     }
     
     let orgLabel = UILabel().then {
+        $0.textColor = .mainBlack
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 16)
     }
     
     lazy var emailLabel = UILabel().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         $0.textColor = .mainBlue
-        let attributedString = NSMutableAttributedString.init(string: " ")
-        attributedString.addAttribute(NSAttributedString.Key.underlineStyle, value: 1, range: NSRange.init(location: 0, length: attributedString.length))
-        $0.attributedText = attributedString
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(emailLabelDidTap))
         $0.isUserInteractionEnabled = true
@@ -119,6 +118,7 @@ class OtherProfileVC: UIViewController {
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
+        view.isScrollEnabled = false
     
         view.layer.cornerRadius = 13 // 테스트
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
@@ -145,6 +145,7 @@ class OtherProfileVC: UIViewController {
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
+        view.isScrollEnabled = false
         
         view.layer.cornerRadius = 14 // 테스트
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
@@ -170,6 +171,7 @@ class OtherProfileVC: UIViewController {
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
+        view.isScrollEnabled = false
         
         view.layer.cornerRadius = 15 // 테스트
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
