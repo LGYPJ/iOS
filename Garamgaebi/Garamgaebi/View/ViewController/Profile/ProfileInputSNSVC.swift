@@ -144,7 +144,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("snsIdx: \(snsIdx)")
+        print("편집할 snsIdx: \(snsIdx)")
         view.backgroundColor = .white
         tabBarController?.tabBar.isHidden = true
         

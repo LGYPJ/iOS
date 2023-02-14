@@ -11,7 +11,7 @@ import SnapKit
 import Then
 
 protocol ButtonTappedDelegate: AnyObject {
-    func editButtonDidTap(snsIdx: Int)
+    func editButtonDidTap(snsIdx: Int, type: String, address: String)
     func copyButtonDidTap()
 }
 
@@ -20,12 +20,16 @@ class ProfileSNSTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     
     // MARK: - Properties
     static let identifier = String(describing: ProfileSNSTableViewCell.self)
+    
     weak var delegate: ButtonTappedDelegate?
+    
     var snsIdx: Int?
+    var type: String?
+    var address: String?
     
     // MARK: - Subviews
     lazy var snsTypeLable = UILabel().then {
@@ -87,9 +91,9 @@ class ProfileSNSTableViewCell: UITableViewCell {
     }
     
     @objc private func editButtonDidTap() {
-        delegate?.editButtonDidTap(snsIdx: snsIdx ?? 0)
+        delegate?.editButtonDidTap(snsIdx: snsIdx ?? 0, type: type ?? "", address: address ?? "")
         
-        print("편집 버튼 클릭")
+//        print("편집 버튼 클릭")
     }
     
     @objc private func copyButtonDidTap() {

@@ -781,6 +781,8 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             
             // 편집 데이터 넘기기
             cell.snsIdx = row.snsIdx
+            cell.type = row.type
+            cell.address = row.address
             
             cell.delegate = self
             
@@ -833,9 +835,9 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
 }
 
 extension ProfileVC: ButtonTappedDelegate {
-    func editButtonDidTap(snsIdx: Int) {
+    func editButtonDidTap(snsIdx: Int, type: String, address: String) {
         // 화면 전환
-        print("받은 snsIdx: \(snsIdx)")
+//        print("받은 snsIdx: \(snsIdx)")
         let nextVC = ProfileInputSNSVC()
         
         // 편집 모드
@@ -846,6 +848,8 @@ extension ProfileVC: ButtonTappedDelegate {
         // 값 넘기기
         nextVC.memberIdx = memberIdx
         nextVC.snsIdx = snsIdx
+        nextVC.typeTextField.text = type
+        nextVC.linkTextField.text = address
 
         navigationController?.pushViewController(nextVC, animated: true)
     }

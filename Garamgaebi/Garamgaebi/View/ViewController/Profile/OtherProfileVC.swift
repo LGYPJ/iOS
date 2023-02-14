@@ -642,7 +642,7 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
 }
 
 extension OtherProfileVC: ButtonTappedDelegate {
-    func editButtonDidTap(snsIdx: Int) {
+    func editButtonDidTap(snsIdx: Int, type: String, address: String) {
         //
     }
     
