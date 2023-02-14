@@ -228,13 +228,15 @@ extension IceBreakingRoomVC {
 	}
 	
 	private func subscribeSocket() {
-		socketClient.subscribe(destination: "/topic/game/room/\(self.roomId)")
+//		socketClient.subscribe(destination: "/topic/game/room/\(self.roomId)")
+		socketClient.subscribe(destination: "/topic/game/room/1")
 	}
 
 	private func sendMessageWithSocket(type: String, message: String) {
 		var payloadObject : [String : Any] = [
 			"type" : type,
-			"roomId": self.roomId,
+//			"roomId": self.roomId,
+			"roomId": "1",
 			"sender": UserDefaults.standard.string(forKey: "nickname")!,
 			"message": message
 		]
