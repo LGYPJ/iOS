@@ -145,12 +145,16 @@ class IceBreakingRoomVC: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		disconnectSocket()
+		
+		IcebreakingViewModel.deleteGameUser(roomId: self.roomId, memberId: self.memberId, completion: {
+			self.disconnectSocket()
+			self.connectSocket()
+		})
+		
 		configureCollectionView()
 		configureViews()
 		configureButtonTarget()
 		fetchGameImage()
-		connectSocket()
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {

@@ -111,6 +111,7 @@ struct IcebreakingViewModel {
 						completion()
 					} else {
 						print("실패(게임 방 유저 삭제): \(result.message)")
+						completion()
 					}
 				case .failure(let error):
 					print("실패(AF-게임 방 유저 삭제): \(error.localizedDescription)")
