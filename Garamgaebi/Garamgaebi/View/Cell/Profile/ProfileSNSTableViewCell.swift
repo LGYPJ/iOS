@@ -11,7 +11,7 @@ import SnapKit
 import Then
 
 protocol ButtonTappedDelegate: class {
-    func editButtonDidTap()
+    func editButtonDidTap(snsIdx: Int)
     func copyButtonDidTap()
 }
 
@@ -87,8 +87,9 @@ class ProfileSNSTableViewCell: UITableViewCell {
     }
     
     @objc private func editButtonDidTap() {
-        delegate?.editButtonDidTap()
+        delegate?.editButtonDidTap(snsIdx: 0)
         
+        print("편집 버튼 클릭")
     }
     
     @objc private func copyButtonDidTap() {
