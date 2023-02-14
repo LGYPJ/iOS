@@ -41,7 +41,7 @@ class ViewAllViewModel {
     }
     
     // 예정된 Seminar 조회 request
-    public static func getSeminarNextMonthInfo(completion: @escaping ((SeminarNextMonthInfo) -> Void)) {
+    public static func getSeminarNextMonthInfo(completion: @escaping ((SeminarReadyInfo) -> Void)) {
         let url = "https://garamgaebi.shop/seminars/next-month"
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
@@ -125,7 +125,7 @@ class ViewAllViewModel {
     }
     
     // 예정된 Networking 조회 request
-    public static func getNetworkingNextMonthInfo(completion: @escaping ((NetworkingNextMonthInfo) -> Void)) {
+    public static func getNetworkingNextMonthInfo(completion: @escaping ((NetworkingReadyInfo) -> Void)) {
         let url = "https://garamgaebi.shop/networkings/next-month"
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"

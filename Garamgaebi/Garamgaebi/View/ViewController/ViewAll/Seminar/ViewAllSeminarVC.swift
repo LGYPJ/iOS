@@ -16,7 +16,7 @@ class ViewAllSeminarVC: UIViewController {
             self.tableView.reloadData()
         }
     }
-    private var dataList2: [SeminarNextMonthInfo] = [] {
+    private var dataList2: [SeminarReadyInfo] = [] {
         didSet {
             self.tableView.reloadData()
         }
@@ -188,7 +188,7 @@ extension ViewAllSeminarVC: UITableViewDataSource, UITableViewDelegate {
             if dataList2.count == 0 {
                 cell.configureZeroCell(caseString: "예정된")
             } else {
-                cell.configureNextMonthInfo(dataList2[indexPath.row])
+                cell.configureReadyInfo(dataList2[indexPath.row])
             }
         case 2:
             if dataList3.count == 0 {
@@ -215,6 +215,14 @@ extension ViewAllSeminarVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50.0
+    }
+    
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        if indexPath.section == 1,
+           dataList2[indexPath.row].isOpen == "BEFORE_OPEN" {
+            return nil
+        }
+        return indexPath
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

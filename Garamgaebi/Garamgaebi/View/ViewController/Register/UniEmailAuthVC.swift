@@ -14,7 +14,6 @@ class UniEmailAuthVC: UIViewController {
     var timer: Timer?
     
     let interval = 1.0
-    var authNumber = UniEmailAuthNumber(key: "")
     var userId = String()
     var isValidId = false {
         didSet {
@@ -355,18 +354,23 @@ class UniEmailAuthVC: UIViewController {
     
     @objc
     func sendEmail(_ sender: UIButton) {
+        
+        // 네이버메일(임시)
         let uniEmail = UniEmailAuthModel(email: "\(userId)@gachon.ac.kr")
+        //let uniEmail = UniEmailAuthModel(email: "\(userId)@naver.com")
         
         // 메일을 보내면서 uniEmail UserDefault에 저장
         UserDefaults.standard.set("\(userId)@gachon.ac.kr", forKey: "uniEmail")
+        //UserDefaults.standard.set("\(userId)@naver.com", forKey: "uniEmail")
         
-        DispatchQueue.main.async {
-            UniEmailAuthViewModel.requestSendEmail(uniEmail) { [weak self] result in
-                self?.authNumber = result
-                print(self?.authNumber.key)
+        UniEmailAuthViewModel.requestSendEmail(uniEmail) { [weak self] result in
+            switch result {
+            case true:
+                print(">>>Front: 이메일 전송 성공")
+            default:
+                print(">>>Front: 이메일 전송 실패")
             }
         }
-
         sender.setTitleColor(UIColor.mainBlue, for: .normal)
         sender.backgroundColor = .white
         sender.layer.borderColor = UIColor.mainBlue.cgColor
@@ -410,34 +414,37 @@ class UniEmailAuthVC: UIViewController {
     
     @objc
     private func authSuccessed(_ sender: Any) {
-        if authNumberTextField.text == authNumber.key {
-            // 인증번호 맞으면 ->
-            self.nextButton.isEnabled = true
-            // 타이머 끄기
-            timer?.invalidate()
-            timer = nil
-            // ++ 나머지 버튼들 누르지 못하게 해야하나?? -> 이메일 잘못 기입해서 다시 보낼
-            self.authNumberSendButton.isEnabled = false
-            self.authNumberTextField.isEnabled = false
-            self.emailTextField.isEnabled = false
-            self.emailAuthSendButton.isEnabled = false
-            UIView.animate(withDuration: 0.33) {
-                self.nextButton.backgroundColor = .mainBlue
-                self.emailAuthSendButton.setTitle("이메일 인증완료", for: .normal)
-                self.emailAuthSendButton.setTitleColor(.white, for: .normal)
-                self.emailAuthSendButton.backgroundColor = .mainBlue
+        let verifyModel = UniEmailAuthNumberModel(email: UserDefaults.standard.string(forKey: "uniEmail")!, key: authNumberTextField.text!)
+        UniEmailAuthViewModel.requestVerifyAuthNumber(verifyModel) { [weak self] result in
+            switch result {
+            case true:
+                // 인증번호 맞으면 ->
+                self?.nextButton.isEnabled = true
+                // 타이머 끄기
+                self?.timer?.invalidate()
+                self?.timer = nil
+                // ++ 나머지 버튼들 누르지 못하게 해야하나?? -> 이메일 잘못 기입해서 다시 보낼
+                self?.authNumberSendButton.isEnabled = false
+                self?.authNumberTextField.isEnabled = false
+                self?.emailTextField.isEnabled = false
+                self?.emailAuthSendButton.isEnabled = false
+                UIView.animate(withDuration: 0.33) {
+                    self?.nextButton.backgroundColor = .mainBlue
+                    self?.emailAuthSendButton.setTitle("이메일 인증완료", for: .normal)
+                    self?.emailAuthSendButton.setTitleColor(.white, for: .normal)
+                    self?.emailAuthSendButton.backgroundColor = .mainBlue
+                }
+            default:
+                // 인증번호 틀리면
+                // 빨갛게, shake
+                
+                self?.authNumberTextField.shake()
+                //"인증번호가 올바르지 않습니다"
+                UIView.transition(with: self!.authNumNotificationLabel, duration: 0.33, options: .transitionCrossDissolve, animations: {
+                    self?.authNumNotificationLabel.isHidden = false
+                })
+                print(">>>Front: 인증번호가 일치하지 않습니다")
             }
-        }
-        else {
-            // 인증번호 틀리면
-            // 빨갛게, shake
-            authNumberTextField.shake()
-            //"인증번호가 올바르지 않습니다"
-            UIView.transition(with: self.authNumNotificationLabel, duration: 0.33,
-                              options: .transitionCrossDissolve,
-                              animations: {
-                self.authNumNotificationLabel.isHidden = false
-            })
         }
     }
     
