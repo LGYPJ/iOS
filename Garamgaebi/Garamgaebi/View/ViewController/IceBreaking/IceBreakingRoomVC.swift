@@ -283,7 +283,7 @@ extension IceBreakingRoomVC {
 	
 	// 뒤로가기 버튼 did tap
 	@objc private func didTapBackBarButton() {
-		IcebreakingViewModel.deleteGameUser(roomId: self.roomId, memberId: self.memberId, completion: {
+		IcebreakingViewModel.deleteGameUser(roomId: self.roomId, memberId: self.memberId+2, completion: {
 			self.disconnectSocket()
 		})
 		self.navigationController?.popViewController(animated: true)
@@ -323,7 +323,7 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 			let cellData = userList[indexPath.row]
 			cell.nameLabel.text = cellData.nickname
 //			cell.profileImageView.kf.setImage(with: URL(string: cellData.profileUrl ?? ""), placeholder: UIImage(named: "ExProfileImage"))
-			if indexPath.row == currentIndex && isStart {
+			if indexPath.row == currentIndex % userList.count && isStart {
 				cell.profileImageView.layer.borderWidth = 2
 			}
 			return cell
@@ -429,7 +429,7 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 		print("Stomp socket is connected")
 		subscribeSocket()
 //		self.sendMessageWithSocket(type: "ENTER", message: "", profileUrl: "")
-		IcebreakingViewModel.postGameUser(roomId: self.roomId, memberId: self.memberId, completion: {
+		IcebreakingViewModel.postGameUser(roomId: self.roomId, memberId: self.memberId+2, completion: {
 			// TODO: 나의 이미지 Url 얻어올 방법?
 			self.sendMessageWithSocket(type: "ENTER", message: "", profileUrl: "")
 		})
