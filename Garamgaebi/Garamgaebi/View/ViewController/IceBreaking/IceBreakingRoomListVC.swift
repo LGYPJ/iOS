@@ -75,7 +75,6 @@ class IceBreakingRoomListVC: UIViewController {
 		configureCollectionView()
 		fetchGameRoomData()
     }
-    
 
     
 
@@ -157,7 +156,9 @@ extension IceBreakingRoomListVC: UICollectionViewDelegate, UICollectionViewDataS
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		navigationController?.pushViewController(IceBreakingRoomVC(programId: self.programId, roomId: roomList[indexPath.row].roomId, roomName: roomNameList[indexPath.row]), animated: true)
+//		navigationController?.pushViewController(IceBreakingRoomVC(programId: self.programId, roomId: roomList[indexPath.row].roomId, roomName: roomNameList[indexPath.row]), animated: true)
+		let vc = IceBreakingRoomVC_Test(programId: self.programId, roomId: roomList[indexPath.row].roomId, roomName: roomNameList[indexPath.row])
+		navigationController?.pushViewController(vc, animated: true)
 //		navigationController?.pushViewController(WebSocketTestVC(), animated: true)
 	}
 	
