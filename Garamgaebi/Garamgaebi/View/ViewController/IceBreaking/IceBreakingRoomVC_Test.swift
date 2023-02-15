@@ -1,8 +1,8 @@
 //
-//  IceBreakingRoomVC.swift
+//  IceBreakingRoomVC_Test.swift
 //  Garamgaebi
 //
-//  Created by 정현우 on 2023/01/13.
+//  Created by 정현우 on 2023/02/15.
 //
 
 import UIKit
@@ -11,36 +11,35 @@ import Alamofire
 import StompClientLib
 import Kingfisher
 
-class IceBreakingRoomVC: UIViewController {
+class IceBreakingRoomVC_Test: UIViewController {
 	
-    // MARK: - Subviews
-    
-    lazy var headerView: UIView = {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 71))
-        view.backgroundColor = .systemBackground
-        view.layer.addBorder([.bottom], color: .mainGray, width: 1)
-        return view
-    }()
-    
-    lazy var titleLabel: UILabel = {
-        let label = UILabel()
+	// MARK: - Subviews
+	
+	lazy var headerView: UIView = {
+		let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 71))
+		view.backgroundColor = .mainBlue
+		return view
+	}()
+	
+	lazy var titleLabel: UILabel = {
+		let label = UILabel()
 //        label.text = "가천관"
-        label.textColor = UIColor(hex: 0x000000,alpha: 0.8)
-        label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
-        return label
-    }()
-    
-    lazy var backButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "arrowBackward"), for: .normal)
-        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        button.clipsToBounds = true
-        button.tintColor = UIColor(hex: 0x000000,alpha: 0.8)
-        button.addTarget(self, action: #selector(didTapBackBarButton), for: .touchUpInside)
-        
-        return button
-    }()
-    
+		label.textColor = UIColor(hex: 0xFFFFFF,alpha: 0.8)
+		label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
+		return label
+	}()
+	
+	lazy var backButton: UIButton = {
+		let button = UIButton()
+		button.setImage(UIImage(named: "arrowBackward")?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .normal)
+		button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+		button.clipsToBounds = true
+//		button.tintColor = UIColor(hex: 0xFFFFFF,alpha: 0.8)
+		button.addTarget(self, action: #selector(didTapBackBarButton), for: .touchUpInside)
+		
+		return button
+	}()
+	
 	lazy var userCollectionview: UICollectionView = {
 		let layout = UICollectionViewFlowLayout()
 		layout.scrollDirection = .horizontal
@@ -50,6 +49,7 @@ class IceBreakingRoomVC: UIViewController {
 		
 		let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
 		collectionView.showsHorizontalScrollIndicator = false
+		collectionView.layer.cornerRadius = 12
 		
 		return collectionView
 	}()
@@ -64,12 +64,13 @@ class IceBreakingRoomVC: UIViewController {
 	lazy var cardCollectionView: UICollectionView = {
 //		let layout = UICollectionViewFlowLayout()
 		let layout = CustomFlowLayout()
-				
+		layout.itemSize = CGSize(width: cardWidth, height: cardHeight)
 		let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
 		collectionView.showsHorizontalScrollIndicator = false
 //		collectionView.isUserInteractionEnabled = false
 		collectionView.isScrollEnabled = false
 		collectionView.decelerationRate = .fast
+		collectionView.backgroundColor = .clear
 		
 		
 		return collectionView
@@ -109,6 +110,10 @@ class IceBreakingRoomVC: UIViewController {
 			userCollectionview.reloadData()
 		}
 	}
+	private let cardWidth: CGFloat = UIScreen.main.bounds.width - 60
+//	private let cardWidth: CGFloat = UIScreen.main.bounds.width - 84
+	private let cardHeight: CGFloat = (UIScreen.main.bounds.width - 60) * 0.85
+//	private let cardHeight: CGFloat = (UIScreen.main.bounds.width - 60) * 1.5
 	private var cardCount = 10
 	private var currentIndex = 0
 	private let programId: Int
@@ -129,7 +134,7 @@ class IceBreakingRoomVC: UIViewController {
 		}
 	}
 	
-    // MARK: - Life Cycle
+	// MARK: - Life Cycle
 	
 	init(programId: Int ,roomId: String, roomName: String) {
 		self.memberId = UserDefaults.standard.integer(forKey: "memberIdx") + 2
@@ -138,6 +143,8 @@ class IceBreakingRoomVC: UIViewController {
 		self.roomId = roomId
 		self.roomName = roomName
 		super.init(nibName: nil, bundle: nil)
+//		self.cardWidth = UIScreen.main.bounds.width - 60
+//		self.cardHeight = cardWidth * 0.85
 	}
 	
 	required init?(coder: NSCoder) {
@@ -146,7 +153,6 @@ class IceBreakingRoomVC: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
 		IcebreakingViewModel.deleteGameUser(roomId: self.roomId, memberId: self.memberId, completion: {
 			self.disconnectSocket()
 			self.connectSocket()
@@ -163,12 +169,16 @@ class IceBreakingRoomVC: UIViewController {
 		currentIndex = 0
 		nextButton.isHidden = true
 		nextButton.alpha = 0
-		
+
 	}
+	
+
+	
+
 	
 }
 
-extension IceBreakingRoomVC {
+extension IceBreakingRoomVC_Test {
 
 	private func configureCollectionView() {
 		userCollectionview.delegate = self
@@ -182,55 +192,62 @@ extension IceBreakingRoomVC {
 	
 	private func configureViews() {
 		self.titleLabel.text = self.roomName
-		view.backgroundColor = .white
-        [headerView, userCollectionview, separator, cardCollectionView, nextButton]
+		view.backgroundColor = UIColor(hex: 0xCBE2F7)
+		
+		[headerView, userCollectionview, separator, cardCollectionView, nextButton]
 			.forEach {view.addSubview($0)}
-        
-        //headerView
-        headerView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.height.equalTo(71)
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-        }
-        
-        [titleLabel, backButton]
-            .forEach {headerView.addSubview($0)}
-        
-        // titleLabel
-        titleLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
-        }
-        
-        // backButton
-        backButton.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(16)
-            make.centerY.equalToSuperview()
-        }
-        
-        // userCollectionview
+		
+		//headerView
+		let window = UIApplication.shared.windows.first
+		let top = window?.safeAreaInsets.top ?? 0
+		headerView.snp.makeConstraints { make in
+			make.left.right.equalToSuperview()
+			make.height.equalTo(71 + top)
+//			make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+			make.top.equalToSuperview()
+		}
+		
+		[titleLabel, backButton]
+			.forEach {headerView.addSubview($0)}
+		
+		// titleLabel
+		titleLabel.snp.makeConstraints { make in
+			make.centerX.equalToSuperview()
+//			make.centerY.equalToSuperview()
+			make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+		}
+		
+		// backButton
+		backButton.snp.makeConstraints { make in
+			make.left.equalToSuperview().inset(16)
+//			make.centerY.equalToSuperview()
+			make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+		}
+		
+		// userCollectionview
 		userCollectionview.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(16)
-			$0.leading.equalToSuperview()
-			$0.trailing.equalToSuperview()
+			$0.top.equalTo(headerView.snp.bottom).offset(16)
+			$0.leading.trailing.equalToSuperview().inset(16)
 			$0.height.equalTo(68)
 		}
-        
-        // separator
+		
+		// separator
 		separator.snp.makeConstraints {
 			$0.height.equalTo(1)
 			$0.leading.trailing.equalToSuperview()
 			$0.top.equalTo(userCollectionview.snp.bottom).offset(16)
 		}
 		
-        // cardCollectionView
+		// cardCollectionView
 		cardCollectionView.snp.makeConstraints {
-			$0.top.equalTo(separator.snp.bottom)
+//			$0.top.equalTo(separator.snp.bottom).offset(36)
+			$0.top.equalTo(separator.snp.bottom).offset(25)
 			$0.leading.trailing.equalToSuperview()
-			$0.bottom.equalTo(view.safeAreaLayoutGuide)
+			$0.height.equalTo(cardHeight)
+//			$0.bottom.equalTo(view.safeAreaLayoutGuide)
 		}
-		
-        // nextButton
+
+		// nextButton
 		nextButton.snp.makeConstraints {
 			$0.centerY.equalTo(cardCollectionView)
 			$0.width.height.equalTo(36)
@@ -330,7 +347,7 @@ extension IceBreakingRoomVC {
 }
 
 // MARK: CollectionView
-extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension IceBreakingRoomVC_Test: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 	func numberOfSections(in collectionView: UICollectionView) -> Int {
 		return 2
 	}
@@ -425,7 +442,7 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 }
 
 // MARK: StompClientLibDelegate
-extension IceBreakingRoomVC: StompClientLibDelegate {
+extension IceBreakingRoomVC_Test: StompClientLibDelegate {
 	func stompClient(client: StompClientLib!, didReceiveMessageWithJSONBody jsonBody: AnyObject?, akaStringBody stringBody: String?, withHeader header: [String : String]?, withDestination destination: String) {
 		guard let json = jsonBody as? [String: String] else { // type, sender, roomId, profileUrl, message
 			print("error in decode jsonBody")

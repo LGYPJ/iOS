@@ -34,6 +34,7 @@ class SeminarPreviewPopUpVC: UIViewController {
 		imageView.layer.borderWidth = 3
 		imageView.layer.borderColor = UIColor.white.cgColor
 		imageView.backgroundColor = .white
+		imageView.contentMode = .scaleAspectFill
 		
 		return imageView
 	}()
