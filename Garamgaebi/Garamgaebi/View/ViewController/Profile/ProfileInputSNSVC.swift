@@ -140,6 +140,13 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         return stackView
     }()
     
+    // alert dialog
+    lazy var alert = UIAlertController(title: "삭제가 완료되었습니다.", message: "", preferredStyle: .alert)
+    lazy var alertAction = UIAlertAction(title: "닫기", style: .default) { (_) in
+        // 닫기 누르면 이전 화면으로
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     
     // MARK: Life Cycle
     override func viewDidLoad() {
@@ -283,9 +290,11 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
     }
     // sns 삭제 버튼
     @objc private func deleteButtonDidTap(_ sender: UIButton) {
-        deleteSNS(snsIdx: snsIdx) { result in
+        deleteSNS(snsIdx: snsIdx) { [self] result in
             if result {
-                self.navigationController?.popViewController(animated: true)
+                // 삭제 확인 다이얼로그 띄우기
+                self.alert.addAction(alertAction)
+                self.present(alert, animated: true, completion: nil)
             }
         }
     }
