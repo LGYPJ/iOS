@@ -99,7 +99,7 @@ class ProfileHistoryTableViewCell: UITableViewCell {
     }
     
     @objc private func historyEditButtonDidTap() {
-        print("id: \(id)")
+//        print("id: \(id)")
         if (id == 1) { // 경력
             delegate?.careerButtonDidTap(careerIdx: careerIdx ?? 0, company: company ?? "", position: position ?? "", startDate: startDate ?? "", endDate: endDate ?? "", isWorking: isWorking ?? "")
         } else if (id == 2) { // 교육

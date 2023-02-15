@@ -519,24 +519,33 @@ class ProfileInputCareerVC: UIViewController {
     }
     // 경력 수정 버튼
     @objc private func editButtonDidTap(_ sender: UIButton) {
-//        guard let type = typeTextField.text else { return }
-//        guard let address = linkTextField.text else { return }
-//
-//        ProfileHistoryViewModel.patchSNS(snsIdx: snsIdx, type: type, address: address ) { result in
-//            if result {
-//                self.navigationController?.popViewController(animated: true)
-//            }
-//        }
+        guard let company = companyTextField.text else { return }
+        guard let position = positionTextField.text else { return }
+        guard let startDate = startDateTextField.text else { return }
+        guard let endDate = endDateTextField.text else { return }
+        
+        var checkValue: String
+        if endDate == "현재" {
+            checkValue = "TRUE"
+        } else {
+            checkValue = "FALSE"
+        }
+
+        ProfileHistoryViewModel.patchCareer(careerIdx: careerIdx, company:  company, position: position, isWorking: checkValue, startDate: startDate, endDate: endDate) { result in
+            if result {
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
     }
     // 경력 삭제 버튼
     @objc private func deleteButtonDidTap(_ sender: UIButton) {
-//        ProfileHistoryViewModel.deleteSNS(snsIdx: snsIdx) { [self] result in
-//            if result {
-//                // 삭제 확인 다이얼로그 띄우기
-//                self.alert.addAction(alertAction)
-//                self.present(alert, animated: true, completion: nil)
-//            }
-//        }
+        ProfileHistoryViewModel.deleteCareer(careerIdx: careerIdx) { [self] result in
+            if result {
+                // 삭제 확인 다이얼로그 띄우기
+                self.alert.addAction(alertAction)
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
     }
     
     func setCurrentYear() {

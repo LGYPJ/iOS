@@ -45,7 +45,7 @@ class ProfileSNSTableViewCell: UITableViewCell {
     lazy var editButton = UIButton().then {
         $0.setImage(UIImage(named: "ProfileEdit"), for: .normal)
         
-        $0.addTarget(self, action: #selector(snsEditButtonDidTap), for: .touchUpInside)
+        $0.addTarget(self, action: #selector(editButtonDidTap), for: .touchUpInside)
     }
     lazy var copyButton = UIButton().then {
         $0.setImage(UIImage(named: "ProfileCopy"), for: .normal)
@@ -90,7 +90,7 @@ class ProfileSNSTableViewCell: UITableViewCell {
        
     }
     
-    @objc private func snsEditButtonDidTap() {
+    @objc private func editButtonDidTap() {
         delegate?.snsEditButtonDidTap(snsIdx: snsIdx ?? 0, type: type ?? "", address: address ?? "")
         
 //        print("편집 버튼 클릭")
