@@ -67,7 +67,7 @@ class OnboardingCollectionViewCell: UICollectionViewCell {
             make.centerX.equalToSuperview()
         }
         titleLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(subTitleLabel.snp.top).offset(-20)
+            make.bottom.equalTo(subTitleLabel.snp.top).offset(-16)
             make.centerX.equalToSuperview()
         }
         
