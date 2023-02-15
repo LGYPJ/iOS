@@ -301,7 +301,7 @@ class ProfileInputCareerVC: UIViewController {
         view.addSubview(headerView)
         [titleLabel, backButton]
             .forEach {headerView.addSubview($0)}
-            
+        
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
@@ -314,12 +314,13 @@ class ProfileInputCareerVC: UIViewController {
         contentView.addSubview(endDateTextField)
         contentView.addSubview(betweenTildLabel)
         contentView.addSubview(checkIsWorkingButton)
-        contentView.addSubview(saveUserProfileButton)
         
         /* Labels */
         [subtitleCompanyLabel,subtitlePositionLabel,subtitleWorkingDateLabel].forEach {
             contentView.addSubview($0)
         }
+        
+        view.addSubview(saveUserProfileButton)
     }
     
     func configLayouts() {
@@ -348,7 +349,7 @@ class ProfileInputCareerVC: UIViewController {
             make.left.equalToSuperview()
             make.right.equalToSuperview()
             make.top.equalTo(headerView.snp.bottom)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            make.bottom.equalTo(saveUserProfileButton.snp.top)
         }
         
         //contentView
@@ -362,7 +363,7 @@ class ProfileInputCareerVC: UIViewController {
         // subtitleCompanyLabel
         subtitleCompanyLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
-            make.top.equalTo(headerView.snp.bottom).offset(16)
+            make.top.equalToSuperview().inset(16)
         }
         
         // companyTextCountLabel
@@ -437,7 +438,7 @@ class ProfileInputCareerVC: UIViewController {
         saveUserProfileButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
-            make.bottom.equalToSuperview().inset(14)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(14)
         }
     }
     
@@ -856,10 +857,10 @@ extension ProfileInputCareerVC {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             
             var safeArea = self.view.frame
-            safeArea.size.height += headerView.frame.maxY
+            safeArea.size.height -= view.safeAreaInsets.top * 1.5 // 이 부분 조절하면서 스크롤 올리는 정도 변경
+            safeArea.size.height -= headerView.frame.height // scrollView 말고 view에 headerView가 있기때문에 제외
             safeArea.size.height += scrollView.contentOffset.y
             safeArea.size.height -= keyboardSize.height + (UIScreen.main.bounds.height*0.04) // Adjust buffer to your liking
-            
             // determine which UIView was selected and if it is covered by keyboard
             
             let activeField: UIView? = [companyTextField, positionTextField, startDateTextField, endDateTextField].first { $0.isFirstResponder }
@@ -874,8 +875,6 @@ extension ProfileInputCareerVC {
                 }
             }
             // prevent scrolling while typing
-            print(distance)
-            print(scrollOffset)
             scrollView.isScrollEnabled = false
         }
     }

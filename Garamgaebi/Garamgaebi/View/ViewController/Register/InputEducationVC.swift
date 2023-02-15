@@ -354,13 +354,14 @@ class InputEducationVC: UIViewController {
         contentView.addSubview(endDateTextField)
         contentView.addSubview(betweenTildLabel)
         contentView.addSubview(checkIsLearningButton)
-        contentView.addSubview(saveUserProfileButton)
-        contentView.addSubview(inputCareerButton)
         contentView.addSubview(institutionTextCountLabel)
         contentView.addSubview(majorTextCountLabel)
         
+        view.addSubview(inputCareerButton)
+        view.addSubview(subDescriptionLabel)
+        view.addSubview(saveUserProfileButton)
         /* Labels */
-        [titleLabel,descriptionLabel,subtitleInstitutionLabel,subtitleMajorLabel, subtitleLearningDateLabel,subDescriptionLabel].forEach {
+        [titleLabel,descriptionLabel,subtitleInstitutionLabel,subtitleMajorLabel, subtitleLearningDateLabel].forEach {
             contentView.addSubview($0)
         }
     }
@@ -371,7 +372,7 @@ class InputEducationVC: UIViewController {
             make.left.equalToSuperview()
             make.right.equalToSuperview()
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            make.bottom.equalTo(saveUserProfileButton.snp.top)
         }
         
         //contentView
@@ -482,7 +483,7 @@ class InputEducationVC: UIViewController {
         saveUserProfileButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
-            make.bottom.equalToSuperview().inset(14)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(14)
             make.height.equalTo(48)
         }
         
@@ -861,11 +862,11 @@ extension InputEducationVC {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             
             var safeArea = self.view.frame
+            safeArea.size.height -= view.safeAreaInsets.top * 1.5 // 이 부분 조절하면서 스크롤 올리는 정도 변경
             safeArea.size.height += scrollView.contentOffset.y
             safeArea.size.height -= keyboardSize.height + (UIScreen.main.bounds.height*0.04) // Adjust buffer to your liking
             
             // determine which UIView was selected and if it is covered by keyboard
-            
             let activeField: UIView? = [institutionTextField, majorTextField, startDateTextField, endDateTextField].first { $0.isFirstResponder }
             if let activeField = activeField {
                 if safeArea.contains(CGPoint(x: 0, y: activeField.frame.maxY)) {
@@ -878,8 +879,6 @@ extension InputEducationVC {
                 }
             }
             // prevent scrolling while typing
-            print(distance)
-            print(scrollOffset)
             scrollView.isScrollEnabled = false
         }
     }
