@@ -50,6 +50,10 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         return button
     }()
     
+    let scrollView = UIScrollView()
+    
+    let contentView = UIView()
+    
     let noticeSubtitleLabel = UILabel().then {
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
         $0.textColor = UIColor.mainBlack
@@ -114,6 +118,11 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         $0.textColor = .mainGray
         $0.delegate = self // <-
     }
+    lazy var contentLengthLabel = UILabel().then {
+        $0.font = UIFont.NotoSansKR(type: .Bold, size: 12)
+        $0.textColor = UIColor(hex: 0xAEAEAE)
+        $0.text = "0/100"
+    }
     
     lazy var agreeCheckBtn = UIButton().then {
         $0.setTitle("이메일 정보 제공 동의", for: .normal)
@@ -143,10 +152,12 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         $0.isEnabled = false
     }
     
-    let logoutLabel = UIButton().then {
+    lazy var logoutLabel = UIButton().then {
         $0.setTitle("로그아웃", for: .normal)
         $0.titleLabel?.font = UIFont.NotoSansKR(type: .Bold, size: 16)
         $0.setTitleColor(UIColor(hex: 0xAEAEAE), for: .normal)
+        
+        $0.addTarget(self, action: #selector(logoutButtonDidTap), for: .touchUpInside)
     }
     
     lazy var withdrawalLabel = UIButton().then {
@@ -161,7 +172,6 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
         tabBarController?.tabBar.isHidden = true
         
         configureLayouts()
@@ -172,12 +182,23 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     
     // MARK: - Functions
     private func configureLayouts() {
-        // addSubview
-        [headerView, noticeSubtitleLabel, noticeLabel, emailSubtitleLabel, emailTextField, questionTypeSubtitleLabel, questionTypeTextField, contentTextField, agreeCheckBtn, agreemsgLabel, sendBtn, logoutLabel, withdrawalLabel]
-            .forEach {view.addSubview($0)}
         
+        view.backgroundColor = .white
+        
+        // addSubview - HeaderView
+        view.addSubview(headerView)
         [titleLabel, backButton]
             .forEach {headerView.addSubview($0)}
+        
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        scrollView.showsVerticalScrollIndicator = false
+        
+        // addSubview
+        [noticeSubtitleLabel, noticeLabel, emailSubtitleLabel, emailTextField, questionTypeSubtitleLabel, questionTypeTextField, contentTextField, agreeCheckBtn, agreemsgLabel, sendBtn, logoutLabel, withdrawalLabel]
+            .forEach {contentView.addSubview($0)}
+        
+        contentView.addSubview(contentLengthLabel)
         
         // layout
         
@@ -200,15 +221,28 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
             make.centerY.equalToSuperview()
         }
         
+        // scrollView
+        scrollView.snp.makeConstraints {
+            $0.top.equalTo(headerView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
+//            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        // contentView
+        contentView.snp.makeConstraints {
+            $0.top.bottom.leading.trailing.equalTo(scrollView)
+            $0.width.equalTo(scrollView)
+        }
+        
         noticeSubtitleLabel.snp.makeConstraints { /// 고객센터 안내
-            $0.top.equalTo(headerView.snp.bottom).offset(16)
-            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.top.equalTo(scrollView).offset(16)
+            $0.leading.trailing.equalTo(contentView).inset(16)
 
         }
         noticeLabel.snp.makeConstraints {
             $0.top.equalTo(noticeSubtitleLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalTo(noticeSubtitleLabel)
-
         }
         
         emailSubtitleLabel.snp.makeConstraints { /// 답변 받을 이메일 주소
@@ -234,7 +268,10 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         contentTextField.snp.makeConstraints { /// 내용 입력
             $0.top.equalTo(questionTypeTextField.snp.bottom).offset(12)
             $0.leading.trailing.equalTo(emailTextField)
-            $0.height.equalTo(152)
+            $0.height.equalTo(100)
+        }
+        contentLengthLabel.snp.makeConstraints { /// 글자수 계산
+            $0.trailing.bottom.equalTo(contentTextField).inset(12)
         }
         
         agreeCheckBtn.snp.makeConstraints { /// 이메일 정보 제공 동의
@@ -248,7 +285,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         
         sendBtn.snp.makeConstraints { /// 메일 보내기 버튼
             $0.top.equalTo(agreemsgLabel.snp.bottom).offset(40)
-//            $0.bottom.equalTo(logoutLabel.snp.top).offset(-20)
+            $0.bottom.equalTo(logoutLabel.snp.top).offset(-20)
             $0.leading.trailing.equalTo(emailTextField)
         }
         
@@ -256,9 +293,9 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
             $0.bottom.equalTo(withdrawalLabel.snp.top).offset(5)
             $0.centerX.equalTo(withdrawalLabel)
         }
-        
+
         withdrawalLabel.snp.makeConstraints { /// 회원탈퇴
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
+            $0.bottom.equalTo(contentView).inset(16)
             $0.centerX.equalToSuperview()
         }
         
@@ -283,6 +320,16 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         
         self.present(bottomSheetVC, animated: false, completion: nil)
         self.view.endEditing(false)
+    }
+    
+    // 로그아웃 버튼 did tap
+    @objc private func logoutButtonDidTap() {
+        
+        // 로그아웃 버튼 누르면 로그인 화면으로
+        let nextVC = LoginVC()
+        // 호출하는 화면의 크기와 동일한 화면크기로 불려짐. 기존의 뷰들은 아예 삭제
+        nextVC.modalPresentationStyle = .currentContext
+        present(nextVC, animated: true)
     }
     
     // 회원탈퇴 버튼 did tap
@@ -396,6 +443,12 @@ extension ProfileServiceVC: UITextViewDelegate {
             contentTextField.text = textViewPlaceHolder
             contentTextField.textColor = .mainGray
         }
+        else if emailTextField.text?.count != 0,
+           questionTypeTextField.text?.count != 0,
+           isChecking {
+            sendBtn.backgroundColor = .mainBlue
+            sendBtn.isEnabled = true
+        }
         contentTextField.layer.borderColor = UIColor.mainGray.cgColor
     }
 
@@ -408,13 +461,14 @@ extension ProfileServiceVC: UITextViewDelegate {
             sendBtn.backgroundColor = .mainGray
             sendBtn.isEnabled = false
         }
-        if isValidEmail,
+        else if emailTextField.text?.count != 0,
            questionTypeTextField.text?.count != 0,
            isChecking {
             sendBtn.backgroundColor = .mainBlue
             sendBtn.isEnabled = true
         }
 
+        contentLengthLabel.text = "\(str.count)/100"
         return newLenght <= 100
     }
 }

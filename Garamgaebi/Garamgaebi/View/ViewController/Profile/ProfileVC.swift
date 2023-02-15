@@ -38,7 +38,7 @@ class ProfileVC: UIViewController {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "내 프로필"
-        label.textColor = .black.withAlphaComponent(0.8)
+        label.textColor = .mainBlack
         label.font = UIFont.NotoSansKR(type: .Bold, size: 24)
         return label
     }()
@@ -63,23 +63,23 @@ class ProfileVC: UIViewController {
         $0.clipsToBounds = true
         
         $0.layer.cornerRadius = 50
-        $0.backgroundColor = .mainGray
+        $0.image = UIImage(named: "DefaultProfileImage")
     }
     
     let nameLabel = UILabel().then {
+        $0.textColor = .mainBlack
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 20)
     }
     
     let orgLabel = UILabel().then {
+        $0.textColor = .mainBlack
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 16)
     }
     
     lazy var emailLabel = UILabel().then {
+        $0.textColor = .mainBlack
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         $0.textColor = .mainBlue
-        let attributedString = NSMutableAttributedString.init(string: " ")
-        attributedString.addAttribute(NSAttributedString.Key.underlineStyle, value: 1, range: NSRange.init(location: 0, length: attributedString.length))
-        $0.attributedText = attributedString
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(emailLabelDidTap))
         $0.isUserInteractionEnabled = true
@@ -138,6 +138,7 @@ class ProfileVC: UIViewController {
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
+        view.isScrollEnabled = false
         
         view.register(ProfileSNSTableViewCell.self, forCellReuseIdentifier: ProfileSNSTableViewCell.identifier)
         view.delegate = self
@@ -174,6 +175,7 @@ class ProfileVC: UIViewController {
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
+        view.isScrollEnabled = false
         
         view.register(ProfileHistoryTableViewCell.self, forCellReuseIdentifier: ProfileHistoryTableViewCell.identifier)
         view.delegate = self
@@ -210,7 +212,8 @@ class ProfileVC: UIViewController {
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
-        //view.isScrollEnabled = false
+        view.isScrollEnabled = false
+        
         view.register(ProfileHistoryTableViewCell.self, forCellReuseIdentifier: ProfileHistoryTableViewCell.identifier)
         view.delegate = self
         view.dataSource = self
@@ -277,17 +280,17 @@ class ProfileVC: UIViewController {
         headerView.addSubview(serviceButton)
         
         view.addSubview(scrollView)
-        
         scrollView.addSubview(contentView)
+        scrollView.showsVerticalScrollIndicator = false
         
         // scroll - profile
         [profileImageView, profileStackView, introduceLabel, profileEditBtn]
-            .forEach {scrollView.addSubview($0)}
+            .forEach {contentView.addSubview($0)}
         
         // scroll - add
         [snsTopRadiusView, snsBottomRadiusView,
          careerTopRadiusView, careerBottomRadiusView,
-         eduTopRadiusView, eduBottomRadiusView].forEach {scrollView.addSubview($0)}
+         eduTopRadiusView, eduBottomRadiusView].forEach {contentView.addSubview($0)}
         
         // view - sns
         [snsDefaultLabel, snsTableView, addSnsBtn].forEach { snsBottomRadiusView.addSubview($0) }
@@ -434,8 +437,6 @@ class ProfileVC: UIViewController {
     }
     
     @objc private func serviceButtonDidTap(_ sender : UIButton) {
-//        print("고객센터 버튼 클릭")
-        
         // 화면 전환
         let nextVC = ProfileServiceVC()
         navigationController?.pushViewController(nextVC, animated: true)
@@ -443,7 +444,6 @@ class ProfileVC: UIViewController {
     
     @objc private func editButtonDidTap(_ sender : UIButton) {
 //        print("프로필 편집 버튼 클릭")
-        
         
         // 다음 화면으로 넘길 텍스트
         DispatchQueue.main.async {
@@ -691,7 +691,7 @@ class ProfileVC: UIViewController {
                 $0.top.equalToSuperview()
                 $0.leading.trailing.equalToSuperview()
                 $0.bottom.equalTo(addSnsBtn.snp.top).offset(-12)
-                $0.height.equalTo(snsCount * 41)
+                $0.height.equalTo(snsCount * 65)
             }
         }
     }
@@ -761,7 +761,7 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if tableView == snsTableView { return 41 }
+        if tableView == snsTableView { return 65 }
         else { return 90 }
     }
     
@@ -779,8 +779,11 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             cell.snsLinkLabel.text = row.address
             cell.copyButton.isHidden = true
             
-            snsIdx = row.snsIdx
-            print("cellForRowAt: \(snsIdx)")
+            // 편집 데이터 넘기기
+            cell.snsIdx = row.snsIdx
+            cell.type = row.type
+            cell.address = row.address
+            
             cell.delegate = self
             
             cell.selectionStyle = .none
@@ -829,30 +832,25 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
         
         return UITableViewCell()
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-//        if (tableView == snsTableView) {
-//            if let delegate = ButtonTappedDelegate.self {
-//
-//                let snsIdx = snsData[indexPath.row].snsIdx
-//                delegate.editButtonDidTap(snsIdx)
-//                print("sendIdx : \(snsIdx)")
-//            }
-//        }
-    }
 }
 
 extension ProfileVC: ButtonTappedDelegate {
-    func editButtonDidTap(snsIdx: Int) {
+    func editButtonDidTap(snsIdx: Int, type: String, address: String) {
         // 화면 전환
+//        print("받은 snsIdx: \(snsIdx)")
         let nextVC = ProfileInputSNSVC()
-        nextVC.memberIdx = memberIdx
-        nextVC.snsIdx = snsIdx
+        
+        // 편집 모드
         nextVC.titleLabel.text = "SNS 편집하기"
         nextVC.editButtonStackView.isHidden = false
         nextVC.saveUserProfileButton.isHidden = true
         
+        // 값 넘기기
+        nextVC.memberIdx = memberIdx
+        nextVC.snsIdx = snsIdx
+        nextVC.typeTextField.text = type
+        nextVC.linkTextField.text = address
+
         navigationController?.pushViewController(nextVC, animated: true)
     }
     

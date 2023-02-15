@@ -59,23 +59,22 @@ class OtherProfileVC: UIViewController {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 50
-        $0.backgroundColor = .mainGray
+        $0.image = UIImage(named: "DefaultProfileImage")
     }
     
     let nameLabel = UILabel().then {
+        $0.textColor = .mainBlack
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 20)
     }
     
     let orgLabel = UILabel().then {
+        $0.textColor = .mainBlack
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 16)
     }
     
     lazy var emailLabel = UILabel().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 16)
         $0.textColor = .mainBlue
-        let attributedString = NSMutableAttributedString.init(string: " ")
-        attributedString.addAttribute(NSAttributedString.Key.underlineStyle, value: 1, range: NSRange.init(location: 0, length: attributedString.length))
-        $0.attributedText = attributedString
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(emailLabelDidTap))
         $0.isUserInteractionEnabled = true
@@ -119,6 +118,7 @@ class OtherProfileVC: UIViewController {
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
+        view.isScrollEnabled = false
     
         view.layer.cornerRadius = 13 // 테스트
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
@@ -145,6 +145,7 @@ class OtherProfileVC: UIViewController {
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
+        view.isScrollEnabled = false
         
         view.layer.cornerRadius = 14 // 테스트
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
@@ -170,6 +171,7 @@ class OtherProfileVC: UIViewController {
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.contentInset = .zero
+        view.isScrollEnabled = false
         
         view.layer.cornerRadius = 15 // 테스트
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
@@ -366,11 +368,10 @@ class OtherProfileVC: UIViewController {
                     // 프로필 이미지
                     if let urlString = result.profileUrl {
                         let url = URL(string: urlString)
-
+                        
                         self.profileImageView.kf.indicatorType = .activity
                         self.profileImageView.kf.setImage(with: url)
                     }
-//                    completion(result)
                 } else {
                     print("실패(\(self.memberIdx) 프로필): \(response.message)")
                 }
@@ -510,7 +511,7 @@ class OtherProfileVC: UIViewController {
                 $0.top.equalToSuperview().offset(47) // 헤더 크기
                 $0.leading.trailing.equalToSuperview().inset(1)
                 $0.bottom.equalToSuperview().inset(1)
-                $0.height.equalTo(snsCount * 41)
+                $0.height.equalTo(snsCount * 65)
             }
         }
     }
@@ -573,7 +574,7 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if tableView == snsTableView { return 41 }
+        if tableView == snsTableView { return 65 }
         else { return 90 }
     }
     
@@ -640,7 +641,7 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
 }
 
 extension OtherProfileVC: ButtonTappedDelegate {
-    func editButtonDidTap(snsIdx: Int) {
+    func editButtonDidTap(snsIdx: Int, type: String, address: String) {
         //
     }
     

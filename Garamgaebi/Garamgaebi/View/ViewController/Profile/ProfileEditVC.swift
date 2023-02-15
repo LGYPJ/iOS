@@ -140,6 +140,12 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.textColor = .mainGray
         $0.delegate = self // <-
     }
+    lazy var introduceLengthLabel = UILabel().then {
+        $0.font = UIFont.NotoSansKR(type: .Bold, size: 12)
+        $0.textColor = UIColor(hex: 0xAEAEAE)
+        let count = introduceTextField.text.count
+        $0.text = "\(count)/100"
+    }
     
     let editDoneBtn = UIButton().then {
         $0.basicButton()
@@ -179,6 +185,8 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         
         [titleLabel, backButton]
             .forEach {headerView.addSubview($0)}
+        
+        view.addSubview(introduceLengthLabel)
         
         //headerView
         headerView.snp.makeConstraints { make in
@@ -256,16 +264,18 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             $0.top.equalTo(emailTextField.snp.bottom).offset(16)
             $0.leading.equalTo(emailLabel)
         }
-        
         introduceTextField.snp.makeConstraints {
             $0.top.equalTo(introduceLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalTo(nickNameTextField)
             $0.height.equalTo(100)
         }
+        introduceLengthLabel.snp.makeConstraints { /// 글자수 계산
+            $0.trailing.bottom.equalTo(introduceTextField).inset(12)
+        }
         
         
         editDoneBtn.snp.makeConstraints {
-            $0.bottom.equalTo(-48)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
             $0.leading.trailing.equalTo(emailTextField)
         }
         editDoneBtn.addTarget(self, action: #selector(doneButtonDidTap), for: .touchUpInside)
@@ -377,25 +387,27 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     func postMyInfo(memberIdx: Int, nickName: String, belong: String, profileEmail: String, content: String, profileImage: UIImage?, completion: @escaping ((Bool) -> Void)) {
         
         // http 요청 주소 지정
-        let url = "https://garamgaebi.shop/profile/edit/\(memberIdx)"
+        let url = "https://garamgaebi.shop/profile/edit"
         
         // http 요청 헤더 지정
         let header : HTTPHeaders = [
             "Content-Type": "multipart/form-data",
-            "Authorization": "Bearer \(token)"
+            "Authorization": "Bearer \(token ?? "")"
         ]
         
         let parameters: [String : Any] = [
             "memberIdx": String(memberIdx),
-            "nickName": nickName,
+            "nickname": nickName,
             "belong" : belong,
             "profileEmail" : profileEmail,
-            "content": content,
+            "content": content
         ]
+
+        print(parameters)
         
         AF.upload(multipartFormData: { multipartFormData in
             for (key, value) in parameters { // 요청 바디에 있는 key, value 값을 for문을 통해 각각 multipartFormData 에 추가해서 전송
-                multipartFormData.append("\(value)".data(using: .utf8)!, withName: key, mimeType: "text/plain")
+                multipartFormData.append("\(value)".data(using: .utf8)!, withName: key, mimeType: "application/json")
             }
             if let imageData = profileImage?.pngData() {
 //                print("이미지 있음")
@@ -568,16 +580,13 @@ extension ProfileEditVC: UITextViewDelegate {
         }
     }
     
+    // TextView 글자수 제한
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        let inputString = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard let oldString = textView.text, let newRange = Range(range, in: oldString) else { return true }
-        let newString = oldString.replacingCharacters(in: newRange, with: inputString).trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        let characterCount = newString.count
-        guard characterCount <= 100 else { return false }
-        //updateCountLabel(characterCount: characterCount)
-        
-        return true
+        guard let str = textView.text else { return true }
+        let newLenght = str.count + text.count - range.length
+
+        introduceLengthLabel.text = "\(str.count)/100"
+        return newLenght <= 100
     }
     
     // 키보드
@@ -617,7 +626,7 @@ extension ProfileEditVC : UIImagePickerControllerDelegate, UINavigationControlle
         guard let selectedImage = info[.originalImage] as? UIImage else {
             fatalError("Expected a dictionary containing an image, but was provided the following: \(info)")
         }
-        let imageData = selectedImage.jpegData(compressionQuality: 0.5)
+//        let imageData = selectedImage.jpegData(compressionQuality: 0.5)
         self.dismiss(animated: false) {
             DispatchQueue.main.async {
                 self.profileImageView.image = selectedImage

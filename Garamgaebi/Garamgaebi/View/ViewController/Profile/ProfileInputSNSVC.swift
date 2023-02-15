@@ -113,6 +113,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 12
         
+        button.addTarget(self, action: #selector(deleteButtonDidTap), for: .touchUpInside)
         return button
     }()
     lazy var editSaveButton: UIButton = {
@@ -121,7 +122,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         button.basicButton()
         button.setTitle("저장하기", for: .normal)
         
-        //        button.addTarget(self, action: #selector(saveButtonDidTap), for: .touchUpInside)
+        button.addTarget(self, action: #selector(editButtonDidTap), for: .touchUpInside)
         return button
     }()
     lazy var editButtonStackView: UIStackView = {
@@ -139,12 +140,19 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         return stackView
     }()
     
+    // alert dialog
+    lazy var alert = UIAlertController(title: "삭제가 완료되었습니다.", message: "", preferredStyle: .alert)
+    lazy var alertAction = UIAlertAction(title: "닫기", style: .default) { (_) in
+        // 닫기 누르면 이전 화면으로
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("snsIdx: \(snsIdx)")
+        print("편집할 snsIdx: \(snsIdx)")
         view.backgroundColor = .white
         tabBarController?.tabBar.isHidden = true
         
@@ -229,7 +237,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         saveUserProfileButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
-            make.bottom.equalToSuperview().inset(48)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
         }
         
         // editButtonStackView
@@ -252,7 +260,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         bottomSheetVC.delegate = self
         
         bottomSheetVC.titleText = "SNS 종류"
-        bottomSheetVC.T1 = "인스타"
+        bottomSheetVC.T1 = "인스타그램"
         bottomSheetVC.T2 = "블로그"
         bottomSheetVC.T3 = "깃허브"
         bottomSheetVC.T4 = "직접 입력"
@@ -260,6 +268,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         self.view.endEditing(true)
     }
     
+    // sns 추가 버튼
     @objc private func saveButtonDidTap(_ sender: UIButton) {
         guard let type = typeTextField.text else { return }
         guard let address = linkTextField.text else { return }
@@ -268,7 +277,26 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
                 self.navigationController?.popViewController(animated: true)
             }
         }
-        
+    }
+    // sns 수정 버튼
+    @objc private func editButtonDidTap(_ sender: UIButton) {
+        guard let type = typeTextField.text else { return }
+        guard let address = linkTextField.text else { return }
+        patchSNS(snsIdx: snsIdx, type: type, address: address ) { result in
+            if result {
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+    }
+    // sns 삭제 버튼
+    @objc private func deleteButtonDidTap(_ sender: UIButton) {
+        deleteSNS(snsIdx: snsIdx) { [self] result in
+            if result {
+                // 삭제 확인 다이얼로그 띄우기
+                self.alert.addAction(alertAction)
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
     }
     
     @objc func allTextFieldFilledIn() {
@@ -366,7 +394,82 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
             }
         }
     }
+    // MARK: - [PATCH] SNS 수정
+    func patchSNS(snsIdx: Int, type: String, address: String, completion: @escaping ((Bool) -> Void)) {
+        
+        // http 요청 주소 지정
+        let url = "https://garamgaebi.shop/profile/sns"
+        
+        // http 요청 헤더 지정
+        let header : HTTPHeaders = [
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(token ?? "")"
+        ]
+        let bodyData: Parameters = [
+            "snsIdx": snsIdx,
+            "address": address,
+            "type": type
+        ]
+        
+        // httpBody 에 parameters 추가
+        AF.request(
+            url,
+            method: .patch,
+            parameters: bodyData,
+            encoding: JSONEncoding.default,
+            headers: header
+        )
+        .validate()
+        .responseDecodable(of: ProfilePostResponse.self) { response in
+            switch response.result {
+            case .success(let response):
+                if response.isSuccess {
+                    print("성공(SNS수정): \(response.message)")
+                    completion(response.result)
+                } else {
+                    print("실패(SNS수정): \(response.message)")
+                }
+            case .failure(let error):
+                print("실패(AF-SNS수정): \(error.localizedDescription)")
+            }
+        }
+    }
+    // MARK: - [DELETE] SNS 삭제
+    func deleteSNS(snsIdx: Int, completion: @escaping ((Bool) -> Void)) {
+        
+        // http 요청 주소 지정
+        let url = "https://garamgaebi.shop/profile/sns/\(snsIdx)"
+        
+        // http 요청 헤더 지정
+        let header : HTTPHeaders = [
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(token ?? "")"
+        ]
+        
+        // httpBody 에 parameters 추가
+        AF.request(
+            url,
+            method: .delete,
+            encoding: JSONEncoding.default,
+            headers: header
+        )
+        .validate()
+        .responseDecodable(of: ProfilePostResponse.self) { response in
+            switch response.result {
+            case .success(let response):
+                if response.isSuccess {
+                    print("성공(SNS삭제): \(response.message)")
+                    completion(response.result)
+                } else {
+                    print("실패(SNS삭제): \(response.message)")
+                }
+            case .failure(let error):
+                print("실패(AF-SNS삭제): \(error.localizedDescription)")
+            }
+        }
+    }
 }
+
 // MARK: - Extension
 extension ProfileInputSNSVC {
     private func configureGestureRecognizer() {
