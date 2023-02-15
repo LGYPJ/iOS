@@ -450,21 +450,24 @@ class ProfileInputEducationVC: UIViewController {
         // 값 저장
         guard let institution = institutionTextField.text else { return }
         guard let major = majorTextField.text else { return }
-        //TODO: 서버에서 date 어떻게 받을지 모르겠음
         guard let startDate = startDateTextField.text else { return }
         guard let endDate = endDateTextField.text else { return }
-        //TODO: 토글 체크상태에 따라서 처리. 근데 이거 왜 String임? -> 이거 True로 하면 endDate에 null이 온다
-        let isLearning = "FALSE"
+ 
+        var checkValue: String
+        if endDate == "현재" {
+            checkValue = "TRUE"
+        } else {
+            checkValue = "FALSE"
+        }
         
         // 서버 연동
-        postEducation(memberIdx: memberIdx, institution: institution, major: major, isLearning: isLearning, startDate: startDate, endDate: endDate) { result in
+        ProfileHistoryViewModel.postEducation(memberIdx: memberIdx, institution: institution, major: major, isLearning: checkValue, startDate: startDate, endDate: endDate) { result in
             if result {
                 // 서버 통신 후 profileVC reload 요청 notification 예시
                 // NotificationCenter.default.post(name: Notification.Name("profileVCRefresh"), object: nil)
                 self.navigationController?.popViewController(animated: true)
             }
         }
-
     }
     
     func setCurrentYear() {
@@ -656,50 +659,6 @@ class ProfileInputEducationVC: UIViewController {
     @objc private func didTapBackBarButton() {
 //        print("뒤로가기 버튼 클릭")
         self.navigationController?.popViewController(animated: true)
-    }
-    
-    // MARK: - [POST] 교육 추가
-    func postEducation(memberIdx: Int, institution: String, major: String, isLearning: String, startDate: String, endDate: String, completion: @escaping ((Bool) -> Void)) {
-        
-        // http 요청 주소 지정
-        let url = "https://garamgaebi.shop/profile/education"
-        
-        // http 요청 헤더 지정
-        let header : HTTPHeaders = [
-            "Content-Type": "application/json",
-            "Authorization": "Bearer \(token ?? "")"
-        ]
-        let bodyData: Parameters = [
-            "memberIdx": memberIdx,
-            "institution": institution,
-            "major": major,
-            "isLearning": isLearning,
-            "startDate": startDate,
-            "endDate": endDate
-        ]
-        
-        // httpBody 에 parameters 추가
-        AF.request(
-            url,
-            method: .post,
-            parameters: bodyData,
-            encoding: JSONEncoding.default,
-            headers: header
-        )
-        .validate()
-        .responseDecodable(of: ProfilePostResponse.self) { response in
-            switch response.result {
-            case .success(let response):
-                if response.isSuccess {
-                    print("성공(Education추가): \(response.message)")
-                    completion(response.result)
-                } else {
-                    print("실패(Education추가): \(response.message)")
-                }
-            case .failure(let error):
-                print("실패(AF-Education추가): \(error.localizedDescription)")
-            }
-        }
     }
     
     @objc
