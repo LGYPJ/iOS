@@ -19,6 +19,9 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     var memberIdx: Int = 0
     var token = UserDefaults.standard.string(forKey: "BearerToken")
     
+    private var scrollOffset : CGFloat = 0
+    private var distance : CGFloat = 0
+    
     // 유효성 검사
     var nickName = String()
     var isValidNickName = false {
@@ -63,6 +66,10 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         
         return button
     }()
+    
+    let scrollView = UIScrollView()
+    
+    let contentView = UIView()
     
     let imagePicker = UIImagePickerController()
     let profileImageView : UIImageView = {
@@ -173,20 +180,32 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
+        
+        setKeyboardObserver()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        setKeyboardObserverRemove()
+    }
     
     // MARK: - Functions
     func configureLayouts() {
         
         // addSubview
-        [headerView, profileImageView,profilePlusImageView, nickNameLabel, nickNameTextField, orgLabel, orgTextField, emailLabel, emailTextField,introduceLabel, introduceTextField, editDoneBtn]
-            .forEach {view.addSubview($0)}
-        
+        view.addSubview(headerView)
         [titleLabel, backButton]
             .forEach {headerView.addSubview($0)}
         
-        view.addSubview(introduceLengthLabel)
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        scrollView.showsVerticalScrollIndicator = false
+        
+        [profileImageView,profilePlusImageView, nickNameLabel, nickNameTextField, orgLabel, orgTextField, emailLabel, emailTextField,introduceLabel, introduceTextField, editDoneBtn]
+            .forEach {contentView.addSubview($0)}
+        
+        contentView.addSubview(introduceLengthLabel)
         
         //headerView
         headerView.snp.makeConstraints { make in
@@ -207,10 +226,23 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             make.centerY.equalToSuperview()
         }
         
+        // scrollView
+        scrollView.snp.makeConstraints {
+            $0.top.equalTo(headerView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+        
+        // contentView
+        contentView.snp.makeConstraints {
+            $0.top.bottom.leading.trailing.equalTo(scrollView)
+            $0.width.equalTo(scrollView)
+        }
+        
         // layer
         profileImageView.snp.makeConstraints { /// 프로필 이미지
             $0.width.height.equalTo(100)
-            $0.top.equalTo(headerView.snp.bottom).offset(16)
+            $0.top.equalTo(scrollView).offset(16)
             $0.leading.equalTo(16)
         }
         profilePlusImageView.snp.makeConstraints { /// 플러스 버튼
@@ -224,7 +256,6 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             $0.top.equalTo(profileImageView.snp.bottom).offset(16)
             $0.leading.equalTo(profileImageView)
         }
-        
         nickNameTextField.snp.makeConstraints {
             $0.top.equalTo(nickNameLabel.snp.bottom).offset(8)
             $0.leading.equalTo(nickNameLabel)
@@ -237,7 +268,6 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             $0.top.equalTo(nickNameTextField.snp.bottom).offset(16)
             $0.leading.equalTo(nickNameLabel)
         }
-        
         orgTextField.snp.makeConstraints {
             $0.top.equalTo(orgLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalTo(nickNameTextField)
@@ -249,7 +279,6 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             $0.top.equalTo(orgTextField.snp.bottom).offset(16)
             $0.leading.equalTo(orgLabel)
         }
-        
         emailTextField.snp.makeConstraints {
             $0.top.equalTo(emailLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalTo(orgTextField)
@@ -273,9 +302,10 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             $0.trailing.bottom.equalTo(introduceTextField).inset(12)
         }
         
-        
+        // 저장 버튼
         editDoneBtn.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
+            $0.top.equalTo(introduceTextField.snp.bottom).offset(54)
+            $0.bottom.equalTo(contentView).inset(16)
             $0.leading.trailing.equalTo(emailTextField)
         }
         editDoneBtn.addTarget(self, action: #selector(doneButtonDidTap), for: .touchUpInside)
@@ -669,4 +699,55 @@ extension UILabel {
         attributedString.addAttribute(.foregroundColor, value: color, range: range)
         attributedText = attributedString
     }
+}
+
+extension ProfileEditVC {
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            
+            var safeArea = self.view.frame
+            safeArea.size.height -= view.safeAreaInsets.top * 1.5 // 이 부분 조절하면서 스크롤 올리는 정도 변경
+            safeArea.size.height -= headerView.frame.height // scrollView 말고 view에 headerView가 있기때문에 제외
+            safeArea.size.height += scrollView.contentOffset.y
+            safeArea.size.height -= keyboardSize.height + (UIScreen.main.bounds.height*0.04) // Adjust buffer to your liking
+            // determine which UIView was selected and if it is covered by keyboard
+            
+            let activeField: UIView? = [nickNameTextField, orgTextField, emailTextField, introduceTextField].first { $0.isFirstResponder }
+            if let activeField = activeField {
+                if safeArea.contains(CGPoint(x: 0, y: activeField.frame.maxY)) {
+                    //print("No need to Scroll")
+                    return
+                } else {
+                    distance = activeField.frame.maxY - safeArea.size.height
+                    scrollOffset = scrollView.contentOffset.y
+                    self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset + distance), animated: true)
+                }
+            }
+            // prevent scrolling while typing
+            scrollView.isScrollEnabled = false
+        }
+    }
+    
+    @objc private func keyboardWillHide() {
+        
+        if distance == 0 {
+            return
+        }
+        // return to origin scrollOffset
+//        self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset), animated: true)
+        self.scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        scrollOffset = 0
+        distance = 0
+        scrollView.isScrollEnabled = true
+    }
+    
+    func setKeyboardObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    func setKeyboardObserverRemove() {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
 }
