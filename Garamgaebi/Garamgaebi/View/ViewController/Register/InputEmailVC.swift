@@ -73,7 +73,7 @@ class InputEmailVC: UIViewController {
     
     lazy var emailValidLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 10)
         label.textColor = UIColor(hex: 0xFF0000)
         label.isHidden = true
         return label
@@ -157,7 +157,7 @@ class InputEmailVC: UIViewController {
         
         // emailValidLabel
         emailValidLabel.snp.makeConstraints { make in
-            make.top.equalTo(profileEmailTextField.snp.bottom).offset(4)
+            make.top.equalTo(profileEmailTextField.snp.bottom).offset(2)
             make.height.equalTo(17)
             make.left.equalToSuperview().inset(16)
         }

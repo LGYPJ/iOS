@@ -70,6 +70,6 @@ class HomeNetworkingPopUpVC: UIViewController {
     }
     
     @objc func backgroundTap(){
-        self.dismiss(animated: false, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
 }

@@ -15,10 +15,15 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
     
     lazy var imageInfoView: UIImageView = {
         let view = UIImageView()
-        view.backgroundColor = .mainGray
         view.contentMode = .scaleAspectFill
+        view.backgroundColor = .mainLightGray
         view.clipsToBounds = true
         return view
+    }()
+    
+    lazy var imageDefault: UIImageView = {
+        let img = UIImageView(image: UIImage(named: "untitle"))
+        return img
     }()
     
     lazy var contentInfoView: UIView = {
@@ -71,7 +76,7 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         contentView.layer.cornerRadius = 12
-        contentView.layer.borderWidth = 1
+        contentView.layer.borderWidth = 0.5
         contentView.layer.borderColor = UIColor.mainGray.cgColor
         contentView.clipsToBounds = true
         configAddSubView()
@@ -80,6 +85,7 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
     
     func configAddSubView(){
         contentView.addSubview(imageInfoView)
+        imageInfoView.addSubview(imageDefault)
         contentView.addSubview(contentInfoView)
         contentInfoView.addSubview(nickNameInfoLabel)
         contentInfoView.addSubview(belongInfoLabel)
@@ -93,7 +99,10 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
             make.left.right.equalToSuperview()
             make.height.equalTo(100)
         }
-        
+        imageDefault.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview().inset(20)
+            make.left.right.equalToSuperview().inset(30)
+        }
         contentInfoView.snp.makeConstraints { make in
             make.top.equalTo(imageInfoView.snp.bottom)
             make.left.right.equalToSuperview().inset(6)
@@ -129,12 +138,17 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
     }
     
     public func configure(_ item: RecommendUsersInfo) {
-//        // 이미지url 이미지View에 적용
-//        //https://terry-some.tistory.com/89 참고하였음
-        // default Image url 필요함 -> "" 자리에 넣을거임
-        let url = URL(string: item.profileUrl ?? "")
-        imageInfoView.kf.setImage(with: url)
+
+        self.imageDefault.isHidden = false
+        self.imageInfoView.image = .none
+        if let urlString = item.profileUrl {
+            let url = URL(string: urlString)
+            self.imageInfoView.kf.indicatorType = .activity
+            self.imageInfoView.kf.setImage(with: url)
+            self.imageDefault.isHidden = true
+        }
         
+        //imageInfoView.image = UIImage(named: "untitle")?.withTintColor(.mainGray)
         // 닉네임
         nickNameInfoLabel.text = item.nickName
         

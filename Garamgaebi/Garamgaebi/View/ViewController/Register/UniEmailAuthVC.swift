@@ -150,7 +150,7 @@ class UniEmailAuthVC: UIViewController {
         let label = UILabel()
         label.text = "메일을 받지 못하신 경우, 스팸 메일함을 확인해주세요."
         label.textColor = .mainBlack
-        label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 10)
         return label
     }()
     
@@ -176,7 +176,7 @@ class UniEmailAuthVC: UIViewController {
         let label = UILabel()
         label.text = "인증번호가 올바르지 않습니다"
         label.textColor = UIColor(hex: 0xFF0000)
-        label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 10)
         label.isHidden = true
         return label
     }()
@@ -229,7 +229,7 @@ class UniEmailAuthVC: UIViewController {
         contentView.addSubview(pagingImage)
         contentView.addSubview(emailAuthSendButton)
         contentView.addSubview(authNumberSendButton)
-        contentView.addSubview(nextButton)
+        view.addSubview(nextButton)
         
         /* TextField */
         contentView.addSubview(emailTextField)
@@ -250,7 +250,7 @@ class UniEmailAuthVC: UIViewController {
             make.left.equalToSuperview()
             make.right.equalToSuperview()
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            make.bottom.equalTo(nextButton.snp.top)
         }
         
         //contentView
@@ -310,7 +310,7 @@ class UniEmailAuthVC: UIViewController {
         
         // emailNotificationLabel
         emailNotificationLabel.snp.makeConstraints { make in
-            make.top.equalTo(emailAuthSendButton.snp.bottom).offset(4)
+            make.top.equalTo(emailAuthSendButton.snp.bottom).offset(2)
             make.left.equalTo(emailAuthSendButton.snp.left)
         }
         
@@ -338,7 +338,7 @@ class UniEmailAuthVC: UIViewController {
         
         // authNumNotificationLabel
         authNumNotificationLabel.snp.makeConstraints { make in
-            make.top.equalTo(authNumberTextField.snp.bottom).offset(4)
+            make.top.equalTo(authNumberTextField.snp.bottom).offset(2)
             make.left.equalTo(authNumberTextField.snp.left)
             make.height.equalTo(22)
         }
@@ -347,7 +347,7 @@ class UniEmailAuthVC: UIViewController {
         nextButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
-            make.bottom.equalToSuperview().inset(14)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(14)
             make.height.equalTo(48)
         }
     }
@@ -584,11 +584,11 @@ extension UniEmailAuthVC {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             
             var safeArea = self.view.frame
+            safeArea.size.height -= view.safeAreaInsets.top * 1.5 // 이 부분 조절하면서 스크롤 올리는 정도 변경
             safeArea.size.height += scrollView.contentOffset.y
             safeArea.size.height -= keyboardSize.height + (UIScreen.main.bounds.height*0.04) // Adjust buffer to your liking
             
             // determine which UIView was selected and if it is covered by keyboard
-            
             let activeField: UIView? = [emailTextField, authNumberTextField].first { $0.isFirstResponder }
             if let activeField = activeField {
                 if safeArea.contains(CGPoint(x: 0, y: activeField.frame.maxY)) {
@@ -601,8 +601,6 @@ extension UniEmailAuthVC {
                 }
             }
             // prevent scrolling while typing
-            print(distance)
-            print(scrollOffset)
             scrollView.isScrollEnabled = false
         }
     }

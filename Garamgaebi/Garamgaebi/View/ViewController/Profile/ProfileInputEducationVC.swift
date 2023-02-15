@@ -316,12 +316,13 @@ class ProfileInputEducationVC: UIViewController {
         contentView.addSubview(endDateTextField)
         contentView.addSubview(betweenTildLabel)
         contentView.addSubview(checkIsLearningButton)
-        contentView.addSubview(saveUserProfileButton)
 
         /* Labels */
         [subtitleInstitutionLabel,subtitleMajorLabel,subtitleLearningDateLabel].forEach {
             contentView.addSubview($0)
         }
+        
+        view.addSubview(saveUserProfileButton)
     }
 
     func configLayouts() {
@@ -350,7 +351,7 @@ class ProfileInputEducationVC: UIViewController {
             make.left.equalToSuperview()
             make.right.equalToSuperview()
             make.top.equalTo(headerView.snp.bottom)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            make.bottom.equalTo(saveUserProfileButton.snp.top)
         }
         
         //contentView
@@ -364,7 +365,7 @@ class ProfileInputEducationVC: UIViewController {
         // subtitleCompanyLabel
         subtitleInstitutionLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
-            make.top.equalTo(headerView.snp.bottom).offset(16)
+            make.top.equalToSuperview().inset(16)
         }
 
         // institutionTextCountLabel
@@ -440,7 +441,7 @@ class ProfileInputEducationVC: UIViewController {
         saveUserProfileButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
-            make.bottom.equalToSuperview().inset(14)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(14)
         }
     }
 
@@ -479,6 +480,10 @@ class ProfileInputEducationVC: UIViewController {
     @objc
     private func toggleButton(_ sender: UIButton) {
         sender.isSelected.toggle()
+        checkButtonValid(sender)
+    }
+    
+    private func checkButtonValid(_ sender: UIButton){
         switch sender.isSelected {
         case true:
             // cornerCase에서 토글시
@@ -486,13 +491,11 @@ class ProfileInputEducationVC: UIViewController {
             endDateTextField.layer.borderColor = UIColor.mainGray.cgColor
             
             sender.setTitleColor(.mainBlack, for: .normal)
-            endDateTextField.isEnabled = false
             endDateTextField.text = "현재"
             endYearValue = String(Int(yearArray[0])!+1)
             endMonthValue = monthArray[0]
         case false:
             sender.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
-            endDateTextField.isEnabled = true
             endDatePickerView.selectRow(0, inComponent: 0, animated: false)
             endDatePickerView.selectRow(0, inComponent: 1, animated: false)
             endYearValue = yearArray[0]
@@ -501,16 +504,15 @@ class ProfileInputEducationVC: UIViewController {
         }
     }
     
-    
     @objc
     func textFieldActivated(_ sender: UITextField) {
+        sender.layer.borderColor = UIColor.mainBlack.cgColor
         switch sender {
         case startDateTextField:
             let startValue = Int(startMonthValue)! + 12*Int(startYearValue)!
             let endValue = Int(endMonthValue)! + 12*Int(endYearValue)!
             if !(startValue > endValue
                 && !(startValue == 0 || endValue == 0)) {
-                endDateTextField.layer.borderColor = UIColor.mainGray.cgColor
                 startYearValue = yearArray[startDatePickerView.selectedRow(inComponent: 0)]
                 startMonthValue = monthArray[startDatePickerView.selectedRow(inComponent: 1)]
                 sender.text = "\(startYearValue)/\(startMonthValue)"
@@ -519,11 +521,14 @@ class ProfileInputEducationVC: UIViewController {
                 sender.layer.borderWidth = 1
             }
         case endDateTextField:
+            if checkIsLearningButton.isSelected {
+                checkIsLearningButton.isSelected = false
+                checkButtonValid(checkIsLearningButton)
+            }
             let startValue = Int(startMonthValue)! + 12*Int(startYearValue)!
             let endValue = Int(endMonthValue)! + 12*Int(endYearValue)!
             if !(startValue > endValue
                  && !(startValue == 0 || endValue == 0)) {
-                startDateTextField.layer.borderColor = UIColor.mainGray.cgColor
                 endYearValue = yearArray[endDatePickerView.selectedRow(inComponent: 0)]
                 endMonthValue = monthArray[endDatePickerView.selectedRow(inComponent: 1)]
                 sender.text = "\(endYearValue)/\(endMonthValue)"
@@ -532,8 +537,7 @@ class ProfileInputEducationVC: UIViewController {
                 sender.layer.borderWidth = 1
             }
         default:
-            sender.layer.borderColor = UIColor.mainBlack.cgColor
-            sender.layer.borderWidth = 1
+            print(">>>Front: textFieldActivated")
         }
     }
     
@@ -857,9 +861,10 @@ extension ProfileInputEducationVC {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             
             var safeArea = self.view.frame
+            safeArea.size.height -= view.safeAreaInsets.top * 1.5 // 이 부분 조절하면서 스크롤 올리는 정도 변경
+            safeArea.size.height -= headerView.frame.height // scrollView 말고 view에 headerView가 있기때문에 제외
             safeArea.size.height += scrollView.contentOffset.y
             safeArea.size.height -= keyboardSize.height + (UIScreen.main.bounds.height*0.04) // Adjust buffer to your liking
-            
             // determine which UIView was selected and if it is covered by keyboard
             
             let activeField: UIView? = [institutionTextField, majorTextField, startDateTextField, endDateTextField].first { $0.isFirstResponder }
@@ -874,8 +879,6 @@ extension ProfileInputEducationVC {
                 }
             }
             // prevent scrolling while typing
-            print(distance)
-            print(scrollOffset)
             scrollView.isScrollEnabled = false
         }
     }

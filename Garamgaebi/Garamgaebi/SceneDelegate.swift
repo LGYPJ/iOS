@@ -25,6 +25,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = scene as? UIWindowScene else { return }
         self.window = UIWindow(windowScene: windowScene)
         
+        let rootViewController = SplashVC()
 //        let rootViewController = TabBarController()
         //let rootViewController = EventApplyCancelVC()
         //let rootViewController = HomeVC()
@@ -37,7 +38,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        let rootViewController = InputOrganizationVC()
         //let rootViewController = InputCareerVC()
 //        let rootViewController = InputEducationVC()
-        let rootViewController = CompleteRegisterVC(myCareer: nil, myEducation: nil)
+//        let rootViewController = CompleteRegisterVC(myCareer: nil, myEducation: nil)
         self.window?.rootViewController = rootViewController
         self.window?.makeKeyAndVisible()
         

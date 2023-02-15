@@ -72,7 +72,8 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
     
     lazy var settingButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "moreHorizon")?.withTintColor(.mainBlue), for: .normal)
+        button.setImage(UIImage(named: "moreHorizon")?.withTintColor(.mainBlue), for: .highlighted)
+        button.setImage(UIImage(named: "moreHorizon")?.withTintColor(UIColor(hex: 0x1C1B1F)), for: .normal)
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         button.clipsToBounds = true
         
@@ -220,13 +221,11 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
                                  identifier: nil,
                                  options: .displayInline, // .destructive
                                  children: [detail, cancel])
-            settingButton.setImage(UIImage(named: "moreHorizon")?.withTintColor(.mainBlue), for: .normal)
         case .CLOSED:
             settingButton.menu = UIMenu(
                                  identifier: nil,
                                  options: .displayInline, // .destructive
                                  children: [detail])
-            settingButton.setImage(UIImage(named: "moreHorizon")?.withTintColor(UIColor(hex: 0x1C1B1F)), for: .normal)
         }
     }
     
