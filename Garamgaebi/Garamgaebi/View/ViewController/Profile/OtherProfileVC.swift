@@ -59,7 +59,7 @@ class OtherProfileVC: UIViewController {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 50
-        $0.backgroundColor = .mainGray
+        $0.image = UIImage(named: "DefaultProfileImage")
     }
     
     let nameLabel = UILabel().then {
@@ -368,11 +368,10 @@ class OtherProfileVC: UIViewController {
                     // 프로필 이미지
                     if let urlString = result.profileUrl {
                         let url = URL(string: urlString)
-
+                        
                         self.profileImageView.kf.indicatorType = .activity
                         self.profileImageView.kf.setImage(with: url)
                     }
-//                    completion(result)
                 } else {
                     print("실패(\(self.memberIdx) 프로필): \(response.message)")
                 }

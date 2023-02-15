@@ -63,7 +63,7 @@ class ProfileVC: UIViewController {
         $0.clipsToBounds = true
         
         $0.layer.cornerRadius = 50
-        $0.backgroundColor = .mainGray
+        $0.image = UIImage(named: "DefaultProfileImage")
     }
     
     let nameLabel = UILabel().then {
