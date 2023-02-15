@@ -15,6 +15,7 @@ class ProfileInputEducationVC: UIViewController {
     // MARK: - Properties
     lazy var token = UserDefaults.standard.string(forKey: "BearerToken")
     lazy var memberIdx: Int = 0
+    var educationIdx: Int = 0
     
     
     private var currentYear: Int = 0 {
@@ -269,6 +270,53 @@ class ProfileInputEducationVC: UIViewController {
         button.addTarget(self, action: #selector(saveButtonDidTap), for: .touchUpInside)
         return button
     }()
+    
+    // 편집용
+    lazy var editDeleteButton: UIButton = {
+        let button = UIButton()
+        
+        button.setTitle("삭제하기", for: .normal)
+        button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
+        button.setTitleColor(.mainBlue, for: .normal)
+        button.tintColor = .mainBlue
+        
+        button.layer.borderColor = UIColor.mainBlue.cgColor
+        button.layer.borderWidth = 1
+        button.layer.cornerRadius = 12
+        
+        button.addTarget(self, action: #selector(deleteButtonDidTap), for: .touchUpInside)
+        return button
+    }()
+    lazy var editSaveButton: UIButton = {
+        let button = UIButton()
+        
+        button.basicButton()
+        button.setTitle("저장하기", for: .normal)
+        
+        button.addTarget(self, action: #selector(editButtonDidTap), for: .touchUpInside)
+        return button
+    }()
+    lazy var editButtonStackView: UIStackView = {
+        let stackView = UIStackView()
+        [editDeleteButton, editSaveButton].forEach {
+            stackView.addArrangedSubview($0)
+        }
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
+        stackView.distribution = .fillEqually
+        stackView.spacing = 6
+        
+        stackView.isHidden = true
+        
+        return stackView
+    }()
+    
+    // alert dialog
+    lazy var alert = UIAlertController(title: "삭제가 완료되었습니다.", message: "", preferredStyle: .alert)
+    lazy var alertAction = UIAlertAction(title: "닫기", style: .default) { (_) in
+        // 닫기 누르면 이전 화면으로
+        self.navigationController?.popViewController(animated: true)
+    }
 
     // MARK: Life Cycle
     override func viewDidLoad() {
@@ -323,6 +371,7 @@ class ProfileInputEducationVC: UIViewController {
         }
         
         view.addSubview(saveUserProfileButton)
+        view.addSubview(editButtonStackView)
     }
 
     func configLayouts() {
@@ -443,6 +492,11 @@ class ProfileInputEducationVC: UIViewController {
             make.right.equalToSuperview().inset(16)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(14)
         }
+        // editButtonStackView
+        editButtonStackView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview().inset(16)
+            make.bottom.equalTo(saveUserProfileButton)
+        }
     }
 
     @objc private func saveButtonDidTap(_ sender: UIButton) {
@@ -468,6 +522,28 @@ class ProfileInputEducationVC: UIViewController {
                 self.navigationController?.popViewController(animated: true)
             }
         }
+    }
+    
+    // 교육 수정 버튼
+    @objc private func editButtonDidTap(_ sender: UIButton) {
+//        guard let type = typeTextField.text else { return }
+//        guard let address = linkTextField.text else { return }
+//
+//        ProfileHistoryViewModel.patchSNS(snsIdx: snsIdx, type: type, address: address ) { result in
+//            if result {
+//                self.navigationController?.popViewController(animated: true)
+//            }
+//        }
+    }
+    // 교육 삭제 버튼
+    @objc private func deleteButtonDidTap(_ sender: UIButton) {
+//        ProfileHistoryViewModel.deleteSNS(snsIdx: snsIdx) { [self] result in
+//            if result {
+//                // 삭제 확인 다이얼로그 띄우기
+//                self.alert.addAction(alertAction)
+//                self.present(alert, animated: true, completion: nil)
+//            }
+//        }
     }
     
     func setCurrentYear() {

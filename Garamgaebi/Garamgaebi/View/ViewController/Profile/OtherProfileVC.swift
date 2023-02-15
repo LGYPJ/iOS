@@ -640,8 +640,8 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
-extension OtherProfileVC: ButtonTappedDelegate {
-    func editButtonDidTap(snsIdx: Int, type: String, address: String) {
+extension OtherProfileVC: SnsButtonTappedDelegate {
+    func snsEditButtonDidTap(snsIdx: Int, type: String, address: String) {
         //
     }
     
