@@ -29,7 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         //let rootViewController = EventApplyCancelVC()
         //let rootViewController = HomeVC()
         //let rootViewController = HomeNotificationVC()
-        //let rootViewController = OnboardingVC()
+//        let rootViewController = OnboardingVC()
         //let rootViewController = LoginVC()
 //        let rootViewController = UniEmailAuthVC()
 //        let rootViewController = InputNickNameVC()

@@ -20,6 +20,8 @@ class IceBreakingUserCollectionViewCell: UICollectionViewCell {
 		imageView.tintColor = .mainGray
 		imageView.layer.cornerRadius = imageSize/2
 		imageView.layer.borderColor = UIColor.mainBlue.cgColor
+		imageView.contentMode = .scaleAspectFill
+		imageView.clipsToBounds = true
 		
 		return imageView
 	}()
