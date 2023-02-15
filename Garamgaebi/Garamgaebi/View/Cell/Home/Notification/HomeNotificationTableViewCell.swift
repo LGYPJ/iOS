@@ -90,9 +90,9 @@ class HomeNotificationTableViewCell: UITableViewCell {
         }
 
         if item.isRead == false {
-            contentView.backgroundColor = .mainLightGray
-        } else {
             contentView.backgroundColor = .white
+        } else {
+            contentView.backgroundColor = .mainLightGray
         }
         contentLabel.text = item.content
     }
