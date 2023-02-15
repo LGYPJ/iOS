@@ -373,6 +373,9 @@ class ProfileInputCareerVC: UIViewController {
     
     func configLayouts() {
         
+        companyTextCount = companyTextField.text?.count ?? 0
+        positionTextCount = positionTextField.text?.count ?? 0
+        
         //headerView
         headerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()

@@ -376,6 +376,9 @@ class ProfileInputEducationVC: UIViewController {
 
     func configLayouts() {
         
+        institutionTextCount = institutionTextField.text?.count ?? 0
+        majorTextCount = majorTextField.text?.count ?? 0
+        
         //headerView
         headerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
