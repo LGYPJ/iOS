@@ -71,7 +71,7 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         contentView.layer.cornerRadius = 12
-        contentView.layer.borderWidth = 1
+        contentView.layer.borderWidth = 0.5
         contentView.layer.borderColor = UIColor.mainGray.cgColor
         contentView.clipsToBounds = true
         configAddSubView()
