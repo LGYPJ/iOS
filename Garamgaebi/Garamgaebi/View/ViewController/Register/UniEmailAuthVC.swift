@@ -310,7 +310,7 @@ class UniEmailAuthVC: UIViewController {
         
         // emailNotificationLabel
         emailNotificationLabel.snp.makeConstraints { make in
-            make.top.equalTo(emailAuthSendButton.snp.bottom).offset(4)
+            make.top.equalTo(emailAuthSendButton.snp.bottom).offset(2)
             make.left.equalTo(emailAuthSendButton.snp.left)
         }
         
@@ -338,7 +338,7 @@ class UniEmailAuthVC: UIViewController {
         
         // authNumNotificationLabel
         authNumNotificationLabel.snp.makeConstraints { make in
-            make.top.equalTo(authNumberTextField.snp.bottom).offset(4)
+            make.top.equalTo(authNumberTextField.snp.bottom).offset(2)
             make.left.equalTo(authNumberTextField.snp.left)
             make.height.equalTo(22)
         }

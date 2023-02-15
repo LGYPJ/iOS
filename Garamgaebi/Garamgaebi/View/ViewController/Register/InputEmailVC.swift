@@ -157,7 +157,7 @@ class InputEmailVC: UIViewController {
         
         // emailValidLabel
         emailValidLabel.snp.makeConstraints { make in
-            make.top.equalTo(profileEmailTextField.snp.bottom).offset(4)
+            make.top.equalTo(profileEmailTextField.snp.bottom).offset(2)
             make.height.equalTo(17)
             make.left.equalToSuperview().inset(16)
         }

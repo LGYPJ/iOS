@@ -155,7 +155,7 @@ class InputNickNameVC: UIViewController {
         
         // nickNameValidLabel
         nickNameValidLabel.snp.makeConstraints { make in
-            make.top.equalTo(nickNameTextField.snp.bottom).offset(4)
+            make.top.equalTo(nickNameTextField.snp.bottom).offset(2)
             make.height.equalTo(17)
             make.left.equalToSuperview().inset(16)
         }
