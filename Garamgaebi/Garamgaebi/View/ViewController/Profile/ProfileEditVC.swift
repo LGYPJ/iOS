@@ -140,6 +140,12 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.textColor = .mainGray
         $0.delegate = self // <-
     }
+    lazy var introduceLengthLabel = UILabel().then {
+        $0.font = UIFont.NotoSansKR(type: .Bold, size: 12)
+        $0.textColor = UIColor(hex: 0xAEAEAE)
+        let count = introduceTextField.text.count
+        $0.text = "\(count)/100"
+    }
     
     let editDoneBtn = UIButton().then {
         $0.basicButton()
@@ -179,6 +185,8 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         
         [titleLabel, backButton]
             .forEach {headerView.addSubview($0)}
+        
+        view.addSubview(introduceLengthLabel)
         
         //headerView
         headerView.snp.makeConstraints { make in
@@ -256,11 +264,13 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             $0.top.equalTo(emailTextField.snp.bottom).offset(16)
             $0.leading.equalTo(emailLabel)
         }
-        
         introduceTextField.snp.makeConstraints {
             $0.top.equalTo(introduceLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalTo(nickNameTextField)
             $0.height.equalTo(100)
+        }
+        introduceLengthLabel.snp.makeConstraints { /// 글자수 계산
+            $0.trailing.bottom.equalTo(introduceTextField).inset(12)
         }
         
         
@@ -570,16 +580,13 @@ extension ProfileEditVC: UITextViewDelegate {
         }
     }
     
+    // TextView 글자수 제한
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        let inputString = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard let oldString = textView.text, let newRange = Range(range, in: oldString) else { return true }
-        let newString = oldString.replacingCharacters(in: newRange, with: inputString).trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        let characterCount = newString.count
-        guard characterCount <= 100 else { return false }
-        //updateCountLabel(characterCount: characterCount)
-        
-        return true
+        guard let str = textView.text else { return true }
+        let newLenght = str.count + text.count - range.length
+
+        introduceLengthLabel.text = "\(str.count)/100"
+        return newLenght <= 100
     }
     
     // 키보드

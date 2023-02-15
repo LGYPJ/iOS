@@ -198,8 +198,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         [noticeSubtitleLabel, noticeLabel, emailSubtitleLabel, emailTextField, questionTypeSubtitleLabel, questionTypeTextField, contentTextField, agreeCheckBtn, agreemsgLabel, sendBtn, logoutLabel, withdrawalLabel]
             .forEach {contentView.addSubview($0)}
         
-        
-        contentTextField.addSubview(contentLengthLabel)
+        contentView.addSubview(contentLengthLabel)
         
         // layout
         
