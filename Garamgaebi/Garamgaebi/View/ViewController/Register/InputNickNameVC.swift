@@ -72,7 +72,7 @@ class InputNickNameVC: UIViewController {
     
     lazy var nickNameValidLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 10)
         label.textColor = UIColor(hex: 0xFF0000)
         label.isHidden = true
         return label

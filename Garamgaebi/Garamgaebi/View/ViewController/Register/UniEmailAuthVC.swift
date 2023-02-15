@@ -150,7 +150,7 @@ class UniEmailAuthVC: UIViewController {
         let label = UILabel()
         label.text = "메일을 받지 못하신 경우, 스팸 메일함을 확인해주세요."
         label.textColor = .mainBlack
-        label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 10)
         return label
     }()
     
@@ -176,7 +176,7 @@ class UniEmailAuthVC: UIViewController {
         let label = UILabel()
         label.text = "인증번호가 올바르지 않습니다"
         label.textColor = UIColor(hex: 0xFF0000)
-        label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 10)
         label.isHidden = true
         return label
     }()
