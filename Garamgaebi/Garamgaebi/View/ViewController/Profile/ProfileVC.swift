@@ -280,17 +280,17 @@ class ProfileVC: UIViewController {
         headerView.addSubview(serviceButton)
         
         view.addSubview(scrollView)
-        
         scrollView.addSubview(contentView)
+        scrollView.showsVerticalScrollIndicator = false
         
         // scroll - profile
         [profileImageView, profileStackView, introduceLabel, profileEditBtn]
-            .forEach {scrollView.addSubview($0)}
+            .forEach {contentView.addSubview($0)}
         
         // scroll - add
         [snsTopRadiusView, snsBottomRadiusView,
          careerTopRadiusView, careerBottomRadiusView,
-         eduTopRadiusView, eduBottomRadiusView].forEach {scrollView.addSubview($0)}
+         eduTopRadiusView, eduBottomRadiusView].forEach {contentView.addSubview($0)}
         
         // view - sns
         [snsDefaultLabel, snsTableView, addSnsBtn].forEach { snsBottomRadiusView.addSubview($0) }
