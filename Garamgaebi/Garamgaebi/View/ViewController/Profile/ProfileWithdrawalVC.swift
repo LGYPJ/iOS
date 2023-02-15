@@ -198,9 +198,9 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         }
         
         contentTextField.snp.makeConstraints { /// 내용 입력
-            $0.top.equalTo(reasonTypeTextField.snp.bottom).offset(16)
+            $0.top.equalTo(reasonTypeTextField.snp.bottom).offset(12)
             $0.leading.trailing.equalTo(emailTextField)
-            $0.height.equalTo(152)
+            $0.height.equalTo(100)
         }
         
         agreeCheckBtn.snp.makeConstraints { /// 회원탈퇴 내용 숙지
@@ -213,7 +213,7 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         }
         
         sendBtn.snp.makeConstraints { /// 회원탈퇴 버튼
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(39)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
             $0.leading.trailing.equalTo(emailTextField)
         }
         sendBtn.addTarget(self, action: #selector(withdrawalButtonDidTap), for: .touchUpInside)

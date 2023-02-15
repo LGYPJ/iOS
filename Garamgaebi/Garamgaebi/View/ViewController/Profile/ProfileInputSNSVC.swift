@@ -237,7 +237,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         saveUserProfileButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
-            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(48)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
         }
         
         // editButtonStackView

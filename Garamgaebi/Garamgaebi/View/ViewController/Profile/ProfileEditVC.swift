@@ -265,7 +265,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         
         
         editDoneBtn.snp.makeConstraints {
-            $0.bottom.equalTo(-48)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
             $0.leading.trailing.equalTo(emailTextField)
         }
         editDoneBtn.addTarget(self, action: #selector(doneButtonDidTap), for: .touchUpInside)

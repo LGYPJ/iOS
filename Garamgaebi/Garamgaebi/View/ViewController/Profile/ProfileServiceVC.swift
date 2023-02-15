@@ -269,7 +269,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         contentTextField.snp.makeConstraints { /// 내용 입력
             $0.top.equalTo(questionTypeTextField.snp.bottom).offset(12)
             $0.leading.trailing.equalTo(emailTextField)
-            $0.height.equalTo(152)
+            $0.height.equalTo(100)
         }
         contentLengthLabel.snp.makeConstraints { /// 글자수 계산
             $0.trailing.bottom.equalTo(contentTextField).inset(12)
