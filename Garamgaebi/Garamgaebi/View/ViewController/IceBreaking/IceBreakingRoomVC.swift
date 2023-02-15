@@ -340,7 +340,7 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 		if collectionView == userCollectionview {
 			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IceBreakingUserCollectionViewCell.idetifier, for: indexPath) as? IceBreakingUserCollectionViewCell else {return UICollectionViewCell()}
 			let cellData = userList[indexPath.row]
-			cell.nameLabel.text = cellData.nickname
+			cell.nameLabel.text = cellData.nickname.maxLength(length: 5)
 //			cell.profileImageView.kf.setImage(with: URL(string: cellData.profileUrl ?? ""), placeholder: UIImage(named: "ExProfileImage"))
 			if indexPath.row == currentIndex % userList.count && isStart {
 				cell.profileImageView.layer.borderWidth = 2

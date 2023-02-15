@@ -60,6 +60,20 @@ extension String {
 		
 		return dateFormatter.string(from: date)
 	}
+	
+	func maxLength(length: Int) -> String {
+		var str = self
+		let nsString = str as NSString
+		if nsString.length >= length {
+			str = nsString.substring(with:
+				NSRange(
+				 location: 0,
+				 length: nsString.length > length ? length : nsString.length)
+			)
+			str += "..."
+		}
+		return  str
+	}
     
     
 }
