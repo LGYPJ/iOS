@@ -109,7 +109,7 @@ class IceBreakingRoomVC: UIViewController {
 			userCollectionview.reloadData()
 		}
 	}
-//	private var cardCount = 10
+	private var cardCount = 10
 	private var currentIndex = 0
 	private let programId: Int
 	private let roomId: String
@@ -120,6 +120,7 @@ class IceBreakingRoomVC: UIViewController {
 	private var userList: [IceBrakingCurrentUserModel] = [] {
 		didSet {
 			self.userCollectionview.reloadData()
+			self.cardCollectionView.reloadData()
 		}
 	}
 	private var imageList: [String] = [] {
@@ -131,7 +132,7 @@ class IceBreakingRoomVC: UIViewController {
     // MARK: - Life Cycle
 	
 	init(programId: Int ,roomId: String, roomName: String) {
-		self.memberId = UserDefaults.standard.integer(forKey: "memberIdx")
+		self.memberId = UserDefaults.standard.integer(forKey: "memberIdx") + 2
 		self.nickname = UserDefaults.standard.string(forKey: "nickname")!
 		self.programId = programId
 		self.roomId = roomId
@@ -238,6 +239,22 @@ extension IceBreakingRoomVC {
 		nextButton.layer.cornerRadius = 36/2
 	}
 	
+	private func configureNextButtonStatus(_ isEnable: Bool) {
+		if isEnable {
+			UIView.animate(withDuration: 0.5, animations: {
+				self.nextButton.alpha = 1
+			}, completion: { [weak self] _ in
+				self?.nextButton.isEnabled = true
+			})
+		} else {
+			UIView.animate(withDuration: 0.5, animations: {
+				self.nextButton.alpha = 0
+			}, completion: { [weak self] _ in
+				self?.nextButton.isEnabled = false
+			})
+		}
+	}
+	
 	private func configureButtonTarget() {
 		nextButton.addTarget(self, action: #selector(didTapNextButton), for: .touchUpInside)
 	}
@@ -280,7 +297,9 @@ extension IceBreakingRoomVC {
 	}
 	
 	private func scrollToNextItem() {
-		if currentIndex < (imageList.count - 1) {
+		currentIndex += 1
+//		if currentIndex < (imageList.count - 1) {
+		if currentIndex < (cardCount) {
 			// 해당 인덱스로 스크롤
 			cardCollectionView.scrollToItem(at: IndexPath(row: currentIndex, section: 1), at: .centeredHorizontally, animated: true)
 			userCollectionview.scrollToItem(at: IndexPath(row: currentIndex % userList.count, section: 0), at: .centeredHorizontally, animated: true)
@@ -289,14 +308,11 @@ extension IceBreakingRoomVC {
 			userCollectionview.reloadData()
 		}
 		// 다음 버튼 서서히 사라지는 애니메이션
-		if currentIndex == (imageList.count - 1) {
-			UIView.animate(withDuration: 0.5, animations: {
-				self.nextButton.alpha = 0
-			}, completion: { [weak self] _ in
-				self?.nextButton.isEnabled = false
-			})
+//		if currentIndex == (imageList.count - 1) {
+		if currentIndex == (cardCount) {
+			configureNextButtonStatus(true)
 		}
-		currentIndex += 1
+		
 	}
 	
 	// 뒤로가기 버튼 did tap
@@ -327,8 +343,8 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 		} else if collectionView == cardCollectionView {
 			switch section {
 			case 0: return 1
-//			case 1: return cardCount
-			case 1: return imageList.count
+			case 1: return cardCount
+//			case 1: return imageList.count
 			default: return 0
 			}
 		} else {
@@ -354,9 +370,9 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 				return cell
 			case 1:
 				guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IceBreakingCardCollectionViewCell.identifier, for: indexPath) as? IceBreakingCardCollectionViewCell else {return UICollectionViewCell()}
-//				cell.contentImageView.image = UIImage(named: "ExIceBreakingCardText")
-				let url = URL(string: imageList[indexPath.row])
-				cell.contentImageView.kf.setImage(with: url)
+				cell.contentImageView.image = UIImage(named: "ExIceBreakingCardText")
+//				let url = URL(string: imageList[indexPath.row])
+//				cell.contentImageView.kf.setImage(with: url)
 				
 				// 현재 셀, 앞 뒤 셀들만 보여지고 나머지는 숨김
 				if (currentIndex-1)...(currentIndex+1) ~= (indexPath.row) {
@@ -371,6 +387,16 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 				} else{
 					cell.contentImageView.isHidden = true
 				}
+				
+				// 자신 차례일 경우만 다음버튼 보이게
+				if !userList.isEmpty {
+					if userList[currentIndex % userList.count].memberIdx == self.memberId && (currentIndex != (cardCount - 1)) {
+						configureNextButtonStatus(true)
+					} else {
+						configureNextButtonStatus(false)
+					}
+				}
+				
 				
 				return cell
 			default:
