@@ -400,8 +400,16 @@ class EventApplyVC: UIViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		self.tabBarController?.tabBar.isHidden = true
+        
+        setKeyboardObserver()
+        
 	}
-	
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        setKeyboardObserverRemove()
+    }
+    
 	// view를 터치했을때 editing 끝나게, 하지만 scrollview touch는 안먹음
 	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 		self.view.endEditing(true)
@@ -662,9 +670,7 @@ extension EventApplyVC {
 		nameTextField.returnKeyType = .done
 		nicknameTextField.returnKeyType = .done
 		numberTextField.returnKeyType = .done
-		
-		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+
 	}
 	
 	// 3개의 textField가 모두 조건을 만족했을때 버튼 활성화
@@ -845,54 +851,7 @@ extension EventApplyVC {
 			}
 		})
 	}
-	
-	@objc func keyboardWillShow(notification: NSNotification) {
-//		guard let userInfo = notification.userInfo,
-//			  let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {return}
-//
-//		let contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardFrame.size.height - 48 - 48, right: 0.0)  // 48: 버튼 높이, 버튼 bottom ~ superview bottom
-//		scrollView.setContentOffset(CGPoint(x: 0, y: keyboardFrame.size.height - 48 - 48), animated: true)
-//		scrollView.contentInset = contentInset
-//		scrollView.scrollIndicatorInsets = contentInset
-		
-		if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-			
-			var safeArea = self.view.frame
-			safeArea.size.height += scrollView.contentOffset.y
-			safeArea.size.height -= keyboardSize.height + (UIScreen.main.bounds.height*0.04) // Adjust buffer to your liking
-			
-			// determine which UIView was selected and if it is covered by keyboard
-			
-			let activeField: UIView? = [nameTextField, nicknameTextField, numberTextField].first { $0.isFirstResponder }
-			if let activeField = activeField {
-				if safeArea.contains(CGPoint(x: 0, y: activeField.frame.maxY + 60)) {
-					print("No need to Scroll")
-					return
-				} else {
-					distance = activeField.frame.maxY - safeArea.size.height
-					scrollOffset = scrollView.contentOffset.y
-					// 48: 버튼 높이, 버튼 bottom ~ superview bottom
-					self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset + distance + 48 + 48), animated: true)
-				}
-			}
-		}
-				
-	}
-	
-	@objc func keyboardWillHide(notification: NSNotification) {
-//		let contentInset = UIEdgeInsets.zero
-//		scrollView.contentInset = contentInset
-//		scrollView.scrollIndicatorInsets = contentInset
-		
-		if distance == 0 {
-			return
-		}
-		// return to origin scrollOffset
-//        self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset), animated: true)
-		self.scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-		scrollOffset = 0
-		distance = 0
-	}
+
 }
 
 extension EventApplyVC: UITextFieldDelegate {
@@ -939,9 +898,57 @@ extension EventApplyVC: UITextFieldDelegate {
 		}
 		
 	}
-	
-	
-	
-	
+
+}
+
+extension EventApplyVC {
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            
+            var safeArea = self.view.frame
+            safeArea.size.height -= view.safeAreaInsets.top // 이 부분 조절하면서 스크롤 올리는 정도 변경
+            safeArea.size.height -= headerView.frame.height // scrollView 말고 view에 headerView가 있기때문에 제외
+            safeArea.size.height += scrollView.contentOffset.y
+            safeArea.size.height -= keyboardSize.height + (UIScreen.main.bounds.height*0.04) // Adjust buffer to your liking
+            
+            // determine which UIView was selected and if it is covered by keyboard
+            let activeField: UIView? = [nameTextField, nicknameTextField, numberTextField].first { $0.isFirstResponder }
+            if let activeField = activeField {
+                if safeArea.contains(CGPoint(x: 0, y: activeField.frame.maxY)) {
+                    print("No need to Scroll")
+                    return
+                } else {
+                    distance = activeField.frame.maxY - safeArea.size.height
+                    scrollOffset = scrollView.contentOffset.y
+                    self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset + distance), animated: true)
+                }
+            }
+            // prevent scrolling while typing
+            scrollView.isScrollEnabled = false
+        }
+    }
+    
+    @objc private func keyboardWillHide() {
+        
+        if distance == 0 {
+            return
+        }
+        // return to origin scrollOffset
+//        self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset), animated: true)
+        self.scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        scrollOffset = 0
+        distance = 0
+        scrollView.isScrollEnabled = true
+    }
+    
+    func setKeyboardObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    func setKeyboardObserverRemove() {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
 }
 
