@@ -199,7 +199,6 @@ class UniEmailAuthVC: UIViewController {
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        UserDefaults.standard.set("hsw1920@naver.com", forKey: "socialEmail")
         view.backgroundColor = .white
         emailTextField.delegate = self
         authNumberTextField.delegate = self
@@ -355,13 +354,9 @@ class UniEmailAuthVC: UIViewController {
     @objc
     func sendEmail(_ sender: UIButton) {
         
-        // 네이버메일(임시)
-//        let uniEmail = UniEmailAuthModel(email: "\(userId)@gachon.ac.kr")
-        let uniEmail = UniEmailAuthModel(email: "\(userId)@naver.com")
-        
         // 메일을 보내면서 uniEmail UserDefault에 저장
-//        UserDefaults.standard.set("\(userId)@gachon.ac.kr", forKey: "uniEmail")
-        UserDefaults.standard.set("\(userId)@naver.com", forKey: "uniEmail")
+        let uniEmail = UniEmailAuthModel(email: "\(userId)@gachon.ac.kr")
+        UserDefaults.standard.set("\(userId)@gachon.ac.kr", forKey: "uniEmail")
         
         UniEmailAuthViewModel.requestSendEmail(uniEmail) { [weak self] result in
             switch result {
