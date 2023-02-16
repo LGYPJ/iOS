@@ -102,11 +102,13 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         $0.text = textViewPlaceHolder
         $0.textColor = .mainGray
         $0.delegate = self // <-
+        $0.isHidden = true
     }
     lazy var contentLengthLabel = UILabel().then {
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 12)
         $0.textColor = UIColor(hex: 0xAEAEAE)
         $0.text = "\(textCount)/100"
+        $0.isHidden = true
     }
     
     lazy var agreeCheckBtn = UIButton().then {
@@ -209,9 +211,9 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         }
         
         contentTextField.snp.makeConstraints { /// 내용 입력
-            $0.top.equalTo(reasonTypeTextField.snp.bottom).offset(12)
+            $0.top.equalTo(reasonTypeTextField.snp.bottom).offset(0)
             $0.leading.trailing.equalTo(emailTextField)
-            $0.height.equalTo(100)
+            $0.height.equalTo(0)
         }
         contentLengthLabel.snp.makeConstraints { /// 글자수 계산
             $0.trailing.bottom.equalTo(contentTextField).inset(12)
@@ -236,6 +238,26 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
     
     func typeSelect(type: String) {
         self.reasonTypeTextField.text = type
+        if (type == "기타") {
+            contentTextField.snp.updateConstraints { // 내용 입력 표시
+                $0.height.equalTo(100)
+                $0.top.equalTo(self.reasonTypeTextField.snp.bottom).offset(16)
+            }
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.contentTextField.isHidden = false
+                self?.contentLengthLabel.isHidden = false
+            }
+            
+        } else {
+            contentTextField.snp.updateConstraints { // 내용 입력 표시 X
+                $0.height.equalTo(0)
+                $0.top.equalTo(reasonTypeTextField.snp.bottom).offset(0)
+            }
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.contentTextField.isHidden = true
+                self?.contentLengthLabel.isHidden = true
+            }
+        }
     }
     
     // 바텀시트 나타내기
@@ -251,7 +273,7 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         bottomSheetVC.T4 = "기타"
         
         self.present(bottomSheetVC, animated: false, completion: nil)
-        self.view.endEditing(false)
+        self.view.endEditing(true)
     }
     
     @objc private func didTapBackBarButton() {
