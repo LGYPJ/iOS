@@ -75,7 +75,7 @@ extension EventPreviewTableViewCell {
 			$0.trailing.equalToSuperview()
 			$0.bottom.equalToSuperview().inset(6)
 			// 스크롤 가능하게 구현하려면 height를 cellItem*100 + (cellItem-1)*14
-			$0.height.equalTo(3*104 + 2*12)
+			$0.height.equalTo(previews.count*104 + (previews.count - 1)*12)
 		}
 	}
 	

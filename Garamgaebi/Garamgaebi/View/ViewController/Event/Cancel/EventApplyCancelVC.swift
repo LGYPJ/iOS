@@ -541,9 +541,8 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 		if self.networkingInfo.fee == 0 {
 //			costStackView.isHidden = true
 			costInfoLabel.text = "무료"
-			// TODO: 임시 주석처리 나중에 삭제해야함
-//			bankButton.isHidden = true
-//			accountTextField.isHidden = true
+			bankButton.isHidden = true
+			accountTextField.isHidden = true
 		} else {
 //			costStackView.isHidden = false
 			bankButton.isHidden = false
