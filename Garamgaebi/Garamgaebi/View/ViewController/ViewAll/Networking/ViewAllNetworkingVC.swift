@@ -182,20 +182,26 @@ extension ViewAllNetworkingVC: UITableViewDataSource, UITableViewDelegate {
         case 0:
             if dataList1.count == 0 {
                 cell.configureZeroCell(caseString: "이번 달은")
+                cell.isUserInteractionEnabled = false
             } else {
                 cell.configureThisMonthInfo(dataList1[indexPath.row])
+                cell.isUserInteractionEnabled = true
             }
         case 1:
             if dataList2.count == 0 {
                 cell.configureZeroCell(caseString: "예정된")
+                cell.isUserInteractionEnabled = false
             } else {
                 cell.configureReadyInfo(dataList2[indexPath.row])
+                cell.isUserInteractionEnabled = true
             }
         case 2:
             if dataList3.count == 0 {
                 cell.configureZeroCell(caseString: "마감된")
+                cell.isUserInteractionEnabled = false
             } else {
                 cell.configureClosedInfo(dataList3[indexPath.row])
+                cell.isUserInteractionEnabled = true
             }
         default:
             print("dataList Count Error")
