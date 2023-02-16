@@ -298,8 +298,8 @@ extension IceBreakingRoomVC {
 	
 	private func scrollToNextItem() {
 		currentIndex += 1
-//		if currentIndex < (imageList.count - 1) {
-		if currentIndex < (cardCount) {
+		if currentIndex < (imageList.count - 1) {
+//		if currentIndex < (cardCount) {
 			// 해당 인덱스로 스크롤
 			cardCollectionView.scrollToItem(at: IndexPath(row: currentIndex, section: 1), at: .centeredHorizontally, animated: true)
 			userCollectionview.scrollToItem(at: IndexPath(row: currentIndex % userList.count, section: 0), at: .centeredHorizontally, animated: true)
@@ -308,8 +308,8 @@ extension IceBreakingRoomVC {
 			userCollectionview.reloadData()
 		}
 		// 다음 버튼 서서히 사라지는 애니메이션
-//		if currentIndex == (imageList.count - 1) {
-		if currentIndex == (cardCount) {
+		if currentIndex == (imageList.count - 1) {
+//		if currentIndex == (cardCount) {
 			configureNextButtonStatus(true)
 		}
 		
@@ -343,8 +343,8 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 		} else if collectionView == cardCollectionView {
 			switch section {
 			case 0: return 1
-			case 1: return cardCount
-//			case 1: return imageList.count
+//			case 1: return cardCount
+			case 1: return imageList.count
 			default: return 0
 			}
 		} else {
@@ -390,7 +390,7 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 				
 				// 자신 차례일 경우만 다음버튼 보이게
 				if !userList.isEmpty {
-					if userList[currentIndex % userList.count].memberIdx == self.memberId && (currentIndex != (cardCount - 1)) {
+					if userList[currentIndex % userList.count].memberIdx == self.memberId && (currentIndex != (imageList.count - 1)) {
 						configureNextButtonStatus(true)
 					} else {
 						configureNextButtonStatus(false)
