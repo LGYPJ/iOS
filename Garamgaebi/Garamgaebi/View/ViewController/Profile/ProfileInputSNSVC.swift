@@ -301,23 +301,32 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         }
     }
     
+    private func buttonActivated() {
+        saveUserProfileButton.isEnabled = true
+        editSaveButton.isEnabled = true
+        UIView.animate(withDuration: 0.33) { [weak self] in
+            self?.saveUserProfileButton.backgroundColor = .mainBlue
+            self?.editSaveButton.backgroundColor = .mainBlue
+        }
+    }
+    private func buttonInactivated() {
+        saveUserProfileButton.isEnabled = false
+        UIView.animate(withDuration: 0.33) { [weak self] in
+            self?.saveUserProfileButton.backgroundColor = .mainGray
+            self?.editSaveButton.backgroundColor = .mainGray
+        }
+    }
+    
     @objc func allTextFieldFilledIn() {
         
         /* 모든 textField가 채워졌으면 SNS 저장 버튼 활성화 */
         if self.typeTextField.text?.count != 0,
            self.linkTextField.text?.count != 0 {
 
-            // 저장버튼 활성화
-            UIView.animate(withDuration: 0.33) { [weak self] in
-                self?.saveUserProfileButton.backgroundColor = .mainBlue
-            }
-            saveUserProfileButton.isEnabled = true
+            buttonActivated()
             
         } else { // 저장버튼 비활성화
-            saveUserProfileButton.isEnabled = false
-            UIView.animate(withDuration: 0.33) { [weak self] in
-                self?.saveUserProfileButton.backgroundColor = .mainGray
-            }
+            buttonInactivated()
         }
     }
     
