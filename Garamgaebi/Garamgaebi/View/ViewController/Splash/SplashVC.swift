@@ -49,12 +49,11 @@ class SplashVC: UIViewController {
     }
     
     private func login() {
-        let useruniEmail = UserDefaults.standard.string(forKey: "uniEmail")!
-        let userpassword = "1234"
-        print("로그인 된 uniEmail: \(useruniEmail)")
-        print("로그인 된 password: \(userpassword)")
+        let usersocialEmail = UserDefaults.standard.string(forKey: "socialEmail")!
+        print("로그인 된 socialEmail: \(usersocialEmail)")
         
-        LoginViewModel.postLogin(uniEmail: useruniEmail, password: userpassword, completion: { [weak self] result in
+        
+        LoginViewModel.postLogin(socialEmail: usersocialEmail, completion: { [weak self] result in
             UserDefaults.standard.set(result.accessToken, forKey: "BearerToken")
             UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
             self?.showHome()
