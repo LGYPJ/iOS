@@ -21,7 +21,6 @@ struct RegisterUserInfo: Codable {
     let socialEmail: String
     let uniEmail: String
     let status: String
-    let password: String
 }
 
 struct RegisterMemberIdx: Codable {
