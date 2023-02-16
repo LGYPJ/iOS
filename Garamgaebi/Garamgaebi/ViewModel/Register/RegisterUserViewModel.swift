@@ -26,7 +26,6 @@ class RegisterUserViewModel {
             "socialEmail": parameter.socialEmail,
             "uniEmail": parameter.uniEmail,
             "status": parameter.status,
-            "password": parameter.password
         ]
         AF.request(url, method: .post,
                    parameters: body, encoding: JSONEncoding.default)
