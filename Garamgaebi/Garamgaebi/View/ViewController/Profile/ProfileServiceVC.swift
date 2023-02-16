@@ -145,6 +145,8 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         $0.setTitle("보내기", for: .normal)
         $0.backgroundColor = .mainGray
         $0.isEnabled = false
+        
+        $0.addTarget(self, action: #selector(sendButtonDidTap), for: .touchUpInside)
     }
     
     lazy var logoutLabel = UIButton().then {
@@ -316,6 +318,21 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         
         self.present(bottomSheetVC, animated: false, completion: nil)
         self.view.endEditing(true)
+    }
+    
+    // 서버 통신
+    @objc private func sendButtonDidTap() {
+        
+        let memberIdx = UserDefaults.standard.integer(forKey: "memberIdx")
+        guard let email = emailTextField.text else { return }
+        guard let category = questionTypeTextField.text else { return }
+        guard let content = contentTextField.text else { return }
+        
+        ProfileServiceViewModel.postQna(memberIdx: memberIdx, email: email, category: category, content: content) { result in
+                if result {
+                    self.navigationController?.popViewController(animated: true)
+                }
+        }
     }
     
     // 로그아웃 버튼 did tap
@@ -496,7 +513,6 @@ extension ProfileServiceVC: UITextViewDelegate {
         }
 
         textCount = str.count
-        print(textCount)
         contentLengthLabel.text = "\(str.count)/100"
         return newLenght <= 100
     }

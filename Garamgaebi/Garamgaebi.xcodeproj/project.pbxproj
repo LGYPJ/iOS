@@ -60,6 +60,7 @@
 		468A713B2990BD9000696FC6 /* OtherProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468A713A2990BD9000696FC6 /* OtherProfileVC.swift */; };
 		46AB1233299D3D780013371C /* ProfileHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AB1232299D3D780013371C /* ProfileHistoryViewModel.swift */; };
 		46B4780B29700FEE002186A3 /* ProfileServiceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B4780A29700FEE002186A3 /* ProfileServiceVC.swift */; };
+		46C003E1299DC41600625E79 /* ProfileServiceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C003E0299DC41600625E79 /* ProfileServiceViewModel.swift */; };
 		46C18D25297866E600A05CBF /* ProfileDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C18D24297866E600A05CBF /* ProfileDataModel.swift */; };
 		46C18D2929788A7600A05CBF /* ProfileInputSNSVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C18D2829788A7600A05CBF /* ProfileInputSNSVC.swift */; };
 		60093A8B296E7EFB00F76783 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60093A8A296E7EFB00F76783 /* LoginVC.swift */; };
@@ -212,6 +213,7 @@
 		468A713A2990BD9000696FC6 /* OtherProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherProfileVC.swift; sourceTree = "<group>"; };
 		46AB1232299D3D780013371C /* ProfileHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHistoryViewModel.swift; sourceTree = "<group>"; };
 		46B4780A29700FEE002186A3 /* ProfileServiceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileServiceVC.swift; sourceTree = "<group>"; };
+		46C003E0299DC41600625E79 /* ProfileServiceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileServiceViewModel.swift; sourceTree = "<group>"; };
 		46C18D24297866E600A05CBF /* ProfileDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDataModel.swift; sourceTree = "<group>"; };
 		46C18D2829788A7600A05CBF /* ProfileInputSNSVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInputSNSVC.swift; sourceTree = "<group>"; };
 		5393A75B600780926B72C170 /* Pods-GaramgaebiTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaramgaebiTests.release.xcconfig"; path = "Target Support Files/Pods-GaramgaebiTests/Pods-GaramgaebiTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -337,6 +339,7 @@
 			isa = PBXGroup;
 			children = (
 				46AB1232299D3D780013371C /* ProfileHistoryViewModel.swift */,
+				46C003E0299DC41600625E79 /* ProfileServiceViewModel.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -1156,6 +1159,7 @@
 				601823372972FAD800160EF4 /* HomeEventDataModel.swift in Sources */,
 				60BD04FD2973D6BE00F4B433 /* HomeNotificationVC.swift in Sources */,
 				4688328C298B7A2D00D85886 /* ProfileHistoryDataModel.swift in Sources */,
+				46C003E1299DC41600625E79 /* ProfileServiceViewModel.swift in Sources */,
 				60093A8F296EC92200F76783 /* InputNickNameVC.swift in Sources */,
 				4614A1732984BA9500D12108 /* ProfileSNSTableViewCell.swift in Sources */,
 				6055D84129700C9500C86D53 /* InputEmailVC.swift in Sources */,
