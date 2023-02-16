@@ -447,7 +447,7 @@ class ProfileVC: UIViewController {
             guard let nameString = self.nameLabel.text else { return }
             guard let orgString = self.orgLabel.text else { return }
             guard let emailString = self.emailLabel.text else { return }
-            guard let introduceString = self.introduceLabel.text else { return }
+//            guard let introduceString = self.introduceLabel.text else { return }
             
 //            guard let image = self.profileImageView.image else { return UIImage(named: "DefaultProfileImage") }
 //            var image = UIImage
@@ -462,8 +462,8 @@ class ProfileVC: UIViewController {
             nextVC.nickNameTextField.text = nameString
             nextVC.orgTextField.text = orgString
             nextVC.emailTextField.text = emailString
-            nextVC.introduceTextField.text = introduceString
-            nextVC.introduceTextField.textColor = .mainBlack
+//            nextVC.introduceTextField.text = introduceString
+//            nextVC.introduceTextField.textColor = .mainBlack
 //            nextVC.profileImageView.image = image
             
             // 사용자

@@ -140,7 +140,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         $0.textColor = UIColor(hex: 0x8A8A8A)
     }
     
-    let sendBtn = UIButton().then {
+    lazy var sendBtn = UIButton().then {
         $0.basicButton()
         $0.setTitle("보내기", for: .normal)
         $0.backgroundColor = .mainGray
@@ -306,6 +306,8 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     
     // 바텀시트 나타내기
     @objc private func showBottomSheet() {
+//        self.questionTypeTextField.layer.borderColor = UIColor.mainBlack.cgColor
+        
         let bottomSheetVC = BottomSheetVC()
         bottomSheetVC.modalPresentationStyle = .overFullScreen
         bottomSheetVC.delegate = self
@@ -318,6 +320,16 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         
         self.present(bottomSheetVC, animated: false, completion: nil)
         self.view.endEditing(true)
+        
+        /* 모든 textField가 채워졌으면 고객센터 버튼 활성화 */
+        if self.isValidEmail,
+           self.textCount != 0,
+           agreeCheckBtn.isSelected {
+            sendBtn.isEnabled = true
+            UIView.animate(withDuration: 2) { [weak self] in
+                self?.sendBtn.backgroundColor = .mainBlue
+            }
+        }
     }
     
     // 서버 통신
@@ -380,6 +392,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     private func configureTextField() {
         // email
         emailTextField.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
+        emailTextField.addTarget(self, action: #selector(textFieldActivated(_:)), for: .editingDidBegin)
         emailTextField.addTarget(self, action: #selector(textFieldInactivated(_:)), for: .editingDidEnd)
         emailTextField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         
@@ -404,6 +417,19 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         sender.layer.borderColor = UIColor.mainGray.cgColor
     }
     
+    private func buttonActivated() {
+        sendBtn.isEnabled = true
+        UIView.animate(withDuration: 0.33) { [weak self] in
+            self?.sendBtn.backgroundColor = .mainBlue
+        }
+    }
+    private func buttonInactivated() {
+        sendBtn.isEnabled = false
+        UIView.animate(withDuration: 0.33) { [weak self] in
+            self?.sendBtn.backgroundColor = .mainGray
+        }
+    }
+    
     @objc func allTextFieldFilledIn() {
         
         /* 모든 textField가 채워졌으면 고객센터 버튼 활성화 */
@@ -412,22 +438,13 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
            self.textCount != 0 {
             
             if agreeCheckBtn.isSelected { // 정보 제공 동의 필수
-                UIView.animate(withDuration: 0.33) { [weak self] in
-                    self?.sendBtn.backgroundColor = .mainBlue
-                }
-                sendBtn.isEnabled = true
+                self.buttonActivated()
             }
             else { // 체크 안 했으면 무조건 비활성화
-                sendBtn.isEnabled = false
-                UIView.animate(withDuration: 0.33) { [weak self] in
-                    self?.sendBtn.backgroundColor = .mainGray
-                }
+                self.buttonInactivated()
             }
         } else {
-            sendBtn.isEnabled = false
-            UIView.animate(withDuration: 0.33) { [weak self] in
-                self?.sendBtn.backgroundColor = .mainGray
-            }
+            self.buttonInactivated()
         }
     }
     

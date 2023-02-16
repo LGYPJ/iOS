@@ -241,6 +241,9 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
     
     func typeSelect(type: String) {
         self.reasonTypeTextField.text = type
+        if (agreeCheckBtn.isSelected) {
+            buttonActivated()
+        }
         if (type == "기타") {
             contentTextField.snp.updateConstraints { // 내용 입력 표시
                 $0.height.equalTo(100)
