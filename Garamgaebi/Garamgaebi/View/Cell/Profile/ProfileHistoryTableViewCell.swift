@@ -10,6 +10,11 @@ import UIKit
 import SnapKit
 import Then
 
+protocol HistoryButtonTappedDelegate: AnyObject {
+    func careerButtonDidTap(careerIdx: Int, company: String, position: String, startDate: String, endDate: String, isWorking: String)
+    func educationButtonDidTap(educationIdx: Int, institution: String, major: String, startDate: String, endDate: String, isLearning: String)
+}
+
 class ProfileHistoryTableViewCell: UITableViewCell {
 
     required init?(coder: NSCoder) {
@@ -18,6 +23,17 @@ class ProfileHistoryTableViewCell: UITableViewCell {
     
     // MARK: - Properties
     static let identifier = String(describing: ProfileHistoryTableViewCell.self)
+    
+    weak var delegate: HistoryButtonTappedDelegate?
+    
+    var id: Int = 0 // career -> 1, education -> 2
+    
+    var careerIdx: Int?
+    var company: String?
+    var position: String?
+    var startDate: String?
+    var endDate: String?
+    var isWorking: String?
     
     lazy var companyLabel = UILabel().then {
         $0.text = "우아한 형제들"
@@ -39,6 +55,8 @@ class ProfileHistoryTableViewCell: UITableViewCell {
     
     lazy var editButton = UIButton().then {
         $0.setImage(UIImage(named: "ProfileEdit"), for: .normal)
+        
+        $0.addTarget(self, action: #selector(historyEditButtonDidTap), for: .touchUpInside)
     }
     
     
@@ -77,10 +95,18 @@ class ProfileHistoryTableViewCell: UITableViewCell {
             $0.trailing.equalToSuperview().inset(14)
             $0.width.height.equalTo(16)
         }
-        
-        
        
     }
+    
+    @objc private func historyEditButtonDidTap() {
+//        print("id: \(id)")
+        if (id == 1) { // 경력
+            delegate?.careerButtonDidTap(careerIdx: careerIdx ?? 0, company: company ?? "", position: position ?? "", startDate: startDate ?? "", endDate: endDate ?? "", isWorking: isWorking ?? "")
+        } else if (id == 2) { // 교육
+            delegate?.educationButtonDidTap(educationIdx: careerIdx ?? 0, institution: company ?? "", major: position ?? "", startDate: startDate ?? "", endDate: endDate ?? "", isLearning: isWorking ?? "")
+        }
+    }
+    
     
 //    public func careerConfigure(_ item: ProfileCareerDataModel) {
 //        companyLabel.text = item.company

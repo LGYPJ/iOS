@@ -15,6 +15,7 @@ class ProfileInputEducationVC: UIViewController {
     // MARK: - Properties
     lazy var token = UserDefaults.standard.string(forKey: "BearerToken")
     lazy var memberIdx: Int = 0
+    var educationIdx: Int = 0
     
     
     private var currentYear: Int = 0 {
@@ -269,6 +270,53 @@ class ProfileInputEducationVC: UIViewController {
         button.addTarget(self, action: #selector(saveButtonDidTap), for: .touchUpInside)
         return button
     }()
+    
+    // 편집용
+    lazy var editDeleteButton: UIButton = {
+        let button = UIButton()
+        
+        button.setTitle("삭제하기", for: .normal)
+        button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
+        button.setTitleColor(.mainBlue, for: .normal)
+        button.tintColor = .mainBlue
+        
+        button.layer.borderColor = UIColor.mainBlue.cgColor
+        button.layer.borderWidth = 1
+        button.layer.cornerRadius = 12
+        
+        button.addTarget(self, action: #selector(deleteButtonDidTap), for: .touchUpInside)
+        return button
+    }()
+    lazy var editSaveButton: UIButton = {
+        let button = UIButton()
+        
+        button.basicButton()
+        button.setTitle("저장하기", for: .normal)
+        
+        button.addTarget(self, action: #selector(editButtonDidTap), for: .touchUpInside)
+        return button
+    }()
+    lazy var editButtonStackView: UIStackView = {
+        let stackView = UIStackView()
+        [editDeleteButton, editSaveButton].forEach {
+            stackView.addArrangedSubview($0)
+        }
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
+        stackView.distribution = .fillEqually
+        stackView.spacing = 6
+        
+        stackView.isHidden = true
+        
+        return stackView
+    }()
+    
+    // alert dialog
+    lazy var alert = UIAlertController(title: "삭제가 완료되었습니다.", message: "", preferredStyle: .alert)
+    lazy var alertAction = UIAlertAction(title: "닫기", style: .default) { (_) in
+        // 닫기 누르면 이전 화면으로
+        self.navigationController?.popViewController(animated: true)
+    }
 
     // MARK: Life Cycle
     override func viewDidLoad() {
@@ -323,9 +371,13 @@ class ProfileInputEducationVC: UIViewController {
         }
         
         view.addSubview(saveUserProfileButton)
+        view.addSubview(editButtonStackView)
     }
 
     func configLayouts() {
+        
+        institutionTextCount = institutionTextField.text?.count ?? 0
+        majorTextCount = majorTextField.text?.count ?? 0
         
         //headerView
         headerView.snp.makeConstraints { make in
@@ -443,6 +495,11 @@ class ProfileInputEducationVC: UIViewController {
             make.right.equalToSuperview().inset(16)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(14)
         }
+        // editButtonStackView
+        editButtonStackView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview().inset(16)
+            make.bottom.equalTo(saveUserProfileButton)
+        }
     }
 
     @objc private func saveButtonDidTap(_ sender: UIButton) {
@@ -450,21 +507,55 @@ class ProfileInputEducationVC: UIViewController {
         // 값 저장
         guard let institution = institutionTextField.text else { return }
         guard let major = majorTextField.text else { return }
-        //TODO: 서버에서 date 어떻게 받을지 모르겠음
         guard let startDate = startDateTextField.text else { return }
         guard let endDate = endDateTextField.text else { return }
-        //TODO: 토글 체크상태에 따라서 처리. 근데 이거 왜 String임? -> 이거 True로 하면 endDate에 null이 온다
-        let isLearning = "FALSE"
+ 
+        var checkValue: String
+        if endDate == "현재" {
+            checkValue = "TRUE"
+        } else {
+            checkValue = "FALSE"
+        }
         
         // 서버 연동
-        postEducation(memberIdx: memberIdx, institution: institution, major: major, isLearning: isLearning, startDate: startDate, endDate: endDate) { result in
+        ProfileHistoryViewModel.postEducation(memberIdx: memberIdx, institution: institution, major: major, isLearning: checkValue, startDate: startDate, endDate: endDate) { result in
             if result {
                 // 서버 통신 후 profileVC reload 요청 notification 예시
                 // NotificationCenter.default.post(name: Notification.Name("profileVCRefresh"), object: nil)
                 self.navigationController?.popViewController(animated: true)
             }
         }
+    }
+    
+    // 교육 수정 버튼
+    @objc private func editButtonDidTap(_ sender: UIButton) {
+        guard let institution = institutionTextField.text else { return }
+        guard let major = majorTextField.text else { return }
+        guard let startDate = startDateTextField.text else { return }
+        guard let endDate = endDateTextField.text else { return }
+        
+        var checkValue: String
+        if endDate == "현재" {
+            checkValue = "TRUE"
+        } else {
+            checkValue = "FALSE"
+        }
 
+        ProfileHistoryViewModel.patchEducation(educationIdx: educationIdx, institution:  institution, major: major, isLearning: checkValue, startDate: startDate, endDate: endDate) { result in
+            if result {
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+    }
+    // 교육 삭제 버튼
+    @objc private func deleteButtonDidTap(_ sender: UIButton) {
+        ProfileHistoryViewModel.deleteEducation(educationIdx: educationIdx) { [self] result in
+            if result {
+                // 삭제 확인 다이얼로그 띄우기
+                self.alert.addAction(alertAction)
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
     }
     
     func setCurrentYear() {
@@ -656,50 +747,6 @@ class ProfileInputEducationVC: UIViewController {
     @objc private func didTapBackBarButton() {
 //        print("뒤로가기 버튼 클릭")
         self.navigationController?.popViewController(animated: true)
-    }
-    
-    // MARK: - [POST] 교육 추가
-    func postEducation(memberIdx: Int, institution: String, major: String, isLearning: String, startDate: String, endDate: String, completion: @escaping ((Bool) -> Void)) {
-        
-        // http 요청 주소 지정
-        let url = "https://garamgaebi.shop/profile/education"
-        
-        // http 요청 헤더 지정
-        let header : HTTPHeaders = [
-            "Content-Type": "application/json",
-            "Authorization": "Bearer \(token ?? "")"
-        ]
-        let bodyData: Parameters = [
-            "memberIdx": memberIdx,
-            "institution": institution,
-            "major": major,
-            "isLearning": isLearning,
-            "startDate": startDate,
-            "endDate": endDate
-        ]
-        
-        // httpBody 에 parameters 추가
-        AF.request(
-            url,
-            method: .post,
-            parameters: bodyData,
-            encoding: JSONEncoding.default,
-            headers: header
-        )
-        .validate()
-        .responseDecodable(of: ProfilePostResponse.self) { response in
-            switch response.result {
-            case .success(let response):
-                if response.isSuccess {
-                    print("성공(Education추가): \(response.message)")
-                    completion(response.result)
-                } else {
-                    print("실패(Education추가): \(response.message)")
-                }
-            case .failure(let error):
-                print("실패(AF-Education추가): \(error.localizedDescription)")
-            }
-        }
     }
     
     @objc

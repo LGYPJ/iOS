@@ -10,8 +10,8 @@ import UIKit
 import SnapKit
 import Then
 
-protocol ButtonTappedDelegate: AnyObject {
-    func editButtonDidTap(snsIdx: Int, type: String, address: String)
+protocol SnsButtonTappedDelegate: AnyObject {
+    func snsEditButtonDidTap(snsIdx: Int, type: String, address: String)
     func copyButtonDidTap()
 }
 
@@ -25,7 +25,7 @@ class ProfileSNSTableViewCell: UITableViewCell {
     // MARK: - Properties
     static let identifier = String(describing: ProfileSNSTableViewCell.self)
     
-    weak var delegate: ButtonTappedDelegate?
+    weak var delegate: SnsButtonTappedDelegate?
     
     var snsIdx: Int?
     var type: String?
@@ -91,7 +91,7 @@ class ProfileSNSTableViewCell: UITableViewCell {
     }
     
     @objc private func editButtonDidTap() {
-        delegate?.editButtonDidTap(snsIdx: snsIdx ?? 0, type: type ?? "", address: address ?? "")
+        delegate?.snsEditButtonDidTap(snsIdx: snsIdx ?? 0, type: type ?? "", address: address ?? "")
         
 //        print("편집 버튼 클릭")
     }

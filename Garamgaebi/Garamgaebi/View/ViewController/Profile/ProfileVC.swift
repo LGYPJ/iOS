@@ -26,6 +26,7 @@ class ProfileVC: UIViewController {
     var eduData: [EducationResult] = []
     
     var snsIdx: Int = 0
+    var careerIdx: Int = 0
     
     // MARK: - Subviews
     lazy var headerView: UIView = {
@@ -383,7 +384,7 @@ class ProfileVC: UIViewController {
         addSnsBtn.addTarget(self,action: #selector(self.snsButtonDidTap(_:)), for: .touchUpInside)
         
         
-        // Career
+        // 경력
         careerTopRadiusView.snp.makeConstraints {
             $0.top.equalTo(snsBottomRadiusView.snp.bottom).offset(16)
             $0.leading.trailing.equalTo(snsTopRadiusView)
@@ -806,6 +807,18 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             cell.companyLabel.text = row.company
             cell.positionLabel.text = row.position
             
+            cell.id = 1 // 경력
+            
+            // 편집 데이터 넘기기
+            cell.careerIdx = row.careerIdx
+            cell.company = row.company
+            cell.position = row.position
+            cell.startDate = row.startDate
+            cell.endDate = endDate
+            cell.isWorking = row.isWorking
+            
+            cell.delegate = self
+            
             cell.selectionStyle = .none
 
             return cell
@@ -826,6 +839,18 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             cell.positionLabel.text = row.major
             cell.periodLabel.text = "\(row.startDate) ~ \(endDate)"
             
+            cell.id = 2 // 교육
+            
+            // 편집 데이터 넘기기
+            cell.careerIdx = row.educationIdx
+            cell.company = row.institution
+            cell.position = row.major
+            cell.startDate = row.startDate
+            cell.endDate = endDate
+            cell.isWorking = row.isLearning
+            
+            cell.delegate = self
+            
             cell.selectionStyle = .none
             return cell
         }
@@ -834,8 +859,8 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
-extension ProfileVC: ButtonTappedDelegate {
-    func editButtonDidTap(snsIdx: Int, type: String, address: String) {
+extension ProfileVC: SnsButtonTappedDelegate {
+    func snsEditButtonDidTap(snsIdx: Int, type: String, address: String) {
         // 화면 전환
 //        print("받은 snsIdx: \(snsIdx)")
         let nextVC = ProfileInputSNSVC()
@@ -857,4 +882,57 @@ extension ProfileVC: ButtonTappedDelegate {
     func copyButtonDidTap() {
         //
     }
+}
+extension ProfileVC: HistoryButtonTappedDelegate {
+    func careerButtonDidTap(careerIdx: Int, company: String, position: String, startDate: String, endDate: String, isWorking: String) {
+        // 화면 전환
+        let nextVC = ProfileInputCareerVC()
+        
+        // 편집 모드
+        nextVC.titleLabel.text = "경력 편집하기"
+        nextVC.editButtonStackView.isHidden = false
+        nextVC.saveUserProfileButton.isHidden = true
+        
+        // 값 넘기기
+        nextVC.memberIdx = memberIdx
+        nextVC.careerIdx = careerIdx
+        nextVC.companyTextField.text = company
+        nextVC.positionTextField.text = position
+        nextVC.startDateTextField.text = startDate
+        nextVC.endDateTextField.text = endDate
+        if (isWorking == "TRUE") {
+            //TODO: 편집 모드 -> '재직 중' 버튼 로직 변경 필요
+            nextVC.checkIsWorkingButton.setImage(UIImage(systemName: "checkmark.square")?.withRenderingMode(.automatic), for: .normal)
+            nextVC.checkIsWorkingButton.setImage(UIImage(systemName: "square")?.withRenderingMode(.automatic), for: .selected)
+        }
+
+        navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
+    func educationButtonDidTap(educationIdx: Int, institution: String, major: String, startDate: String, endDate: String, isLearning: String) {
+        // 화면 전환
+        let nextVC = ProfileInputEducationVC()
+        
+        // 편집 모드
+        nextVC.titleLabel.text = "교육 편집하기"
+        nextVC.editButtonStackView.isHidden = false
+        nextVC.saveUserProfileButton.isHidden = true
+        
+        // 값 넘기기
+        nextVC.memberIdx = memberIdx
+        nextVC.educationIdx = educationIdx
+        nextVC.institutionTextField.text = institution
+        nextVC.majorTextField.text = major
+        nextVC.startDateTextField.text = startDate
+        nextVC.endDateTextField.text = endDate
+        if (isLearning == "TRUE") {
+            //TODO: 편집 모드 -> '교육 중' 버튼 로직 변경 필요
+            nextVC.checkIsLearningButton.setImage(UIImage(systemName: "checkmark.square")?.withRenderingMode(.automatic), for: .normal)
+            nextVC.checkIsLearningButton.setImage(UIImage(systemName: "square")?.withRenderingMode(.automatic), for: .selected)
+        }
+
+        navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
+    
 }
