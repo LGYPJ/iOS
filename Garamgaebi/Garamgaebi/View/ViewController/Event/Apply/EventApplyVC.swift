@@ -211,7 +211,7 @@ class EventApplyVC: UIViewController {
 	lazy var nameAlertLabel: UILabel = {
 		let label = UILabel()
 		label.textColor = .red
-		label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
+		label.font = UIFont.NotoSansKR(type: .Regular, size: 10)
 		label.text = "이름 형식을 확인해주세요."
 //		label.isHidden = true
 		label.alpha = 0
@@ -245,7 +245,7 @@ class EventApplyVC: UIViewController {
 	lazy var nicknameAlertLabel: UILabel = {
 		let label = UILabel()
 		label.textColor = .red
-		label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
+		label.font = UIFont.NotoSansKR(type: .Regular, size: 10)
 		label.text = "닉네임이 일치하지 않습니다."
 //		label.isHidden = true
 		label.alpha = 0
@@ -279,7 +279,7 @@ class EventApplyVC: UIViewController {
 	lazy var numberAlertLabel: UILabel = {
 		let label = UILabel()
 		label.textColor = .red
-		label.font = UIFont.NotoSansKR(type: .Regular, size: 12)
+		label.font = UIFont.NotoSansKR(type: .Regular, size: 10)
 		label.text = "번호 형식이 올바르지 않습니다."
 //		label.isHidden = true
 		label.alpha = 0
@@ -555,7 +555,7 @@ extension EventApplyVC {
 		
 		nameAlertLabel.snp.makeConstraints {
 			$0.leading.equalToSuperview().inset(16)
-			$0.top.equalTo(nameTextField.snp.bottom).offset(4)
+			$0.top.equalTo(nameTextField.snp.bottom).offset(2)
 		}
 		
         // nicknameTitleLabel
@@ -573,7 +573,7 @@ extension EventApplyVC {
 		
 		nicknameAlertLabel.snp.makeConstraints {
 			$0.leading.equalToSuperview().inset(16)
-			$0.top.equalTo(nicknameTextField.snp.bottom).offset(4)
+			$0.top.equalTo(nicknameTextField.snp.bottom).offset(2)
 		}
 		
         // numberTitleLabel
@@ -591,7 +591,7 @@ extension EventApplyVC {
 		
 		numberAlertLabel.snp.makeConstraints {
 			$0.leading.equalToSuperview().inset(16)
-			$0.top.equalTo(numberTextField.snp.bottom).offset(4)
+			$0.top.equalTo(numberTextField.snp.bottom).offset(2)
 		}
 		
 		descriptionContainerView.snp.makeConstraints {
