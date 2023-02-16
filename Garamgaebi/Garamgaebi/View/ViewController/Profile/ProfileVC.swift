@@ -424,14 +424,6 @@ class ProfileVC: UIViewController {
         addEduBtn.addTarget(self,action: #selector(self.educationButtonDidTap(_:)), for: .touchUpInside)
     }
     
-    func editData(image: String, nickname: String, organization: String, email: String, introduce: String) {
-        self.profileImageView.image = UIImage(named: image) // 변경 필요
-        self.nameLabel.text = nickname
-        self.orgLabel.text = organization
-        self.emailLabel.text = email
-        self.introduceLabel.text = introduce
-    }
-    
     @objc func emailLabelDidTap() {
         guard let copyString = emailLabel.text else { return }
         UIPasteboard.general.string = copyString
@@ -456,7 +448,15 @@ class ProfileVC: UIViewController {
             guard let orgString = self.orgLabel.text else { return }
             guard let emailString = self.emailLabel.text else { return }
             guard let introduceString = self.introduceLabel.text else { return }
-            guard let image = self.profileImageView.image else { return }
+            
+//            guard let image = self.profileImageView.image else { return UIImage(named: "DefaultProfileImage") }
+//            var image = UIImage
+//            if let saveImage = self.profileImageView.image {
+//                image = saveImage
+//            } else {
+//                image = UIImage(named: "DefaultProfileImage")
+//            }
+//            print("image: \(image)")
             
             // 값 넘기기
             nextVC.nickNameTextField.text = nameString
@@ -464,7 +464,7 @@ class ProfileVC: UIViewController {
             nextVC.emailTextField.text = emailString
             nextVC.introduceTextField.text = introduceString
             nextVC.introduceTextField.textColor = .mainBlack
-            nextVC.profileImageView.image = image
+//            nextVC.profileImageView.image = image
             
             // 사용자
             nextVC.memberIdx = self.memberIdx
@@ -541,6 +541,7 @@ class ProfileVC: UIViewController {
                     }
                     // 프로필 이미지
                     if let urlString = result.profileUrl {
+                        
                         let url = URL(string: urlString)
 
                         self.profileImageView.kf.indicatorType = .activity
@@ -555,6 +556,9 @@ class ProfileVC: UIViewController {
                 // 실제 HTTP에러 404 또는 디코드 에러?
                 print("실패(AF-내프로필): \(error.localizedDescription)")
                 self.configureDummyData() // 임시
+                self.showSnsDefaultLabel()
+                self.showCareerDefaultLabel()
+                self.showEducationDefaultLabel()
             }
         }
     }
@@ -736,7 +740,7 @@ class ProfileVC: UIViewController {
     
     // TODO: API연동 후 삭제
     func configureDummyData() {
-        nameLabel.text = "코코아"
+        nameLabel.text = "가람개비"
         orgLabel.text = "가천대학교 소프트웨어학과"
         emailLabel.text = "umc@gmail.com"
         introduceLabel.text = "자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소."

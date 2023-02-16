@@ -157,6 +157,8 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     let editDoneBtn = UIButton().then {
         $0.basicButton()
         $0.setTitle("저장하기", for: .normal)
+        
+        $0.addTarget(self, action: #selector(doneButtonDidTap), for: .touchUpInside)
     }
     
     
@@ -308,7 +310,6 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             $0.bottom.equalTo(contentView).inset(16)
             $0.leading.trailing.equalTo(emailTextField)
         }
-        editDoneBtn.addTarget(self, action: #selector(doneButtonDidTap), for: .touchUpInside)
     }
     
     // 클릭 이벤트
@@ -317,14 +318,6 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(profileImageDidTap))
         profileImageView.addGestureRecognizer(tapGestureRecognizer)
         profileImageView.isUserInteractionEnabled = true
-        
-//        // 키보드 처리 -> 텍스트필드 입력시 뷰 올리기
-//        restoreFrameYValue = self.view.frame.origin.y
-//
-//        // UIResponder.keyboardWillShowNotification : 키보드가 해제되기 직전에 post 된다.
-//        NotificationCenter.default.addObserver(self, selector: #selector(setKeyboardShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-//        // UIResponder.keyboardWillHideNotificationdcdc : 키보드가 보여지기 직전에 post 된다.
-//        NotificationCenter.default.addObserver(self, selector: #selector(setKeyboardHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     // SubTitle 별 처리
@@ -358,30 +351,6 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     
     @objc func textFieldInactivated(_ sender: UITextField) {
         sender.layer.borderColor = UIColor.mainGray.cgColor
-    }
-    
-    // 키보드 업
-    @objc func setKeyboardShow(_ notification: Notification) {
-        // 키보드가 내려왔을 때만 올리기
-        if self.view.frame.origin.y == restoreFrameYValue {
-            if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-                let keyboardHeight = keyboardFrame.cgRectValue.height
-                self.view.frame.origin.y -= keyboardHeight
-//                print("show keyboard")
-            }
-        }
-    }
-
-    // 키보드 다운
-    @objc private func setKeyboardHide(_ notification: Notification) {
-        // 키보드가 올라갔을 때만 내리기
-        if self.view.frame.origin.y != restoreFrameYValue {
-            if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-                let keyboardHeight = keyboardFrame.cgRectValue.height
-                self.view.frame.origin.y += keyboardHeight
-//                print("hide keyboard")
-            }
-        }
     }
     
     @objc func profileImageDidTap() {
