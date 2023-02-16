@@ -132,7 +132,7 @@ class IceBreakingRoomVC: UIViewController {
     // MARK: - Life Cycle
 	
 	init(programId: Int ,roomId: String, roomName: String) {
-		self.memberId = UserDefaults.standard.integer(forKey: "memberIdx") + 2
+		self.memberId = UserDefaults.standard.integer(forKey: "memberIdx")
 		self.nickname = UserDefaults.standard.string(forKey: "nickname")!
 		self.programId = programId
 		self.roomId = roomId
@@ -274,7 +274,6 @@ extension IceBreakingRoomVC {
 	
 	private func subscribeSocket() {
 		socketClient.subscribe(destination: "/topic/game/room/\(self.roomId)")
-//		socketClient.subscribe(destination: "/topic/game/room/1")
 	}
 
 	private func sendMessageWithSocket(type: String, message: String, profileUrl: String) {
@@ -287,7 +286,6 @@ extension IceBreakingRoomVC {
 		]
 			
 		socketClient.sendJSONForDict(dict: payloadObject as AnyObject, toDestination: "/app/game/message")
-//		socketClient.sendMessage(message: "Test입니다", toDestination: "/app/game/message", withHeaders: nil, withReceipt: "Receipt가 머지")
 	}
 	
 	private func disconnectSocket() {
@@ -298,8 +296,7 @@ extension IceBreakingRoomVC {
 	
 	private func scrollToNextItem() {
 		currentIndex += 1
-		if currentIndex < (imageList.count - 1) {
-//		if currentIndex < (cardCount) {
+		if currentIndex < (imageList.count) {
 			// 해당 인덱스로 스크롤
 			cardCollectionView.scrollToItem(at: IndexPath(row: currentIndex, section: 1), at: .centeredHorizontally, animated: true)
 			userCollectionview.scrollToItem(at: IndexPath(row: currentIndex % userList.count, section: 0), at: .centeredHorizontally, animated: true)
@@ -308,9 +305,8 @@ extension IceBreakingRoomVC {
 			userCollectionview.reloadData()
 		}
 		// 다음 버튼 서서히 사라지는 애니메이션
-		if currentIndex == (imageList.count - 1) {
-//		if currentIndex == (cardCount) {
-			configureNextButtonStatus(true)
+		if currentIndex == (imageList.count) {
+			configureNextButtonStatus(false)
 		}
 		
 	}
@@ -343,7 +339,6 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 		} else if collectionView == cardCollectionView {
 			switch section {
 			case 0: return 1
-//			case 1: return cardCount
 			case 1: return imageList.count
 			default: return 0
 			}
@@ -370,9 +365,9 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 				return cell
 			case 1:
 				guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IceBreakingCardCollectionViewCell.identifier, for: indexPath) as? IceBreakingCardCollectionViewCell else {return UICollectionViewCell()}
-				cell.contentImageView.image = UIImage(named: "ExIceBreakingCardText")
-//				let url = URL(string: imageList[indexPath.row])
-//				cell.contentImageView.kf.setImage(with: url)
+				
+				let url = URL(string: imageList[indexPath.row])
+				cell.contentImageView.kf.setImage(with: url)
 				
 				// 현재 셀, 앞 뒤 셀들만 보여지고 나머지는 숨김
 				if (currentIndex-1)...(currentIndex+1) ~= (indexPath.row) {
@@ -474,9 +469,7 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 	func stompClientDidConnect(client: StompClientLib!) {
 		print("Stomp socket is connected")
 		subscribeSocket()
-//		self.sendMessageWithSocket(type: "ENTER", message: "", profileUrl: "")
 		IcebreakingViewModel.postGameUser(roomId: self.roomId, memberId: self.memberId, completion: {
-			// TODO: 나의 이미지 Url 얻어올 방법?
 			self.sendMessageWithSocket(type: "ENTER", message: "", profileUrl: "")
 		})
 	}
