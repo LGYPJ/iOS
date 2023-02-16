@@ -191,7 +191,7 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 		if self.type == "SEMINAR" {
 			let cellData = self.seminarAttendants[indexPath.row]
 			cell.profileImageView.kf.indicatorType = .activity
-			cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg ?? ""), placeholder: UIImage(named: "ExProfileImage"))
+			cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg ?? ""), placeholder: UIImage(named: "DefaultProfileImage"))
 			
 			cell.userNameLabel.text = cellData.nickname
 			
@@ -208,7 +208,7 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 			
 			let cellData = self.networkingAttendants[indexPath.row]
 			cell.profileImageView.kf.indicatorType = .activity
-			cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg ?? ""), placeholder: UIImage(named: "ExProfileImage"))
+			cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg ?? ""), placeholder: UIImage(named: "DefaultProfileImage"))
 			cell.userNameLabel.text = cellData.nickname.maxLength(length: 5)
 			
 			if indexPath.row == 0 && isUserApply {
