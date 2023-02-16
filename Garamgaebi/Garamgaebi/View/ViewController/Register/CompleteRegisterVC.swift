@@ -192,8 +192,8 @@ class CompleteRegisterVC: UIViewController {
         let useruniEmail = UserDefaults.standard.string(forKey: "uniEmail")!
         let userstatus = "ACTIVE"
         // TODO: password 추후 제거 예정
-        let userpassword = "1234" //UserDefaults.standard.string(forKey: "password")!
-        let userInfo =  RegisterUserInfo(nickname: usernickname, profileEmail: userprofileEmail, socialEmail: usersocialEmail, uniEmail: useruniEmail, status: userstatus, password: userpassword)
+
+        let userInfo =  RegisterUserInfo(nickname: usernickname, profileEmail: userprofileEmail, socialEmail: usersocialEmail, uniEmail: useruniEmail, status: userstatus)
         print(userInfo)
         
          //response 받은 memberIdx로 회원가입 API post
@@ -224,12 +224,10 @@ class CompleteRegisterVC: UIViewController {
         // 임시로 uniEmail, password 사용
         //jrwedo@gachon.ac.kr
         //1234
-        let useruniEmail = UserDefaults.standard.string(forKey: "uniEmail")!
-        let userpassword = "1234"
-        print("로그인 된 uniEmail: \(useruniEmail)")
-        print("로그인 된 password: \(userpassword)")
-        
-        LoginViewModel.postLogin(uniEmail: useruniEmail, password: userpassword, completion: { [weak self] result in
+        let usersocialEmail = UserDefaults.standard.string(forKey: "socialEmail")!
+        print("로그인 된 socialEmail: \(usersocialEmail)")
+
+        LoginViewModel.postLogin(socialEmail: usersocialEmail, completion: { [weak self] result in
             UserDefaults.standard.set(result.accessToken, forKey: "BearerToken")
             UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
 //            UserDefaults.standard.set(7, forKey: "memberIdx")
@@ -253,9 +251,9 @@ class CompleteRegisterVC: UIViewController {
         /// memberIdx: 36
         /// uniEmail: seutest@gachon.ac.kr
         /// passwod: 1234
-//        register()
+        register()
         
-        login()
+//        login()
     }
     
     @objc

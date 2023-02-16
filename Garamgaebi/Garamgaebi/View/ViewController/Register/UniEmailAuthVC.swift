@@ -356,12 +356,12 @@ class UniEmailAuthVC: UIViewController {
     func sendEmail(_ sender: UIButton) {
         
         // 네이버메일(임시)
-        let uniEmail = UniEmailAuthModel(email: "\(userId)@gachon.ac.kr")
-        //let uniEmail = UniEmailAuthModel(email: "\(userId)@naver.com")
+//        let uniEmail = UniEmailAuthModel(email: "\(userId)@gachon.ac.kr")
+        let uniEmail = UniEmailAuthModel(email: "\(userId)@naver.com")
         
         // 메일을 보내면서 uniEmail UserDefault에 저장
-        UserDefaults.standard.set("\(userId)@gachon.ac.kr", forKey: "uniEmail")
-        //UserDefaults.standard.set("\(userId)@naver.com", forKey: "uniEmail")
+//        UserDefaults.standard.set("\(userId)@gachon.ac.kr", forKey: "uniEmail")
+        UserDefaults.standard.set("\(userId)@naver.com", forKey: "uniEmail")
         
         UniEmailAuthViewModel.requestSendEmail(uniEmail) { [weak self] result in
             switch result {
