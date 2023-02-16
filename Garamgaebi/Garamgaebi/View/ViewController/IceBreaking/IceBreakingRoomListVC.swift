@@ -3,15 +3,14 @@
 //  Garamgaebi
 //
 //  Created by 정현우 on 2023/01/13.
-//
+//  아이스브레이킹 게임 방들의 리스트 VC
 
 import UIKit
 import SnapKit
 
 class IceBreakingRoomListVC: UIViewController {
 	
-    // MARK: - Subviews
-    
+	// MARK: 헤더 뷰
     lazy var headerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 71))
         view.backgroundColor = .systemBackground
@@ -38,7 +37,7 @@ class IceBreakingRoomListVC: UIViewController {
         return button
     }()
     
-    
+	// MARK: - Subviews
 	lazy var collectionView: UICollectionView = {
 		let layout = UICollectionViewFlowLayout()
 		layout.scrollDirection = .vertical
@@ -75,19 +74,17 @@ class IceBreakingRoomListVC: UIViewController {
 		configureCollectionView()
 		fetchGameRoomData()
     }
-
-    
-
 }
 
 extension IceBreakingRoomListVC {
-	
+	// MARK: Configure
+	// 뷰 속성 및 레이아웃
 	private func cofigureViews() {
 		view.backgroundColor = .white
         view.addSubview(headerView)
 		view.addSubview(collectionView)
         
-        //headerView
+        // headerView
         headerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(71)
@@ -97,22 +94,19 @@ extension IceBreakingRoomListVC {
         [titleLabel, backButton]
             .forEach {headerView.addSubview($0)}
         
-        // titleLabel
         titleLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
         }
         
-        // backButton
         backButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.centerY.equalToSuperview()
         }
         
-        // collectionView
+		// subViews
 		collectionView.snp.makeConstraints {
             $0.top.equalTo(headerView.snp.bottom).offset(16)
-//			$0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
 			$0.leading.trailing.equalToSuperview().inset(16)
 			$0.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
 		}
@@ -124,6 +118,7 @@ extension IceBreakingRoomListVC {
 		collectionView.register(IceBreakingRoomCollectionViewCell.self, forCellWithReuseIdentifier: IceBreakingRoomCollectionViewCell.identifier)
 	}
 	
+	// 게임 방 리스트 fetch
 	private func fetchGameRoomData() {
 		GameRoomListViewModel.getGameRoomList(programId: self.programId, completion: {[weak self] result in
 			self?.roomList = result
@@ -143,6 +138,7 @@ extension IceBreakingRoomListVC: UICollectionViewDelegate, UICollectionViewDataS
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IceBreakingRoomCollectionViewCell.identifier, for: indexPath) as? IceBreakingRoomCollectionViewCell else {return UICollectionViewCell()}
+		
 		let cellData = roomNameList[indexPath.row]
 		cell.roomTitleLabel.text = cellData
 		
@@ -156,10 +152,9 @@ extension IceBreakingRoomListVC: UICollectionViewDelegate, UICollectionViewDataS
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		navigationController?.pushViewController(IceBreakingRoomVC(programId: self.programId, roomId: roomList[indexPath.row].roomId, roomName: roomNameList[indexPath.row]), animated: true)
+		let vc = IceBreakingRoomVC(programId: self.programId, roomId: roomList[indexPath.row].roomId, roomName: roomNameList[indexPath.row])
 //		let vc = IceBreakingRoomVC_Test(programId: self.programId, roomId: roomList[indexPath.row].roomId, roomName: roomNameList[indexPath.row])
-//		navigationController?.pushViewController(vc, animated: true)
-//		navigationController?.pushViewController(WebSocketTestVC(), animated: true)
+		navigationController?.pushViewController(vc, animated: true)
 	}
 	
 	

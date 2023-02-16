@@ -93,7 +93,7 @@ class EventPreviewCollectionViewCell: UICollectionViewCell {
 	
 	// TODO: API연동 후 삭제
 	func configureDummyData() {
-		profileImageView.image = UIImage(named: "ExProfileImage")
+		profileImageView.image = UIImage(named: "DefaultProfileImage")
 //		titleLabel.text = "docker에 대해 알아보자"
 //		userLabel.text = "네온"
 //		belongLabel.text = "재학생"

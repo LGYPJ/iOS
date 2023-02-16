@@ -75,7 +75,7 @@ extension EventPreviewTableViewCell {
 			$0.trailing.equalToSuperview()
 			$0.bottom.equalToSuperview().inset(6)
 			// 스크롤 가능하게 구현하려면 height를 cellItem*100 + (cellItem-1)*14
-			$0.height.equalTo(3*104 + 2*12)
+			$0.height.equalTo(previews.count*104 + (previews.count - 1)*12)
 		}
 	}
 	
@@ -102,7 +102,7 @@ extension EventPreviewTableViewCell: UICollectionViewDelegate, UICollectionViewD
 		
 		let cellData = self.previews[indexPath.row]
 		cell.profileImageView.kf.indicatorType = .activity
-		cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImgUrl), placeholder: UIImage(named: "ExProfileImage"))
+		cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImgUrl), placeholder: UIImage(named: "DefaultProfileImage"))
 		cell.titleLabel.text = cellData.title
 		cell.userLabel.text = cellData.nickname
 		cell.belongLabel.text = cellData.organization

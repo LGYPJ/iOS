@@ -1431,7 +1431,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = QNLYL4GD4K;
+				DEVELOPMENT_TEAM = FKL5LCYWBF;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Garamgaebi/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 공유 및 저장을 위해 접근 권한을 허용해 주세요.";
@@ -1465,7 +1465,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = QNLYL4GD4K;
+				DEVELOPMENT_TEAM = FKL5LCYWBF;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Garamgaebi/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 공유 및 저장을 위해 접근 권한을 허용해 주세요.";
