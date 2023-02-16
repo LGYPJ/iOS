@@ -264,6 +264,8 @@ class CompleteRegisterVC: UIViewController {
             if checkAgreeAllButton.isSelected {
                 checkAgreeAgeButton.isSelected = true
                 checkAgreeTermsConditionsButton.isSelected = true
+                let vc = ServiceTermVC()
+                present(vc,animated: true)
             }
             else {
                 checkAgreeAgeButton.isSelected = false
@@ -276,6 +278,9 @@ class CompleteRegisterVC: UIViewController {
         case checkAgreeTermsConditionsButton:
             if !checkAgreeTermsConditionsButton.isSelected {
                 checkAgreeAllButton.isSelected = false
+            } else {
+                let vc = ServiceTermVC()
+                present(vc,animated: true)
             }
         default:
             print("nothing")
