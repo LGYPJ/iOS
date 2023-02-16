@@ -11,8 +11,10 @@ import Then
 
 class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
     
-    // MARK: - Subviews
+    // MARK: - Properties
+    var textCount: Int = 0
     
+    // MARK: - Subviews
     lazy var headerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 71))
         view.backgroundColor = .systemBackground
@@ -101,6 +103,11 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         $0.textColor = .mainGray
         $0.delegate = self // <-
     }
+    lazy var contentLengthLabel = UILabel().then {
+        $0.font = UIFont.NotoSansKR(type: .Bold, size: 12)
+        $0.textColor = UIColor(hex: 0xAEAEAE)
+        $0.text = "\(textCount)/100"
+    }
     
     lazy var agreeCheckBtn = UIButton().then {
         $0.setTitle("회원 탈퇴에 관한 모든 내용을 숙지하고,", for: .normal)
@@ -125,6 +132,9 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
     let sendBtn = UIButton().then {
         $0.basicButton()
         $0.setTitle("탈퇴하기", for: .normal)
+        
+        $0.backgroundColor = .mainGray
+        $0.isEnabled = false
     }
 
     override func viewDidLoad() {
@@ -146,6 +156,7 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         
         [titleLabel, backButton]
             .forEach {headerView.addSubview($0)}
+        view.addSubview(contentLengthLabel)
         
         // layout
         
@@ -201,6 +212,9 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
             $0.top.equalTo(reasonTypeTextField.snp.bottom).offset(12)
             $0.leading.trailing.equalTo(emailTextField)
             $0.height.equalTo(100)
+        }
+        contentLengthLabel.snp.makeConstraints { /// 글자수 계산
+            $0.trailing.bottom.equalTo(contentTextField).inset(12)
         }
         
         agreeCheckBtn.snp.makeConstraints { /// 회원탈퇴 내용 숙지
@@ -286,6 +300,8 @@ extension ProfileWithdrawalVC: UITextViewDelegate {
         guard let str = textView.text else { return true }
         let newLenght = str.count + text.count - range.length
         
+        textCount = str.count
+        contentLengthLabel.text = "\(str.count)/100"
         return newLenght <= 100
     }
 }
