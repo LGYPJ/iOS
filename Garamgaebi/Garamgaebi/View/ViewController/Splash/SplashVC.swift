@@ -49,9 +49,9 @@ class SplashVC: UIViewController {
     }
     
     private func login() {
-//		UserDefaults.standard.set(62, forKey: "memberIdx")
+//		UserDefaults.standard.set(25, forKey: "memberIdx")
 //		UserDefaults.standard.set("jrwedo2@naver.com", forKey: "socialEmail")
-//		UserDefaults.standard.set("연현", forKey: "nickname")
+//		UserDefaults.standard.set("연현부계", forKey: "nickname")
         let usersocialEmail = UserDefaults.standard.string(forKey: "socialEmail")!
         print("로그인 된 socialEmail: \(usersocialEmail)")
         

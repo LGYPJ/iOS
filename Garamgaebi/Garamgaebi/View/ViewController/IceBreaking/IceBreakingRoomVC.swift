@@ -403,15 +403,22 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 		if collectionView == cardCollectionView && indexPath.section == 0 {
 			guard let cell = collectionView.cellForItem(at: indexPath) as? IceBreakingStartCardCollectionViewCell  else {return}
 			// 시작하기 눌렀을때
-			UIView.transition(with: cell.contentView, duration: 0.3, options: .transitionFlipFromLeft, animations: {
-				cell.contentView.alpha = 0
-				cell.titleLabel.alpha = 0
-			}, completion: { [weak self] _ in
-				self?.cardCollectionView.scrollToItem(at: IndexPath(row: self!.currentIndex, section: 1), at: .centeredHorizontally, animated: false)
-				self?.isStart = true
-				self?.nextButton.alpha = 1
-				self?.nextButton.isHidden = false
-			})
+				UIView.transition(with: cell.contentView, duration: 0.3, options: .transitionFlipFromLeft, animations: {
+					cell.contentView.alpha = 0
+					cell.titleLabel.alpha = 0
+				}, completion: { _ in
+					if self.currentIndex < self.imageList.count {
+						self.cardCollectionView.scrollToItem(at: IndexPath(row: self.currentIndex, section: 1), at: .centeredHorizontally, animated: false)
+					} else {
+						// index 초과인경우 마지막카드 표시
+						self.cardCollectionView.scrollToItem(at: IndexPath(row: self.imageList.count - 1, section: 1), at: .centeredHorizontally, animated: false)
+					}
+					
+					self.isStart = true
+					self.nextButton.alpha = 1
+					self.nextButton.isHidden = false
+				})
+			
 		}
 	}
 }
