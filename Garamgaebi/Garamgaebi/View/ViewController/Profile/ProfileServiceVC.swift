@@ -13,6 +13,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     
     // MARK: - Properties
     private var isChecking: Bool = false
+    var textCount: Int = 0
     
     // 이메일 유효성 검사
     var email = String()
@@ -74,11 +75,12 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     lazy var emailTextField = UITextField().then {
         $0.basicTextField()
         $0.placeholder = "답변 받을 이메일 주소"
-        
-        $0.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
-        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
-        $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
-        $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+    }
+    lazy var emailAlertLabel = UILabel().then {
+        $0.textColor = .red
+        $0.font = UIFont.NotoSansKR(type: .Regular, size: 10)
+        $0.text = "이메일 형식이 올바르지 않습니다."
+        $0.alpha = 0
     }
     
     let questionTypeSubtitleLabel = UILabel().then {
@@ -100,11 +102,6 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
             $0.trailing.equalToSuperview().inset(12)
             $0.width.height.equalTo(35)
         }
-        
-        $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
-        $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
-        $0.addTarget(self, action: #selector(showBottomSheet), for: .editingDidBegin)
-        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
     }
     
     let textViewPlaceHolder = "내용을 적어주세요"
@@ -121,7 +118,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     lazy var contentLengthLabel = UILabel().then {
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 12)
         $0.textColor = UIColor(hex: 0xAEAEAE)
-        $0.text = "0/100"
+        $0.text = "\(textCount)/100"
     }
     
     lazy var agreeCheckBtn = UIButton().then {
@@ -134,8 +131,6 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         $0.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
         
         $0.clipsToBounds = true
-        $0.addTarget(self, action: #selector(toggleButton), for: .touchUpInside)
-        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .touchUpInside)
     }
     
     let agreemsgLabel = UILabel().then {
@@ -175,8 +170,8 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         tabBarController?.tabBar.isHidden = true
         
         configureLayouts()
+        configureTextField()
         configureGestureRecognizer()
-        
     }
     
     
@@ -195,7 +190,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         scrollView.showsVerticalScrollIndicator = false
         
         // addSubview
-        [noticeSubtitleLabel, noticeLabel, emailSubtitleLabel, emailTextField, questionTypeSubtitleLabel, questionTypeTextField, contentTextField, agreeCheckBtn, agreemsgLabel, sendBtn, logoutLabel, withdrawalLabel]
+        [noticeSubtitleLabel, noticeLabel, emailSubtitleLabel, emailTextField, emailAlertLabel, questionTypeSubtitleLabel, questionTypeTextField, contentTextField, agreeCheckBtn, agreemsgLabel, sendBtn, logoutLabel, withdrawalLabel]
             .forEach {contentView.addSubview($0)}
         
         contentView.addSubview(contentLengthLabel)
@@ -226,7 +221,6 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
             $0.top.equalTo(headerView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
-//            $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
         // contentView
@@ -254,9 +248,13 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
             $0.leading.trailing.equalTo(emailSubtitleLabel)
             $0.height.equalTo(48)
         }
+        emailAlertLabel.snp.makeConstraints {
+            $0.top.equalTo(emailTextField.snp.bottom).offset(2)
+            $0.leading.trailing.equalTo(emailSubtitleLabel)
+        }
         
         questionTypeSubtitleLabel.snp.makeConstraints { /// 질문 유형 선택
-            $0.top.equalTo(emailTextField.snp.bottom).offset(12)
+            $0.top.equalTo(emailAlertLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalTo(emailTextField)
         }
         questionTypeTextField.snp.makeConstraints {
@@ -298,8 +296,6 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
             $0.bottom.equalTo(contentView).inset(16)
             $0.centerX.equalToSuperview()
         }
-        
-        
     }
     
     func typeSelect(type: String) {
@@ -319,7 +315,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         bottomSheetVC.T4 = "기타"
         
         self.present(bottomSheetVC, animated: false, completion: nil)
-        self.view.endEditing(false)
+        self.view.endEditing(true)
     }
     
     // 로그아웃 버튼 did tap
@@ -343,20 +339,43 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     @objc
     private func toggleButton(_ sender: UIButton) {
         sender.isSelected.toggle()
+        checkButtonValid(sender)
+    }
+    
+    private func checkButtonValid(_ sender: UIButton){
         switch sender.isSelected {
         case true:
-            sender.setTitleColor(UIColor.mainBlack, for: .normal)
+            // cornerCase에서 토글시
+            sender.setTitleColor(.mainBlack, for: .normal)
             agreemsgLabel.textColor = .mainBlack
         case false:
             sender.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
             agreemsgLabel.textColor = UIColor(hex: 0x8A8A8A)
         }
     }
-    
 
     // 뒤로가기 버튼 did tap
     @objc private func didTapBackBarButton() {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    // textField delegate 등록
+    private func configureTextField() {
+        // email
+        emailTextField.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
+        emailTextField.addTarget(self, action: #selector(textFieldInactivated(_:)), for: .editingDidEnd)
+        emailTextField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
+        
+        // questionType
+        questionTypeTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+        questionTypeTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+        questionTypeTextField.addTarget(self, action: #selector(showBottomSheet), for: .editingDidBegin)
+        questionTypeTextField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
+
+        
+        // toggle
+        agreeCheckBtn.addTarget(self, action: #selector(toggleButton), for: .touchUpInside)
+        agreeCheckBtn.addTarget(self, action: #selector(allTextFieldFilledIn), for: .touchUpInside)
     }
     
     // 텍스트 활성화
@@ -371,10 +390,11 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     @objc func allTextFieldFilledIn() {
         
         /* 모든 textField가 채워졌으면 고객센터 버튼 활성화 */
-        if self.emailTextField.text?.count != 0,
-           self.questionTypeTextField.text?.count != 0 {
+        if self.isValidEmail,
+           self.questionTypeTextField.text?.count != 0,
+           self.textCount != 0 {
             
-            if isChecking { // 정보 제공 동의 필수
+            if agreeCheckBtn.isSelected { // 정보 제공 동의 필수
                 UIView.animate(withDuration: 0.33) { [weak self] in
                     self?.sendBtn.backgroundColor = .mainBlue
                 }
@@ -401,7 +421,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         case emailTextField:
             self.isValidEmail = text.isValidEmail()
             self.email = text
-        
+            
         default:
             fatalError("Missing TextField...")
         }
@@ -409,22 +429,29 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     
     func validateEmail() {
         if isValidEmail {
-            self.sendBtn.isEnabled = true
-            self.emailTextField.layer.borderColor = UIColor.mainBlack.cgColor
-            self.emailTextField.layer.borderWidth = 1
-            UIView.animate(withDuration: 0.33) {
-                self.sendBtn.backgroundColor = .mainBlue
-            }
+            hideAlert(textField: self.emailTextField, alertLabel: self.emailAlertLabel)
         } else {
-            self.sendBtn.isEnabled = false
-            self.sendBtn.layer.borderColor = UIColor(hex: 0xFF0000).cgColor
-            self.emailTextField.layer.borderWidth = 1
-            UIView.animate(withDuration: 0.33) {
-                self.sendBtn.backgroundColor = .mainGray
+            showAlert(textField: self.emailTextField, alertLabel: self.emailAlertLabel, status: isValidEmail)
             }
         }
     }
-}
+    
+    private func showAlert(textField: UITextField, alertLabel: UILabel, status: Bool) {
+        
+        UIView.animate(withDuration: 0.3) {
+            textField.layer.borderColor = UIColor.red.cgColor
+            alertLabel.alpha = 1
+        }
+    }
+    
+    private func hideAlert(textField: UITextField, alertLabel: UILabel) {
+        
+        UIView.animate(withDuration: 0.3) {
+            textField.layer.borderColor = UIColor.mainBlack.cgColor
+            alertLabel.alpha = 0
+        }
+    }
+
 
 // MARK: - Extension
 extension ProfileServiceVC: UITextViewDelegate {
@@ -442,12 +469,10 @@ extension ProfileServiceVC: UITextViewDelegate {
         if contentTextField.text.isEmpty {
             contentTextField.text = textViewPlaceHolder
             contentTextField.textColor = .mainGray
-        }
-        else if emailTextField.text?.count != 0,
-           questionTypeTextField.text?.count != 0,
-           isChecking {
-            sendBtn.backgroundColor = .mainBlue
-            sendBtn.isEnabled = true
+            sendBtn.isEnabled = false
+            UIView.animate(withDuration: 0.33) { [weak self] in
+                self?.sendBtn.backgroundColor = .mainGray
+            }
         }
         contentTextField.layer.borderColor = UIColor.mainGray.cgColor
     }
@@ -461,13 +486,17 @@ extension ProfileServiceVC: UITextViewDelegate {
             sendBtn.backgroundColor = .mainGray
             sendBtn.isEnabled = false
         }
-        else if emailTextField.text?.count != 0,
-           questionTypeTextField.text?.count != 0,
-           isChecking {
-            sendBtn.backgroundColor = .mainBlue
+        else if isValidEmail,
+                questionTypeTextField.text?.count != 0,
+                agreeCheckBtn.isSelected {
             sendBtn.isEnabled = true
+            UIView.animate(withDuration: 0.33) { [weak self] in
+                self?.sendBtn.backgroundColor = .mainBlue
+            }
         }
 
+        textCount = str.count
+        print(textCount)
         contentLengthLabel.text = "\(str.count)/100"
         return newLenght <= 100
     }
