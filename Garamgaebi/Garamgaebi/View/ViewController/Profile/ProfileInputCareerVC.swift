@@ -687,6 +687,22 @@ class ProfileInputCareerVC: UIViewController {
         self.view.endEditing(true)
     }
     
+    private func buttonActivated() {
+        saveUserProfileButton.isEnabled = true
+        editSaveButton.isEnabled = true
+        UIView.animate(withDuration: 0.33) { [weak self] in
+            self?.saveUserProfileButton.backgroundColor = .mainBlue
+            self?.editSaveButton.backgroundColor = .mainBlue
+        }
+    }
+    private func buttonInactivated() {
+        saveUserProfileButton.isEnabled = false
+        UIView.animate(withDuration: 0.33) { [weak self] in
+            self?.saveUserProfileButton.backgroundColor = .mainGray
+            self?.editSaveButton.backgroundColor = .mainGray
+        }
+    }
+    
     @objc
     func allTextFieldFilledIn() {
         
@@ -698,10 +714,7 @@ class ProfileInputCareerVC: UIViewController {
             
             // 재직중 버튼 활성화시 -> 무조건 활성화
             if isWorking {
-                UIView.animate(withDuration: 0.33) { [weak self] in
-                    self?.saveUserProfileButton.backgroundColor = .mainBlue
-                }
-                saveUserProfileButton.isEnabled = true
+                buttonActivated()
             }
             // 재직중 버튼 비활성화시
             else {
@@ -716,23 +729,14 @@ class ProfileInputCareerVC: UIViewController {
                     startDateTextField.shake()
                     endDateTextField.shake()
                     // 프로필 저장버튼 애니메이션
-                    saveUserProfileButton.isEnabled = false
-                    UIView.animate(withDuration: 0.33) { [weak self] in
-                        self?.saveUserProfileButton.backgroundColor = .mainGray
-                    }
+                    buttonInactivated()
                 } else { // 만족시
                     // 프로필 저장버튼 애니메이션
-                    UIView.animate(withDuration: 0.33) { [weak self] in
-                        self?.saveUserProfileButton.backgroundColor = .mainBlue
-                    }
-                    saveUserProfileButton.isEnabled = true
+                    buttonActivated()
                 }
             }
         } else {
-            saveUserProfileButton.isEnabled = false
-            UIView.animate(withDuration: 0.33) { [weak self] in
-                self?.saveUserProfileButton.backgroundColor = .mainGray
-            }
+            buttonInactivated()
         }
     }
         

@@ -11,8 +11,10 @@ import Then
 
 class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
     
-    // MARK: - Subviews
+    // MARK: - Properties
+    var textCount: Int = 0
     
+    // MARK: - Subviews
     lazy var headerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 71))
         view.backgroundColor = .systemBackground
@@ -88,6 +90,7 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         }
 
         $0.addTarget(self, action: #selector(showBottomSheet), for: .editingDidBegin)
+        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
     }
     
     let textViewPlaceHolder = "내용을 적어주세요"
@@ -100,6 +103,13 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         $0.text = textViewPlaceHolder
         $0.textColor = .mainGray
         $0.delegate = self // <-
+        $0.isHidden = true
+    }
+    lazy var contentLengthLabel = UILabel().then {
+        $0.font = UIFont.NotoSansKR(type: .Bold, size: 12)
+        $0.textColor = UIColor(hex: 0xAEAEAE)
+        $0.text = "\(textCount)/100"
+        $0.isHidden = true
     }
     
     lazy var agreeCheckBtn = UIButton().then {
@@ -113,6 +123,7 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         
         $0.clipsToBounds = true
         $0.addTarget(self, action: #selector(toggleButton), for: .touchUpInside)
+        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .touchUpInside)
     }
     
     let agreemsgLabel = UILabel().then {
@@ -122,9 +133,14 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         $0.textColor = UIColor(hex: 0x8A8A8A)
     }
     
-    let sendBtn = UIButton().then {
+    lazy var sendBtn = UIButton().then {
         $0.basicButton()
         $0.setTitle("탈퇴하기", for: .normal)
+        
+        $0.backgroundColor = .mainGray
+        $0.isEnabled = false
+        
+        $0.addTarget(self, action: #selector(withdrawalButtonDidTap), for: .touchUpInside)
     }
 
     override func viewDidLoad() {
@@ -146,6 +162,7 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         
         [titleLabel, backButton]
             .forEach {headerView.addSubview($0)}
+        view.addSubview(contentLengthLabel)
         
         // layout
         
@@ -198,9 +215,12 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         }
         
         contentTextField.snp.makeConstraints { /// 내용 입력
-            $0.top.equalTo(reasonTypeTextField.snp.bottom).offset(12)
+            $0.top.equalTo(reasonTypeTextField.snp.bottom).offset(0)
             $0.leading.trailing.equalTo(emailTextField)
-            $0.height.equalTo(100)
+            $0.height.equalTo(0)
+        }
+        contentLengthLabel.snp.makeConstraints { /// 글자수 계산
+            $0.trailing.bottom.equalTo(contentTextField).inset(12)
         }
         
         agreeCheckBtn.snp.makeConstraints { /// 회원탈퇴 내용 숙지
@@ -216,12 +236,36 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
             $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
             $0.leading.trailing.equalTo(emailTextField)
         }
-        sendBtn.addTarget(self, action: #selector(withdrawalButtonDidTap), for: .touchUpInside)
         
     }
     
     func typeSelect(type: String) {
         self.reasonTypeTextField.text = type
+        if (agreeCheckBtn.isSelected) {
+            buttonActivated()
+        }
+        if (type == "기타") {
+            contentTextField.snp.updateConstraints { // 내용 입력 표시
+                $0.height.equalTo(100)
+                $0.top.equalTo(self.reasonTypeTextField.snp.bottom).offset(16)
+            }
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.contentTextField.isHidden = false
+                self?.contentLengthLabel.isHidden = false
+            }
+            if (textCount == 0) { // 이전 입력 텍스트가 없다면
+                buttonInactivated()
+            }
+        } else {
+            contentTextField.snp.updateConstraints { // 내용 입력 표시 X
+                $0.height.equalTo(0)
+                $0.top.equalTo(reasonTypeTextField.snp.bottom).offset(0)
+            }
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.contentTextField.isHidden = true
+                self?.contentLengthLabel.isHidden = true
+            }
+        }
     }
     
     // 바텀시트 나타내기
@@ -237,27 +281,73 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         bottomSheetVC.T4 = "기타"
         
         self.present(bottomSheetVC, animated: false, completion: nil)
-        self.view.endEditing(false)
+        self.view.endEditing(true)
     }
     
     @objc private func didTapBackBarButton() {
-        self.navigationController?.popViewController(animated: false)
+        self.navigationController?.popViewController(animated: true)
     }
     
     // 회원탈퇴 버튼 did tap
     @objc private func withdrawalButtonDidTap() {
-        self.navigationController?.popViewController(animated: false)
+        //TODO: 회원탈퇴 진행
+        
+        // 회원 탈퇴가 끝나면 간편 로그인 화면으로 이동
+        let nextVC = LoginVC()
+        
+        nextVC.modalPresentationStyle = .currentContext
+        present(nextVC, animated: true)
     }
     
-    @objc private func toggleButton(_ sender: UIButton) {
+    @objc
+    private func toggleButton(_ sender: UIButton) {
         sender.isSelected.toggle()
+        checkButtonValid(sender)
+    }
+    
+    private func checkButtonValid(_ sender: UIButton){
         switch sender.isSelected {
         case true:
-            sender.setTitleColor(UIColor.mainBlack, for: .normal)
+            // cornerCase에서 토글시
+            sender.setTitleColor(.mainBlack, for: .normal)
             agreemsgLabel.textColor = .mainBlack
         case false:
             sender.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
             agreemsgLabel.textColor = UIColor(hex: 0x8A8A8A)
+        }
+    }
+    
+    private func buttonActivated() {
+        sendBtn.isEnabled = true
+        UIView.animate(withDuration: 0.33) { [weak self] in
+            self?.sendBtn.backgroundColor = .mainBlue
+        }
+    }
+    private func buttonInactivated() {
+        sendBtn.isEnabled = false
+        UIView.animate(withDuration: 0.33) { [weak self] in
+            self?.sendBtn.backgroundColor = .mainGray
+        }
+    }
+    
+    @objc func allTextFieldFilledIn() {
+        
+        /* 모든 textField가 채워졌으면 고객센터 버튼 활성화 */
+        if self.reasonTypeTextField.text?.count != 0,
+           self.agreeCheckBtn.isSelected { // 탈퇴 내용 숙지 동의 필수
+            
+            if reasonTypeTextField.text == "기타" { // 탈퇴 사유가 기타이면 내용 입력 글자가 있어야 버튼 활성화
+                if textCount != 0 {
+                    buttonActivated()
+                }
+                else {
+                    buttonInactivated()
+                }
+            } else {
+                buttonActivated()
+            }
+        } else {
+            buttonInactivated()
         }
     }
 }
@@ -277,6 +367,7 @@ extension ProfileWithdrawalVC: UITextViewDelegate {
         if contentTextField.text.isEmpty {
             contentTextField.text = textViewPlaceHolder
             contentTextField.textColor = .mainGray
+            buttonInactivated()
         }
         contentTextField.layer.borderColor = UIColor.mainGray.cgColor
     }
@@ -286,6 +377,16 @@ extension ProfileWithdrawalVC: UITextViewDelegate {
         guard let str = textView.text else { return true }
         let newLenght = str.count + text.count - range.length
         
+        if contentTextField.text.isEmpty {
+            buttonInactivated()
+        }
+        else if reasonTypeTextField.text?.count != 0,
+                agreeCheckBtn.isSelected {
+            buttonActivated()
+        }
+        
+        textCount = str.count
+        contentLengthLabel.text = "\(str.count)/100"
         return newLenght <= 100
     }
 }
