@@ -34,10 +34,10 @@ class CustomFlowLayout: UICollectionViewFlowLayout {
 		let collectionViewSize = collectionView.bounds.size
 		
 		// MARK: cell itemSize, spacing 커스텀
-//		self.itemSize.width = collectionViewSize.width - (42*2)  // 42는 collectionview와 cell이 떨어진 거리
-		self.itemSize.width = collectionViewSize.width - (30*2)
-//		self.itemSize.height = self.itemSize.width * 1.5
-		self.itemSize.height = self.itemSize.width * 0.85
+		self.itemSize.width = collectionViewSize.width - (42*2)  // 42는 collectionview와 cell이 떨어진 거리
+//		self.itemSize.width = collectionViewSize.width - (30*2)
+		self.itemSize.height = self.itemSize.width * 1.5
+//		self.itemSize.height = self.itemSize.width * 0.85
 		spacing = (-(self.itemSize.width) + 64)  // 64는 현재 셀과 다음 셀이 떨어진 거리(-로)
 		
 		let xInset = (collectionViewSize.width - self.itemSize.width) / 2
