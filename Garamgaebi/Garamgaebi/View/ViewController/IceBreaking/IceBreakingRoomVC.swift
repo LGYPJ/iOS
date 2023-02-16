@@ -321,7 +321,9 @@ extension IceBreakingRoomVC {
 	
 	// 다음 카드 버튼 did tap
 	@objc private func didTapNextButton() {
-		sendMessageWithSocket(type: "TALK", message: "NEXT", profileUrl: "")
+		IcebreakingViewModel.patchCurrentIndex(roomId: self.roomId, completion: {
+			self.sendMessageWithSocket(type: "TALK", message: "NEXT", profileUrl: "")
+		})
 	}
 }
 
@@ -469,7 +471,8 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 	func stompClientDidConnect(client: StompClientLib!) {
 		print("Stomp socket is connected")
 		subscribeSocket()
-		IcebreakingViewModel.postGameUser(roomId: self.roomId, memberId: self.memberId, completion: {
+		IcebreakingViewModel.postGameUser(roomId: self.roomId, memberId: self.memberId, completion: { index in
+			self.currentIndex = index
 			self.sendMessageWithSocket(type: "ENTER", message: "", profileUrl: "")
 		})
 	}

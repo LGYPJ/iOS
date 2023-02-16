@@ -16,6 +16,7 @@ struct IceBreakingChangeUserModelResposne: Codable {
 
 struct IceBreakingChangeUserModel: Codable {
 	let message: String
+	let currentImgIdx: Int
 }
 
 struct IceBrakingCurrentUserModelResponse: Codable {
@@ -38,8 +39,15 @@ struct IceBreakingImageModelResponse: Codable {
 	let result: [String]?
 }
 
+struct IceBreakingPatchIndexModelResponse: Codable {
+	let isSuccess: Bool
+	let code: Int
+	let message: String
+	let result: String?
+}
+
 struct IcebreakingViewModel {
-	public static func postGameUser(roomId: String, memberId: Int, completion: @escaping (() -> Void)) {
+	public static func postGameUser(roomId: String, memberId: Int, completion: @escaping ((Int) -> Void)) {
 		let url = "https://garamgaebi.shop/game/member"
 		let headers: HTTPHeaders = [
 			"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
@@ -56,7 +64,7 @@ struct IcebreakingViewModel {
 				case .success(let result):
 					if result.isSuccess {
 						print("성공(게임 방 유저 추가): roomId: \(roomId)")
-						completion()
+						completion(result.result?.currentImgIdx ?? 0)
 					} else {
 						print("실패(게임 방 유저 추가): \(result.message)")
 					}
@@ -137,6 +145,31 @@ struct IcebreakingViewModel {
 					}
 				case .failure(let error):
 					print("실패(AF-게임 이미지 GET): \(error.localizedDescription)")
+				}
+			}
+	}
+	
+	public static func patchCurrentIndex(roomId: String, completion: @escaping (() -> Void)) {
+		let url = "https://garamgaebi.shop/game/current-idx"
+		let headers: HTTPHeaders = [
+			"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
+		]
+		let body: [String: String] = [
+			"roomId": roomId
+		]
+		
+		AF.request(url, method: .patch, parameters: body,encoding: JSONEncoding.default, headers: headers)
+			.validate()
+			.responseDecodable(of: IceBreakingPatchIndexModelResponse.self) { response in
+				switch response.result {
+				case .success(let result):
+					if result.isSuccess {
+						completion()
+					} else {
+						print("실패(게임 인덱스 PATCH): \(result.message)")
+					}
+				case .failure(let error):
+					print("실패(AF-게임 인덱스 PATCH): \(error.localizedDescription)")
 				}
 			}
 	}
