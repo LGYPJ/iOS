@@ -13,8 +13,7 @@ import Kingfisher
 
 class IceBreakingRoomVC: UIViewController {
 	
-    // MARK: - Subviews
-    
+	// MARK: 헤더 뷰
     lazy var headerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 71))
         view.backgroundColor = .systemBackground
@@ -24,7 +23,6 @@ class IceBreakingRoomVC: UIViewController {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-//        label.text = "가천관"
         label.textColor = UIColor(hex: 0x000000,alpha: 0.8)
         label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
         return label
@@ -41,6 +39,7 @@ class IceBreakingRoomVC: UIViewController {
         return button
     }()
     
+	// MARK: - Subviews
 	lazy var userCollectionview: UICollectionView = {
 		let layout = UICollectionViewFlowLayout()
 		layout.scrollDirection = .horizontal
@@ -62,12 +61,10 @@ class IceBreakingRoomVC: UIViewController {
 	}()
 	
 	lazy var cardCollectionView: UICollectionView = {
-//		let layout = UICollectionViewFlowLayout()
 		let layout = CustomFlowLayout()
 				
 		let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
 		collectionView.showsHorizontalScrollIndicator = false
-//		collectionView.isUserInteractionEnabled = false
 		collectionView.isScrollEnabled = false
 		collectionView.decelerationRate = .fast
 		
@@ -104,12 +101,12 @@ class IceBreakingRoomVC: UIViewController {
 		return label
 	}()
 	
+	// MARK: Properties
 	private var isStart = false {
 		didSet {
 			userCollectionview.reloadData()
 		}
 	}
-	private var cardCount = 10
 	private var currentIndex = 0
 	private let programId: Int
 	private let roomId: String
@@ -130,7 +127,6 @@ class IceBreakingRoomVC: UIViewController {
 	}
 	
     // MARK: - Life Cycle
-	
 	init(programId: Int ,roomId: String, roomName: String) {
 		self.memberId = UserDefaults.standard.integer(forKey: "memberIdx")
 		self.nickname = UserDefaults.standard.string(forKey: "nickname")!
@@ -146,7 +142,7 @@ class IceBreakingRoomVC: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
+		// view load 후 아미 연결된 상태일수도 있으니 delete 후 재연결
 		IcebreakingViewModel.deleteGameUser(roomId: self.roomId, memberId: self.memberId, completion: {
 			self.disconnectSocket()
 			self.connectSocket()
@@ -169,7 +165,7 @@ class IceBreakingRoomVC: UIViewController {
 }
 
 extension IceBreakingRoomVC {
-
+	// MARK: Configure
 	private func configureCollectionView() {
 		userCollectionview.delegate = self
 		userCollectionview.dataSource = self
@@ -196,19 +192,17 @@ extension IceBreakingRoomVC {
         [titleLabel, backButton]
             .forEach {headerView.addSubview($0)}
         
-        // titleLabel
         titleLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
         }
         
-        // backButton
         backButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.centerY.equalToSuperview()
         }
         
-        // userCollectionview
+        // subviews
 		userCollectionview.snp.makeConstraints {
             $0.top.equalTo(headerView.snp.bottom).offset(16)
 			$0.leading.equalToSuperview()
@@ -216,29 +210,26 @@ extension IceBreakingRoomVC {
 			$0.height.equalTo(68)
 		}
         
-        // separator
 		separator.snp.makeConstraints {
 			$0.height.equalTo(1)
 			$0.leading.trailing.equalToSuperview()
 			$0.top.equalTo(userCollectionview.snp.bottom).offset(16)
 		}
 		
-        // cardCollectionView
 		cardCollectionView.snp.makeConstraints {
 			$0.top.equalTo(separator.snp.bottom)
 			$0.leading.trailing.equalToSuperview()
 			$0.bottom.equalTo(view.safeAreaLayoutGuide)
 		}
 		
-        // nextButton
 		nextButton.snp.makeConstraints {
 			$0.centerY.equalTo(cardCollectionView)
 			$0.width.height.equalTo(36)
 			$0.trailing.equalTo(cardCollectionView).offset(-58)
 		}
-		nextButton.layer.cornerRadius = 36/2
+		nextButton.layer.cornerRadius = 36/2  // width(heitght)의 절반, 원 모양을 위해서
 	}
-	
+	// Enable 상태에 따른 버튼 상태 조절
 	private func configureNextButtonStatus(_ isEnable: Bool) {
 		if isEnable {
 			UIView.animate(withDuration: 0.5, animations: {
@@ -258,24 +249,24 @@ extension IceBreakingRoomVC {
 	private func configureButtonTarget() {
 		nextButton.addTarget(self, action: #selector(didTapNextButton), for: .touchUpInside)
 	}
-	
+	// 게임 이미지 리스트 get
 	private func fetchGameImage() {
 		IcebreakingViewModel.getGameImage(programId: self.programId, completion: { result in
 			self.imageList = result
 		})
 	}
-	
+	// socket 연결
 	private func connectSocket() {
 		let url = URL(string: "ws://garamgaebi.shop:8080/ws/game/websocket")!
 		socketClient.openSocketWithURLRequest(
 			request: NSURLRequest(url: url),
 			delegate: self)
 	}
-	
+	// socket 구독
 	private func subscribeSocket() {
 		socketClient.subscribe(destination: "/topic/game/room/\(self.roomId)")
 	}
-
+	// socket 메세지 전송
 	private func sendMessageWithSocket(type: String, message: String, profileUrl: String) {
 		let payloadObject : [String : Any] = [
 			"type" : type,
@@ -287,13 +278,13 @@ extension IceBreakingRoomVC {
 			
 		socketClient.sendJSONForDict(dict: payloadObject as AnyObject, toDestination: "/app/game/message")
 	}
-	
+	// 소켓 연결해제
 	private func disconnectSocket() {
 		userList = []
 		sendMessageWithSocket(type: "EXIT", message: "", profileUrl: "")
 		socketClient.disconnect()
 	}
-	
+	// 다음 아이템으로 스크롤
 	private func scrollToNextItem() {
 		currentIndex += 1
 		if currentIndex < (imageList.count) {
@@ -353,8 +344,11 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 		if collectionView == userCollectionview {
 			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IceBreakingUserCollectionViewCell.idetifier, for: indexPath) as? IceBreakingUserCollectionViewCell else {return UICollectionViewCell()}
 			let cellData = userList[indexPath.row]
-			cell.nameLabel.text = cellData.nickname.maxLength(length: 5)
+			
+			cell.nameLabel.text = cellData.nickname.maxLength(length: 5)  // 5글자 이후 ...으로
 			cell.profileImageView.kf.setImage(with: URL(string: cellData.profileUrl ?? ""), placeholder: UIImage(named: "DefaultProfileImage"))
+			
+			// userCollectionView에서 차례인 유저 파란 테두리로 표시
 			if indexPath.row == currentIndex % userList.count && isStart {
 				cell.profileImageView.layer.borderWidth = 2
 			}
@@ -408,6 +402,7 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		if collectionView == cardCollectionView && indexPath.section == 0 {
 			guard let cell = collectionView.cellForItem(at: indexPath) as? IceBreakingStartCardCollectionViewCell  else {return}
+			// 시작하기 눌렀을때
 			UIView.transition(with: cell.contentView, duration: 0.3, options: .transitionFlipFromLeft, animations: {
 				cell.contentView.alpha = 0
 				cell.titleLabel.alpha = 0
@@ -423,6 +418,7 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 
 // MARK: StompClientLibDelegate
 extension IceBreakingRoomVC: StompClientLibDelegate {
+	// 메세지를 받았을때 호출
 	func stompClient(client: StompClientLib!, didReceiveMessageWithJSONBody jsonBody: AnyObject?, akaStringBody stringBody: String?, withHeader header: [String : String]?, withDestination destination: String) {
 		guard let json = jsonBody as? [String: String] else { // type, sender, roomId, profileUrl, message
 			print("error in decode jsonBody")
@@ -439,40 +435,44 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 		}
 		
 		switch jsonType{
+		// 유저가 입장했을때 전송
 		case "ENTER":
 			print("socket: \(jsonNickname)님이 입장하셨습니다!")
+			// 서버에 유저 등록
 			IcebreakingViewModel.getCurrentGameUserWithPost(roomId: self.roomId, completion: { result in
 				self.userList = result
 			})
-			
+		// 다음 버튼 눌렀을때 전송
 		case "TALK":
+			// message가 NEXT라면 스크롤
 			if jsonMessage == "NEXT" {
 				scrollToNextItem()
-			} else {
-				
 			}
+		// 유저가 퇴장했을때 전송
 		case "EXIT":
 			print("socket: \(jsonNickname)님이 퇴장하셨습니다!")
+			// 유저가 퇴장하면 기존 유저들이 다시 유저목록을 받아옴
 			IcebreakingViewModel.getCurrentGameUserWithPost(roomId: self.roomId, completion: { result in
 				self.userList = result
 			})
-			
 		default:
 			return
 		}
 		
 		
 	}
-	
+	// 연결해제 후 전송
 	func stompClientDidDisconnect(client: StompClientLib!) {
 		print("Stomp socket is disconnected")
 	}
-	
+	// 연결 후 전송
 	func stompClientDidConnect(client: StompClientLib!) {
 		print("Stomp socket is connected")
 		subscribeSocket()
+		// 연결 후 서버에 자신 등록
 		IcebreakingViewModel.postGameUser(roomId: self.roomId, memberId: self.memberId, completion: { index in
 			self.currentIndex = index
+			// enter 메세지 전송
 			self.sendMessageWithSocket(type: "ENTER", message: "", profileUrl: "")
 		})
 	}
