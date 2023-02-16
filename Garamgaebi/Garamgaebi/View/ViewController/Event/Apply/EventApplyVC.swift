@@ -865,7 +865,7 @@ extension EventApplyVC {
 			
 			let activeField: UIView? = [nameTextField, nicknameTextField, numberTextField].first { $0.isFirstResponder }
 			if let activeField = activeField {
-				if safeArea.contains(CGPoint(x: 0, y: activeField.frame.maxY+48)) {  // 48은 텍스트 필드 높이
+				if safeArea.contains(CGPoint(x: 0, y: activeField.frame.maxY + 60)) {
 					print("No need to Scroll")
 					return
 				} else {
