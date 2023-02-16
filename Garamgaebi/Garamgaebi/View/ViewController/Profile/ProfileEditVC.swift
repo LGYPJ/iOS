@@ -169,6 +169,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         view.backgroundColor = .white
         configureLayouts()
         tapGesture()
+        configureGestureRecognizer()
         
         // 엔터키 클릭시 키보드 내리기
         nickNameTextField.delegate = self
@@ -670,6 +671,20 @@ extension UILabel {
     }
 }
 
+extension ProfileEditVC {
+    private func configureGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.isEnabled = true
+        tapGestureRecognizer.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc private func viewDidTap() {
+        self.view.endEditing(true)
+    }
+}
 extension ProfileEditVC {
     @objc private func keyboardWillShow(_ notification: Notification) {
         
