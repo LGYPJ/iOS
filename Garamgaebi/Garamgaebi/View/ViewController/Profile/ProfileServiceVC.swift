@@ -500,8 +500,10 @@ extension ProfileServiceVC: UITextViewDelegate {
         let newLenght = str.count + text.count - range.length
         
         if contentTextField.text.isEmpty {
-            sendBtn.backgroundColor = .mainGray
             sendBtn.isEnabled = false
+            UIView.animate(withDuration: 0.33) { [weak self] in
+                self?.sendBtn.backgroundColor = .mainGray
+            }
         }
         else if isValidEmail,
                 questionTypeTextField.text?.count != 0,
