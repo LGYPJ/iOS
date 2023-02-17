@@ -26,13 +26,13 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     var nickName = String()
     var isValidNickName = false {
         didSet {
-            self.validateNickName()
+            self.validNickname()
         }
     }
-    var profileEmail = String()
-    var isValidProfileEmail = false {
+    var email = String()
+    var isValidEmail = false {
         didSet {
-            self.validateProfileEmail()
+            self.validEmail()
         }
     }
     
@@ -80,7 +80,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         // 이미지 centerCrop
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
-		view.contentMode = .scaleAspectFill
+        view.image = UIImage(named: "DefaultProfileImage")
         
         return view
     }()
@@ -101,6 +101,13 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
         $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
+    }
+    lazy var nickNameAlertLabel = UILabel().then {
+        $0.font = UIFont.NotoSansKR(type: .Regular, size: 10)
+        $0.text = "8자이내, 한/영문, 숫자만 사용 가능합니다"
+        $0.textColor = .red
+        $0.alpha = 0
     }
     
     let orgLabel = UILabel().then {
@@ -109,12 +116,12 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     }
     lazy var orgTextField = UITextField().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        $0.placeholder = "한 줄 소개를 입력해주세요 (예: 프리랜서 백엔드 개발자)"
+        $0.placeholder = "18자 이내로 입력해주세요 (예: 프리랜서 백엔드 개발자)"
         $0.basicTextField()
         
-        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
     }
     
     let emailLabel = UILabel().then {
@@ -129,6 +136,13 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
         $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
+    }
+    lazy var emailAlertLabel = UILabel().then {
+        $0.font = UIFont.NotoSansKR(type: .Regular, size: 10)
+        $0.text = "이메일 형식이 올바르지 않습니다"
+        $0.textColor = .red
+        $0.alpha = 0
     }
     
     let introduceLabel = UILabel().then {
@@ -154,7 +168,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.text = "\(count)/100"
     }
     
-    let editDoneBtn = UIButton().then {
+    lazy var editDoneBtn = UIButton().then {
         $0.basicButton()
         $0.setTitle("저장하기", for: .normal)
         
@@ -207,6 +221,8 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         
         [profileImageView,profilePlusImageView, nickNameLabel, nickNameTextField, orgLabel, orgTextField, emailLabel, emailTextField,introduceLabel, introduceTextField, editDoneBtn]
             .forEach {contentView.addSubview($0)}
+        
+        [nickNameAlertLabel, emailAlertLabel].forEach {contentView.addSubview($0)}
         
         contentView.addSubview(introduceLengthLabel)
         
@@ -265,6 +281,10 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             $0.trailing.equalTo(-16)
             $0.height.equalTo(48)
         }
+        nickNameAlertLabel.snp.makeConstraints {
+            $0.top.equalTo(nickNameTextField.snp.bottom).offset(2)
+            $0.leading.trailing.equalTo(nickNameTextField)
+        }
         
         /// 소속
         orgLabel.snp.makeConstraints {
@@ -286,6 +306,10 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             $0.top.equalTo(emailLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalTo(orgTextField)
             $0.height.equalTo(nickNameTextField)
+        }
+        emailAlertLabel.snp.makeConstraints {
+            $0.top.equalTo(emailTextField.snp.bottom).offset(2)
+            $0.leading.trailing.equalTo(emailTextField)
         }
         
         /// 별 처리
@@ -432,21 +456,11 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     @objc func allTextFieldFilledIn() {
         
         /* 모든 textField가 채워졌으면 프로필 저장 버튼 활성화 */
-        if self.nickNameTextField.text?.count != 0,
-           self.orgTextField.text?.count != 0,
-           self.emailTextField.text?.count != 0 {
-
-            // 프로필 저장버튼 활성화
-            UIView.animate(withDuration: 0.33) { [weak self] in
-                self?.editDoneBtn.backgroundColor = .mainBlue
-            }
-            editDoneBtn.isEnabled = true
-            
+        if self.isValidNickName,
+           self.isValidEmail {
+            buttonActivated()
         } else { // 프로필 저장버튼 비활성화
-            editDoneBtn.isEnabled = false
-            UIView.animate(withDuration: 0.33) { [weak self] in
-                self?.editDoneBtn.backgroundColor = .mainGray
-            }
+            buttonInactivated()
         }
     }
     
@@ -458,8 +472,8 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             self.isValidNickName = text.isValidNickName()
             self.nickName = text
         case emailTextField:
-            self.isValidProfileEmail = text.isValidEmail()
-            self.profileEmail = text
+            self.isValidEmail = text.isValidEmail()
+            self.email = text
         
         default:
             fatalError("Missing TextField...")
@@ -472,48 +486,55 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         self.navigationController?.popViewController(animated: true)
     }
     
-    // MARK: - ValidUserInfo()
-    @objc func validateNickName() {
-//        self.nickNameValidLabel.isHidden = false
-        if isValidNickName && isValidProfileEmail {
-            self.editDoneBtn.isEnabled = true
-            self.nickNameTextField.layer.borderColor = UIColor.mainBlack.cgColor
-            self.nickNameTextField.layer.borderWidth = 1
-            UIView.animate(withDuration: 0.33) {
-                self.editDoneBtn.backgroundColor = .mainBlue
-//                self.nickNameValidLabel.text = ""
-            }
-        } else {
-            self.editDoneBtn.isEnabled = false
-            self.allTextFieldFilledIn()
-            self.nickNameTextField.layer.borderColor = UIColor(hex: 0xFF0000).cgColor
-            self.nickNameTextField.layer.borderWidth = 1
-            UIView.animate(withDuration: 0.33) {
-                self.editDoneBtn.backgroundColor = .mainGray
-                if self.nickNameTextField.text?.count == 0 {
-//                    self.nickNameValidLabel.text = ""
-                } else {
-//                    self.nickNameValidLabel.text = "닉네임은 8자 이내 영문, 숫자만 가능합니다"
-                }
-//                self.nickNameValidLabel.textColor = UIColor(hex: 0x13FF0000)
-            }
+    private func buttonActivated() {
+        editDoneBtn.isEnabled = true
+        UIView.animate(withDuration: 0.33) { [weak self] in
+            self?.editDoneBtn.backgroundColor = .mainBlue
         }
     }
-    func validateProfileEmail() {
-        if isValidProfileEmail && isValidNickName {
-            self.editDoneBtn.isEnabled = true
-            self.emailTextField.layer.borderColor = UIColor.mainBlack.cgColor
-            self.emailTextField.layer.borderWidth = 1
-            UIView.animate(withDuration: 0.33) {
-                self.editDoneBtn.backgroundColor = .mainBlue
-            }
+    private func buttonInactivated() {
+        editDoneBtn.isEnabled = false
+        UIView.animate(withDuration: 0.33) { [weak self] in
+            self?.editDoneBtn.backgroundColor = .mainGray
+        }
+    }
+    
+    // MARK: - validateUserInfo()
+    private func validateUserInfo() {
+        if isValidNickName &&  isValidEmail {
+            buttonActivated()
+        }
+    }
+    private func validNickname() {
+        if isValidNickName {
+            hideAlert(textField: self.nickNameTextField, alertLabel: self.nickNameAlertLabel)
         } else {
-            self.editDoneBtn.isEnabled = false
-            self.emailTextField.layer.borderColor = UIColor(hex: 0xFF0000).cgColor
-            self.emailTextField.layer.borderWidth = 1
-            UIView.animate(withDuration: 0.33) {
-                self.editDoneBtn.backgroundColor = .mainGray
-            }
+            showAlert(textField: self.nickNameTextField, alertLabel: self.nickNameAlertLabel, status: self.isValidNickName)
+        }
+    }
+    
+    private func validEmail() {
+        if isValidEmail {
+            hideAlert(textField: self.emailTextField, alertLabel: self.emailAlertLabel)
+        } else {
+            showAlert(textField: self.emailTextField, alertLabel: self.emailAlertLabel, status: self.isValidEmail)
+        }
+    }
+    
+    private func showAlert(textField: UITextField, alertLabel: UILabel, status: Bool) {
+        
+        UIView.animate(withDuration: 0.3) {
+            textField.layer.borderColor = UIColor.red.cgColor
+            alertLabel.alpha = 1
+
+        }
+    }
+    
+    private func hideAlert(textField: UITextField, alertLabel: UILabel) {
+        
+        UIView.animate(withDuration: 0.3) {
+            textField.layer.borderColor = UIColor.mainBlack.cgColor
+            alertLabel.alpha = 0
         }
     }
     
