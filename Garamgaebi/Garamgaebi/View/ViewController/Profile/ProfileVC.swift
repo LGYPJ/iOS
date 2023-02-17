@@ -905,9 +905,7 @@ extension ProfileVC: HistoryButtonTappedDelegate {
         nextVC.startDateTextField.text = startDate
         nextVC.endDateTextField.text = endDate
         if (isWorking == "TRUE") {
-            //TODO: 편집 모드 -> '재직 중' 버튼 로직 변경 필요
-            nextVC.checkIsWorkingButton.setImage(UIImage(systemName: "checkmark.square")?.withRenderingMode(.automatic), for: .normal)
-            nextVC.checkIsWorkingButton.setImage(UIImage(systemName: "square")?.withRenderingMode(.automatic), for: .selected)
+            nextVC.checkIsWorkingButton.isSelected = true
         }
 
         navigationController?.pushViewController(nextVC, animated: true)
@@ -930,9 +928,7 @@ extension ProfileVC: HistoryButtonTappedDelegate {
         nextVC.startDateTextField.text = startDate
         nextVC.endDateTextField.text = endDate
         if (isLearning == "TRUE") {
-            //TODO: 편집 모드 -> '교육 중' 버튼 로직 변경 필요
-            nextVC.checkIsLearningButton.setImage(UIImage(systemName: "checkmark.square")?.withRenderingMode(.automatic), for: .normal)
-            nextVC.checkIsLearningButton.setImage(UIImage(systemName: "square")?.withRenderingMode(.automatic), for: .selected)
+            nextVC.checkIsLearningButton.isSelected = true
         }
 
         navigationController?.pushViewController(nextVC, animated: true)
