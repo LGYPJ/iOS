@@ -427,6 +427,7 @@ class ProfileVC: UIViewController {
     @objc func emailLabelDidTap() {
         guard let copyString = emailLabel.text else { return }
         UIPasteboard.general.string = copyString
+        self.showToast(message: "클립보드에 복사되었습니다")
     }
     
     @objc private func serviceButtonDidTap(_ sender : UIButton) {
@@ -494,6 +495,24 @@ class ProfileVC: UIViewController {
         let nextVC = ProfileInputEducationVC()
         nextVC.memberIdx = memberIdx
         navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
+    func showToast(message : String) {
+        let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 90, y: self.view.frame.size.height-150, width: 180, height: 35))
+        toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        toastLabel.textColor = UIColor.white
+        toastLabel.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        toastLabel.textAlignment = .center;
+        toastLabel.text = message
+        toastLabel.alpha = 1.0
+        toastLabel.layer.cornerRadius = 10;
+        toastLabel.clipsToBounds  =  true
+        self.view.addSubview(toastLabel)
+        UIView.animate(withDuration: 0.5, delay: 0.5, options: .curveEaseOut, animations: {
+            toastLabel.alpha = 0.0
+        }, completion: {(isCompleted) in
+            toastLabel.removeFromSuperview()
+        })
     }
     
     // MARK: - [GET] 내프로필 정보
