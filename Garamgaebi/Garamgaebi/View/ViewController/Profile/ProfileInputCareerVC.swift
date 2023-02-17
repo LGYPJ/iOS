@@ -24,8 +24,8 @@ class ProfileInputCareerVC: UIViewController {
         }
     }
     private var currentYearMonth: Int = 0
-    private var yearArray: [String] = []
-    private var monthArray = (1...12).map { String(format:"%02d", $0) }
+    var yearArray: [String] = []
+    var monthArray = (1...12).map { String(format:"%02d", $0) }
     private let maxTextCount = 22
     private var companyTextCount = 0 {
         didSet {
@@ -43,11 +43,11 @@ class ProfileInputCareerVC: UIViewController {
             positionTextCountLabel.text = "\(positionTextCount)/\(maxTextCount)"
         }
     }
-    private var startYearValue =  "0"
-    private var startMonthValue = "0"
-    private var endYearValue =  "0"
-    private var endMonthValue = "0"
-    private var isWorking: Bool = false
+    var startYearValue =  "0"
+    var startMonthValue = "0"
+    var endYearValue =  "0"
+    var endMonthValue = "0"
+    var isWorking: Bool = false
     private var scrollOffset : CGFloat = 0
     private var distance : CGFloat = 0
     
@@ -697,6 +697,7 @@ class ProfileInputCareerVC: UIViewController {
     }
     private func buttonInactivated() {
         saveUserProfileButton.isEnabled = false
+        editSaveButton.isEnabled = false
         UIView.animate(withDuration: 0.33) { [weak self] in
             self?.saveUserProfileButton.backgroundColor = .mainGray
             self?.editSaveButton.backgroundColor = .mainGray
