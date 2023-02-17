@@ -29,28 +29,29 @@ final class MyRequestInterceptor: RequestInterceptor {
         }
         // retry 최대 개수 정해줄수있음
         switch response.statusCode {
-//        case 2007:
-//            let url = "https://garamgaebi.shop/member/login"
-//            let body: [String: Any] = [
-//                "socialEmail": UserDefaults.standard.string(forKey: "socialEmail")!,
-//            ]
-//            AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default)
-//                .validate()
-//                .responseDecodable(of: LoginModelResponse.self) { response in
-//                    switch response.result {
-//                    case .success(let result):
-//                        if result.isSuccess {
-//                            guard let passData = result.result else {return}
-//                            UserDefaults.standard.set(passData.accessToken, forKey: "BearerToken")
-//                            UserDefaults.standard.set(passData.memberIdx, forKey: "memberIdx")
-//                        } else {
-//                            print("실패 : Token Refresh Fail : \(error)")
-//                        }
-//                    case .failure(let error):
-//                        print("실패: AF - Token Refresh Fail : \(error)")
-//                        completion(.doNotRetryWithError(error))
-//                    }
-//                }
+        case 401:
+            let url = "https://garamgaebi.shop/member/login"
+            let body: [String: Any] = [
+                "socialEmail": UserDefaults.standard.string(forKey: "socialEmail")!,
+            ]
+            AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default)
+                .validate()
+                .responseDecodable(of: LoginModelResponse.self) { response in
+                    switch response.result {
+                    case .success(let result):
+                        if result.isSuccess {
+                            guard let passData = result.result else {return}
+                            UserDefaults.standard.set(passData.accessToken, forKey: "BearerToken")
+                            UserDefaults.standard.set(passData.memberIdx, forKey: "memberIdx")
+                            completion(.retry)
+                        } else {
+                            print("실패 : Token Refresh Fail : \(error)")
+                        }
+                    case .failure(let error):
+                        print("실패: AF - Token Refresh Fail : \(error)")
+                        completion(.doNotRetryWithError(error))
+                    }
+                }
         default:
             completion(.doNotRetry)
         }

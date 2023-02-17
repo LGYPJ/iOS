@@ -14,19 +14,7 @@ class HomeViewModel {
     // 홈 화면 Seminar 조회 request
     public static func getHomeSeminarInfo(completion: @escaping (([HomeSeminarInfo]) -> Void)) {
         let url = "https://garamgaebi.shop/seminars/main"
-		let headers: HTTPHeaders = [
-			"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-		]
-//        let dummy = [
-//            HomeSeminarInfo(programIdx: 1, title: "유료 세미나1", date: "2023-02-25T18:00:00", location: "가천관이지롱", type: "SEMINAR", payment: "PREMIUM", status: "THIS_MONTH", isOpen: "OPEN"),
-//            HomeSeminarInfo(programIdx: 1, title: "세미나2", date: "2023-02-25T18:00:00", location: "가천관일까?", type: "SEMINAR", payment: "FREE", status: "READY", isOpen: "OPEN"),
-//            HomeSeminarInfo(programIdx: 11, title: "마감된 세미나3", date: "2023-02-25T18:00:00", location: "가천관맞지롱", type: "SEMINAR", payment: "FREE", status: "CLOSED", isOpen: "OPEN"),
-//            HomeSeminarInfo(programIdx: 12, title: "마감된 세미나4", date: "2023-02-25T18:00:00", location: "가천관맞지롱", type: "SEMINAR", payment: "PREMIUM", status: "CLOSED", isOpen: "OPEN"),
-//            HomeSeminarInfo(programIdx: 13, title: "마감된 세미나6", date: "2023-02-25T18:00:00", location: "가천관맞지롱", type: "SEMINAR", payment: "FREE", status: "CLOSED", isOpen: "OPEN"),
-//        ]
-//        completion(dummy)
-        
-		AF.request(url, method: .get, headers: headers)
+		AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
             .responseDecodable(of: HomeSeminarInfoResponse.self) { response in
                 switch response.result {
@@ -39,7 +27,7 @@ class HomeViewModel {
                         print("실패(홈 화면 Seminar 조회): \(result.message)")
                     }
                 case .failure(let error):
-                    // 실제 HTTP에러 404
+                    // 실제 HTTP에러 ex)404
                     print("실패(AF-홈 화면 Seminar 조회): \(error.localizedDescription)")
                 }
             }
