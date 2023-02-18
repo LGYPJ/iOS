@@ -11,6 +11,7 @@ import SnapKit
 
 protocol SelectServiceDataDelegate:  AnyObject {
     func typeSelect(type: String)
+    func textFieldChanged()
 }
 
 class BottomSheetVC: UIViewController {
@@ -103,6 +104,12 @@ class BottomSheetVC: UIViewController {
         
         showBottomSheet()
         tapGesture()
+    }
+    
+    // bottomSheet 내려갈때 해당 textField borderColor를 mainGray로 바꿈
+    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        super.dismiss(animated: flag, completion: completion)
+        self.delegate?.textFieldChanged()
     }
     
     // MARK: - Functions
@@ -269,23 +276,27 @@ class BottomSheetVC: UIViewController {
         self.delegate?.typeSelect(type: type)
         // 바텀시트 내리기
         hideBottomSheetAndGoBack()
+        self.delegate?.textFieldChanged() // bottomSheet 내려갈때 해당 textField borderColor를 mainGray로 바꿈
     }
     @objc func type2DidTap() { // 오류신고
         guard let type = type2Label.text else { return }
         
         self.delegate?.typeSelect(type: type)
         hideBottomSheetAndGoBack()
+        self.delegate?.textFieldChanged() // bottomSheet 내려갈때 해당 textField borderColor를 mainGray로 바꿈
     }
     @objc func type3DidTap() { // 서비스 제안
         guard let type = type3Label.text else { return }
         
         self.delegate?.typeSelect(type: type)
         hideBottomSheetAndGoBack()
+        self.delegate?.textFieldChanged() // bottomSheet 내려갈때 해당 textField borderColor를 mainGray로 바꿈
     }
     @objc func etcDidTap() { // 기타
         guard let type = etcLabel.text else { return }
         
         self.delegate?.typeSelect(type: type)
         hideBottomSheetAndGoBack()
+        self.delegate?.textFieldChanged() // bottomSheet 내려갈때 해당 textField borderColor를 mainGray로 바꿈
     }
 }

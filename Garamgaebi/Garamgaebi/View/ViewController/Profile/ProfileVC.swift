@@ -910,6 +910,7 @@ extension ProfileVC: HistoryButtonTappedDelegate {
     func careerButtonDidTap(careerIdx: Int, company: String, position: String, startDate: String, endDate: String, isWorking: String) {
         // 화면 전환
         let nextVC = ProfileInputCareerVC()
+        nextVC.setCurrentYear()
         
         // 편집 모드
         nextVC.titleLabel.text = "경력 편집하기"
@@ -923,10 +924,32 @@ extension ProfileVC: HistoryButtonTappedDelegate {
         nextVC.positionTextField.text = position
         nextVC.startDateTextField.text = startDate
         nextVC.endDateTextField.text = endDate
+        
+        let start =  startDate.components(separatedBy: "/")
+        nextVC.startYearValue =  start[0]
+        nextVC.startMonthValue = start[1]
+        let startYearIdx = nextVC.yearArray.firstIndex(of: start[0]) ?? 0
+        let startMonthIdx = nextVC.monthArray.firstIndex(of: start[1]) ?? 0
+        nextVC.startDatePickerView.selectRow(startYearIdx, inComponent: 0, animated: false)
+        nextVC.startDatePickerView.selectRow(startMonthIdx, inComponent: 1, animated: false)
+        
+        
+        if endDate == "현재" {
+            nextVC.endYearValue = String(Int(nextVC.yearArray[0])!+1)
+            nextVC.endMonthValue = nextVC.monthArray[0]
+        } else {
+            let end = endDate.components(separatedBy: "/")
+            nextVC.endYearValue = end[0]
+            nextVC.endMonthValue = end[1]
+            let endYearIdx = nextVC.yearArray.firstIndex(of: end[0]) ?? 0
+            let endMonthIdx = nextVC.monthArray.firstIndex(of: end[1]) ?? 0
+            nextVC.endDatePickerView.selectRow(endYearIdx, inComponent: 0, animated: false)
+            nextVC.endDatePickerView.selectRow(endMonthIdx, inComponent: 1, animated: false)
+        }
+    
         if (isWorking == "TRUE") {
-            //TODO: 편집 모드 -> '재직 중' 버튼 로직 변경 필요
-            nextVC.checkIsWorkingButton.setImage(UIImage(systemName: "checkmark.square")?.withRenderingMode(.automatic), for: .normal)
-            nextVC.checkIsWorkingButton.setImage(UIImage(systemName: "square")?.withRenderingMode(.automatic), for: .selected)
+            nextVC.checkIsWorkingButton.isSelected = true
+            nextVC.isWorking = true
         }
 
         navigationController?.pushViewController(nextVC, animated: true)
@@ -935,6 +958,7 @@ extension ProfileVC: HistoryButtonTappedDelegate {
     func educationButtonDidTap(educationIdx: Int, institution: String, major: String, startDate: String, endDate: String, isLearning: String) {
         // 화면 전환
         let nextVC = ProfileInputEducationVC()
+        nextVC.setCurrentYear()
         
         // 편집 모드
         nextVC.titleLabel.text = "교육 편집하기"
@@ -948,10 +972,32 @@ extension ProfileVC: HistoryButtonTappedDelegate {
         nextVC.majorTextField.text = major
         nextVC.startDateTextField.text = startDate
         nextVC.endDateTextField.text = endDate
+        
+        let start =  startDate.components(separatedBy: "/")
+        nextVC.startYearValue =  start[0]
+        nextVC.startMonthValue = start[1]
+        let startYearIdx = nextVC.yearArray.firstIndex(of: start[0]) ?? 0
+        let startMonthIdx = nextVC.monthArray.firstIndex(of: start[1]) ?? 0
+        nextVC.startDatePickerView.selectRow(startYearIdx, inComponent: 0, animated: false)
+        nextVC.startDatePickerView.selectRow(startMonthIdx, inComponent: 1, animated: false)
+        
+        
+        if endDate == "현재" {
+            nextVC.endYearValue = String(Int(nextVC.yearArray[0])!+1)
+            nextVC.endMonthValue = nextVC.monthArray[0]
+        } else {
+            let end = endDate.components(separatedBy: "/")
+            nextVC.endYearValue = end[0]
+            nextVC.endMonthValue = end[1]
+            let endYearIdx = nextVC.yearArray.firstIndex(of: end[0]) ?? 0
+            let endMonthIdx = nextVC.monthArray.firstIndex(of: end[1]) ?? 0
+            nextVC.endDatePickerView.selectRow(endYearIdx, inComponent: 0, animated: false)
+            nextVC.endDatePickerView.selectRow(endMonthIdx, inComponent: 1, animated: false)
+        }
+        
         if (isLearning == "TRUE") {
-            //TODO: 편집 모드 -> '교육 중' 버튼 로직 변경 필요
-            nextVC.checkIsLearningButton.setImage(UIImage(systemName: "checkmark.square")?.withRenderingMode(.automatic), for: .normal)
-            nextVC.checkIsLearningButton.setImage(UIImage(systemName: "square")?.withRenderingMode(.automatic), for: .selected)
+            nextVC.checkIsLearningButton.isSelected = true
+            nextVC.isLearning = true
         }
 
         navigationController?.pushViewController(nextVC, animated: true)

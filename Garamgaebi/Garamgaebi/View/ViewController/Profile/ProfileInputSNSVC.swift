@@ -11,6 +11,11 @@ import Then
 import Alamofire
 
 class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
+    func textFieldChanged() {
+        typeTextField.layer.borderColor = UIColor.mainGray.cgColor
+        allTextFieldFilledIn()
+    }
+    
 
     // MARK: - Properties
     lazy var memberIdx: Int = 0
@@ -54,16 +59,9 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
     
     lazy var typeTextField: UITextField = {
         let textField = UITextField()
-        
+        textField.text = ""
         textField.basicTextField()
-        textField.placeholder = "표시할 이름을 입력해주세요 (예:블로그, 깃허브 등)"
-        
-        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
-        textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
-        textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
-        
-        textField.addTarget(self, action: #selector(showBottomSheet), for: .editingDidBegin)
-        
+        textField.placeholder = "표시할 이름을 입력해주세요 (예:블로그, 깃허브 등)"       
         return textField
     }()
     
@@ -271,6 +269,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         } else {
             typeTextField.placeholder = "SNS 종류를 직접 입력해주세요"
         }
+
     }
     
     // sns 추가 버튼
@@ -325,9 +324,8 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
     @objc func allTextFieldFilledIn() {
         
         /* 모든 textField가 채워졌으면 SNS 저장 버튼 활성화 */
-        if self.typeTextField.text?.count != 0,
+        if self.typeTextField.text!.count != 0,
            self.linkTextField.text?.count != 0 {
-
             buttonActivated()
             
         } else { // 저장버튼 비활성화
@@ -379,10 +377,22 @@ extension ProfileInputSNSVC {
         tapGestureRecognizer.isEnabled = true
         tapGestureRecognizer.cancelsTouchesInView = false
         
+        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(viewDidQuestionTap))
+        tapGestureRecognizer2.numberOfTapsRequired = 1
+        tapGestureRecognizer2.isEnabled = true
+        tapGestureRecognizer2.cancelsTouchesInView = false
+        typeTextField.addGestureRecognizer(tapGestureRecognizer2)
+        
         view.addGestureRecognizer(tapGestureRecognizer)
     }
     
     @objc private func viewDidTap() {
         self.view.endEditing(true)
+    }
+    
+    @objc private func viewDidQuestionTap() {
+        self.view.endEditing(true)
+        typeTextField.layer.borderColor = UIColor.mainBlack.cgColor
+        showBottomSheet()
     }
 }

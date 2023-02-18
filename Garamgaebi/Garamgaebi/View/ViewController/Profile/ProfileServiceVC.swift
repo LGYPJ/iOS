@@ -14,6 +14,8 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     // MARK: - Properties
     private var isChecking: Bool = false
     var textCount: Int = 0
+    private var scrollOffset : CGFloat = 0
+    private var distance : CGFloat = 0
     
     // 이메일 유효성 검사
     var email = String()
@@ -91,6 +93,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     lazy var questionTypeTextField = UITextField().then {
         $0.basicTextField()
         $0.placeholder = "질문 유형을 선택해주세요"
+        $0.text = ""
         
         let typeSelectBtn = UIButton()
         typeSelectBtn.setImage(UIImage(systemName: "chevron.down"), for: .normal)
@@ -176,6 +179,17 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         configureGestureRecognizer()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setKeyboardObserver()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        setKeyboardObserverRemove()
+    }
+    
+    
     
     // MARK: - Functions
     private func configureLayouts() {
@@ -222,7 +236,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         scrollView.snp.makeConstraints {
             $0.top.equalTo(headerView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
         
         // contentView
@@ -302,11 +316,16 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     
     func typeSelect(type: String) {
         self.questionTypeTextField.text = type
+        
+    }
+    
+    func textFieldChanged() {
+        self.questionTypeTextField.layer.borderColor = UIColor.mainGray.cgColor
+        allTextFieldFilledIn()
     }
     
     // 바텀시트 나타내기
     @objc private func showBottomSheet() {
-//        self.questionTypeTextField.layer.borderColor = UIColor.mainBlack.cgColor
         
         let bottomSheetVC = BottomSheetVC()
         bottomSheetVC.modalPresentationStyle = .overFullScreen
@@ -318,11 +337,13 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         bottomSheetVC.T3 = "서비스 제안"
         bottomSheetVC.T4 = "기타"
         
-        self.present(bottomSheetVC, animated: false, completion: nil)
-        self.view.endEditing(true)
+        self.present(bottomSheetVC, animated: false) {
+            self.questionTypeTextField.layer.borderColor = UIColor.mainBlack.cgColor
+        }
         
         /* 모든 textField가 채워졌으면 고객센터 버튼 활성화 */
         if self.isValidEmail,
+           self.questionTypeTextField.text!.count != 0,
            self.textCount != 0,
            agreeCheckBtn.isSelected {
             sendBtn.isEnabled = true
@@ -397,11 +418,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         emailTextField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         
         // questionType
-        questionTypeTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
-        questionTypeTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
-        questionTypeTextField.addTarget(self, action: #selector(showBottomSheet), for: .editingDidBegin)
-        questionTypeTextField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
-
+        //questionTypeTextField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
         
         // toggle
         agreeCheckBtn.addTarget(self, action: #selector(toggleButton), for: .touchUpInside)
@@ -435,7 +452,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         
         /* 모든 textField가 채워졌으면 고객센터 버튼 활성화 */
         if self.isValidEmail,
-           self.questionTypeTextField.text?.count != 0,
+           self.questionTypeTextField.text!.count != 0,
            self.textCount != 0 {
             
             if agreeCheckBtn.isSelected { // 정보 제공 동의 필수
@@ -545,9 +562,75 @@ extension ProfileServiceVC {
         tapGestureRecognizer.cancelsTouchesInView = false
         
         view.addGestureRecognizer(tapGestureRecognizer)
+        
+        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(viewDidQuestionTap))
+        tapGestureRecognizer2.numberOfTapsRequired = 1
+        tapGestureRecognizer2.isEnabled = true
+        tapGestureRecognizer2.cancelsTouchesInView = false
+        questionTypeTextField.addGestureRecognizer(tapGestureRecognizer2)
     }
     
     @objc private func viewDidTap() {
         self.view.endEditing(true)
+    }
+    
+    @objc private func viewDidQuestionTap() {
+        self.view.endEditing(true)
+        questionTypeTextField.layer.borderColor = UIColor.mainBlack.cgColor
+        showBottomSheet()
+    }
+}
+
+extension ProfileServiceVC {
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            
+            var safeArea = self.view.frame
+            //safeArea.size.height -= view.safeAreaInsets.top * 1.5 // 이 부분 조절하면서 스크롤 올리는 정도 변경
+            //safeArea.size.height -= headerView.frame.height // scrollView 말고 view에 headerView가 있기때문에 제외
+            safeArea.size.height += scrollView.contentOffset.y
+            safeArea.size.height -= keyboardSize.height + (UIScreen.main.bounds.height*0.04) // Adjust buffer to your liking
+            // determine which UIView was selected and if it is covered by keyboard
+            
+            let activeField: UIView? = [emailTextField, contentTextField].first { $0.isFirstResponder }
+            if let activeField = activeField {
+                if safeArea.contains(CGPoint(x: 0, y: activeField.frame.maxY + headerView.frame.maxY)) {
+                    print("No need to Scroll")
+                    return
+                } else {
+                    distance = (activeField.frame.maxY + headerView.frame.maxY) - (safeArea.size.height + view.safeAreaInsets.top)
+                    if activeField == contentTextField {
+                        distance += (agreemsgLabel.frame.height * 2) * 1.2 // 아래 체크버튼까지 보이게 키보드 올림 + 여유공간 20%
+                    }
+                    scrollOffset = scrollView.contentOffset.y
+                    print(scrollOffset)
+                    self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset + distance), animated: true)
+                }
+            }
+            // prevent scrolling while typing
+            scrollView.isScrollEnabled = false
+        }
+    }
+    
+    @objc private func keyboardWillHide() {
+        
+        if distance == 0 {
+            return
+        }
+        // return to origin scrollOffset
+//        self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset), animated: true)
+        self.scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        scrollOffset = 0
+        distance = 0
+        scrollView.isScrollEnabled = true
+    }
+    
+    func setKeyboardObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    func setKeyboardObserverRemove() {
+        NotificationCenter.default.removeObserver(self)
     }
 }

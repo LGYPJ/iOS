@@ -141,6 +141,7 @@
 		60F91414296D4B6F00626C40 /* NotoSansKR-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 60F9140B296D46E500626C40 /* NotoSansKR-Light.otf */; };
 		60F91415296D4B6F00626C40 /* NotoSansKR-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 60F9140D296D46E500626C40 /* NotoSansKR-Medium.otf */; };
 		60F91416296D4B6F00626C40 /* NotoSansKR-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 60F9140C296D46E500626C40 /* NotoSansKR-Regular.otf */; };
+		60F92C53299F4904000AC1C3 /* MyRequestInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F92C52299F4904000AC1C3 /* MyRequestInterceptor.swift */; };
 		8774F3F8C23CF17362051187 /* Pods_GaramgaebiTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE5760D4575087EF7AF0515D /* Pods_GaramgaebiTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -301,6 +302,7 @@
 		60F9140E296D46E500626C40 /* NotoSansKR-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansKR-Bold.otf"; sourceTree = "<group>"; };
 		60F9140F296D46E500626C40 /* NotoSansKR-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansKR-Black.otf"; sourceTree = "<group>"; };
 		60F91410296D46E500626C40 /* NotoSansKR-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansKR-Thin.otf"; sourceTree = "<group>"; };
+		60F92C52299F4904000AC1C3 /* MyRequestInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyRequestInterceptor.swift; sourceTree = "<group>"; };
 		C8CB1AB7E398B75581977FAF /* Pods_Garamgaebi.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Garamgaebi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE5760D4575087EF7AF0515D /* Pods_GaramgaebiTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaramgaebiTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0F3426C456DDD54ECB7EBDC /* Pods-Garamgaebi-GaramgaebiUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Garamgaebi-GaramgaebiUITests.release.xcconfig"; path = "Target Support Files/Pods-Garamgaebi-GaramgaebiUITests/Pods-Garamgaebi-GaramgaebiUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -716,6 +718,7 @@
 				60A4BC142992264000C24DAC /* NotificationViewModel.swift */,
 				2C65943829968B63007D3619 /* GameRoomListViewModel.swift */,
 				2C408318299A9169000747DF /* IcebreakingViewModel.swift */,
+				60F92C52299F4904000AC1C3 /* MyRequestInterceptor.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1145,6 +1148,7 @@
 				60513F3F298E5FBF0065CD15 /* RegisterEducationViewModel.swift in Sources */,
 				601823352972F04500160EF4 /* HomeEventCollectionViewCell.swift in Sources */,
 				60BD05032974187700F4B433 /* UnderlineSegmentedControl.swift in Sources */,
+				60F92C53299F4904000AC1C3 /* MyRequestInterceptor.swift in Sources */,
 				6055D84729701F6B00C86D53 /* InputEducationVC.swift in Sources */,
 				60A4BC152992264000C24DAC /* NotificationViewModel.swift in Sources */,
 				2CED690329867F1800C838BD /* NetworkingDetailViewModel.swift in Sources */,
