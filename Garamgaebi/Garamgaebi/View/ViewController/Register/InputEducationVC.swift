@@ -21,17 +21,23 @@ class InputEducationVC: UIViewController {
     private var institutionTextCount = 0 {
         didSet {
             if institutionTextCount > maxTextCount {
-                institutionTextCount -= 1
+                institutionTextCount = maxTextCount - 1
+                institutionTextCountLabel.text = "\(institutionTextCount + 1)/\(maxTextCount)"
             }
-            institutionTextCountLabel.text = "\(institutionTextCount)/\(maxTextCount)"
+            else {
+                institutionTextCountLabel.text = "\(institutionTextCount)/\(maxTextCount)"
+            }
         }
     }
     private var majorTextCount = 0 {
         didSet{
             if majorTextCount > maxTextCount {
-                majorTextCount -= 1
+                majorTextCount = maxTextCount - 1
+                majorTextCountLabel.text = "\(majorTextCount + 1)/\(maxTextCount)"
             }
-            majorTextCountLabel.text = "\(majorTextCount)/\(maxTextCount)"
+            else {
+                majorTextCountLabel.text = "\(majorTextCount)/\(maxTextCount)"
+            }
         }
     }
     private var startYearValue =  "0"
