@@ -10,6 +10,10 @@ import SnapKit
 import Then
 
 class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
+    func textFieldChanged() {
+        reasonTypeTextField.layer.borderColor = UIColor.mainGray.cgColor
+        allTextFieldFilledIn()
+    }
     
     // MARK: - Properties
     var textCount: Int = 0
@@ -77,6 +81,7 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
     lazy var reasonTypeTextField = UITextField().then {
         $0.basicTextField()
         $0.placeholder = "탈퇴 사유를 선택해주세요"
+        $0.text = ""
         
         let typeSelectBtn = UIButton()
         typeSelectBtn.setImage(UIImage(systemName: "chevron.down"), for: .normal)
@@ -89,8 +94,8 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
             $0.width.height.equalTo(35)
         }
 
-        $0.addTarget(self, action: #selector(showBottomSheet), for: .editingDidBegin)
-        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
+//        $0.addTarget(self, action: #selector(showBottomSheet), for: .editingDidBegin) -> 삭제예정
+        //$0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
     }
     
     let textViewPlaceHolder = "내용을 적어주세요"
@@ -280,7 +285,9 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         bottomSheetVC.T3 = "콘텐츠 내용이 부족해서"
         bottomSheetVC.T4 = "기타"
         
-        self.present(bottomSheetVC, animated: false, completion: nil)
+        self.present(bottomSheetVC, animated: false) {
+            self.reasonTypeTextField.layer.borderColor = UIColor.mainBlack.cgColor
+        }
         self.view.endEditing(true)
     }
     
@@ -333,7 +340,7 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
     @objc func allTextFieldFilledIn() {
         
         /* 모든 textField가 채워졌으면 고객센터 버튼 활성화 */
-        if self.reasonTypeTextField.text?.count != 0,
+        if self.reasonTypeTextField.text!.count != 0,
            self.agreeCheckBtn.isSelected { // 탈퇴 내용 숙지 동의 필수
             
             if reasonTypeTextField.text == "기타" { // 탈퇴 사유가 기타이면 내용 입력 글자가 있어야 버튼 활성화
@@ -397,10 +404,22 @@ extension ProfileWithdrawalVC {
         tapGestureRecognizer.isEnabled = true
         tapGestureRecognizer.cancelsTouchesInView = false
         
+        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(viewDidQuestionTap))
+        tapGestureRecognizer2.numberOfTapsRequired = 1
+        tapGestureRecognizer2.isEnabled = true
+        tapGestureRecognizer2.cancelsTouchesInView = false
+        reasonTypeTextField.addGestureRecognizer(tapGestureRecognizer2)
+        
         view.addGestureRecognizer(tapGestureRecognizer)
     }
     
     @objc private func viewDidTap() {
         self.view.endEditing(true)
+    }
+    
+    @objc private func viewDidQuestionTap() {
+        self.view.endEditing(true)
+        reasonTypeTextField.layer.borderColor = UIColor.mainBlack.cgColor
+        showBottomSheet()
     }
 }
