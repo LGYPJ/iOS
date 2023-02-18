@@ -35,12 +35,20 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             self.validEmail()
         }
     }
+    private let maxBelongCount = 18
+    private var belongTextCount = 0 {
+        didSet {
+            if belongTextCount > 18 {
+                belongTextCount -= 1
+            }
+            orgTextCountLabel.text = "\(belongTextCount)/\(maxBelongCount)"
+        }
+    }
     
     // 뷰의 초기 y 값을 저장해서 뷰가 올라갔는지 내려왔는지에 대한 분기처리시 사용
     private var restoreFrameYValue = 0.0
     
     // MARK: - Subviews
-    
     lazy var headerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 71))
         view.backgroundColor = .systemBackground
@@ -75,7 +83,6 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     let profileImageView : UIImageView = {
         let view = UIImageView()
         view.layer.cornerRadius = 50
-        view.backgroundColor = .mainGray
         
         // 이미지 centerCrop
         view.contentMode = .scaleAspectFill
@@ -99,9 +106,9 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.basicTextField()
         
         $0.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
+        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
-        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
     }
     lazy var nickNameAlertLabel = UILabel().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 10)
@@ -119,9 +126,17 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.placeholder = "18자 이내로 입력해주세요 (예: 프리랜서 백엔드 개발자)"
         $0.basicTextField()
         
+        $0.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
+        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
-        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
+    }
+    lazy var orgTextCountLabel = UILabel().then {
+        $0.textColor = UIColor(hex: 0xAEAEAE)
+        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        
+        guard let initialCount = orgTextField.text?.count else { return }
+        $0.text = "\(initialCount)/\(maxBelongCount)"
     }
     
     let emailLabel = UILabel().then {
@@ -134,9 +149,9 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.basicTextField()
         
         $0.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
+        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
-        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
     }
     lazy var emailAlertLabel = UILabel().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 10)
@@ -199,6 +214,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         tabBarController?.tabBar.isHidden = true
         
         setKeyboardObserver()
+        setObserver()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -222,7 +238,8 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         [profileImageView,profilePlusImageView, nickNameLabel, nickNameTextField, orgLabel, orgTextField, emailLabel, emailTextField,introduceLabel, introduceTextField, editDoneBtn]
             .forEach {contentView.addSubview($0)}
         
-        [nickNameAlertLabel, emailAlertLabel].forEach {contentView.addSubview($0)}
+        // 오류 메시지 관련
+        [nickNameAlertLabel, emailAlertLabel, orgTextCountLabel].forEach {contentView.addSubview($0)}
         
         contentView.addSubview(introduceLengthLabel)
         
@@ -295,6 +312,10 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             $0.top.equalTo(orgLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalTo(nickNameTextField)
             $0.height.equalTo(nickNameTextField)
+        }
+        orgTextCountLabel.snp.makeConstraints {
+            $0.centerY.equalTo(orgLabel)
+            $0.trailing.equalTo(orgTextField)
         }
         
         /// 이메일
@@ -456,8 +477,9 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     @objc func allTextFieldFilledIn() {
         
         /* 모든 textField가 채워졌으면 프로필 저장 버튼 활성화 */
-        if self.isValidNickName,
-           self.isValidEmail {
+        if self.nickNameTextField.text?.count != 0,
+           self.isValidEmail,
+           self.orgTextField.text?.count != 0 {
             buttonActivated()
         } else { // 프로필 저장버튼 비활성화
             buttonInactivated()
@@ -538,25 +560,15 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         }
     }
     
-    @objc private func textDidChange(_ notification: Notification) {
-            if let textField = notification.object as? UITextField {
-                let maxLength = 18
-                if let text = textField.text {
-                    
-                    if text.count > maxLength {
-                        // 18글자 넘어가면 자동으로 키보드 내려감
-                        textField.resignFirstResponder()
-                    }
-                    
-                    // 초과되는 텍스트 제거
-                    if text.count >= maxLength {
-                        let index = text.index(text.startIndex, offsetBy: maxLength)
-                        let newString = text[text.startIndex..<index]
-                        textField.text = String(newString)
-                    }
-                }
-            }
+    @objc private func textDidChange(_ sender: UITextField) {
+        switch sender {
+        case orgTextField:
+            belongTextCount = orgTextField.text?.count ?? 0
+            NotificationCenter.default.post(name: Notification.Name("textDidChange"), object: sender)
+        default:
+            print(">>>ERROR: typeText ProfileEditVC")
         }
+    }
     
 //    // 갤러리 권한 체크
 //    func checkAlbumPermission(){
@@ -584,6 +596,28 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     
 }
 
+extension ProfileEditVC {
+    func setObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(validTextCount(_:)), name: Notification.Name("textDidChange"), object: nil)
+    }
+    
+    @objc private func validTextCount(_ notification: Notification) {
+        if let textField = notification.object as? UITextField {
+            if let text = textField.text {
+                if text.count > maxBelongCount {
+                    // 18글자 넘어가면 자동으로 키보드 내려감
+                    textField.resignFirstResponder()
+                }
+                // 초과되는 텍스트 제거
+                if text.count >= maxBelongCount {
+                    let index = text.index(text.startIndex, offsetBy: maxBelongCount)
+                    let newString = text[text.startIndex..<index]
+                    textField.text = String(newString)
+                }
+            }
+        }
+    }
+}
 extension ProfileEditVC: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == textViewPlaceHolder {
