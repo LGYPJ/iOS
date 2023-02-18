@@ -16,6 +16,7 @@
 		2C65943929968B63007D3619 /* GameRoomListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C65943829968B63007D3619 /* GameRoomListViewModel.swift */; };
 		2C65943B29968BB5007D3619 /* GameRoomListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C65943A29968BB5007D3619 /* GameRoomListModel.swift */; };
 		2C65943D29975E85007D3619 /* EventUserApplyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C65943C29975E85007D3619 /* EventUserApplyModel.swift */; };
+		2C8A4EF129A098A4004E1FCB /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8A4EF029A098A4004E1FCB /* WebSocketManager.swift */; };
 		2C9E5611297A960900DF9E5A /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9E5610297A960900DF9E5A /* String+.swift */; };
 		2CBF6C72297A954E00940CBE /* UITextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBF6C71297A954E00940CBE /* UITextField+.swift */; };
 		2CDD94D9296FDB88004B8D56 /* EventApplyCancelVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94D8296FDB88004B8D56 /* EventApplyCancelVC.swift */; };
@@ -169,6 +170,7 @@
 		2C65943829968B63007D3619 /* GameRoomListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomListViewModel.swift; sourceTree = "<group>"; };
 		2C65943A29968BB5007D3619 /* GameRoomListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomListModel.swift; sourceTree = "<group>"; };
 		2C65943C29975E85007D3619 /* EventUserApplyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventUserApplyModel.swift; sourceTree = "<group>"; };
+		2C8A4EF029A098A4004E1FCB /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		2C9E5610297A960900DF9E5A /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		2CBF6C71297A954E00940CBE /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
 		2CDD94D8296FDB88004B8D56 /* EventApplyCancelVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventApplyCancelVC.swift; sourceTree = "<group>"; };
@@ -756,6 +758,7 @@
 				609A53D1296AB47300BBD338 /* AppDelegate.swift */,
 				609A53D3296AB47300BBD338 /* SceneDelegate.swift */,
 				2CED690E298CBD2800C838BD /* Status.swift */,
+				2C8A4EF029A098A4004E1FCB /* WebSocketManager.swift */,
 				60F9140A296D465E00626C40 /* Fonts */,
 				60F91405296D440F00626C40 /* Extension */,
 				603215FD297A738400ACBB04 /* Model */,
@@ -1169,6 +1172,7 @@
 				6055D84129700C9500C86D53 /* InputEmailVC.swift in Sources */,
 				60AA6BCB29752422002878B6 /* ViewAllSeminarDataModel.swift in Sources */,
 				2CBF6C72297A954E00940CBE /* UITextField+.swift in Sources */,
+				2C8A4EF129A098A4004E1FCB /* WebSocketManager.swift in Sources */,
 				60F91403296D2F4800626C40 /* ProfileVC.swift in Sources */,
 				46876C6729732053000BA1B6 /* ProfileWithdrawalVC.swift in Sources */,
 				46C18D25297866E600A05CBF /* ProfileDataModel.swift in Sources */,

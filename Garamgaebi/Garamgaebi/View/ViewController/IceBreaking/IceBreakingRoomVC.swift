@@ -113,7 +113,7 @@ class IceBreakingRoomVC: UIViewController {
 	private let roomName: String
 	private let memberId: Int
 	private let nickname: String
-	private var socketClient = StompClientLib()
+//	private var socketClient = StompClientLib()
 	private var userList: [IceBrakingCurrentUserModel] = [] {
 		didSet {
 			self.userCollectionview.reloadData()
@@ -147,6 +147,11 @@ class IceBreakingRoomVC: UIViewController {
 			self.disconnectSocket()
 			self.connectSocket()
 		})
+		
+		// 앱 백그라운드 전환 시 disconnect
+		NotificationCenter.default.addObserver(self, selector: #selector(didTapBackBarButton), name: UIApplication.didEnterBackgroundNotification, object: nil)
+		
+		UserDefaults.standard.setValue(roomId, forKey: "roomId")
 		
 		configureCollectionView()
 		configureViews()
@@ -258,13 +263,17 @@ extension IceBreakingRoomVC {
 	// socket 연결
 	private func connectSocket() {
 		let url = URL(string: "ws://garamgaebi.shop:8080/ws/game/websocket")!
-		socketClient.openSocketWithURLRequest(
+		WebSocketManager.shared.socketClient.openSocketWithURLRequest(
 			request: NSURLRequest(url: url),
 			delegate: self)
+//		socketClient.openSocketWithURLRequest(
+//			request: NSURLRequest(url: url),
+//			delegate: self)
 	}
 	// socket 구독
 	private func subscribeSocket() {
-		socketClient.subscribe(destination: "/topic/game/room/\(self.roomId)")
+		WebSocketManager.shared.socketClient.subscribe(destination: "/topic/game/room/\(self.roomId)")
+//		socketClient.subscribe(destination: "/topic/game/room/\(self.roomId)")
 	}
 	// socket 메세지 전송
 	private func sendMessageWithSocket(type: String, message: String, profileUrl: String) {
@@ -275,14 +284,15 @@ extension IceBreakingRoomVC {
 			"message": message,
 			"profileUrl": profileUrl
 		]
-			
-		socketClient.sendJSONForDict(dict: payloadObject as AnyObject, toDestination: "/app/game/message")
+		WebSocketManager.shared.socketClient.sendJSONForDict(dict: payloadObject as AnyObject, toDestination: "/app/game/message")
+//		socketClient.sendJSONForDict(dict: payloadObject as AnyObject, toDestination: "/app/game/message")
 	}
 	// 소켓 연결해제
 	private func disconnectSocket() {
 		userList = []
 		sendMessageWithSocket(type: "EXIT", message: "", profileUrl: "")
-		socketClient.disconnect()
+		WebSocketManager.shared.socketClient.disconnect()
+//		socketClient.disconnect()
 	}
 	// 다음 아이템으로 스크롤
 	private func scrollToNextItem() {
