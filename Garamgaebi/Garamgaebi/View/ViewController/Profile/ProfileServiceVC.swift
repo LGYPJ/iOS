@@ -484,9 +484,13 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
             hideAlert(textField: self.emailTextField, alertLabel: self.emailAlertLabel)
         } else {
             showAlert(textField: self.emailTextField, alertLabel: self.emailAlertLabel, status: isValidEmail)
-            }
+        }
+        if emailTextField.text?.count == 0 {
+            hideAlert(textField: self.emailTextField, alertLabel: self.emailAlertLabel)
         }
     }
+    
+}
     
     private func showAlert(textField: UITextField, alertLabel: UILabel, status: Bool) {
         
