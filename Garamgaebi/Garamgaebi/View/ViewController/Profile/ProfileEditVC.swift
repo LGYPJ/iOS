@@ -133,7 +133,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     }
     lazy var belongTextCountLabel = UILabel().then {
         $0.textColor = UIColor(hex: 0xAEAEAE)
-        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        $0.font = UIFont.NotoSansKR(type: .Bold, size: 12)
         
         guard let initialCount = belongTextField.text?.count else { return }
         $0.text = "\(initialCount)/\(maxBelongCount)"
@@ -176,7 +176,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.textColor = .mainGray
         $0.delegate = self // <-
     }
-    lazy var introduceLengthLabel = UILabel().then {
+    lazy var introduceTextCountLabel = UILabel().then {
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 12)
         $0.textColor = UIColor(hex: 0xAEAEAE)
         let count = introduceTextField.text.count
@@ -239,9 +239,8 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             .forEach {contentView.addSubview($0)}
         
         // 오류 메시지 관련
-        [nickNameAlertLabel, emailAlertLabel, belongTextCountLabel].forEach {contentView.addSubview($0)}
+        [nickNameAlertLabel, emailAlertLabel, belongTextCountLabel, introduceTextCountLabel].forEach {contentView.addSubview($0)}
         
-        contentView.addSubview(introduceLengthLabel)
         
         //headerView
         headerView.snp.makeConstraints { make in
@@ -346,8 +345,9 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             $0.leading.trailing.equalTo(nickNameTextField)
             $0.height.equalTo(100)
         }
-        introduceLengthLabel.snp.makeConstraints { /// 글자수 계산
-            $0.trailing.bottom.equalTo(introduceTextField).inset(12)
+        introduceTextCountLabel.snp.makeConstraints { /// 글자수 계산
+            $0.centerY.equalTo(introduceLabel)
+            $0.trailing.equalTo(introduceTextField)
         }
         
         // 저장 버튼
@@ -378,9 +378,9 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         // 기존 라벨에 attributedString 객체 속성 부여
         nickNameLabel.attributedText = attributedString1
         
-        let orgText = belongLabel.text ?? ""
-        let attributedString2 = NSMutableAttributedString(string: orgText)
-        let range2 = (orgText as NSString).range(of: "*")
+        let belongText = belongLabel.text ?? ""
+        let attributedString2 = NSMutableAttributedString(string: belongText)
+        let range2 = (belongText as NSString).range(of: "*")
         attributedString2.addAttribute(.foregroundColor, value: UIColor.mainBlue, range: range2)
         belongLabel.attributedText = attributedString2
         
@@ -639,7 +639,7 @@ extension ProfileEditVC: UITextViewDelegate {
         guard let str = textView.text else { return true }
         let newLenght = str.count + text.count - range.length
 
-        introduceLengthLabel.text = "\(str.count)/100"
+        introduceTextCountLabel.text = "\(str.count)/100"
         return newLenght <= 100
     }
     
