@@ -270,11 +270,11 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         }
         
         questionTypeSubtitleLabel.snp.makeConstraints { /// 질문 유형 선택
-            $0.top.equalTo(emailAlertLabel.snp.bottom).offset(8)
+            $0.top.equalTo(emailTextField.snp.bottom).offset(24)
             $0.leading.trailing.equalTo(emailTextField)
         }
         questionTypeTextField.snp.makeConstraints {
-            $0.top.equalTo(questionTypeSubtitleLabel.snp.bottom).offset(12)
+            $0.top.equalTo(questionTypeSubtitleLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalTo(questionTypeSubtitleLabel)
             $0.height.equalTo(48)
         }
@@ -432,6 +432,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     
     @objc func textFieldInactivated(_ sender: UITextField) {
         sender.layer.borderColor = UIColor.mainGray.cgColor
+        sender.resignFirstResponder()
     }
     
     private func buttonActivated() {

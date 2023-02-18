@@ -61,13 +61,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         let textField = UITextField()
         textField.text = ""
         textField.basicTextField()
-        textField.placeholder = "표시할 이름을 입력해주세요 (예:블로그, 깃허브 등)"
-        
-        //textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
-//        textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
-//        textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
-        //textField.addTarget(self, action: #selector(showBottomSheet), for: .editingDidBegin) -> 삭제예정
-        
+        textField.placeholder = "표시할 이름을 입력해주세요 (예:블로그, 깃허브 등)"       
         return textField
     }()
     
@@ -84,7 +78,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         let textField = UITextField()
         
         textField.basicTextField()
-        textField.placeholder = "https://"
+        textField.placeholder = "링크를 입력해주세요"
         
         textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
@@ -261,18 +255,21 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
     @objc private func showBottomSheet() {
         let bottomSheetVC = BottomSheetVC()
 
-        bottomSheetVC.modalPresentationStyle = .overFullScreen
-        bottomSheetVC.delegate = self
-        
-        bottomSheetVC.titleText = "SNS 종류"
-        bottomSheetVC.T1 = "인스타그램"
-        bottomSheetVC.T2 = "블로그"
-        bottomSheetVC.T3 = "깃허브"
-        bottomSheetVC.T4 = "직접 입력"
-        self.present(bottomSheetVC, animated: false) {
-            self.typeTextField.layer.borderColor = UIColor.mainBlack.cgColor
+        if (typeTextField.text != "직접 입력") { // 직접 입력인 경우 편집 가능
+            bottomSheetVC.modalPresentationStyle = .overFullScreen
+            bottomSheetVC.delegate = self
+            
+            bottomSheetVC.titleText = "SNS 종류"
+            bottomSheetVC.T1 = "인스타그램"
+            bottomSheetVC.T2 = "블로그"
+            bottomSheetVC.T3 = "깃허브"
+            bottomSheetVC.T4 = "직접 입력"
+            self.present(bottomSheetVC, animated: false, completion: nil)
+            self.view.endEditing(true)
+        } else {
+            typeTextField.placeholder = "SNS 종류를 직접 입력해주세요"
         }
-        self.view.endEditing(true)
+
     }
     
     // sns 추가 버튼

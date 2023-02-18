@@ -67,7 +67,7 @@ class OtherProfileVC: UIViewController {
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 20)
     }
     
-    let orgLabel = UILabel().then {
+    let belongLabel = UILabel().then {
         $0.textColor = .mainBlack
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 16)
     }
@@ -83,7 +83,7 @@ class OtherProfileVC: UIViewController {
     
     lazy var profileStackView: UIStackView = {
         let stackView = UIStackView()
-        [nameLabel, orgLabel, emailLabel]
+        [nameLabel, belongLabel, emailLabel]
             .forEach {stackView.addArrangedSubview($0)}
         stackView.axis = .vertical
         stackView.spacing = 4
@@ -319,6 +319,7 @@ class OtherProfileVC: UIViewController {
     @objc func emailLabelDidTap() {
         guard let copyString = emailLabel.text else { return }
         UIPasteboard.general.string = copyString
+        showToast(message: "클립보드에 복사되었습니다")
     }
     
     
@@ -353,7 +354,7 @@ class OtherProfileVC: UIViewController {
                     
                     // 값 넣어주기
                     self.nameLabel.text = result.nickName
-                    self.orgLabel.text = result.belong
+                    self.belongLabel.text = result.belong
                     self.emailLabel.text = result.profileEmail
                     // 자기소개
                     if let userIntro = result.content { // 자기소개가 있으면
@@ -638,6 +639,24 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
         
         return UITableViewCell()
     }
+    
+    func showToast(message : String) {
+        let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 90, y: self.view.frame.size.height-100, width: 180, height: 35))
+        toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        toastLabel.textColor = UIColor.white
+        toastLabel.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        toastLabel.textAlignment = .center;
+        toastLabel.text = message
+        toastLabel.alpha = 0.8
+        toastLabel.layer.cornerRadius = 10;
+        toastLabel.clipsToBounds  =  true
+        self.view.addSubview(toastLabel)
+        UIView.animate(withDuration: 1.5, delay: 0.1, options: .curveEaseIn, animations: {
+            toastLabel.alpha = 0
+        }, completion: {(isCompleted) in
+            toastLabel.removeFromSuperview()
+        })
+    }
 }
 
 extension OtherProfileVC: SnsButtonTappedDelegate {
@@ -646,6 +665,6 @@ extension OtherProfileVC: SnsButtonTappedDelegate {
     }
     
     func copyButtonDidTap() {
-        //
+        showToast(message: "클립보드에 복사되었습니다")
     }
 }
