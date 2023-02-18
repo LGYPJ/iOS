@@ -16,7 +16,18 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
     }
     
     // MARK: - Properties
-    var textCount: Int = 0
+    private var textCount: Int = 0 {
+        didSet {
+            if textCount > maxTextCount {
+                textCount = maxTextCount - 1
+                contentLengthLabel.text = "\(textCount + 1)/\(maxTextCount)"
+            }
+            else {
+                contentLengthLabel.text = "\(textCount)/\(maxTextCount)"
+            }
+        }
+    }
+    private let maxTextCount = 100
     private var scrollOffset : CGFloat = 0
     private var distance : CGFloat = 0
     
@@ -161,6 +172,7 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setKeyboardObserver()
+        setObserver()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -210,7 +222,6 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         }
         
         // scrollView
-//        scrollView.backgroundColor = .mainLightGray
         scrollView.snp.makeConstraints {
             $0.top.equalTo(headerView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
@@ -218,7 +229,6 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         }
         
         // contentView
-//        contentView.backgroundColor = .mainLightBlue
         contentView.snp.makeConstraints {
             $0.left.right.equalTo(view)
             $0.top.bottom.equalTo(scrollView)
@@ -249,6 +259,12 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
             $0.top.equalTo(emailTextField.snp.bottom).offset(16)
             $0.leading.trailing.equalTo(emailTextField)
         }
+        
+        contentLengthLabel.snp.makeConstraints { /// 글자수 계산
+            $0.centerY.equalTo(reasonTitleLabel)
+            $0.trailing.equalToSuperview().inset(16)
+        }
+        
         reasonTypeTextField.snp.makeConstraints { /// 탈퇴 사유 입력
             $0.top.equalTo(reasonTitleLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalTo(reasonTitleLabel)
@@ -259,9 +275,6 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
             $0.top.equalTo(reasonTypeTextField.snp.bottom).offset(0)
             $0.leading.trailing.equalTo(emailTextField)
             $0.height.equalTo(0)
-        }
-        contentLengthLabel.snp.makeConstraints { /// 글자수 계산
-            $0.trailing.bottom.equalTo(contentTextField).inset(12)
         }
         
         agreeCheckBtn.snp.makeConstraints { /// 회원탈퇴 내용 숙지
@@ -421,9 +434,6 @@ extension ProfileWithdrawalVC: UITextViewDelegate {
 
     // TextView 글자수 제한
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        guard let str = textView.text else { return true }
-        let newLenght = str.count + text.count - range.length
-        
         if contentTextField.text.isEmpty {
             buttonInactivated()
         }
@@ -432,12 +442,39 @@ extension ProfileWithdrawalVC: UITextViewDelegate {
                 agreeCheckBtn.isSelected {
             buttonActivated()
         }
-        
-        textCount = str.count
-        contentLengthLabel.text = "\(str.count)/100"
-        return newLenght <= 100
+        return true
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        textCount = contentTextField.text?.count ?? 0
+        NotificationCenter.default.post(name: Notification.Name("textViewDidChanged"), object: textView)
     }
 }
+
+extension ProfileWithdrawalVC {
+    func setObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(validTextCount(_:)), name: Notification.Name("textViewDidChanged"), object: nil)
+    }
+    
+    @objc private func validTextCount(_ notification: Notification) {
+        if let textView = notification.object as? UITextView {
+            if let text = textView.text {
+                if text.count > maxTextCount {
+                    // 100글자 넘어가면 자동으로 키보드 내려감
+                    textView.resignFirstResponder()
+                }
+                // 초과되는 텍스트 제거
+                if text.count >= maxTextCount {
+                    let index = text.index(text.startIndex, offsetBy: maxTextCount)
+                    let newString = text[text.startIndex..<index]
+                    textView.text = String(newString)
+                }
+            }
+        }
+    }
+}
+
+
 extension ProfileWithdrawalVC {
     private func configureGestureRecognizer() {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))

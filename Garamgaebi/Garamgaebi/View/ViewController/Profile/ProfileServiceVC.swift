@@ -13,7 +13,18 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     
     // MARK: - Properties
     private var isChecking: Bool = false
-    var textCount: Int = 0
+    private var textCount: Int = 0 {
+        didSet {
+            if textCount > maxTextCount {
+                textCount = maxTextCount - 1
+                contentLengthLabel.text = "\(textCount + 1)/\(maxTextCount)"
+            }
+            else {
+                contentLengthLabel.text = "\(textCount)/\(maxTextCount)"
+            }
+        }
+    }
+    private let maxTextCount = 100
     private var scrollOffset : CGFloat = 0
     private var distance : CGFloat = 0
     
@@ -182,6 +193,7 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setKeyboardObserver()
+        setObserver()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -273,6 +285,12 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
             $0.top.equalTo(emailTextField.snp.bottom).offset(24)
             $0.leading.trailing.equalTo(emailTextField)
         }
+        
+        contentLengthLabel.snp.makeConstraints { /// 글자수 계산
+            $0.centerY.equalTo(questionTypeSubtitleLabel)
+            $0.trailing.equalToSuperview().inset(16)
+        }
+        
         questionTypeTextField.snp.makeConstraints {
             $0.top.equalTo(questionTypeSubtitleLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalTo(questionTypeSubtitleLabel)
@@ -283,9 +301,6 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
             $0.top.equalTo(questionTypeTextField.snp.bottom).offset(12)
             $0.leading.trailing.equalTo(emailTextField)
             $0.height.equalTo(100)
-        }
-        contentLengthLabel.snp.makeConstraints { /// 글자수 계산
-            $0.trailing.bottom.equalTo(contentTextField).inset(12)
         }
         
         agreeCheckBtn.snp.makeConstraints { /// 이메일 정보 제공 동의
@@ -524,7 +539,7 @@ extension ProfileServiceVC: UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         if contentTextField.text.isEmpty {
             contentTextField.text = textViewPlaceHolder
-            contentTextField.textColor = .mainGray
+            contentTextField.textColor = UIColor.mainGray
             sendBtn.isEnabled = false
             UIView.animate(withDuration: 0.33) { [weak self] in
                 self?.sendBtn.backgroundColor = .mainGray
@@ -535,9 +550,6 @@ extension ProfileServiceVC: UITextViewDelegate {
 
     // TextView 글자수 제한
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        guard let str = textView.text else { return true }
-        let newLenght = str.count + text.count - range.length
-        
         if contentTextField.text.isEmpty {
             sendBtn.isEnabled = false
             UIView.animate(withDuration: 0.33) { [weak self] in
@@ -552,12 +564,38 @@ extension ProfileServiceVC: UITextViewDelegate {
                 self?.sendBtn.backgroundColor = .mainBlue
             }
         }
-
-        textCount = str.count
-        contentLengthLabel.text = "\(str.count)/100"
-        return newLenght <= 100
+        return true
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        textCount = contentTextField.text?.count ?? 0
+        NotificationCenter.default.post(name: Notification.Name("textViewDidChanged"), object: textView)
     }
 }
+
+extension ProfileServiceVC {
+    func setObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(validTextCount(_:)), name: Notification.Name("textViewDidChanged"), object: nil)
+    }
+    
+    @objc private func validTextCount(_ notification: Notification) {
+        if let textView = notification.object as? UITextView {
+            if let text = textView.text {
+                if text.count > maxTextCount {
+                    // 100글자 넘어가면 자동으로 키보드 내려감
+                    textView.resignFirstResponder()
+                }
+                // 초과되는 텍스트 제거
+                if text.count >= maxTextCount {
+                    let index = text.index(text.startIndex, offsetBy: maxTextCount)
+                    let newString = text[text.startIndex..<index]
+                    textView.text = String(newString)
+                }
+            }
+        }
+    }
+}
+
 extension ProfileServiceVC {
     private func configureGestureRecognizer() {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
