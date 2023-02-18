@@ -72,7 +72,7 @@ class ProfileVC: UIViewController {
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 20)
     }
     
-    let orgLabel = UILabel().then {
+    let belongLabel = UILabel().then {
         $0.textColor = .mainBlack
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 16)
     }
@@ -89,7 +89,7 @@ class ProfileVC: UIViewController {
     
     lazy var profileStackView: UIStackView = {
         let stackView = UIStackView()
-        [nameLabel, orgLabel, emailLabel]
+        [nameLabel, belongLabel, emailLabel]
             .forEach {stackView.addArrangedSubview($0)}
         stackView.axis = .vertical
         stackView.spacing = 4
@@ -446,7 +446,7 @@ class ProfileVC: UIViewController {
             let nextVC = ProfileEditVC()
             
             guard let nameString = self.nameLabel.text else { return }
-            guard let orgString = self.orgLabel.text else { return }
+            guard let orgString = self.belongLabel.text else { return }
             guard let emailString = self.emailLabel.text else { return }
 //            guard let introduceString = self.introduceLabel.text else { return }
             
@@ -461,7 +461,7 @@ class ProfileVC: UIViewController {
             
             // 값 넘기기
             nextVC.nickNameTextField.text = nameString
-            nextVC.orgTextField.text = orgString
+            nextVC.belongTextField.text = orgString
             nextVC.emailTextField.text = emailString
 //            nextVC.introduceTextField.text = introduceString
 //            nextVC.introduceTextField.textColor = .mainBlack
@@ -546,7 +546,7 @@ class ProfileVC: UIViewController {
                     
                     // 값 넣어주기
                     self.nameLabel.text = result.nickName
-                    self.orgLabel.text = result.belong
+                    self.belongLabel.text = result.belong
                     self.emailLabel.text = result.profileEmail
                     // 자기소개
                     if let userIntro = result.content { // 자기소개가 있으면
@@ -760,7 +760,7 @@ class ProfileVC: UIViewController {
     // TODO: API연동 후 삭제
     func configureDummyData() {
         nameLabel.text = "가람개비"
-        orgLabel.text = "가천대학교 소프트웨어학과"
+        belongLabel.text = "가천대학교 소프트웨어학과"
         emailLabel.text = "umc@gmail.com"
         introduceLabel.text = "자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소."
     }

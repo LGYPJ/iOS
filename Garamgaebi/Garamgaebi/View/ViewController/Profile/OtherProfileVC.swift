@@ -67,7 +67,7 @@ class OtherProfileVC: UIViewController {
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 20)
     }
     
-    let orgLabel = UILabel().then {
+    let belongLabel = UILabel().then {
         $0.textColor = .mainBlack
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 16)
     }
@@ -83,7 +83,7 @@ class OtherProfileVC: UIViewController {
     
     lazy var profileStackView: UIStackView = {
         let stackView = UIStackView()
-        [nameLabel, orgLabel, emailLabel]
+        [nameLabel, belongLabel, emailLabel]
             .forEach {stackView.addArrangedSubview($0)}
         stackView.axis = .vertical
         stackView.spacing = 4
@@ -354,7 +354,7 @@ class OtherProfileVC: UIViewController {
                     
                     // 값 넣어주기
                     self.nameLabel.text = result.nickName
-                    self.orgLabel.text = result.belong
+                    self.belongLabel.text = result.belong
                     self.emailLabel.text = result.profileEmail
                     // 자기소개
                     if let userIntro = result.content { // 자기소개가 있으면

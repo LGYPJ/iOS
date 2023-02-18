@@ -41,7 +41,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             if belongTextCount > 18 {
                 belongTextCount -= 1
             }
-            orgTextCountLabel.text = "\(belongTextCount)/\(maxBelongCount)"
+            belongTextCountLabel.text = "\(belongTextCount)/\(maxBelongCount)"
         }
     }
     
@@ -117,11 +117,11 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.alpha = 0
     }
     
-    let orgLabel = UILabel().then {
+    let belongLabel = UILabel().then {
         $0.text = "한 줄 소개 *"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
     }
-    lazy var orgTextField = UITextField().then {
+    lazy var belongTextField = UITextField().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.placeholder = "18자 이내로 입력해주세요 (예: 프리랜서 백엔드 개발자)"
         $0.basicTextField()
@@ -131,11 +131,11 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
     }
-    lazy var orgTextCountLabel = UILabel().then {
+    lazy var belongTextCountLabel = UILabel().then {
         $0.textColor = UIColor(hex: 0xAEAEAE)
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         
-        guard let initialCount = orgTextField.text?.count else { return }
+        guard let initialCount = belongTextField.text?.count else { return }
         $0.text = "\(initialCount)/\(maxBelongCount)"
     }
     
@@ -202,11 +202,11 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         
         // 엔터키 클릭시 키보드 내리기
         nickNameTextField.delegate = self
-        orgTextField.delegate = self
+        belongTextField.delegate = self
         emailTextField.delegate = self
         introduceTextField.delegate = self
         
-        NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: UITextField.textDidChangeNotification, object: orgTextField)
+        NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: UITextField.textDidChangeNotification, object: belongTextField)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -235,11 +235,11 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         scrollView.addSubview(contentView)
         scrollView.showsVerticalScrollIndicator = false
         
-        [profileImageView,profilePlusImageView, nickNameLabel, nickNameTextField, orgLabel, orgTextField, emailLabel, emailTextField,introduceLabel, introduceTextField, editDoneBtn]
+        [profileImageView,profilePlusImageView, nickNameLabel, nickNameTextField, belongLabel, belongTextField, emailLabel, emailTextField,introduceLabel, introduceTextField, editDoneBtn]
             .forEach {contentView.addSubview($0)}
         
         // 오류 메시지 관련
-        [nickNameAlertLabel, emailAlertLabel, orgTextCountLabel].forEach {contentView.addSubview($0)}
+        [nickNameAlertLabel, emailAlertLabel, belongTextCountLabel].forEach {contentView.addSubview($0)}
         
         contentView.addSubview(introduceLengthLabel)
         
@@ -304,28 +304,28 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         }
         
         /// 소속
-        orgLabel.snp.makeConstraints {
+        belongLabel.snp.makeConstraints {
             $0.top.equalTo(nickNameTextField.snp.bottom).offset(16)
             $0.leading.equalTo(nickNameLabel)
         }
-        orgTextField.snp.makeConstraints {
-            $0.top.equalTo(orgLabel.snp.bottom).offset(8)
+        belongTextField.snp.makeConstraints {
+            $0.top.equalTo(belongLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalTo(nickNameTextField)
             $0.height.equalTo(nickNameTextField)
         }
-        orgTextCountLabel.snp.makeConstraints {
-            $0.centerY.equalTo(orgLabel)
-            $0.trailing.equalTo(orgTextField)
+        belongTextCountLabel.snp.makeConstraints {
+            $0.centerY.equalTo(belongLabel)
+            $0.trailing.equalTo(belongTextField)
         }
         
         /// 이메일
         emailLabel.snp.makeConstraints {
-            $0.top.equalTo(orgTextField.snp.bottom).offset(16)
-            $0.leading.equalTo(orgLabel)
+            $0.top.equalTo(belongTextField.snp.bottom).offset(16)
+            $0.leading.equalTo(belongLabel)
         }
         emailTextField.snp.makeConstraints {
             $0.top.equalTo(emailLabel.snp.bottom).offset(8)
-            $0.leading.trailing.equalTo(orgTextField)
+            $0.leading.trailing.equalTo(belongTextField)
             $0.height.equalTo(nickNameTextField)
         }
         emailAlertLabel.snp.makeConstraints {
@@ -378,11 +378,11 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         // 기존 라벨에 attributedString 객체 속성 부여
         nickNameLabel.attributedText = attributedString1
         
-        let orgText = orgLabel.text ?? ""
+        let orgText = belongLabel.text ?? ""
         let attributedString2 = NSMutableAttributedString(string: orgText)
         let range2 = (orgText as NSString).range(of: "*")
         attributedString2.addAttribute(.foregroundColor, value: UIColor.mainBlue, range: range2)
-        orgLabel.attributedText = attributedString2
+        belongLabel.attributedText = attributedString2
         
         let emailText = emailLabel.text ?? ""
         let attributedString3 = NSMutableAttributedString(string: emailText)
@@ -416,7 +416,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     @objc private func doneButtonDidTap() {
         
         guard let editName = nickNameTextField.text else { return }
-        guard let editOrg = orgTextField.text else { return }
+        guard let editOrg = belongTextField.text else { return }
         guard let editEmail = emailTextField.text else { return }
         guard let editIntroduce = introduceTextField.text else { return }
         guard let profileImage = profileImageView.image else { return }
@@ -479,7 +479,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         /* 모든 textField가 채워졌으면 프로필 저장 버튼 활성화 */
         if self.nickNameTextField.text?.count != 0,
            self.isValidEmail,
-           self.orgTextField.text?.count != 0 {
+           self.belongTextField.text?.count != 0 {
             buttonActivated()
         } else { // 프로필 저장버튼 비활성화
             buttonInactivated()
@@ -496,7 +496,6 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         case emailTextField:
             self.isValidEmail = text.isValidEmail()
             self.email = text
-        
         default:
             fatalError("Missing TextField...")
         }
@@ -522,11 +521,11 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     }
     
     // MARK: - validateUserInfo()
-    private func validateUserInfo() {
-        if isValidNickName &&  isValidEmail {
-            buttonActivated()
-        }
-    }
+//    private func validateUserInfo() {
+//        if isValidNickName &&  isValidEmail {
+//            buttonActivated()
+//        }
+//    }
     private func validNickname() {
         if isValidNickName {
             hideAlert(textField: self.nickNameTextField, alertLabel: self.nickNameAlertLabel)
@@ -562,8 +561,8 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     
     @objc private func textDidChange(_ sender: UITextField) {
         switch sender {
-        case orgTextField:
-            belongTextCount = orgTextField.text?.count ?? 0
+        case belongTextField:
+            belongTextCount = belongTextField.text?.count ?? 0
             NotificationCenter.default.post(name: Notification.Name("textDidChange"), object: sender)
         default:
             print(">>>ERROR: typeText ProfileEditVC")
@@ -752,7 +751,7 @@ extension ProfileEditVC {
             safeArea.size.height -= keyboardSize.height + (UIScreen.main.bounds.height*0.04) // Adjust buffer to your liking
             // determine which UIView was selected and if it is covered by keyboard
             
-            let activeField: UIView? = [nickNameTextField, orgTextField, emailTextField, introduceTextField].first { $0.isFirstResponder }
+            let activeField: UIView? = [nickNameTextField, belongTextField, emailTextField, introduceTextField].first { $0.isFirstResponder }
             if let activeField = activeField {
                 if safeArea.contains(CGPoint(x: 0, y: activeField.frame.maxY)) {
                     //print("No need to Scroll")
