@@ -72,7 +72,7 @@ class ProfileVC: UIViewController {
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 20)
     }
     
-    let orgLabel = UILabel().then {
+    let belongLabel = UILabel().then {
         $0.textColor = .mainBlack
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 16)
     }
@@ -89,7 +89,7 @@ class ProfileVC: UIViewController {
     
     lazy var profileStackView: UIStackView = {
         let stackView = UIStackView()
-        [nameLabel, orgLabel, emailLabel]
+        [nameLabel, belongLabel, emailLabel]
             .forEach {stackView.addArrangedSubview($0)}
         stackView.axis = .vertical
         stackView.spacing = 4
@@ -427,6 +427,7 @@ class ProfileVC: UIViewController {
     @objc func emailLabelDidTap() {
         guard let copyString = emailLabel.text else { return }
         UIPasteboard.general.string = copyString
+        self.showToast(message: "클립보드에 복사되었습니다")
     }
     
     @objc private func serviceButtonDidTap(_ sender : UIButton) {
@@ -445,7 +446,7 @@ class ProfileVC: UIViewController {
             let nextVC = ProfileEditVC()
             
             guard let nameString = self.nameLabel.text else { return }
-            guard let orgString = self.orgLabel.text else { return }
+            guard let orgString = self.belongLabel.text else { return }
             guard let emailString = self.emailLabel.text else { return }
 //            guard let introduceString = self.introduceLabel.text else { return }
             
@@ -460,7 +461,7 @@ class ProfileVC: UIViewController {
             
             // 값 넘기기
             nextVC.nickNameTextField.text = nameString
-            nextVC.orgTextField.text = orgString
+            nextVC.belongTextField.text = orgString
             nextVC.emailTextField.text = emailString
 //            nextVC.introduceTextField.text = introduceString
 //            nextVC.introduceTextField.textColor = .mainBlack
@@ -496,6 +497,24 @@ class ProfileVC: UIViewController {
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
+    func showToast(message : String) {
+        let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 90, y: self.view.frame.size.height-150, width: 180, height: 35))
+        toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        toastLabel.textColor = UIColor.white
+        toastLabel.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        toastLabel.textAlignment = .center;
+        toastLabel.text = message
+        toastLabel.alpha = 1.0
+        toastLabel.layer.cornerRadius = 10;
+        toastLabel.clipsToBounds  =  true
+        self.view.addSubview(toastLabel)
+        UIView.animate(withDuration: 0.5, delay: 0.5, options: .curveEaseOut, animations: {
+            toastLabel.alpha = 0.0
+        }, completion: {(isCompleted) in
+            toastLabel.removeFromSuperview()
+        })
+    }
+    
     // MARK: - [GET] 내프로필 정보
     func getMyInfo() {
         
@@ -527,7 +546,7 @@ class ProfileVC: UIViewController {
                     
                     // 값 넣어주기
                     self.nameLabel.text = result.nickName
-                    self.orgLabel.text = result.belong
+                    self.belongLabel.text = result.belong
                     self.emailLabel.text = result.profileEmail
                     // 자기소개
                     if let userIntro = result.content { // 자기소개가 있으면
@@ -741,7 +760,7 @@ class ProfileVC: UIViewController {
     // TODO: API연동 후 삭제
     func configureDummyData() {
         nameLabel.text = "가람개비"
-        orgLabel.text = "가천대학교 소프트웨어학과"
+        belongLabel.text = "가천대학교 소프트웨어학과"
         emailLabel.text = "umc@gmail.com"
         introduceLabel.text = "자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소."
     }
