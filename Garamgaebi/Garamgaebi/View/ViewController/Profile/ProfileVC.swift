@@ -355,6 +355,7 @@ class ProfileVC: UIViewController {
         introduceLabel.snp.makeConstraints { /// 자기소개
             $0.top.equalTo(profileStackView.snp.bottom).offset(16)
             $0.leading.trailing.equalTo(profileStackView)
+            $0.height.equalTo(introduceLabel.intrinsicContentSize)
         }
         
         profileEditBtn.snp.makeConstraints { /// 프로필 편집 버튼
@@ -448,16 +449,8 @@ class ProfileVC: UIViewController {
             let nameString = self.nameLabel.text ?? ""
             let orgString = self.belongLabel.text ?? ""
             let emailString = self.emailLabel.text ?? ""
-            let introduceString = self.introduceLabel.text ?? ""
+            let introduceString = self.introduceLabel.text
             let profileImage = self.profileImageView.image ?? UIImage(named: "DefaultProfileImage")!
-//            var image = UIImage()
-//            if let saveImage = self.profileImageView.image {
-//                image = UIImage(named: "DefaultProfileImage")!
-//            }
-//            } else {
-//                image = UIImage(named: "DefaultProfileImage")
-//            }
-//            print("image: \(image)")
             
             // 값 넘기기
             nextVC.profileImageView.image = profileImage
@@ -465,9 +458,12 @@ class ProfileVC: UIViewController {
             nextVC.belongTextField.text = orgString
             nextVC.emailTextField.text = emailString
             // 자기소개가 있다면 넘김
-            if introduceString.count != 0 {
+            if introduceString != nil {
                 nextVC.introduceTextField.text = introduceString
                 nextVC.introduceTextField.textColor = .mainBlack
+            } else {
+                nextVC.introduceTextField.text = "100자 이내로 작성해주세요"
+                nextVC.introduceTextField.textColor = .mainGray
             }
 
             // 사용자
@@ -552,11 +548,19 @@ class ProfileVC: UIViewController {
                     self.belongLabel.text = result.belong
                     self.emailLabel.text = result.profileEmail
                     // 자기소개
-                    if let userIntro = result.content { // 자기소개가 있으면
+                    if let userIntro = result.content { // 자기소개
+                        //있으면 보이게
                         self.introduceLabel.text = userIntro
+                        self.introduceLabel.isHidden = false
+                        self.introduceLabel.snp.updateConstraints {
+                            $0.top.equalTo(self.profileStackView.snp.bottom).offset(16)
+                            $0.leading.trailing.equalTo(self.profileStackView)
+                            $0.height.equalTo(self.introduceLabel.intrinsicContentSize)
+                        }
                     } else { // 없으면 안 보이게
+                        self.introduceLabel.text = nil
                         self.introduceLabel.isHidden = true
-                        self.introduceLabel.snp.makeConstraints {
+                        self.introduceLabel.snp.updateConstraints {
                             $0.top.equalTo(self.profileStackView.snp.bottom)
                             $0.height.equalTo(0)
                         }
