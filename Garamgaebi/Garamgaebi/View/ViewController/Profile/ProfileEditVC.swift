@@ -547,11 +547,6 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     }
     
     // MARK: - validateUserInfo()
-//    private func validateUserInfo() {
-//        if isValidNickName &&  isValidEmail {
-//            buttonActivated()
-//        }
-//    }
     private func validNickname() {
         if isValidNickName {
             hideAlert(textField: self.nickNameTextField, alertLabel: self.nickNameAlertLabel)
@@ -594,31 +589,6 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             print(">>>ERROR: typeText ProfileEditVC")
         }
     }
-    
-//    // 갤러리 권한 체크
-//    func checkAlbumPermission(){
-//        PHPhotoLibrary.requestAuthorization( { status in
-//            switch status{
-//            case .authorized:
-//                print("Album: 권한 허용")
-//                DispatchQueue.main.async {
-//                    // 이미지 피커 열기
-//                    self.imagePicker.delegate = self
-//                    self.imagePicker.sourceType = .photoLibrary
-//                    self.imagePicker.modalPresentationStyle = .fullScreen
-//
-//                    self.present(self.imagePicker, animated: true, completion: nil)
-//                }
-//            case .denied:
-//                print("Album: 권한 거부")
-//            case .restricted, .notDetermined:
-//                print("Album: 선택하지 않음")
-//            default:
-//                break
-//            }
-//        })
-//    }
-    
 }
 
 extension ProfileEditVC {
@@ -689,23 +659,7 @@ extension ProfileEditVC: UITextViewDelegate {
         introduceTextCount = introduceTextField.text?.count ?? 0
         NotificationCenter.default.post(name: Notification.Name("textDidChange"), object: textView)
     }
-    
-    // 삭제해야함
-//    // TextView 글자수 제한
-//    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-//        guard let str = textView.text else { return true }
-//        let newLenght = str.count + text.count - range.length
-//
-//        introduceTextCountLabel.text = "\(str.count)/100"
-//        return newLenght <= 100
-//    }
-//
-//    // 키보드
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        self.view.endEditing(true)
-//    }
-//
-    
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder() // TextField 비활성화
         return true
@@ -730,58 +684,6 @@ extension ProfileEditVC: PHPickerViewControllerDelegate {
         }
     }
 }
-
-extension ProfileEditVC : UIImagePickerControllerDelegate, UINavigationControllerDelegate{
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
-        guard let selectedImage = info[.originalImage] as? UIImage else {
-            fatalError("Expected a dictionary containing an image, but was provided the following: \(info)")
-        }
-//        let imageData = selectedImage.jpegData(compressionQuality: 0.5)
-        self.dismiss(animated: false) {
-            DispatchQueue.main.async {
-                self.profileImageView.image = selectedImage
-            }
-        }
-    }
-
-    func PhotoAuth() -> Bool {
-        // 포토 라이브러리 접근 권한
-        let authorizationStatus = PHPhotoLibrary.authorizationStatus()
-        
-        var isAuth = false
-        
-        switch authorizationStatus {
-        case .authorized: return true // 사용자가 앱에 사진 라이브러리에 대한 액세스 권한을 명시 적으로 부여했습니다.
-        case .denied: break // 사용자가 사진 라이브러리에 대한 앱 액세스를 명시 적으로 거부했습니다.
-        case .limited: break // ?
-        case .notDetermined: // 사진 라이브러리 액세스에는 명시적인 사용자 권한이 필요하지만 사용자가 아직 이러한 권한을 부여하거나 거부하지 않았습니다
-            PHPhotoLibrary.requestAuthorization { (state) in
-                if state == .authorized {
-                    isAuth = true
-                }
-            }
-            return isAuth
-        case .restricted: break // 앱이 사진 라이브러리에 액세스 할 수있는 권한이 없으며 사용자는 이러한 권한을 부여 할 수 없습니다.
-        default: break
-        }
-        
-        return false;
-    }
-
-}
-
-// 이건 왜 있는거임?
-//
-//extension UILabel {
-//    func asColor(targetString: String, color: UIColor) {
-//        let fullText = text ?? ""
-//        let attributedString = NSMutableAttributedString(string: fullText)
-//        let range = (fullText as NSString).range(of: targetString)
-//        attributedString.addAttribute(.foregroundColor, value: color, range: range)
-//        attributedText = attributedString
-//    }
-//}
 
 extension ProfileEditVC {
     private func configureGestureRecognizer() {
@@ -829,8 +731,6 @@ extension ProfileEditVC {
         if distance == 0 {
             return
         }
-        // return to origin scrollOffset
-//        self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset), animated: true)
         self.scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
         scrollOffset = 0
         distance = 0
