@@ -463,23 +463,25 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             "Authorization": "Bearer \(token ?? "")"
         ]
         
-        let parameters: [String : Any] = [
+        let subParam: [String: Any] = [
             "memberIdx": String(memberIdx),
             "nickname": nickName,
             "belong" : belong,
             "profileEmail" : profileEmail,
             "content": content
         ]
-
-        print(parameters)
+        
+        let mainParam: [String: Any] = [
+            "info": subParam
+        ]
         
         AF.upload(multipartFormData: { multipartFormData in
-            for (key, value) in parameters { // 요청 바디에 있는 key, value 값을 for문을 통해 각각 multipartFormData 에 추가해서 전송
-                multipartFormData.append("\(value)".data(using: .utf8)!, withName: key, mimeType: "application/json")
+            for (key, value) in mainParam {
+                let paramData =  try! JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
+                multipartFormData.append(paramData, withName: key, mimeType: "application/json")
             }
             if let imageData = profileImage?.pngData() {
-//                print("이미지 있음")
-                multipartFormData.append(imageData, withName: "image", fileName: "\(imageData).png", mimeType: "image/png")
+                multipartFormData.append(imageData, withName: "image", fileName: "\(imageData).png", mimeType: "multipart/form-data")
             }
         }, to: url, method: .post, headers: header)
         .validate()
@@ -488,11 +490,13 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             case .success(let response):
                 if response.isSuccess {
                     print("성공(프로필수정): \(response.message)")
+                    completion(response.isSuccess)
                 } else {
                     print("실패(프로필수정): \(response.message)")
+                    completion(response.isSuccess)
                 }
             case .failure(let error):
-                print("실패(AF-프로필수정): \(error.localizedDescription)")
+                print("실패(AF-프로필수정): \(error)")
             }
         }
     }
