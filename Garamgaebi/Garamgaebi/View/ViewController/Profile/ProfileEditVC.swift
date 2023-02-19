@@ -131,26 +131,6 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.alpha = 0
     }
     
-    lazy var belongLabel = UILabel().then {
-        $0.text = "한 줄 소개 *"
-        $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
-    }
-    lazy var belongTextField = UITextField().then {
-        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        $0.placeholder = "18자 이내로 입력해주세요 (예: 프리랜서 백엔드 개발자)"
-        $0.basicTextField()
-        
-        $0.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
-        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
-        $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
-        $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
-    }
-    lazy var belongTextCountLabel = UILabel().then {
-        $0.textColor = UIColor(hex: 0xAEAEAE)
-        $0.font = UIFont.NotoSansKR(type: .Bold, size: 12)
-        $0.text = "\(belongTextCount)/\(maxBelongCount)"
-    }
-    
     lazy var emailLabel = UILabel().then {
         $0.text = "이메일 *"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
@@ -170,6 +150,26 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.text = "이메일 형식이 올바르지 않습니다"
         $0.textColor = .red
         $0.alpha = 0
+    }
+    
+    lazy var belongLabel = UILabel().then {
+        $0.text = "한 줄 소개"
+        $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+    }
+    lazy var belongTextField = UITextField().then {
+        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        $0.placeholder = "18자 이내로 입력해주세요 (예: 프리랜서 백엔드 개발자)"
+        $0.basicTextField()
+        
+        $0.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
+        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
+        $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+        $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+    }
+    lazy var belongTextCountLabel = UILabel().then {
+        $0.textColor = UIColor(hex: 0xAEAEAE)
+        $0.font = UIFont.NotoSansKR(type: .Bold, size: 12)
+        $0.text = "\(belongTextCount)/\(maxBelongCount)"
     }
     
     lazy var introduceLabel = UILabel().then {
@@ -230,8 +230,6 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         emailTextField.delegate = self
         introduceTextField.delegate = self
         
-        // 삭제, 밑에 setObserver에 있음
-//        NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: UITextField.textDidChangeNotification, object: belongTextField)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -327,9 +325,24 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             $0.leading.trailing.equalTo(nickNameTextField)
         }
         
+        /// 이메일
+        emailLabel.snp.makeConstraints {
+            $0.top.equalTo(nickNameTextField.snp.bottom).offset(16)
+            $0.leading.equalTo(nickNameLabel)
+        }
+        emailTextField.snp.makeConstraints {
+            $0.top.equalTo(emailLabel.snp.bottom).offset(8)
+            $0.leading.trailing.equalTo(belongTextField)
+            $0.height.equalTo(nickNameTextField)
+        }
+        emailAlertLabel.snp.makeConstraints {
+            $0.top.equalTo(emailTextField.snp.bottom).offset(2)
+            $0.leading.trailing.equalTo(emailTextField)
+        }
+        
         /// 소속
         belongLabel.snp.makeConstraints {
-            $0.top.equalTo(nickNameTextField.snp.bottom).offset(16)
+            $0.top.equalTo(emailTextField.snp.bottom).offset(16)
             $0.leading.equalTo(nickNameLabel)
         }
         belongTextField.snp.makeConstraints {
@@ -342,28 +355,13 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             $0.trailing.equalTo(belongTextField)
         }
         
-        /// 이메일
-        emailLabel.snp.makeConstraints {
-            $0.top.equalTo(belongTextField.snp.bottom).offset(16)
-            $0.leading.equalTo(belongLabel)
-        }
-        emailTextField.snp.makeConstraints {
-            $0.top.equalTo(emailLabel.snp.bottom).offset(8)
-            $0.leading.trailing.equalTo(belongTextField)
-            $0.height.equalTo(nickNameTextField)
-        }
-        emailAlertLabel.snp.makeConstraints {
-            $0.top.equalTo(emailTextField.snp.bottom).offset(2)
-            $0.leading.trailing.equalTo(emailTextField)
-        }
-        
         /// 별 처리
         contigureStarText()
         
         /// 자기소개
         introduceLabel.snp.makeConstraints {
-            $0.top.equalTo(emailTextField.snp.bottom).offset(16)
-            $0.leading.equalTo(emailLabel)
+            $0.top.equalTo(belongTextField.snp.bottom).offset(16)
+            $0.leading.equalTo(nickNameLabel)
         }
         introduceTextField.snp.makeConstraints {
             $0.top.equalTo(introduceLabel.snp.bottom).offset(8)
@@ -402,18 +400,12 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         attributedString1.addAttribute(.foregroundColor, value: UIColor.mainBlue, range: range1)
         // 기존 라벨에 attributedString 객체 속성 부여
         nickNameLabel.attributedText = attributedString1
-        
-        let belongText = belongLabel.text ?? ""
-        let attributedString2 = NSMutableAttributedString(string: belongText)
-        let range2 = (belongText as NSString).range(of: "*")
-        attributedString2.addAttribute(.foregroundColor, value: UIColor.mainBlue, range: range2)
-        belongLabel.attributedText = attributedString2
-        
+
         let emailText = emailLabel.text ?? ""
-        let attributedString3 = NSMutableAttributedString(string: emailText)
-        let range3 = (emailText as NSString).range(of: "*")
-        attributedString3.addAttribute(.foregroundColor, value: UIColor.mainBlue, range: range3)
-        emailLabel.attributedText = attributedString3
+        let attributedString2 = NSMutableAttributedString(string: emailText)
+        let range2 = (emailText as NSString).range(of: "*")
+        attributedString2.addAttribute(.foregroundColor, value: UIColor.mainBlue, range: range2)
+        emailLabel.attributedText = attributedString2
     }
     
     @objc func textFieldActivated(_ sender: UITextField) {
@@ -494,6 +486,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             case .success(let response):
                 if response.isSuccess {
                     print("성공(프로필수정): \(response.message)")
+                    UserDefaults.standard.set(nickName, forKey: "nickname")
                     completion(response.isSuccess)
                 } else {
                     print("실패(프로필수정): \(response.message)")
