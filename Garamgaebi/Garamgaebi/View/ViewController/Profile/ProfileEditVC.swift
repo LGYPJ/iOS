@@ -23,14 +23,12 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     private var distance : CGFloat = 0
     
     // 유효성 검사
-    var nickName = String()
-    var isValidNickName = false {
+    var isValidNickName = true {
         didSet {
             self.validNickname()
         }
     }
-    var email = String()
-    var isValidEmail = false {
+    var isValidEmail = true {
         didSet {
             self.validEmail()
         }
@@ -199,6 +197,8 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     lazy var editDoneBtn = UIButton().then {
         $0.basicButton()
         $0.setTitle("저장하기", for: .normal)
+        $0.isEnabled = false
+        $0.backgroundColor = .mainGray
         
         $0.addTarget(self, action: #selector(doneButtonDidTap), for: .touchUpInside)
     }
@@ -209,6 +209,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         view.backgroundColor = .white
+        allTextFieldFilledIn()
         configureLayouts()
         tapGesture()
         configureGestureRecognizer()
@@ -505,9 +506,8 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     }
     
     @objc func allTextFieldFilledIn() {
-        
         /* 모든 textField가 채워졌으면 프로필 저장 버튼 활성화 */
-        if self.nickNameTextField.text?.count != 0,
+        if self.isValidNickName,
            self.isValidEmail,
            self.belongTextField.text?.count != 0 {
             buttonActivated()
@@ -518,18 +518,14 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     
     @objc func textFieldEditingChanged(_ sender: UITextField) {
         let text = sender.text ?? ""
-        
         switch sender {
         case nickNameTextField:
             self.isValidNickName = text.isValidNickName()
-            self.nickName = text
         case emailTextField:
             self.isValidEmail = text.isValidEmail()
-            self.email = text
         default:
             fatalError("Missing TextField...")
         }
-
     }
 
     // 뒤로가기 버튼 did tap
