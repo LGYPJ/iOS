@@ -64,7 +64,7 @@ class ProfileVC: UIViewController {
         $0.clipsToBounds = true
         
         $0.layer.cornerRadius = 50
-        $0.image = UIImage(named: "DefaultProfileImage")
+        $0.backgroundColor = .mainLightGray
     }
     
     let nameLabel = UILabel().then {
@@ -460,14 +460,16 @@ class ProfileVC: UIViewController {
 //            print("image: \(image)")
             
             // 값 넘기기
+            nextVC.profileImageView.image = profileImage
             nextVC.nickNameTextField.text = nameString
             nextVC.belongTextField.text = orgString
             nextVC.emailTextField.text = emailString
-//            nextVC.introduceTextField.text = introduceString
-//            nextVC.introduceTextField.textColor = .mainBlack
-            nextVC.profileImageView.image = profileImage
+            // 자기소개가 있다면 넘김
+            if introduceString.count != 0 {
+                nextVC.introduceTextField.text = introduceString
+                nextVC.introduceTextField.textColor = .mainBlack
+            }
 
-            
             // 사용자
             nextVC.memberIdx = self.memberIdx
 
@@ -561,13 +563,17 @@ class ProfileVC: UIViewController {
                     }
                     // 프로필 이미지
                     if let urlString = result.profileUrl {
-                        
+//                        let processor = DownsamplingImageProcessor(size: self.profileImageView.bounds.size)
+                        let processor = RoundCornerImageProcessor(cornerRadius: self.profileImageView.layer.cornerRadius)
                         let url = URL(string: urlString)
 
-                        self.profileImageView.kf.indicatorType = .activity
-                        self.profileImageView.kf.setImage(with: url)
+                        self.profileImageView.kf.setImage(with: url, options: [
+                            .processor(processor),
+                            .scaleFactor(UIScreen.main.scale),
+                            .transition(.fade(1)),
+                            .cacheOriginalImage
+                        ])
                     }
-                    //completion(result)
                 } else {
                     // 통신은 정상적으로 됐으나(200), error발생
                     print("실패(내프로필): \(response.message)")
