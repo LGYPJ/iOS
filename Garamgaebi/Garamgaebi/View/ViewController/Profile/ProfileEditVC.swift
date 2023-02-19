@@ -90,12 +90,12 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         return button
     }()
     
-    let scrollView = UIScrollView()
+    lazy var scrollView = UIScrollView()
     
-    let contentView = UIView()
+    lazy var contentView = UIView()
     
-    let imagePicker = UIImagePickerController()
-    let profileImageView : UIImageView = {
+    lazy var imagePicker = UIImagePickerController()
+    lazy var profileImageView : UIImageView = {
         let view = UIImageView()
         view.layer.cornerRadius = 50
         
@@ -107,12 +107,12 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         
         return view
     }()
-    let profilePlusImageView = UIImageView().then {
+    lazy var profilePlusImageView = UIImageView().then {
         $0.image = UIImage(named: "ProfilePlus")
         $0.layer.cornerRadius = 11
     }
     
-    let nickNameLabel = UILabel().then {
+    lazy var nickNameLabel = UILabel().then {
         $0.text = "닉네임 *"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
     }
@@ -133,7 +133,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.alpha = 0
     }
     
-    let belongLabel = UILabel().then {
+    lazy var belongLabel = UILabel().then {
         $0.text = "한 줄 소개 *"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
     }
@@ -153,7 +153,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.text = "\(belongTextCount)/\(maxBelongCount)"
     }
     
-    let emailLabel = UILabel().then {
+    lazy var emailLabel = UILabel().then {
         $0.text = "이메일 *"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
     }
@@ -174,12 +174,12 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.alpha = 0
     }
     
-    let introduceLabel = UILabel().then {
+    lazy var introduceLabel = UILabel().then {
         $0.text = "자기소개"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
     }
     
-    let textViewPlaceHolder = "100자 이내로 작성해주세요"
+    lazy var textViewPlaceHolder = "100자 이내로 작성해주세요"
     lazy var introduceTextField = UITextView().then {
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.mainGray.cgColor
@@ -775,16 +775,17 @@ extension ProfileEditVC : UIImagePickerControllerDelegate, UINavigationControlle
 
 }
 
-
-extension UILabel {
-    func asColor(targetString: String, color: UIColor) {
-        let fullText = text ?? ""
-        let attributedString = NSMutableAttributedString(string: fullText)
-        let range = (fullText as NSString).range(of: targetString)
-        attributedString.addAttribute(.foregroundColor, value: color, range: range)
-        attributedText = attributedString
-    }
-}
+// 이건 왜 있는거임?
+//
+//extension UILabel {
+//    func asColor(targetString: String, color: UIColor) {
+//        let fullText = text ?? ""
+//        let attributedString = NSMutableAttributedString(string: fullText)
+//        let range = (fullText as NSString).range(of: targetString)
+//        attributedString.addAttribute(.foregroundColor, value: color, range: range)
+//        attributedText = attributedString
+//    }
+//}
 
 extension ProfileEditVC {
     private func configureGestureRecognizer() {
