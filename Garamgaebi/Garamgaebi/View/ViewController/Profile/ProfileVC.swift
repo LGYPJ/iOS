@@ -445,15 +445,15 @@ class ProfileVC: UIViewController {
             // 화면 전환
             let nextVC = ProfileEditVC()
             
-            guard let nameString = self.nameLabel.text else { return }
-            guard let orgString = self.belongLabel.text else { return }
-            guard let emailString = self.emailLabel.text else { return }
-//            guard let introduceString = self.introduceLabel.text else { return }
-            
-//            guard let image = self.profileImageView.image else { return UIImage(named: "DefaultProfileImage") }
-//            var image = UIImage
+            let nameString = self.nameLabel.text ?? ""
+            let orgString = self.belongLabel.text ?? ""
+            let emailString = self.emailLabel.text ?? ""
+            let introduceString = self.introduceLabel.text ?? ""
+            let profileImage = self.profileImageView.image ?? UIImage(named: "DefaultProfileImage")!
+//            var image = UIImage()
 //            if let saveImage = self.profileImageView.image {
-//                image = saveImage
+//                image = UIImage(named: "DefaultProfileImage")!
+//            }
 //            } else {
 //                image = UIImage(named: "DefaultProfileImage")
 //            }
@@ -465,7 +465,8 @@ class ProfileVC: UIViewController {
             nextVC.emailTextField.text = emailString
 //            nextVC.introduceTextField.text = introduceString
 //            nextVC.introduceTextField.textColor = .mainBlack
-//            nextVC.profileImageView.image = image
+            nextVC.profileImageView.image = profileImage
+
             
             // 사용자
             nextVC.memberIdx = self.memberIdx
