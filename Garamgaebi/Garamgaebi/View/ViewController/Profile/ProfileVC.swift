@@ -232,8 +232,6 @@ class ProfileVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(memberIdx)
-        print(token)
         configureLayouts()
         
     }
@@ -253,8 +251,8 @@ class ProfileVC: UIViewController {
         }
         self.getCareerData { [weak self] result in
             self?.careerData = result
-            self?.showCareerDefaultLabel()
             self?.careerTableView.reloadData()
+            self?.showCareerDefaultLabel()
         }
         self.getEducationData { [weak self] result in
             self?.eduData = result
@@ -303,8 +301,6 @@ class ProfileVC: UIViewController {
         [eduDefaultLabel, eduTableView, addEduBtn].forEach {
             eduBottomRadiusView.addSubview($0) }
         
-        
-        
         // layer
         // HeaderView
         headerView.snp.makeConstraints { make in
@@ -324,7 +320,6 @@ class ProfileVC: UIViewController {
             make.right.equalToSuperview().inset(16)
             make.centerY.equalToSuperview()
         }
-        
         
         // scrollView
         scrollView.snp.makeConstraints {
@@ -438,47 +433,37 @@ class ProfileVC: UIViewController {
     }
     
     @objc private func editButtonDidTap(_ sender : UIButton) {
-//        print("프로필 편집 버튼 클릭")
+        // 화면 전환
+        let nextVC = ProfileEditVC()
         
-        // 다음 화면으로 넘길 텍스트
-        DispatchQueue.main.async {
-            
-            // 화면 전환
-            let nextVC = ProfileEditVC()
-            
-            let nameString = self.nameLabel.text ?? ""
-            let orgString = self.belongLabel.text ?? ""
-            let emailString = self.emailLabel.text ?? ""
-            let introduceString = self.introduceLabel.text
-            let profileImage = self.profileImageView.image ?? UIImage(named: "DefaultProfileImage")!
-            
-            // 값 넘기기
-            nextVC.profileImageView.image = profileImage
-            nextVC.nickNameTextField.text = nameString
-            nextVC.belongTextField.text = orgString
-            nextVC.emailTextField.text = emailString
-            // 자기소개가 있다면 넘김
-            if introduceString != nil {
-                nextVC.introduceTextField.text = introduceString
-                nextVC.introduceTextField.textColor = .mainBlack
-            } else {
-                nextVC.introduceTextField.text = "100자 이내로 작성해주세요"
-                nextVC.introduceTextField.textColor = .mainGray
-            }
-
-            // 사용자
-            nextVC.memberIdx = self.memberIdx
-
-            self.navigationController?.pushViewController(nextVC, animated: true)
+        let nameString = self.nameLabel.text ?? ""
+        let orgString = self.belongLabel.text ?? ""
+        let emailString = self.emailLabel.text ?? ""
+        let introduceString = self.introduceLabel.text
+        let profileImage = self.profileImageView.image ?? UIImage(named: "DefaultProfileImage")!
+        
+        // 값 넘기기
+        nextVC.profileImageView.image = profileImage
+        nextVC.nickNameTextField.text = nameString
+        nextVC.belongTextField.text = orgString
+        nextVC.emailTextField.text = emailString
+        // 자기소개가 있다면 넘김
+        if introduceString != nil {
+            nextVC.introduceTextField.text = introduceString
+            nextVC.introduceTextField.textColor = .mainBlack
+        } else {
+            nextVC.introduceTextField.text = "100자 이내로 작성해주세요"
+            nextVC.introduceTextField.textColor = .mainGray
         }
-        
+        // 사용자
+        nextVC.memberIdx = self.memberIdx
+        self.navigationController?.pushViewController(nextVC, animated: true)
     }
     
     @objc private func snsButtonDidTap(_ sender : UIButton) {
         // 화면 전환
         let nextVC = ProfileInputSNSVC()
         nextVC.memberIdx = memberIdx
-        
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
@@ -519,7 +504,6 @@ class ProfileVC: UIViewController {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/\(memberIdx)"
-        
         let authorization = "Bearer \(token ?? "")"
         
         // http 요청 헤더 지정
@@ -539,9 +523,7 @@ class ProfileVC: UIViewController {
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
-//                    print("성공(내프로필): \(response.message)")
                     let result = response.result
-                    
                     // 값 넣어주기
                     self.nameLabel.text = result?.nickName
                     self.belongLabel.text = result?.belong
@@ -580,16 +562,10 @@ class ProfileVC: UIViewController {
                         self.profileImageView.image = UIImage(named: "DefaultProfileImage")
                     }
                 } else {
-                    // 통신은 정상적으로 됐으나(200), error발생
                     print("실패(내프로필): \(response.message)")
                 }
             case .failure(let error):
-                // 실제 HTTP에러 404 또는 디코드 에러?
                 print("실패(AF-내프로필): \(error.localizedDescription)")
-                self.configureDummyData() // 임시
-                self.showSnsDefaultLabel()
-                self.showCareerDefaultLabel()
-                self.showEducationDefaultLabel()
             }
         }
     }
@@ -599,7 +575,6 @@ class ProfileVC: UIViewController {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/sns/\(memberIdx)"
-        
         let authorization = "Bearer \(token ?? "")"
         
         // http 요청 헤더 지정
@@ -623,7 +598,6 @@ class ProfileVC: UIViewController {
 //                    print("성공(SNS조회): \(response.message)")
                     let result = response.result
                     completion(result)
-                    
                 } else {
                     print("실패(SNS조회): \(response.message)")
                 }
@@ -638,7 +612,6 @@ class ProfileVC: UIViewController {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/career/\(memberIdx)"
-        
         let authorization = "Bearer \(token ?? "")"
         
         // http 요청 헤더 지정
@@ -677,7 +650,6 @@ class ProfileVC: UIViewController {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/education/\(memberIdx)"
-        
         let authorization = "Bearer \(token ?? "")"
         
         // http 요청 헤더 지정
@@ -711,11 +683,10 @@ class ProfileVC: UIViewController {
         }
     }
     
-    
     func showSnsDefaultLabel() {
         let snsCount = snsData.count
-        
         if (snsCount == 0) {
+            snsTableView.snp.removeConstraints()
             snsDefaultLabel.snp.updateConstraints {
                 $0.top.equalToSuperview().inset(12)
                 $0.centerX.equalToSuperview()
@@ -723,6 +694,7 @@ class ProfileVC: UIViewController {
             }
         }
         else {
+            snsDefaultLabel.snp.removeConstraints()
             snsTableView.snp.updateConstraints {
                 $0.top.equalToSuperview()
                 $0.leading.trailing.equalToSuperview()
@@ -731,10 +703,11 @@ class ProfileVC: UIViewController {
             }
         }
     }
+    
     func showCareerDefaultLabel() {
         let careerCount = careerData.count
-        
         if (careerCount == 0) {
+            careerTableView.snp.removeConstraints()
             careerDefaultLabel.snp.updateConstraints {
                 $0.top.equalToSuperview().inset(12)
                 $0.centerX.equalToSuperview()
@@ -748,11 +721,14 @@ class ProfileVC: UIViewController {
                 $0.bottom.equalTo(addCareerBtn.snp.top).offset(-12)
                 $0.height.equalTo(careerCount * 90)
             }
+            careerDefaultLabel.snp.removeConstraints()
         }
     }
+    
     func showEducationDefaultLabel() {
         let eduCount = eduData.count
         if (eduCount == 0) {
+            eduTableView.snp.removeConstraints()
             eduDefaultLabel.snp.updateConstraints {
                 $0.top.equalToSuperview().inset(12)
                 $0.centerX.equalToSuperview()
@@ -760,6 +736,7 @@ class ProfileVC: UIViewController {
             }
         }
         else {
+            eduDefaultLabel.snp.removeConstraints()
             eduTableView.snp.updateConstraints {
                 $0.top.equalToSuperview()
                 $0.leading.trailing.equalToSuperview()
@@ -769,28 +746,17 @@ class ProfileVC: UIViewController {
         }
     }
     
-    // TODO: API연동 후 삭제
-    func configureDummyData() {
-        nameLabel.text = "가람개비"
-        belongLabel.text = "가천대학교 소프트웨어학과"
-        emailLabel.text = "umc@gmail.com"
-        introduceLabel.text = "자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소개자기소."
-    }
 }
 // MARK: - Extension
 extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         if tableView == snsTableView {
-
             return snsData.count
         }
         else if tableView == careerTableView {
-            
             return careerData.count
         }
         else if tableView == eduTableView {
-            
             return eduData.count
         }
         else { return 0 }
@@ -800,7 +766,6 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
         if tableView == snsTableView { return 65 }
         else { return 90 }
     }
-    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
@@ -821,9 +786,7 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             cell.address = row.address
             
             cell.delegate = self
-            
             cell.selectionStyle = .none
-
             return cell
         }
         else if tableView == careerTableView {
@@ -831,7 +794,6 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             
             let row = careerData[indexPath.row]
             var endDate = ""
-            
             if row.isWorking == "TRUE" { // endDate가 nil이 옴
                 endDate = "현재"
             } else {
@@ -841,7 +803,6 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             cell.periodLabel.text = "\(row.startDate) ~ \(endDate)"
             cell.companyLabel.text = row.company
             cell.positionLabel.text = row.position
-            
             cell.id = 1 // 경력
             
             // 편집 데이터 넘기기
@@ -853,9 +814,7 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             cell.isWorking = row.isWorking
             
             cell.delegate = self
-            
             cell.selectionStyle = .none
-
             return cell
         }
         else if tableView == eduTableView {
@@ -873,7 +832,6 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             cell.companyLabel.text = row.institution
             cell.positionLabel.text = row.major
             cell.periodLabel.text = "\(row.startDate) ~ \(endDate)"
-            
             cell.id = 2 // 교육
             
             // 편집 데이터 넘기기
@@ -885,11 +843,9 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             cell.isWorking = row.isLearning
             
             cell.delegate = self
-            
             cell.selectionStyle = .none
             return cell
         }
-        
         return UITableViewCell()
     }
 }
@@ -918,6 +874,7 @@ extension ProfileVC: SnsButtonTappedDelegate {
         //
     }
 }
+
 extension ProfileVC: HistoryButtonTappedDelegate {
     func careerButtonDidTap(careerIdx: Int, company: String, position: String, startDate: String, endDate: String, isWorking: String) {
         // 화면 전환
@@ -1014,6 +971,5 @@ extension ProfileVC: HistoryButtonTappedDelegate {
 
         navigationController?.pushViewController(nextVC, animated: true)
     }
-    
     
 }
