@@ -23,14 +23,12 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     private var distance : CGFloat = 0
     
     // 유효성 검사
-    var nickName = String()
-    var isValidNickName = false {
+    var isValidNickName = true {
         didSet {
             self.validNickname()
         }
     }
-    var email = String()
-    var isValidEmail = false {
+    var isValidEmail = true {
         didSet {
             self.validEmail()
         }
@@ -38,10 +36,25 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     private let maxBelongCount = 18
     private var belongTextCount = 0 {
         didSet {
-            if belongTextCount > 18 {
-                belongTextCount -= 1
+            if belongTextCount > maxBelongCount {
+                belongTextCount = maxBelongCount - 1
+                belongTextCountLabel.text = "\(belongTextCount + 1)/\(maxBelongCount)"
             }
-            belongTextCountLabel.text = "\(belongTextCount)/\(maxBelongCount)"
+            else {
+                belongTextCountLabel.text = "\(belongTextCount)/\(maxBelongCount)"
+            }
+        }
+    }
+    private let maxIntroduceCount = 100
+    private var introduceTextCount = 0 {
+        didSet {
+            if introduceTextCount > maxIntroduceCount {
+                introduceTextCount = maxIntroduceCount - 1
+                introduceTextCountLabel.text = "\(introduceTextCount + 1)/\(maxIntroduceCount)"
+            }
+            else {
+                introduceTextCountLabel.text = "\(introduceTextCount)/\(maxIntroduceCount)"
+            }
         }
     }
     
@@ -75,28 +88,29 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         return button
     }()
     
-    let scrollView = UIScrollView()
+    lazy var scrollView = UIScrollView()
     
-    let contentView = UIView()
+    lazy var contentView = UIView()
     
-    let imagePicker = UIImagePickerController()
-    let profileImageView : UIImageView = {
+    lazy var imagePicker = UIImagePickerController()
+    lazy var profileImageView : UIImageView = {
         let view = UIImageView()
         view.layer.cornerRadius = 50
         
         // 이미지 centerCrop
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
-        view.image = UIImage(named: "DefaultProfileImage")
+        view.backgroundColor = .mainLightGray
+        //view.image = UIImage(named: "DefaultProfileImage")
         
         return view
     }()
-    let profilePlusImageView = UIImageView().then {
+    lazy var profilePlusImageView = UIImageView().then {
         $0.image = UIImage(named: "ProfilePlus")
         $0.layer.cornerRadius = 11
     }
     
-    let nickNameLabel = UILabel().then {
+    lazy var nickNameLabel = UILabel().then {
         $0.text = "닉네임 *"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
     }
@@ -117,7 +131,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.alpha = 0
     }
     
-    let belongLabel = UILabel().then {
+    lazy var belongLabel = UILabel().then {
         $0.text = "한 줄 소개 *"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
     }
@@ -134,12 +148,10 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     lazy var belongTextCountLabel = UILabel().then {
         $0.textColor = UIColor(hex: 0xAEAEAE)
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 12)
-        
-        guard let initialCount = belongTextField.text?.count else { return }
-        $0.text = "\(initialCount)/\(maxBelongCount)"
+        $0.text = "\(belongTextCount)/\(maxBelongCount)"
     }
     
-    let emailLabel = UILabel().then {
+    lazy var emailLabel = UILabel().then {
         $0.text = "이메일 *"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
     }
@@ -160,12 +172,12 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.alpha = 0
     }
     
-    let introduceLabel = UILabel().then {
+    lazy var introduceLabel = UILabel().then {
         $0.text = "자기소개"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
     }
     
-    let textViewPlaceHolder = "100자 이내로 작성해주세요"
+    lazy var textViewPlaceHolder = "100자 이내로 작성해주세요"
     lazy var introduceTextField = UITextView().then {
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.mainGray.cgColor
@@ -179,13 +191,14 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     lazy var introduceTextCountLabel = UILabel().then {
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 12)
         $0.textColor = UIColor(hex: 0xAEAEAE)
-        let count = introduceTextField.text.count
-        $0.text = "\(count)/100"
+        $0.text = "\(introduceTextCount)/\(maxIntroduceCount)"
     }
     
     lazy var editDoneBtn = UIButton().then {
         $0.basicButton()
         $0.setTitle("저장하기", for: .normal)
+        $0.isEnabled = false
+        $0.backgroundColor = .mainGray
         
         $0.addTarget(self, action: #selector(doneButtonDidTap), for: .touchUpInside)
     }
@@ -196,9 +209,20 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         view.backgroundColor = .white
+        allTextFieldFilledIn()
         configureLayouts()
         tapGesture()
         configureGestureRecognizer()
+        
+        // countLabel init
+        belongTextCount = belongTextField.text?.count ?? 0
+        if introduceTextField.text == textViewPlaceHolder,
+           introduceTextField.textColor == .mainGray {
+            introduceTextCount = 0
+        } else {
+            introduceTextCount = introduceTextField.text.count
+        }
+        
         
         // 엔터키 클릭시 키보드 내리기
         nickNameTextField.delegate = self
@@ -206,7 +230,8 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         emailTextField.delegate = self
         introduceTextField.delegate = self
         
-        NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: UITextField.textDidChangeNotification, object: belongTextField)
+        // 삭제, 밑에 setObserver에 있음
+//        NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: UITextField.textDidChangeNotification, object: belongTextField)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -418,10 +443,12 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         guard let editName = nickNameTextField.text else { return }
         guard let editOrg = belongTextField.text else { return }
         guard let editEmail = emailTextField.text else { return }
-        guard let editIntroduce = introduceTextField.text else { return }
-        guard let profileImage = profileImageView.image else { return }
-        
-        postMyInfo(memberIdx: memberIdx, nickName: editName, belong: editOrg, profileEmail: editEmail, content: editIntroduce, profileImage: profileImage) { result in
+        var editIntroduce = introduceTextField.text
+        var profileImage = profileImageView.image ?? UIImage(named: "DefaultProfileImage")
+        if introduceTextField.textColor == .mainGray {
+            editIntroduce = nil
+        }
+        postMyInfo(memberIdx: memberIdx, nickName: editName, belong: editOrg, profileEmail: editEmail, content: editIntroduce ?? nil, profileImage: profileImage) { result in
             if result {
                 self.navigationController?.popViewController(animated: true)
             }
@@ -429,7 +456,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     }
     
     // MARK: - [POST] 유저 정보 수정
-    func postMyInfo(memberIdx: Int, nickName: String, belong: String, profileEmail: String, content: String, profileImage: UIImage?, completion: @escaping ((Bool) -> Void)) {
+    func postMyInfo(memberIdx: Int, nickName: String, belong: String, profileEmail: String, content: String?, profileImage: UIImage?, completion: @escaping ((Bool) -> Void)) {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/edit"
@@ -440,23 +467,25 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             "Authorization": "Bearer \(token ?? "")"
         ]
         
-        let parameters: [String : Any] = [
+        let subParam: [String: Any] = [
             "memberIdx": String(memberIdx),
             "nickname": nickName,
             "belong" : belong,
             "profileEmail" : profileEmail,
             "content": content
         ]
-
-        print(parameters)
+        
+        let mainParam: [String: Any] = [
+            "info": subParam
+        ]
         
         AF.upload(multipartFormData: { multipartFormData in
-            for (key, value) in parameters { // 요청 바디에 있는 key, value 값을 for문을 통해 각각 multipartFormData 에 추가해서 전송
-                multipartFormData.append("\(value)".data(using: .utf8)!, withName: key, mimeType: "application/json")
+            for (key, value) in mainParam {
+                let paramData =  try! JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
+                multipartFormData.append(paramData, withName: key, mimeType: "application/json")
             }
             if let imageData = profileImage?.pngData() {
-//                print("이미지 있음")
-                multipartFormData.append(imageData, withName: "image", fileName: "\(imageData).png", mimeType: "image/png")
+                multipartFormData.append(imageData, withName: "image", fileName: "\(imageData).png", mimeType: "multipart/form-data")
             }
         }, to: url, method: .post, headers: header)
         .validate()
@@ -465,19 +494,20 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             case .success(let response):
                 if response.isSuccess {
                     print("성공(프로필수정): \(response.message)")
+                    completion(response.isSuccess)
                 } else {
                     print("실패(프로필수정): \(response.message)")
+                    completion(response.isSuccess)
                 }
             case .failure(let error):
-                print("실패(AF-프로필수정): \(error.localizedDescription)")
+                print("실패(AF-프로필수정): \(error)")
             }
         }
     }
     
     @objc func allTextFieldFilledIn() {
-        
         /* 모든 textField가 채워졌으면 프로필 저장 버튼 활성화 */
-        if self.nickNameTextField.text?.count != 0,
+        if self.isValidNickName,
            self.isValidEmail,
            self.belongTextField.text?.count != 0 {
             buttonActivated()
@@ -488,18 +518,14 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     
     @objc func textFieldEditingChanged(_ sender: UITextField) {
         let text = sender.text ?? ""
-        
         switch sender {
         case nickNameTextField:
             self.isValidNickName = text.isValidNickName()
-            self.nickName = text
         case emailTextField:
             self.isValidEmail = text.isValidEmail()
-            self.email = text
         default:
             fatalError("Missing TextField...")
         }
-
     }
 
     // 뒤로가기 버튼 did tap
@@ -601,17 +627,38 @@ extension ProfileEditVC {
     }
     
     @objc private func validTextCount(_ notification: Notification) {
+        // belongTextField일 때
         if let textField = notification.object as? UITextField {
-            if let text = textField.text {
-                if text.count > maxBelongCount {
-                    // 18글자 넘어가면 자동으로 키보드 내려감
-                    textField.resignFirstResponder()
+            if textField == belongTextField {
+                if let text = textField.text {
+                    if text.count > maxBelongCount {
+                        // 최대글자 넘어가면 자동으로 키보드 내려감
+                        textField.resignFirstResponder()
+                    }
+                    // 초과되는 텍스트 제거
+                    if text.count >= maxBelongCount {
+                        let index = text.index(text.startIndex, offsetBy: maxBelongCount)
+                        let newString = text[text.startIndex..<index]
+                        textField.text = String(newString)
+                    }
                 }
-                // 초과되는 텍스트 제거
-                if text.count >= maxBelongCount {
-                    let index = text.index(text.startIndex, offsetBy: maxBelongCount)
-                    let newString = text[text.startIndex..<index]
-                    textField.text = String(newString)
+            }
+        }
+        
+        // introduceTextField일 때
+        if let textField = notification.object as? UITextView {
+            if textField == introduceTextField {
+                if let text = textField.text {
+                    if text.count > maxIntroduceCount {
+                        // 최대글자 넘어가면 자동으로 키보드 내려감
+                        textField.resignFirstResponder()
+                    }
+                    // 초과되는 텍스트 제거
+                    if text.count >= maxIntroduceCount {
+                        let index = text.index(text.startIndex, offsetBy: maxIntroduceCount)
+                        let newString = text[text.startIndex..<index]
+                        textField.text = String(newString)
+                    }
                 }
             }
         }
@@ -619,13 +666,17 @@ extension ProfileEditVC {
 }
 extension ProfileEditVC: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.text == textViewPlaceHolder {
+        introduceTextField.layer.borderColor = UIColor.mainBlack.cgColor
+        // textView의 placeHolder임을 판단하기 위해 .mainGray까지 조건 써줘야함
+        if textView.text == textViewPlaceHolder,
+            textView.textColor == .mainGray {
             textView.text = nil
             textView.textColor = .mainBlack
         }
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
+        introduceTextField.layer.borderColor = UIColor.mainGray.cgColor
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             textView.text = textViewPlaceHolder
             textView.font = UIFont.NotoSansKR(type: .Regular, size: 14)
@@ -634,23 +685,29 @@ extension ProfileEditVC: UITextViewDelegate {
         }
     }
     
-    // TextView 글자수 제한
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        guard let str = textView.text else { return true }
-        let newLenght = str.count + text.count - range.length
-
-        introduceTextCountLabel.text = "\(str.count)/100"
-        return newLenght <= 100
+    func textViewDidChange(_ textView: UITextView) {
+        introduceTextCount = introduceTextField.text?.count ?? 0
+        NotificationCenter.default.post(name: Notification.Name("textDidChange"), object: textView)
     }
     
-    // 키보드
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
+    // 삭제해야함
+//    // TextView 글자수 제한
+//    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+//        guard let str = textView.text else { return true }
+//        let newLenght = str.count + text.count - range.length
+//
+//        introduceTextCountLabel.text = "\(str.count)/100"
+//        return newLenght <= 100
+//    }
+//
+//    // 키보드
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        self.view.endEditing(true)
+//    }
+//
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder() // TextField 비활성화
-        
         return true
     }
     
@@ -714,16 +771,17 @@ extension ProfileEditVC : UIImagePickerControllerDelegate, UINavigationControlle
 
 }
 
-
-extension UILabel {
-    func asColor(targetString: String, color: UIColor) {
-        let fullText = text ?? ""
-        let attributedString = NSMutableAttributedString(string: fullText)
-        let range = (fullText as NSString).range(of: targetString)
-        attributedString.addAttribute(.foregroundColor, value: color, range: range)
-        attributedText = attributedString
-    }
-}
+// 이건 왜 있는거임?
+//
+//extension UILabel {
+//    func asColor(targetString: String, color: UIColor) {
+//        let fullText = text ?? ""
+//        let attributedString = NSMutableAttributedString(string: fullText)
+//        let range = (fullText as NSString).range(of: targetString)
+//        attributedString.addAttribute(.foregroundColor, value: color, range: range)
+//        attributedText = attributedString
+//    }
+//}
 
 extension ProfileEditVC {
     private func configureGestureRecognizer() {
@@ -745,19 +803,18 @@ extension ProfileEditVC {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             
             var safeArea = self.view.frame
-            safeArea.size.height -= view.safeAreaInsets.top * 1.5 // 이 부분 조절하면서 스크롤 올리는 정도 변경
-            safeArea.size.height -= headerView.frame.height // scrollView 말고 view에 headerView가 있기때문에 제외
             safeArea.size.height += scrollView.contentOffset.y
             safeArea.size.height -= keyboardSize.height + (UIScreen.main.bounds.height*0.04) // Adjust buffer to your liking
             // determine which UIView was selected and if it is covered by keyboard
             
             let activeField: UIView? = [nickNameTextField, belongTextField, emailTextField, introduceTextField].first { $0.isFirstResponder }
             if let activeField = activeField {
-                if safeArea.contains(CGPoint(x: 0, y: activeField.frame.maxY)) {
+                if safeArea.contains(CGPoint(x: 0, y: activeField.frame.maxY + headerView.frame.maxY)) {
                     //print("No need to Scroll")
                     return
                 } else {
-                    distance = activeField.frame.maxY - safeArea.size.height
+                    distance = (activeField.frame.maxY + headerView.frame.maxY) - (safeArea.size.height + view.safeAreaInsets.top)
+                    distance += 10 // 여유공간 10px 만큼 더 스크롤
                     scrollOffset = scrollView.contentOffset.y
                     self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset + distance), animated: true)
                 }

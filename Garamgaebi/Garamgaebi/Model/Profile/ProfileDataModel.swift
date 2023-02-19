@@ -12,13 +12,13 @@ struct ProfileResponse: Decodable {
     let isSuccess: Bool
     let code: Int
     let message: String
-    let result: ProfileResult
+    let result: ProfileResult?
 }
 struct ProfileResult: Decodable {
     let memberIdx: Int
     let nickName: String
     let profileEmail: String
-    let belong: String
+    let belong: String?
     let content: String?
     let profileUrl: String?
 }

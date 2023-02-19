@@ -16,7 +16,20 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
     }
     
     // MARK: - Properties
-    var textCount: Int = 0
+    private var textCount: Int = 0 {
+        didSet {
+            if textCount > maxTextCount {
+                textCount = maxTextCount - 1
+                contentLengthLabel.text = "\(textCount + 1)/\(maxTextCount)"
+            }
+            else {
+                contentLengthLabel.text = "\(textCount)/\(maxTextCount)"
+            }
+        }
+    }
+    private let maxTextCount = 100
+    private var scrollOffset : CGFloat = 0
+    private var distance : CGFloat = 0
     
     // MARK: - Subviews
     lazy var headerView: UIView = {
@@ -44,6 +57,10 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         
         return button
     }()
+    
+    let scrollView = UIScrollView()
+    
+    let contentView = UIView()
     
     let noticeTitleLabel = UILabel().then {
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
@@ -93,9 +110,6 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
             $0.trailing.equalToSuperview().inset(12)
             $0.width.height.equalTo(35)
         }
-
-//        $0.addTarget(self, action: #selector(showBottomSheet), for: .editingDidBegin) -> 삭제예정
-        //$0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
     }
     
     let textViewPlaceHolder = "내용을 적어주세요"
@@ -103,7 +117,7 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.mainGray.cgColor
         $0.layer.cornerRadius = 12
-         $0.textContainerInset = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 16.0, right: 12.0)
+        $0.textContainerInset = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 16.0, right: 12.0)
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.text = textViewPlaceHolder
         $0.textColor = .mainGray
@@ -155,19 +169,36 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         configureGestureRecognizer()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setKeyboardObserver()
+        setObserver()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        setKeyboardObserverRemove()
+    }
     
     
     // MARK: - Functions
     private func configureLayouts() {
         view.backgroundColor = .white
         
-        // addSubview
-        [headerView, noticeTitleLabel, noticeLabel, emailTitleLabel, emailTextField, reasonTitleLabel, reasonTypeTextField, contentTextField, agreeCheckBtn, agreemsgLabel, sendBtn]
-            .forEach {view.addSubview($0)}
-        
+        // addSubview - HeaderView
+        view.addSubview(headerView)
         [titleLabel, backButton]
             .forEach {headerView.addSubview($0)}
-        view.addSubview(contentLengthLabel)
+        
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        scrollView.showsVerticalScrollIndicator = false
+        
+        // addSubview
+        [noticeTitleLabel, noticeLabel, emailTitleLabel, emailTextField, reasonTitleLabel, reasonTypeTextField, contentTextField, agreeCheckBtn, agreemsgLabel]
+            .forEach {contentView.addSubview($0)}
+        view.addSubview(sendBtn)
+        contentView.addSubview(contentLengthLabel)
         
         // layout
         
@@ -190,9 +221,24 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
             make.centerY.equalToSuperview()
         }
         
+        // scrollView
+        scrollView.snp.makeConstraints {
+            $0.top.equalTo(headerView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(sendBtn.snp.top)
+        }
+        
+        // contentView
+        contentView.snp.makeConstraints {
+            $0.left.right.equalTo(view)
+            $0.top.bottom.equalTo(scrollView)
+            $0.width.equalTo(scrollView)
+            $0.height.equalTo(scrollView)
+        }
+        
         noticeTitleLabel.snp.makeConstraints { /// 유의사항
-            $0.top.equalTo(headerView.snp.bottom).offset(16)
-            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.top.equalTo(scrollView).offset(16)
+            $0.leading.trailing.equalTo(contentView).inset(16)
         }
         noticeLabel.snp.makeConstraints { /// 안내
             $0.top.equalTo(noticeTitleLabel.snp.bottom).offset(8)
@@ -213,6 +259,12 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
             $0.top.equalTo(emailTextField.snp.bottom).offset(16)
             $0.leading.trailing.equalTo(emailTextField)
         }
+        
+        contentLengthLabel.snp.makeConstraints { /// 글자수 계산
+            $0.centerY.equalTo(reasonTitleLabel)
+            $0.trailing.equalToSuperview().inset(16)
+        }
+        
         reasonTypeTextField.snp.makeConstraints { /// 탈퇴 사유 입력
             $0.top.equalTo(reasonTitleLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalTo(reasonTitleLabel)
@@ -223,9 +275,6 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
             $0.top.equalTo(reasonTypeTextField.snp.bottom).offset(0)
             $0.leading.trailing.equalTo(emailTextField)
             $0.height.equalTo(0)
-        }
-        contentLengthLabel.snp.makeConstraints { /// 글자수 계산
-            $0.trailing.bottom.equalTo(contentTextField).inset(12)
         }
         
         agreeCheckBtn.snp.makeConstraints { /// 회원탈퇴 내용 숙지
@@ -238,7 +287,8 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         }
         
         sendBtn.snp.makeConstraints { /// 회원탈퇴 버튼
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
+            $0.height.equalTo(48)
+            $0.bottom.equalToSuperview().inset(16)
             $0.leading.trailing.equalTo(emailTextField)
         }
         
@@ -246,7 +296,8 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
     
     func typeSelect(type: String) {
         self.reasonTypeTextField.text = type
-        if (agreeCheckBtn.isSelected) {
+        if (agreeCheckBtn.isSelected &&
+            type != "기타") {
             buttonActivated()
         }
         if (type == "기타") {
@@ -271,6 +322,7 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
                 self?.contentLengthLabel.isHidden = true
             }
         }
+        
     }
     
     // 바텀시트 나타내기
@@ -344,6 +396,7 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
            self.agreeCheckBtn.isSelected { // 탈퇴 내용 숙지 동의 필수
             
             if reasonTypeTextField.text == "기타" { // 탈퇴 사유가 기타이면 내용 입력 글자가 있어야 버튼 활성화
+                
                 if textCount != 0 {
                     buttonActivated()
                 }
@@ -381,22 +434,47 @@ extension ProfileWithdrawalVC: UITextViewDelegate {
 
     // TextView 글자수 제한
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        guard let str = textView.text else { return true }
-        let newLenght = str.count + text.count - range.length
-        
         if contentTextField.text.isEmpty {
             buttonInactivated()
         }
         else if reasonTypeTextField.text?.count != 0,
+                contentTextField.text.count != 0,
                 agreeCheckBtn.isSelected {
             buttonActivated()
         }
-        
-        textCount = str.count
-        contentLengthLabel.text = "\(str.count)/100"
-        return newLenght <= 100
+        return true
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        textCount = contentTextField.text?.count ?? 0
+        NotificationCenter.default.post(name: Notification.Name("textViewDidChanged"), object: textView)
     }
 }
+
+extension ProfileWithdrawalVC {
+    func setObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(validTextCount(_:)), name: Notification.Name("textViewDidChanged"), object: nil)
+    }
+    
+    @objc private func validTextCount(_ notification: Notification) {
+        if let textView = notification.object as? UITextView {
+            if let text = textView.text {
+                if text.count > maxTextCount {
+                    // 100글자 넘어가면 자동으로 키보드 내려감
+                    textView.resignFirstResponder()
+                }
+                // 초과되는 텍스트 제거
+                if text.count >= maxTextCount {
+                    let index = text.index(text.startIndex, offsetBy: maxTextCount)
+                    let newString = text[text.startIndex..<index]
+                    textView.text = String(newString)
+                }
+            }
+        }
+    }
+}
+
+
 extension ProfileWithdrawalVC {
     private func configureGestureRecognizer() {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
@@ -421,5 +499,59 @@ extension ProfileWithdrawalVC {
         self.view.endEditing(true)
         reasonTypeTextField.layer.borderColor = UIColor.mainBlack.cgColor
         showBottomSheet()
+    }
+}
+
+extension ProfileWithdrawalVC {
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            
+            var safeArea = self.view.frame
+            //safeArea.size.height -= view.safeAreaInsets.top * 1.5 // 이 부분 조절하면서 스크롤 올리는 정도 변경
+            //safeArea.size.height -= headerView.frame.height // scrollView 말고 view에 headerView가 있기때문에 제외
+            safeArea.size.height += scrollView.contentOffset.y
+            safeArea.size.height -= keyboardSize.height + (UIScreen.main.bounds.height*0.04) // Adjust buffer to your liking
+            // determine which UIView was selected and if it is covered by keyboard
+            
+            let activeField: UIView? = [contentTextField].first { $0.isFirstResponder }
+            if let activeField = activeField {
+                if safeArea.contains(CGPoint(x: 0, y: activeField.frame.maxY + headerView.frame.maxY)) {
+                    print("No need to Scroll")
+                    return
+                } else {
+                    distance = (activeField.frame.maxY + headerView.frame.maxY) - (safeArea.size.height + view.safeAreaInsets.top)
+                    if activeField == contentTextField {
+                        distance += (agreemsgLabel.frame.height * 2) * 1.2 // 아래 체크버튼까지 보이게 키보드 올림 + 여유공간 20%
+                    }
+                    scrollOffset = scrollView.contentOffset.y
+                    print(scrollOffset)
+                    self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset + distance), animated: true)
+                }
+            }
+            // prevent scrolling while typing
+            scrollView.isScrollEnabled = false
+        }
+    }
+    
+    @objc private func keyboardWillHide() {
+        
+        if distance == 0 {
+            return
+        }
+        // return to origin scrollOffset
+//        self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset), animated: true)
+        self.scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        scrollOffset = 0
+        distance = 0
+        scrollView.isScrollEnabled = true
+    }
+    
+    func setKeyboardObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    func setKeyboardObserverRemove() {
+        NotificationCenter.default.removeObserver(self)
     }
 }

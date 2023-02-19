@@ -21,17 +21,23 @@ class InputCareerVC: UIViewController {
     private var companyTextCount = 0 {
         didSet {
             if companyTextCount > maxTextCount {
-                companyTextCount -= 1
+                companyTextCount = maxTextCount - 1
+                companyTextCountLabel.text = "\(companyTextCount + 1)/\(maxTextCount)"
             }
-            companyTextCountLabel.text = "\(companyTextCount)/\(maxTextCount)"
+            else {
+                companyTextCountLabel.text = "\(companyTextCount)/\(maxTextCount)"
+            }
         }
     }
     private var positionTextCount = 0 {
         didSet{
             if positionTextCount > maxTextCount {
-                positionTextCount -= 1
+                positionTextCount = maxTextCount - 1
+                positionTextCountLabel.text = "\(positionTextCount + 1)/\(maxTextCount)"
             }
-            positionTextCountLabel.text = "\(positionTextCount)/\(maxTextCount)"
+            else {
+                positionTextCountLabel.text = "\(positionTextCount)/\(maxTextCount)"
+            }
         }
     }
     private var startYearValue =  "0"

@@ -64,7 +64,7 @@ class ProfileVC: UIViewController {
         $0.clipsToBounds = true
         
         $0.layer.cornerRadius = 50
-        $0.image = UIImage(named: "DefaultProfileImage")
+        $0.backgroundColor = .mainLightGray
     }
     
     let nameLabel = UILabel().then {
@@ -355,6 +355,7 @@ class ProfileVC: UIViewController {
         introduceLabel.snp.makeConstraints { /// 자기소개
             $0.top.equalTo(profileStackView.snp.bottom).offset(16)
             $0.leading.trailing.equalTo(profileStackView)
+            $0.height.equalTo(introduceLabel.intrinsicContentSize)
         }
         
         profileEditBtn.snp.makeConstraints { /// 프로필 편집 버튼
@@ -445,28 +446,26 @@ class ProfileVC: UIViewController {
             // 화면 전환
             let nextVC = ProfileEditVC()
             
-            guard let nameString = self.nameLabel.text else { return }
-            guard let orgString = self.belongLabel.text else { return }
-            guard let emailString = self.emailLabel.text else { return }
-//            guard let introduceString = self.introduceLabel.text else { return }
-            
-//            guard let image = self.profileImageView.image else { return UIImage(named: "DefaultProfileImage") }
-//            var image = UIImage
-//            if let saveImage = self.profileImageView.image {
-//                image = saveImage
-//            } else {
-//                image = UIImage(named: "DefaultProfileImage")
-//            }
-//            print("image: \(image)")
+            let nameString = self.nameLabel.text ?? ""
+            let orgString = self.belongLabel.text ?? ""
+            let emailString = self.emailLabel.text ?? ""
+            let introduceString = self.introduceLabel.text
+            let profileImage = self.profileImageView.image ?? UIImage(named: "DefaultProfileImage")!
             
             // 값 넘기기
+            nextVC.profileImageView.image = profileImage
             nextVC.nickNameTextField.text = nameString
             nextVC.belongTextField.text = orgString
             nextVC.emailTextField.text = emailString
-//            nextVC.introduceTextField.text = introduceString
-//            nextVC.introduceTextField.textColor = .mainBlack
-//            nextVC.profileImageView.image = image
-            
+            // 자기소개가 있다면 넘김
+            if introduceString != nil {
+                nextVC.introduceTextField.text = introduceString
+                nextVC.introduceTextField.textColor = .mainBlack
+            } else {
+                nextVC.introduceTextField.text = "100자 이내로 작성해주세요"
+                nextVC.introduceTextField.textColor = .mainGray
+            }
+
             // 사용자
             nextVC.memberIdx = self.memberIdx
 
@@ -533,7 +532,6 @@ class ProfileVC: UIViewController {
         AF.request(
             url, // 주소
             method: .get, // 전송 타입
-            encoding: JSONEncoding.default, // 인코딩 스타일
             headers: header // 헤더 지정
         )
         .validate() // statusCode:  200..<300
@@ -545,28 +543,42 @@ class ProfileVC: UIViewController {
                     let result = response.result
                     
                     // 값 넣어주기
-                    self.nameLabel.text = result.nickName
-                    self.belongLabel.text = result.belong
-                    self.emailLabel.text = result.profileEmail
+                    self.nameLabel.text = result?.nickName
+                    self.belongLabel.text = result?.belong
+                    self.emailLabel.text = result?.profileEmail
                     // 자기소개
-                    if let userIntro = result.content { // 자기소개가 있으면
+                    if let userIntro = result?.content { // 자기소개
+                        //있으면 보이게
                         self.introduceLabel.text = userIntro
+                        self.introduceLabel.isHidden = false
+                        self.introduceLabel.snp.updateConstraints {
+                            $0.top.equalTo(self.profileStackView.snp.bottom).offset(16)
+                            $0.leading.trailing.equalTo(self.profileStackView)
+                            $0.height.equalTo(self.introduceLabel.intrinsicContentSize)
+                        }
                     } else { // 없으면 안 보이게
+                        self.introduceLabel.text = nil
                         self.introduceLabel.isHidden = true
-                        self.introduceLabel.snp.makeConstraints {
+                        self.introduceLabel.snp.updateConstraints {
                             $0.top.equalTo(self.profileStackView.snp.bottom)
                             $0.height.equalTo(0)
                         }
                     }
                     // 프로필 이미지
-                    if let urlString = result.profileUrl {
-                        
+                    if let urlString = result?.profileUrl {
+//                        let processor = DownsamplingImageProcessor(size: self.profileImageView.bounds.size)
+                        let processor = RoundCornerImageProcessor(cornerRadius: self.profileImageView.layer.cornerRadius)
                         let url = URL(string: urlString)
 
-                        self.profileImageView.kf.indicatorType = .activity
-                        self.profileImageView.kf.setImage(with: url)
+                        self.profileImageView.kf.setImage(with: url, options: [
+                            .processor(processor),
+                            .scaleFactor(UIScreen.main.scale),
+                            .transition(.fade(1)),
+                            .cacheOriginalImage
+                        ])
+                    } else {
+                        self.profileImageView.image = UIImage(named: "DefaultProfileImage")
                     }
-                    //completion(result)
                 } else {
                     // 통신은 정상적으로 됐으나(200), error발생
                     print("실패(내프로필): \(response.message)")
