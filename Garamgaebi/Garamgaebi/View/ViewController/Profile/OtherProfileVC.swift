@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import Then
 import Alamofire
+import Kingfisher
 
 class OtherProfileVC: UIViewController {
     
@@ -298,6 +299,7 @@ class OtherProfileVC: UIViewController {
         introduceLabel.snp.makeConstraints { /// 자기소개
             $0.top.equalTo(profileStackView.snp.bottom).offset(16)
             $0.leading.trailing.equalTo(profileStackView)
+            $0.height.equalTo(introduceLabel.intrinsicContentSize)
         }
         
         // 하단
@@ -341,7 +343,6 @@ class OtherProfileVC: UIViewController {
         AF.request(
             url, // 주소
             method: .get, // 전송 타입
-            encoding: JSONEncoding.default, // 인코딩 스타일
             headers: header // 헤더 지정
         )
         .validate()
@@ -349,29 +350,44 @@ class OtherProfileVC: UIViewController {
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
-
+                    
                     let result = response.result
                     
                     // 값 넣어주기
-                    self.nameLabel.text = result.nickName
-                    self.belongLabel.text = result.belong
-                    self.emailLabel.text = result.profileEmail
+                    self.nameLabel.text = result?.nickName
+                    self.belongLabel.text = result?.belong
+                    self.emailLabel.text = result?.profileEmail
                     // 자기소개
-                    if let userIntro = result.content { // 자기소개가 있으면
+                    if let userIntro = result?.content { // 자기소개
+                        //있으면 보이게
                         self.introduceLabel.text = userIntro
+                        self.introduceLabel.isHidden = false
+                        self.introduceLabel.snp.updateConstraints {
+                            $0.top.equalTo(self.profileStackView.snp.bottom).offset(16)
+                            $0.leading.trailing.equalTo(self.profileStackView)
+                            $0.height.equalTo(self.introduceLabel.intrinsicContentSize)
+                        }
                     } else { // 없으면 안 보이게
+                        self.introduceLabel.text = nil
                         self.introduceLabel.isHidden = true
-                        self.introduceLabel.snp.makeConstraints { make in
-                            make.top.equalTo(self.profileStackView.snp.bottom)
-                            make.height.equalTo(0)
+                        self.introduceLabel.snp.updateConstraints {
+                            $0.top.equalTo(self.profileStackView.snp.bottom)
+                            $0.height.equalTo(0)
                         }
                     }
                     // 프로필 이미지
-                    if let urlString = result.profileUrl {
+                    if let urlString = result?.profileUrl {
+                        let processor = RoundCornerImageProcessor(cornerRadius: self.profileImageView.layer.cornerRadius)
                         let url = URL(string: urlString)
                         
-                        self.profileImageView.kf.indicatorType = .activity
-                        self.profileImageView.kf.setImage(with: url)
+                        self.profileImageView.kf.setImage(with: url, options: [
+                            .processor(processor),
+                            .scaleFactor(UIScreen.main.scale),
+                            .transition(.fade(1)),
+                            .cacheOriginalImage
+                        ])
+                    } else {
+                        self.profileImageView.image = UIImage(named: "DefaultProfileImage")
                     }
                 } else {
                     print("실패(\(self.memberIdx) 프로필): \(response.message)")
