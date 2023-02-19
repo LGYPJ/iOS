@@ -102,7 +102,8 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         // 이미지 centerCrop
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
-        view.image = UIImage(named: "DefaultProfileImage")
+        view.backgroundColor = .mainLightGray
+        //view.image = UIImage(named: "DefaultProfileImage")
         
         return view
     }()
@@ -441,10 +442,12 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         guard let editName = nickNameTextField.text else { return }
         guard let editOrg = belongTextField.text else { return }
         guard let editEmail = emailTextField.text else { return }
-        guard let editIntroduce = introduceTextField.text else { return }
-        guard let profileImage = profileImageView.image else { return }
-        
-        postMyInfo(memberIdx: memberIdx, nickName: editName, belong: editOrg, profileEmail: editEmail, content: editIntroduce, profileImage: profileImage) { result in
+        var editIntroduce = introduceTextField.text
+        var profileImage = profileImageView.image ?? UIImage(named: "DefaultProfileImage")
+        if introduceTextField.textColor == .mainGray {
+            editIntroduce = nil
+        }
+        postMyInfo(memberIdx: memberIdx, nickName: editName, belong: editOrg, profileEmail: editEmail, content: editIntroduce ?? nil, profileImage: profileImage) { result in
             if result {
                 self.navigationController?.popViewController(animated: true)
             }
@@ -452,7 +455,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     }
     
     // MARK: - [POST] 유저 정보 수정
-    func postMyInfo(memberIdx: Int, nickName: String, belong: String, profileEmail: String, content: String, profileImage: UIImage?, completion: @escaping ((Bool) -> Void)) {
+    func postMyInfo(memberIdx: Int, nickName: String, belong: String, profileEmail: String, content: String?, profileImage: UIImage?, completion: @escaping ((Bool) -> Void)) {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/edit"
