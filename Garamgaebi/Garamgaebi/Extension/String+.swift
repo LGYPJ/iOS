@@ -75,5 +75,7 @@ extension String {
 		return  str
 	}
     
-    
+    func removeString(target string: String) -> String {
+        return components(separatedBy: string).joined()
+    }
 }

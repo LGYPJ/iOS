@@ -772,10 +772,8 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileSNSTableViewCell.identifier, for: indexPath) as? ProfileSNSTableViewCell else { return UITableViewCell()}
             
             let row = snsData[indexPath.row]
-            let type = row.type
-            if type != nil {
-                cell.snsTypeLable.text = type
-            } else { cell.snsTypeLable.text = "기타" }
+            
+            cell.snsTypeLabel.text = row.type
             cell.snsLinkLabel.text = row.address
             cell.copyButton.isHidden = true
             
@@ -860,11 +858,31 @@ extension ProfileVC: SnsButtonTappedDelegate {
         nextVC.editButtonStackView.isHidden = false
         nextVC.saveUserProfileButton.isHidden = true
         
+        var newAddress = address
+        
+        // SNS 유형 처리
+        switch (type) {
+        case "인스타그램":
+            newAddress = address.removeString(target: "@")
+            nextVC.instagramAtLabel.isHidden = false
+            nextVC.linkTextField.placeholder = "인스타그램 아이디를 입력해주세요"
+            let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 28, height: (nextVC.linkTextField.frame.height)))
+            nextVC.linkTextField.leftView = paddingView
+        case "블로그":
+            print()
+        case "깃허브":
+            print()
+        default: // 직접 입력
+            nextVC.typeTextField.placeholder = "SNS 종류를 직접 입력해주세요"
+            nextVC.isAutoInput = true
+            nextVC.autoInputTextCountLabel.isHidden = false
+        }
+        
         // 값 넘기기
         nextVC.memberIdx = memberIdx
         nextVC.snsIdx = snsIdx
         nextVC.typeTextField.text = type
-        nextVC.linkTextField.text = address
+        nextVC.linkTextField.text = newAddress
 
         navigationController?.pushViewController(nextVC, animated: true)
     }

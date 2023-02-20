@@ -356,7 +356,10 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
     // sns 수정 버튼
     @objc private func editButtonDidTap(_ sender: UIButton) {
         guard let type = typeTextField.text else { return }
-        guard let address = linkTextField.text else { return }
+        var address = linkTextField.text ?? ""
+        if type == "인스타그램" {
+            address = "@" + address
+        }
         
         ProfileHistoryViewModel.patchSNS(snsIdx: snsIdx, type: type, address: address ) { result in
             if result {
