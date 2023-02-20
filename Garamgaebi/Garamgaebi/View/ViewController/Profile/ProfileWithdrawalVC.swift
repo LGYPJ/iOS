@@ -30,6 +30,7 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
     private let maxTextCount = 100
     private var scrollOffset : CGFloat = 0
     private var distance : CGFloat = 0
+    private var category: String = ""
     
     // MARK: - Subviews
     lazy var headerView: UIView = {
@@ -322,6 +323,16 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
                 self?.contentLengthLabel.isHidden = true
             }
         }
+        switch(type) {
+        case "이용이 불편해서":
+            category = "UNCOMFORTABLE"
+        case "사용 빈도가 낮아서":
+            category = "UNUSED"
+        case "콘텐츠 내용이 부족해서":
+            category = "CONTENT_LACK"
+        default:
+            category = "ETC"
+        }
         
     }
     
@@ -349,13 +360,21 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
     
     // 회원탈퇴 버튼 did tap
     @objc private func withdrawalButtonDidTap() {
-        //TODO: 회원탈퇴 진행
+        let memberIdx = UserDefaults.standard.integer(forKey: "memberIdx")
+        var content = contentTextField.text
+        if contentTextField.textColor == .mainGray {
+            content = "nil"
+        }
         
-        // 회원 탈퇴가 끝나면 간편 로그인 화면으로 이동
-        let nextVC = LoginVC()
-        
-        nextVC.modalPresentationStyle = .currentContext
-        present(nextVC, animated: true)
+        ProfileServiceViewModel.postWithdrawl(memberIdx: memberIdx, content: content, category: category) { result in
+            if result {
+                // 회원 탈퇴가 끝나면 간편 로그인 화면으로 이동
+                let nextVC = LoginVC()
+                
+                nextVC.modalPresentationStyle = .currentContext
+                self.present(nextVC, animated: true)
+            }
+        }
     }
     
     @objc
