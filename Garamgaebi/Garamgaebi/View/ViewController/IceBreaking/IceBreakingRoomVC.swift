@@ -356,7 +356,7 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 			let cellData = userList[indexPath.row]
 			
 			cell.nameLabel.text = cellData.nickname.maxLength(length: 5)  // 5글자 이후 ...으로
-			cell.profileImageView.kf.setImage(with: URL(string: cellData.profileUrl ?? ""), placeholder: UIImage(named: "DefaultProfileImage"))
+			cell.profileImageView.kf.setImage(with: URL(string: cellData.profileUrl ?? ""), placeholder: UIImage(named: "DefaultProfileImage"), options: [.forceRefresh])
 			
 			// userCollectionView에서 차례인 유저 파란 테두리로 표시
 			if indexPath.row == currentIndex % userList.count && isStart {
