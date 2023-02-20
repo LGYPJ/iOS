@@ -15,8 +15,6 @@ import Kingfisher
 class OtherProfileVC: UIViewController {
     
     // MARK: - Properties
-
-    // TODO: memberIdx 넘겨받기
     var memberIdx: Int // 넘겨받은 memberIdx
 
     let token = UserDefaults.standard.string(forKey: "BearerToken")
@@ -184,8 +182,28 @@ class OtherProfileVC: UIViewController {
         return view
     }()
     
-    // MARK: - LifeCycles
+    // 에러
+    lazy var errorImageView = UIImageView().then {
+        $0.image = UIImage(named: "AlertImage")
+    }
+    lazy var errorTitle = UILabel().then {
+        $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+        $0.textColor = .mainBlack
+        $0.textAlignment = .center
+        $0.text = "사용자를 찾을 수 없습니다"
+    }
+    lazy var errorDesc = UILabel().then {
+        $0.font = UIFont.NotoSansKR(type: .Regular, size: 12)
+        $0.textColor = .mainBlack
+        $0.textAlignment = .center
+        $0.text = "탈퇴하거나 차단된 사용자입니다"
+    }
+    lazy var errorMsgStackView = UIStackView().then {
+        [errorTitle, errorDesc].forEach($0.addArrangedSubview(_:))
+        $0.axis = .vertical
+    }
     
+    // MARK: - LifeCycles
     init(memberIdx: Int) {
         self.memberIdx = memberIdx
         super.init(nibName: nil, bundle: nil)
@@ -249,6 +267,11 @@ class OtherProfileVC: UIViewController {
         snsHistoryBox.addSubview(snsTableView)
         careerHistoryBox.addSubview(careerTableView)
         eduHistoryBox.addSubview(eduTableView)
+        
+        // error
+        [errorImageView, errorMsgStackView].forEach {
+            view.addSubview($0)
+        }
         
         // layer
         //headerView
@@ -391,6 +414,19 @@ class OtherProfileVC: UIViewController {
                     }
                 } else {
                     print("실패(\(self.memberIdx) 프로필): \(response.message)")
+                    if (response.code == 2001) { // 존재하지 않는 회원
+                        self.scrollView.snp.removeConstraints()
+                        self.errorImageView.snp.makeConstraints {
+                            $0.height.width.equalTo(70)
+                            $0.centerX.equalToSuperview()
+                            $0.bottom.equalTo(self.errorMsgStackView.snp.top).offset(-16)
+                        }
+                        self.errorMsgStackView.snp.makeConstraints {
+                            $0.centerX.equalToSuperview()
+                            $0.centerY.equalToSuperview().offset(20)
+                            $0.width.equalTo(380)
+                        }
+                    }
                 }
             case .failure(let error):
                 print("실패(AF-\(self.memberIdx) 프로필): \(error.localizedDescription)")
