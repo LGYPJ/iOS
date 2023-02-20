@@ -70,7 +70,7 @@ extension String {
 				 location: 0,
 				 length: nsString.length > length ? length : nsString.length)
 			)
-			str += "..."
+			str += ".."
 		}
 		return  str
 	}
