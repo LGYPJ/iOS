@@ -639,8 +639,8 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
             
             let type = snsData[indexPath.row].type
             if type != nil {
-                cell.snsTypeLable.text = type
-            } else { cell.snsTypeLable.text = "기타" }
+                cell.snsTypeLabel.text = type
+            } else { cell.snsTypeLabel.text = "기타" }
             cell.snsLinkLabel.text = snsData[indexPath.row].address
             cell.editButton.isHidden = true
             

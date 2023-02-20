@@ -32,7 +32,7 @@ class ProfileSNSTableViewCell: UITableViewCell {
     var address: String?
     
     // MARK: - Subviews
-    lazy var snsTypeLable = UILabel().then {
+    lazy var snsTypeLabel = UILabel().then {
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 14)
         $0.textColor = .mainBlack
     }
@@ -43,7 +43,7 @@ class ProfileSNSTableViewCell: UITableViewCell {
     }
     
     lazy var snsStackView = UIStackView().then {
-        [snsTypeLable, snsLinkLabel].forEach($0.addArrangedSubview(_:))
+        [snsTypeLabel, snsLinkLabel].forEach($0.addArrangedSubview(_:))
         $0.axis = .vertical
         $0.spacing = 4
     }
