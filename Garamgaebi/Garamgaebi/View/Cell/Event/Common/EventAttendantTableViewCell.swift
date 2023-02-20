@@ -206,14 +206,28 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 				NotificationCenter.default.post(name: Notification.Name("programId:\(programId)"), object: false)
 			}
 			
-			let cellData = self.networkingAttendants[indexPath.row]
-			cell.profileImageView.kf.indicatorType = .activity
-			cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg ?? ""), placeholder: UIImage(named: "DefaultProfileImage"), options: [.forceRefresh])
-			cell.userNameLabel.text = cellData.nickname.maxLength(length: 5)
 			
+			
+			
+			
+			// 자신이 참여중인경우 파란테두리
 			if indexPath.row == 0 && isUserApply {
 				cell.profileImageView.layer.borderWidth = 2
 				cell.userNameLabel.textColor = .mainBlue
+			}
+			
+			// 탈퇴한 회원 처리
+			if networkingAttendants[indexPath.row].nickname == "-" {
+				cell.profileImageView.image = UIImage(named: "ExitProfileImage")
+				cell.userNameLabel.text = "알 수 없음"
+				cell.userNameLabel.textColor = .mainGray
+			} else {
+				let cellData = self.networkingAttendants[indexPath.row]
+				
+				cell.profileImageView.kf.indicatorType = .activity
+				cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg ?? ""), placeholder: UIImage(named: "DefaultProfileImage"), options: [.forceRefresh])
+				cell.userNameLabel.text = cellData.nickname.maxLength(length: 5)
+				cell.userNameLabel.textColor = .mainBlack
 			}
 		}
 		
