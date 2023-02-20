@@ -42,6 +42,12 @@ class ProfileSNSTableViewCell: UITableViewCell {
         $0.textAlignment = .left
     }
     
+    lazy var snsStackView = UIStackView().then {
+        [snsTypeLable, snsLinkLabel].forEach($0.addArrangedSubview(_:))
+        $0.axis = .vertical
+        $0.spacing = 4
+    }
+    
     lazy var editButton = UIButton().then {
         $0.setImage(UIImage(named: "ProfileEdit"), for: .normal)
         
@@ -57,8 +63,7 @@ class ProfileSNSTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
 //        contentView
-        self.contentView.addSubview(snsTypeLable)
-        self.contentView.addSubview(snsLinkLabel)
+        self.contentView.addSubview(snsStackView)
         self.contentView.addSubview(editButton)
         self.contentView.addSubview(copyButton)
       
@@ -68,14 +73,9 @@ class ProfileSNSTableViewCell: UITableViewCell {
     
     func configureSubViewLayouts() {
         
-        snsTypeLable.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(12)
+        snsStackView.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().inset(12)
-        }
-        snsLinkLabel.snp.makeConstraints {
-            $0.top.equalTo(snsTypeLable.snp.bottom).offset(4)
-            $0.leading.equalTo(snsTypeLable)
-            $0.bottom.equalToSuperview().inset(12)
         }
         copyButton.snp.makeConstraints {
             $0.centerY.equalTo(editButton)
