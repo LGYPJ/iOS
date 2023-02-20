@@ -15,10 +15,7 @@ class RecommendUsersInfoTableViewCell: UITableViewCell {
     
     // MARK: - Properties
     static let identifier = String(describing: RecommendUsersInfoTableViewCell.self)
-    static let cellHeight = 254.0
-    
-    //let dataList = HomeUserDataModel.list
-    //var recommedUsersList: [RecommendUsersInfo] = []
+    static var cellHeight = 254.0
     
     public var recommendUsersList: [RecommendUsersInfo] = [] {
         didSet {
@@ -39,9 +36,7 @@ class RecommendUsersInfoTableViewCell: UITableViewCell {
     private let collectionViewFlowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        //layout.minimumLineSpacing = 18.0
         layout.minimumInteritemSpacing = 0
-        //layout.itemSize = .init(width: 300, height: cellHeight)
         return layout
     }()
     
@@ -59,9 +54,34 @@ class RecommendUsersInfoTableViewCell: UITableViewCell {
         return view
     }()
     
+    lazy var zeroDataBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.borderColor = UIColor.mainGray.withAlphaComponent(0.8).cgColor
+        view.layer.borderWidth = 1
+        view.layer.cornerRadius = 12
+        return view
+    }()
+    
+    lazy var zeroDataImage: UIImageView = {
+        let img = UIImageView()
+        img.image = UIImage(named: "warning")?.withTintColor(UIColor.mainGray.withAlphaComponent(0.8))
+        return img
+    }()
+    
+    lazy var zeroDataDescriptionLabel: UILabel = {
+        let label = UILabel()
+        label.text = "가람개비 유저가 없습니다."
+        label.numberOfLines = 1
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        label.textColor = .mainGray.withAlphaComponent(0.8)
+        label.textAlignment = .center
+        return label
+    }()
+    
     lazy var interSpcace: UIView = {
         let view = UIView()
-        view.backgroundColor = .mainLightGray
+        view.backgroundColor = UIColor(hex: 0xEBF0F6)
         return view
     }()
     
@@ -71,8 +91,11 @@ class RecommendUsersInfoTableViewCell: UITableViewCell {
         self.collectionView.delegate = self
         
         self.contentView.addSubview(titleLabel)
-        
         self.contentView.addSubview(collectionView)
+        
+        self.contentView.addSubview(zeroDataBackgroundView)
+        zeroDataBackgroundView.addSubview(zeroDataImage)
+        zeroDataBackgroundView.addSubview(zeroDataDescriptionLabel)
         
         self.contentView.addSubview(interSpcace)
         
@@ -80,24 +103,66 @@ class RecommendUsersInfoTableViewCell: UITableViewCell {
         configNotificationCenter()
         
     }
-    
+
     func configSubViewLayouts() {
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(16)
+            make.top.equalToSuperview().offset(16)
             make.left.equalToSuperview().inset(16)
+            make.height.equalTo(26)
         }
         
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(12)
             make.centerX.equalToSuperview()
             make.width.equalToSuperview()
-            make.height.equalTo(184)
+            make.height.equalTo(174)
+        }
+        
+        zeroDataBackgroundView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(12)
+            make.left.right.equalToSuperview().inset(16)
+            make.height.equalTo(120)
+        }
+        
+        zeroDataImage.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().inset(24)
+        }
+        zeroDataDescriptionLabel.snp.makeConstraints { make in
+            make.top.equalTo(zeroDataImage.snp.bottom).offset(8)
+            make.centerX.equalToSuperview()
         }
                 
         interSpcace.snp.makeConstraints { make in
-            make.top.equalTo(collectionView.snp.bottom).offset(16)
+            make.top.equalTo(zeroDataBackgroundView.snp.bottom).offset(16)
             make.left.right.equalToSuperview()
             make.height.equalTo(8)
+        }
+    }
+    
+    private func configureZeroCell() {
+        if recommendUsersList.count == 0 {
+            // 부모 셀 높이 가변설정 (유저가 하나도 없을 때)
+            RecommendUsersInfoTableViewCell.cellHeight = 190
+            interSpcace.snp.removeConstraints()
+            interSpcace.snp.updateConstraints { make in
+                make.top.equalTo(zeroDataBackgroundView.snp.bottom).offset(16)
+                make.left.right.equalToSuperview()
+                make.height.equalTo(8)
+            }
+            collectionView.isHidden = true
+            zeroDataBackgroundView.isHidden = false
+        } else {
+            // 부모 셀 높이 가변설정 (유저 1명이상 존재할 때)
+            RecommendUsersInfoTableViewCell.cellHeight = 254.0
+            interSpcace.snp.removeConstraints()
+            interSpcace.snp.updateConstraints { make in
+                make.top.equalTo(collectionView.snp.bottom).offset(26)
+                make.left.right.equalToSuperview()
+                make.height.equalTo(8)
+            }
+            collectionView.isHidden = false
+            zeroDataBackgroundView.isHidden = true
         }
     }
     
@@ -108,6 +173,7 @@ class RecommendUsersInfoTableViewCell: UITableViewCell {
     @objc func presentRecommendUsersInfo(_ notification: NSNotification) {
         guard let recommendUsersListBase = notification.object as? [RecommendUsersInfo] else { return }
         recommendUsersList = recommendUsersListBase
+        configureZeroCell()
     }
     
 }
@@ -129,7 +195,7 @@ extension RecommendUsersInfoTableViewCell: UICollectionViewDataSource, UICollect
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 120, height: 184)
+        return CGSize(width: 120, height: 174)
     }
     
     func collectionView(_ collectionView: UICollectionView,
