@@ -16,7 +16,6 @@ class HomeVC: UIViewController {
     
     public var homeSeminarInfo: [HomeSeminarInfo] = [] {
         didSet {
-            // notification -> Cell
             NotificationCenter.default.post(name: Notification.Name("presentHomeSeminarInfo"), object: homeSeminarInfo)
             self.tableView.reloadData()
         }
@@ -24,7 +23,6 @@ class HomeVC: UIViewController {
     
     public var homeNetworkingInfo: [HomeNetworkingInfo] = [] {
         didSet {
-            // notification -> Cell
             NotificationCenter.default.post(name: Notification.Name("presentHomeNetworkingInfo"), object: homeNetworkingInfo)
             self.tableView.reloadData()
         }
@@ -32,17 +30,20 @@ class HomeVC: UIViewController {
     
     public var recommendUsersInfo: [RecommendUsersInfo] = [] {
         didSet {
-            // notification -> Cell
-            // API에서 얻는 11명중 본인을 필터링 한 후 10명을 생성 (전체유저가 10명 미만이라면 Error 가능성 있음)
-            recommendUsersInfo = Array(recommendUsersInfo.filter{$0.memberIdx != memberIdx}[0..<10])
-            NotificationCenter.default.post(name: Notification.Name("presentRecommendUsersInfo"), object: recommendUsersInfo)
+            // 본인 필터링
+            var usersInfo = recommendUsersInfo.filter{$0.memberIdx != memberIdx}
+            // 11명이면 1명 제외
+            if usersInfo.count == 11 {
+                usersInfo.remove(at: 0)
+            }
+            // 셔플해서 전달
+            NotificationCenter.default.post(name: Notification.Name("presentRecommendUsersInfo"), object: usersInfo.shuffled())
             self.tableView.reloadData()
         }
     }
     
     public var myEventInfo: [MyEventInfoReady] = [] {
         didSet {
-            // notification -> Cell
             NotificationCenter.default.post(name: Notification.Name("presentMyEventInfo"), object: myEventInfo)
             self.tableView.reloadData()
         }
@@ -71,7 +72,6 @@ class HomeVC: UIViewController {
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(pushNextView), for: .touchUpInside)
-        
         return button
     }()
     
@@ -104,20 +104,16 @@ class HomeVC: UIViewController {
     }
     
     
-    
     // MARK: - Functions
     
     func addSubViews() {
-        
         view.addSubview(headerView)
         headerView.addSubview(titleLabel)
         headerView.addSubview(notificationViewButton)
         view.addSubview(tableView)
-
     }
     
     func configLayouts() {
-        
         //headerView
         headerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
@@ -173,21 +169,18 @@ class HomeVC: UIViewController {
     }
     
     func configNotificationCenter() {
-        
         NotificationCenter.default.addObserver(self, selector: #selector(reloadDatas), name: Notification.Name("HomeTableViewReload"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(pushSeminarDetail(_:)), name: Notification.Name("pushSeminarDetailVC"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(pushNetworkingDetail(_:)), name: Notification.Name("pushNetworkingDetailVC"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(postScrollDirection), name: Notification.Name("getScrollDirection"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(postOtherProfileMemberIdx(_:)), name: Notification.Name("postOtherProfileMemberIdx"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(pushEventPopUpView(_:)), name: Notification.Name("pushEventPopUpView"), object: nil)
-        
     }
 
     @objc private func pushNextView(_ sender: UIButton) {
         switch sender {
         case notificationViewButton:
             self.navigationController?.pushViewController(HomeNotificationVC(), animated: true)
-            
         default:
             print("error")
         }
@@ -195,20 +188,17 @@ class HomeVC: UIViewController {
     
     @objc func pushSeminarDetail(_ notification: NSNotification) {
         let detailInfo: MyEventToDetailInfo = notification.object as! MyEventToDetailInfo
-        
         self.navigationController?.pushViewController(EventSeminarDetailVC(seminarId: detailInfo.programIdx), animated: true)
         print("seminarId: \(detailInfo.programIdx)")
     }
     
     @objc func pushNetworkingDetail(_ notification: NSNotification) {
         let detailInfo: MyEventToDetailInfo = notification.object as! MyEventToDetailInfo
-        
         self.navigationController?.pushViewController(EventNetworkingDetailVC(networkingId: detailInfo.programIdx), animated: true)
     }
     
     @objc func postOtherProfileMemberIdx(_ notification: NSNotification) {
         let otherMemberIdx: Int = notification.object as! Int
-        
         self.navigationController?.pushViewController(OtherProfileVC(memberIdx: otherMemberIdx), animated: true)
     }
     
@@ -222,13 +212,10 @@ class HomeVC: UIViewController {
     
     @objc func pushEventPopUpView(_ notification: NSNotification) {
         let popUpVC: UIViewController = notification.object as! UIViewController
-        
         popUpVC.modalPresentationStyle = .overFullScreen
         popUpVC.modalTransitionStyle = .crossDissolve
         present(popUpVC, animated: true)
     }
-    
-    
 }
 
 
@@ -237,11 +224,6 @@ extension HomeVC {
     private func configureViews() {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = .systemBackground
-    }
-    
-    // 뒤로가기 버튼 did tap
-    @objc private func didTapBackBarButton() {
-        self.navigationController?.popViewController(animated: true)
     }
     
     private func configureTableView() {
