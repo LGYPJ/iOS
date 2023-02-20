@@ -245,7 +245,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 0:
-            return HomeEventInfoTableViewCell.cellHeight + 16.0
+            return HomeEventInfoTableViewCell.cellHeight + 8.0
         case 1:
             return RecommendUsersInfoTableViewCell.cellHeight + 8.0
         case 2:
