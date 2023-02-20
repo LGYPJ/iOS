@@ -176,9 +176,20 @@ class CompleteRegisterVC: UIViewController {
         print("로그인 된 socialEmail: \(usersocialEmail)")
 
         LoginViewModel.postLogin(socialEmail: usersocialEmail, completion: { [weak self] result in
-            UserDefaults.standard.set(result.accessToken, forKey: "BearerToken")
-            UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
-            self?.presentHome()
+            switch result {
+            case .success(let result):
+                if result.isSuccess {
+                    print("성공(로그인): \(result.message)")
+                    UserDefaults.standard.set(result.result?.accessToken, forKey: "BearerToken")
+                    UserDefaults.standard.set(result.result?.memberIdx, forKey: "memberIdx")
+                    self?.presentHome()
+                } else {
+                    print("실패(로그인): \(result.message)")
+                    print("버튼 다시 눌러보세요")
+                }
+            case .failure(let error):
+                print("실패(AF-로그인): \(error.localizedDescription)")
+            }
         })
 	}
     
