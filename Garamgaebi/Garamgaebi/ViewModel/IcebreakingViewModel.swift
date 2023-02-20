@@ -7,6 +7,7 @@
 
 import Alamofire
 
+// 유저 추가
 struct IceBreakingChangeUserModelResposne: Codable {
 	let isSuccess: Bool
 	let code: Int
@@ -19,6 +20,7 @@ struct IceBreakingChangeUserModel: Codable {
 	let currentImgIdx: Int
 }
 
+// 현재 유저 조회
 struct IceBrakingCurrentUserModelResponse: Codable {
 	let isSuccess: Bool
 	let code: Int
@@ -32,6 +34,15 @@ struct IceBrakingCurrentUserModel: Codable {
 	let profileUrl: String?
 }
 
+// 유저 삭제
+struct IceBreakingDeleteUserModelResponse: Codable {
+	let isSuccess: Bool
+	let code: Int
+	let message: String
+	let result: String?
+}
+
+// 이미지 불러오기
 struct IceBreakingImageModelResponse: Codable {
 	let isSuccess: Bool
 	let code: Int
@@ -39,6 +50,7 @@ struct IceBreakingImageModelResponse: Codable {
 	let result: [String]?
 }
 
+// 인덱스 PATCH
 struct IceBreakingPatchIndexModelResponse: Codable {
 	let isSuccess: Bool
 	let code: Int
@@ -111,7 +123,7 @@ struct IcebreakingViewModel {
 		
 		AF.request(url, method: .delete, parameters: body, encoding: JSONEncoding.default, headers: headers)
 			.validate()
-			.responseDecodable(of: IceBreakingChangeUserModelResposne.self) { response in
+			.responseDecodable(of: IceBreakingDeleteUserModelResponse.self) { response in
 				switch response.result {
 				case .success(let result):
 					if result.isSuccess {
@@ -122,6 +134,7 @@ struct IcebreakingViewModel {
 						completion()
 					}
 				case .failure(let error):
+					print(response.result)
 					print("실패(AF-게임 방 유저 삭제): \(error.localizedDescription)")
 				}
 			}
