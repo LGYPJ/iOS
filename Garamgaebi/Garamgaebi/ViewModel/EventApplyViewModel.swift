@@ -10,9 +10,6 @@ import Alamofire
 class EventApplyViewModel {
 	public static func postApplyProgram(memberId: Int, programId: Int, name: String, nickname: String, phone: String, completion: @escaping ((EventApplyModel) -> Void)) {
 		let url = "https://garamgaebi.shop/applies/programs/enroll"
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-        ]
 		let body: [String: Any] = [
 			"memberIdx": memberId,
 			"programIdx": programId,
@@ -21,7 +18,7 @@ class EventApplyViewModel {
 			"phone": phone
 		]
 		
-        AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers)
+        AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default, interceptor: MyRequestInterceptor())
 			.validate()
 			.responseDecodable(of: EventApplyModel.self) { response in
 				switch response.result {
