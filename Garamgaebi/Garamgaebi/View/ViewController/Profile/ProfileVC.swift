@@ -550,13 +550,12 @@ class ProfileVC: UIViewController {
                     if let urlString = result?.profileUrl {
 //                        let processor = DownsamplingImageProcessor(size: self.profileImageView.bounds.size)
                         let processor = RoundCornerImageProcessor(cornerRadius: self.profileImageView.layer.cornerRadius)
-                        let url = URL(string: urlString)
-
+                        guard let url = URL(string: urlString) else { return }
                         self.profileImageView.kf.setImage(with: url, options: [
                             .processor(processor),
                             .scaleFactor(UIScreen.main.scale),
-                            .transition(.fade(1)),
-                            .cacheOriginalImage
+                            .transition(.fade(0.5)),
+                            .forceRefresh
                         ])
                     } else {
                         self.profileImageView.image = UIImage(named: "DefaultProfileImage")
