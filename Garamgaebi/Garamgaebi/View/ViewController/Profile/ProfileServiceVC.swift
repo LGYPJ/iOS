@@ -390,6 +390,13 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         let nextVC = LoginVC()
         // 호출하는 화면의 크기와 동일한 화면크기로 불려짐. 기존의 뷰들은 아예 삭제
         nextVC.modalPresentationStyle = .currentContext
+        
+        // 로그아웃 시 UserDefaults에 저장된 모든 정보 삭제
+        for key in UserDefaults.standard.dictionaryRepresentation().keys {
+            UserDefaults.standard.removeObject(forKey: key.description)
+        }
+        print(">>> Remove All UserDefaults")
+        print("성공(로그아웃): 로그아웃에 성공하였습니다.")
         present(nextVC, animated: true)
     }
     
