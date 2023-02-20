@@ -555,13 +555,31 @@ class ProfileInputEducationVC: UIViewController {
     }
     // 교육 삭제 버튼
     @objc private func deleteButtonDidTap(_ sender: UIButton) {
-        ProfileHistoryViewModel.deleteEducation(educationIdx: educationIdx) { [self] result in
-            if result {
-                // 삭제 확인 다이얼로그 띄우기
-                self.alert.addAction(alertAction)
-                self.present(alert, animated: true, completion: nil)
+        // 삭제 동의 다이얼로그
+        let deleteCheckAlert = UIAlertController(title: "삭제하시겠습니까?", message: "", preferredStyle: .alert)
+        // 삭제 확인 다이얼로그
+        let alert = UIAlertController(title: "삭제가 완료되었습니다.", message: "", preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "닫기", style: .default) { (_) in
+            // 닫기 누르면 이전 화면으로
+            self.navigationController?.popViewController(animated: true)
+        }
+        
+        // 삭제 동의 선택지
+        let deleteNoAction = UIAlertAction(title: "아니오", style: .default, handler: nil)
+        let deleteYesAlertAction = UIAlertAction(title: "예", style: .default) { [self] (_) in
+            // 삭제 진행
+            ProfileHistoryViewModel.deleteEducation(educationIdx: self.educationIdx) { [self] result in
+                if result {
+                    // 삭제 확인 다이얼로그 띄우기
+                    alert.addAction(alertAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
             }
         }
+        // 삭제 동의 다이얼로그 띄우기
+        deleteCheckAlert.addAction(deleteNoAction)
+        deleteCheckAlert.addAction(deleteYesAlertAction)
+        self.present(deleteCheckAlert, animated: true, completion: nil)
     }
     
     func setCurrentYear() {
