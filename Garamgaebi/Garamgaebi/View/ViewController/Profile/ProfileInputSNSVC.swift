@@ -110,6 +110,15 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         
         return textField
     }()
+    lazy var instagramAtLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .mainBlack
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        label.text = "@"
+        label.isHidden = true
+        
+        return label
+    }()
     
     lazy var saveUserProfileButton: UIButton = {
         let button = UIButton()
@@ -201,7 +210,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         
         
         /* Labels */
-        [subtitleLinkLabel,subtitleTypeLabel, autoInputTextCountLabel].forEach {
+        [subtitleLinkLabel,subtitleTypeLabel, autoInputTextCountLabel, instagramAtLabel].forEach {
             view.addSubview($0)
         }
     }
@@ -256,6 +265,10 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
             make.height.equalTo(48)
             make.left.right.equalTo(typeTextField)
         }
+        instagramAtLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(linkTextField)
+            make.left.equalTo(linkTextField).offset(12)
+        }
         
         
         // saveUserProfileButton
@@ -274,17 +287,39 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
     }
     
     func typeSelect(type: String) { // 선택한 SNS 유형
-        if (type == "직접 입력") {
-            UIView.animate(withDuration: 0.33) { [weak self] in
+        switch(type) {
+        case "인스타그램":
+            UIView.animate(withDuration: 0.5) { [weak self] in
+                self?.typeTextField.text = type
+                self?.linkTextField.placeholder = "인스타그램 아이디를 입력해주세요"
+                // 링크 입력
+                let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 28, height: (self?.linkTextField.frame.height)!))
+                self?.linkTextField.leftView = paddingView
+                // 골뱅이 표시
+                self?.instagramAtLabel.isHidden = false
+            }
+            
+        case "직접 입력":
+            UIView.animate(withDuration: 0.5) { [weak self] in
                 self?.typeTextField.text = nil
                 self?.typeTextField.placeholder = "SNS 종류를 직접 입력해주세요"
                 self?.isAutoInput = true
                 self?.autoInputTextCountLabel.isHidden = false
+                //
+                self?.linkTextField.basicTextField()
+                self?.instagramAtLabel.isHidden = true
             }
             // 글자수 계산
             self.typeTextField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
-        } else {
-            self.typeTextField.text = type
+            
+        default:
+            UIView.animate(withDuration: 0.5) { [weak self] in
+                self?.typeTextField.text = type
+                self?.linkTextField.placeholder = "링크를 입력해주세요"
+                //
+                self?.linkTextField.basicTextField()
+                self?.instagramAtLabel.isHidden = true
+            }
         }
     }
     
@@ -307,7 +342,10 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
     // sns 추가 버튼
     @objc private func saveButtonDidTap(_ sender: UIButton) {
         guard let type = typeTextField.text else { return }
-        guard let address = linkTextField.text else { return }
+        var address = linkTextField.text ?? ""
+        if type == "인스타그램" {
+            address = "@" + address
+        }
         
         ProfileHistoryViewModel.postSNS(memberIdx: memberIdx, type: type, address: address ) { result in
             if result {
@@ -441,7 +479,7 @@ extension ProfileInputSNSVC {
     }
     
     @objc private func viewDidQuestionTap() {
-        //TODO: 직접 입력 편집이 바로바로 안 됨
+        //TODO: 직접 입력 편집이 바로바로 안 됨 (포커스 문제?)
         typeTextField.layer.borderColor = UIColor.mainBlack.cgColor
         if (isAutoInput == false) {
             showBottomSheet()
