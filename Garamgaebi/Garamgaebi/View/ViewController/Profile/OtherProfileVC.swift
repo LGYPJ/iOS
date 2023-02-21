@@ -119,7 +119,7 @@ class OtherProfileVC: UIViewController {
         view.contentInset = .zero
         view.isScrollEnabled = false
     
-        view.layer.cornerRadius = 13 // 테스트
+        view.layer.cornerRadius = 18
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         
         view.register(ProfileSNSTableViewCell.self, forCellReuseIdentifier: ProfileSNSTableViewCell.identifier)
@@ -146,7 +146,7 @@ class OtherProfileVC: UIViewController {
         view.contentInset = .zero
         view.isScrollEnabled = false
         
-        view.layer.cornerRadius = 14 // 테스트
+        view.layer.cornerRadius = 18
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         
         view.register(ProfileHistoryTableViewCell.self, forCellReuseIdentifier: ProfileHistoryTableViewCell.identifier)
@@ -172,7 +172,7 @@ class OtherProfileVC: UIViewController {
         view.contentInset = .zero
         view.isScrollEnabled = false
         
-        view.layer.cornerRadius = 15 // 테스트
+        view.layer.cornerRadius = 18
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         
         view.register(ProfileHistoryTableViewCell.self, forCellReuseIdentifier: ProfileHistoryTableViewCell.identifier)
@@ -525,7 +525,7 @@ class OtherProfileVC: UIViewController {
             snsTableView.snp.makeConstraints {
                 $0.top.equalToSuperview().offset(47) // 헤더 크기
                 $0.leading.trailing.equalToSuperview().inset(1)
-                $0.bottom.equalToSuperview().inset(1)
+                $0.bottom.equalToSuperview().inset(0.5)
                 $0.height.equalTo(snsCount * 65)
             }
         }
@@ -543,7 +543,7 @@ class OtherProfileVC: UIViewController {
             careerTableView.snp.makeConstraints {
                 $0.top.equalToSuperview().offset(47) // 헤더 크기
                 $0.leading.trailing.equalToSuperview().inset(1)
-                $0.bottom.equalToSuperview().inset(1)
+                $0.bottom.equalToSuperview().inset(0.5)
                 $0.height.equalTo(careerCount * 90)
             }
         }
@@ -561,7 +561,7 @@ class OtherProfileVC: UIViewController {
             eduTableView.snp.makeConstraints {
                 $0.top.equalToSuperview().offset(47) // 헤더 크기
                 $0.leading.trailing.equalToSuperview().inset(1)
-                $0.bottom.equalToSuperview().inset(1)
+                $0.bottom.equalToSuperview().inset(0.5)
                 $0.height.equalTo(eduCount * 90)
             }
         }
