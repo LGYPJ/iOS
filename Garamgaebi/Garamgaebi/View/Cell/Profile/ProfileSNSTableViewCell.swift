@@ -76,6 +76,7 @@ class ProfileSNSTableViewCell: UITableViewCell {
         snsStackView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().inset(12)
+            $0.trailing.equalTo(copyButton.snp.leading)
         }
         copyButton.snp.makeConstraints {
             $0.centerY.equalTo(editButton)
