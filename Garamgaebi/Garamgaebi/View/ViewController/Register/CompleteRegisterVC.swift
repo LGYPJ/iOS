@@ -41,36 +41,6 @@ class CompleteRegisterVC: UIViewController {
         return label
     }()
     
-    lazy var checkAgreeAllButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("전체 동의하기", for: .normal)
-        button.setImage(UIImage(systemName: "square")?.withTintColor(UIColor(hex: 0xAEAEAE), renderingMode: .alwaysOriginal), for: .normal)
-        button.setImage(UIImage(systemName: "checkmark.square")?.withTintColor(UIColor(hex: 0x000000).withAlphaComponent(0.8), renderingMode: .automatic), for: .selected)
-        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -8)
-        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)
-        button.setTitleColor(UIColor(hex: 0x000000).withAlphaComponent(0.8), for: .normal)
-        button.titleLabel?.font = UIFont.NotoSansKR(type: .Medium, size: 14)
-        
-        button.clipsToBounds = true
-        button.addTarget(self, action: #selector(toggleButton), for: .touchUpInside)
-        return button
-    }()
-    
-    lazy var checkAgreeAgeButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("(필수) 만 14세 이상이에요", for: .normal)
-        button.setImage(UIImage(systemName: "square")?.withTintColor(UIColor(hex: 0xAEAEAE), renderingMode: .alwaysOriginal), for: .normal)
-        button.setImage(UIImage(systemName: "checkmark.square")?.withTintColor(UIColor(hex: 0x000000).withAlphaComponent(0.8), renderingMode: .automatic), for: .selected)
-        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -8)
-        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)
-        button.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
-        button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        
-        button.clipsToBounds = true
-        button.addTarget(self, action: #selector(toggleButton), for: .touchUpInside)
-        return button
-    }()
-
     lazy var checkAgreeTermsConditionsButton: UIButton = {
         let button = UIButton()
         button.setTitle("(필수) 이용약관 및 개인정보수집이용 동의", for: .normal)
@@ -80,7 +50,6 @@ class CompleteRegisterVC: UIViewController {
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)
         button.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
         button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(toggleButton), for: .touchUpInside)
         return button
@@ -116,11 +85,8 @@ class CompleteRegisterVC: UIViewController {
     func addSubViews() {
         /* Buttons */
         view.addSubview(presentHomeButton)
-        view.addSubview(checkAgreeAllButton)
-        view.addSubview(checkAgreeAgeButton)
         view.addSubview(checkAgreeTermsConditionsButton)
 
-        
         /* Labels */
         [titleLabel,descriptionLabel].forEach {
             view.addSubview($0)
@@ -128,7 +94,6 @@ class CompleteRegisterVC: UIViewController {
     }
     
     func configLayouts() {
-        
         // titleLabel
         titleLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
@@ -154,20 +119,6 @@ class CompleteRegisterVC: UIViewController {
         checkAgreeTermsConditionsButton.snp.makeConstraints { make in
             make.left.equalTo(presentHomeButton.snp.left)
             make.bottom.equalTo(presentHomeButton.snp.top).offset(-25)
-            make.height.equalTo(20)
-        }
-        
-        // checkAgreeAgeButton
-        checkAgreeAgeButton.snp.makeConstraints { make in
-            make.left.equalTo(presentHomeButton.snp.left)
-            make.bottom.equalTo(checkAgreeTermsConditionsButton.snp.top).offset(-2)
-            make.height.equalTo(20)
-        }
-        
-        // checkAgreeAllButton
-        checkAgreeAllButton.snp.makeConstraints { make in
-            make.left.equalTo(presentHomeButton.snp.left)
-            make.bottom.equalTo(checkAgreeAgeButton.snp.top).offset(-2)
             make.height.equalTo(20)
         }
     }
@@ -221,16 +172,24 @@ class CompleteRegisterVC: UIViewController {
     }
 	
 	private func login() {
-        // 임시로 uniEmail, password 사용
-        //jrwedo@gachon.ac.kr
-        //1234
         let usersocialEmail = UserDefaults.standard.string(forKey: "socialEmail")!
         print("로그인 된 socialEmail: \(usersocialEmail)")
 
         LoginViewModel.postLogin(socialEmail: usersocialEmail, completion: { [weak self] result in
-            UserDefaults.standard.set(result.accessToken, forKey: "BearerToken")
-            UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
-            self?.presentHome()
+            switch result {
+            case .success(let result):
+                if result.isSuccess {
+                    print("성공(로그인): \(result.message)")
+                    UserDefaults.standard.set(result.result?.accessToken, forKey: "BearerToken")
+                    UserDefaults.standard.set(result.result?.memberIdx, forKey: "memberIdx")
+                    self?.presentHome()
+                } else {
+                    print("실패(로그인): \(result.message)")
+                    print("버튼 다시 눌러보세요")
+                }
+            case .failure(let error):
+                print("실패(AF-로그인): \(error.localizedDescription)")
+            }
         })
 	}
     
@@ -243,56 +202,29 @@ class CompleteRegisterVC: UIViewController {
     
     @objc
     private func presentHomeButtonTapped(_ sender: UIButton) {
-        // TODO: 모두 완료 후 login() 지우고, register() 활성화
-        /// 현재 로그인된 정보
-        /// memberIdx: 36
-        /// uniEmail: seutest@gachon.ac.kr
-        /// passwod: 1234
+        // TODO: 모두 완료 후 login() 지우기
         register()
-        
 //        login()
     }
     
     @objc
     private func toggleButton(_ sender: UIButton) {
         sender.isSelected.toggle()
-        switch sender {
-        case checkAgreeAllButton:
-            if checkAgreeAllButton.isSelected {
-                checkAgreeAgeButton.isSelected = true
-                checkAgreeTermsConditionsButton.isSelected = true
-                let vc = ServiceTermVC()
-                present(vc,animated: true)
-            }
-            else {
-                checkAgreeAgeButton.isSelected = false
-                checkAgreeTermsConditionsButton.isSelected = false
-            }
-        case checkAgreeAgeButton:
-            if !checkAgreeAgeButton.isSelected {
-                checkAgreeAllButton.isSelected = false
-            }
-        case checkAgreeTermsConditionsButton:
-            if !checkAgreeTermsConditionsButton.isSelected {
-                checkAgreeAllButton.isSelected = false
-            } else {
-                let vc = ServiceTermVC()
-                present(vc,animated: true)
-            }
-        default:
-            print("nothing")
-        }
         
-        if checkAgreeAgeButton.isSelected
-            && checkAgreeTermsConditionsButton.isSelected {
-            checkAgreeAllButton.isSelected = true
+        if checkAgreeTermsConditionsButton.isSelected {
             presentHomeButton.isEnabled = true
-            presentHomeButton.backgroundColor = .mainBlue
+            UIView.animate(withDuration: 0.33) {
+                self.presentHomeButton.backgroundColor = .mainBlue
+            }
+            let vc = ServiceTermVC()
+            present(vc,animated: true)
         } else {
             presentHomeButton.isEnabled = false
-            presentHomeButton.backgroundColor = .mainGray
+            UIView.animate(withDuration: 0.33) {
+                self.presentHomeButton.backgroundColor = .mainGray
+            }
+            
         }
-        
     }
 
 }
@@ -303,7 +235,6 @@ extension CompleteRegisterVC {
         tapGestureRecognizer.numberOfTapsRequired = 1
         tapGestureRecognizer.isEnabled = true
         tapGestureRecognizer.cancelsTouchesInView = false
-        
         view.addGestureRecognizer(tapGestureRecognizer)
     }
     

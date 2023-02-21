@@ -15,7 +15,7 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
     
     // MARK: - Properties
     static let identifier = String(describing: HomeMyEventInfoTableViewCell.self)
-    static var cellHeight = 100.0
+    static var cellHeight = 190.0
     
     public var myEventList: [MyEventInfoReady] = [] {
         didSet {
@@ -62,7 +62,7 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
     
     lazy var zeroDataImage: UIImageView = {
         let img = UIImageView()
-        img.image = UIImage(named: "today")
+        img.image = UIImage(named: "warning")
         img.tintColor = .mainGray.withAlphaComponent(0.8)
         return img
     }()
@@ -124,7 +124,6 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
         }
     }
     
-    // TODO: API 통신 후 수정
     private func configureZeroCell() {
         if myEventList.count == 0 {
             // 부모 셀 높이 가변설정 (모임이 하나도 없을 때)

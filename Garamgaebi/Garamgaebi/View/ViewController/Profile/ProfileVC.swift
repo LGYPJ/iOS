@@ -506,17 +506,18 @@ class ProfileVC: UIViewController {
         let url = "https://garamgaebi.shop/profile/\(memberIdx)"
         let authorization = "Bearer \(token ?? "")"
         
-        // http 요청 헤더 지정
-        let header : HTTPHeaders = [
-            "Content-Type": "application/json",
-            "Authorization": authorization
-        ]
+//        // http 요청 헤더 지정
+//        let header : HTTPHeaders = [
+//            "Content-Type": "application/json",
+//            "Authorization": authorization
+//        ]
         
         // httpBody에 parameters 추가
         AF.request(
             url, // 주소
             method: .get, // 전송 타입
-            headers: header // 헤더 지정
+//            headers: header // 헤더 지정
+            interceptor: MyRequestInterceptor()
         )
         .validate() // statusCode:  200..<300
         .responseDecodable(of: ProfileResponse.self) { response in
@@ -550,13 +551,12 @@ class ProfileVC: UIViewController {
                     if let urlString = result?.profileUrl {
 //                        let processor = DownsamplingImageProcessor(size: self.profileImageView.bounds.size)
                         let processor = RoundCornerImageProcessor(cornerRadius: self.profileImageView.layer.cornerRadius)
-                        let url = URL(string: urlString)
-
+                        guard let url = URL(string: urlString) else { return }
                         self.profileImageView.kf.setImage(with: url, options: [
                             .processor(processor),
                             .scaleFactor(UIScreen.main.scale),
-                            .transition(.fade(1)),
-                            .cacheOriginalImage
+                            .transition(.fade(0.5)),
+                            .forceRefresh
                         ])
                     } else {
                         self.profileImageView.image = UIImage(named: "DefaultProfileImage")
@@ -577,18 +577,19 @@ class ProfileVC: UIViewController {
         let url = "https://garamgaebi.shop/profile/sns/\(memberIdx)"
         let authorization = "Bearer \(token ?? "")"
         
-        // http 요청 헤더 지정
-        let header: HTTPHeaders = [
-            "Content-Type" : "application/json",
-            "Authorization": authorization
-        ]
+//        // http 요청 헤더 지정
+//        let header: HTTPHeaders = [
+//            "Content-Type" : "application/json",
+//            "Authorization": authorization
+//        ]
         
         // httpBody에 parameters 추가
         AF.request(
             url,
             method: .get,
             encoding: JSONEncoding.default,
-            headers: header
+//            headers: header
+            interceptor: MyRequestInterceptor()
         )
         .validate()
         .responseDecodable(of: SnsResponse.self) { response in
@@ -614,18 +615,19 @@ class ProfileVC: UIViewController {
         let url = "https://garamgaebi.shop/profile/career/\(memberIdx)"
         let authorization = "Bearer \(token ?? "")"
         
-        // http 요청 헤더 지정
-        let header: HTTPHeaders = [
-            "Content-Type" : "application/json",
-            "Authorization": authorization
-        ]
+//        // http 요청 헤더 지정
+//        let header: HTTPHeaders = [
+//            "Content-Type" : "application/json",
+//            "Authorization": authorization
+//        ]
         
         // httpBody에 parameters 추가
         AF.request(
             url,
             method: .get,
             encoding: JSONEncoding.default,
-            headers: header
+//            headers: header
+            interceptor: MyRequestInterceptor()
         )
         .validate()
         .responseDecodable(of: CareerResponse.self) { response in
@@ -652,18 +654,19 @@ class ProfileVC: UIViewController {
         let url = "https://garamgaebi.shop/profile/education/\(memberIdx)"
         let authorization = "Bearer \(token ?? "")"
         
-        // http 요청 헤더 지정
-        let header: HTTPHeaders = [
-            "Content-Type" : "application/json",
-            "Authorization": authorization
-        ]
+//        // http 요청 헤더 지정
+//        let header: HTTPHeaders = [
+//            "Content-Type" : "application/json",
+//            "Authorization": authorization
+//        ]
         
         // httpBody에 parameters 추가
         AF.request(
             url,
             method: .get,
             encoding: JSONEncoding.default,
-            headers: header
+//            headers: header
+            interceptor: MyRequestInterceptor()
         )
         .validate()
         .responseDecodable(of: EducationResponse.self) { response in
@@ -773,10 +776,8 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileSNSTableViewCell.identifier, for: indexPath) as? ProfileSNSTableViewCell else { return UITableViewCell()}
             
             let row = snsData[indexPath.row]
-            let type = row.type
-            if type != nil {
-                cell.snsTypeLable.text = type
-            } else { cell.snsTypeLable.text = "기타" }
+            
+            cell.snsTypeLabel.text = row.type
             cell.snsLinkLabel.text = row.address
             cell.copyButton.isHidden = true
             
@@ -861,11 +862,31 @@ extension ProfileVC: SnsButtonTappedDelegate {
         nextVC.editButtonStackView.isHidden = false
         nextVC.saveUserProfileButton.isHidden = true
         
+        var newAddress = address
+        
+        // SNS 유형 처리
+        switch (type) {
+        case "인스타그램":
+            newAddress = address.removeString(target: "@")
+            nextVC.instagramAtLabel.isHidden = false
+            nextVC.linkTextField.placeholder = "인스타그램 아이디를 입력해주세요"
+            let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 28, height: (nextVC.linkTextField.frame.height)))
+            nextVC.linkTextField.leftView = paddingView
+        case "블로그":
+            print()
+        case "깃허브":
+            print()
+        default: // 직접 입력
+            nextVC.typeTextField.placeholder = "SNS 종류를 직접 입력해주세요"
+            nextVC.isAutoInput = true
+            nextVC.autoInputTextCountLabel.isHidden = false
+        }
+        
         // 값 넘기기
         nextVC.memberIdx = memberIdx
         nextVC.snsIdx = snsIdx
         nextVC.typeTextField.text = type
-        nextVC.linkTextField.text = address
+        nextVC.linkTextField.text = newAddress
 
         navigationController?.pushViewController(nextVC, animated: true)
     }

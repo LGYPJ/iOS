@@ -186,8 +186,28 @@ class LoginVC: UIViewController {
                         }
                         else {
                             UserDefaults.standard.set(user?.kakaoAccount?.email, forKey: "socialEmail")
-                            // UniEmailAuthVC로 화면전환
-                            self.presentNextView()
+                            
+                            let usersocialEmail = UserDefaults.standard.string(forKey: "socialEmail")!
+                            
+                            // 해당 socialEmail이 존재하는 계정이면 바로 로그인
+                            LoginViewModel.postLogin(socialEmail: usersocialEmail, completion: { [weak self] result in
+                                switch result {
+                                case .success(let result):
+                                    if result.isSuccess {
+                                        print("성공(간편로그인): \(result.message)")
+                                        UserDefaults.standard.set(result.result?.accessToken, forKey: "BearerToken")
+                                        UserDefaults.standard.set(result.result?.memberIdx, forKey: "memberIdx")
+                                        self?.showHome()
+                                    } else {
+                                        print("실패(간편로그인): \(result.message)")
+                                        print(">>> 교육, 경력 기입 화면으로 이동")
+                                        self?.presentNextView()
+                                    }
+                                case .failure(let error):
+                                    print("실패(AF-간편로그인): \(error.localizedDescription)")
+                                }
+                            })
+                            
                         }
                     }
                     
@@ -199,8 +219,16 @@ class LoginVC: UIViewController {
     
     private func presentNextView(){
         let nextVC = UniEmailAuthVC()
-        nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
+        nextVC.modalTransitionStyle = .crossDissolve
         nextVC.modalPresentationStyle = .fullScreen
         self.present(nextVC, animated: true)
     }
+    
+    private func showHome() {
+        let vc = TabBarController()
+        vc.modalPresentationStyle = .fullScreen
+        vc.modalTransitionStyle = .crossDissolve
+        present(vc, animated: true)
+    }
+
 }

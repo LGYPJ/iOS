@@ -40,3 +40,14 @@ struct ProfilePostResponse: Decodable {
     let message: String
     let result: Bool
 }
+
+// MARK: - ProfileWithdrawal
+struct WithdrawalResponse: Decodable {
+    let isSuccess: Bool
+    let code: Int
+    let message: String
+    let result: WithdrawalResult
+}
+struct WithdrawalResult: Decodable {
+    let inactive_success: Bool
+}

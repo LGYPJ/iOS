@@ -141,16 +141,30 @@ class RecommendUsersColectionViewCell: UICollectionViewCell {
 
         self.imageDefault.isHidden = false
         self.imageInfoView.image = .none
+        
+        // 프로필 이미지
         if let urlString = item.profileUrl {
-            let url = URL(string: urlString)
-            self.imageInfoView.kf.indicatorType = .activity
-            self.imageInfoView.kf.setImage(with: url)
+            let processor = RoundCornerImageProcessor(cornerRadius: self.imageInfoView.layer.cornerRadius)
+            guard let url = URL(string: urlString) else { return }
+            
+            self.imageInfoView.kf.setImage(with: url, options: [
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .transition(.fade(0.5)),
+                .forceRefresh
+            ])
             self.imageDefault.isHidden = true
+            
+        } else {
+            self.imageDefault.image = UIImage(named: "untitle")
+            self.imageDefault.isHidden = false
+            self.imageInfoView.image = .none
         }
         
-        //imageInfoView.image = UIImage(named: "untitle")?.withTintColor(.mainGray)
         // 닉네임
         nickNameInfoLabel.text = item.nickName
+        
+        //TODO: 서버 dto 바뀐 후 detail, group 삭제
         
         // belong이 있으면 belong만 보여주고 아니면 group,detail
         switch(item.belong != nil){

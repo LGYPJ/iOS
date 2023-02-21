@@ -204,16 +204,7 @@ class InputNickNameVC: UIViewController {
                 self.nickNameTextField.layer.borderColor = UIColor.mainBlack.cgColor
             }
             else {
-                // 글자 수 맞으면
-                if self.nickNameTextField.text!.count > 0,
-                   self.nickNameTextField.text!.count <= 8 {
-                    self.nickNameValidLabel.text = "사용할 수 없는 닉네임입니다"
-                }
-                // 글자 수 안 맞으면
-                else {
-                    self.nickNameValidLabel.text = "8자 이내로 입력해주세요"
-                }
-                
+                self.nickNameValidLabel.text = "8자이내, 한/영문, 숫자만 사용 가능합니다"
                 self.nickNameTextField.layer.borderColor = UIColor(hex: 0xFF0000).cgColor
             }
             self.nickNameValidLabel.textColor = UIColor(hex: 0xFF0000)

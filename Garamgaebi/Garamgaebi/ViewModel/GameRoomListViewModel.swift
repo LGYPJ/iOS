@@ -10,11 +10,8 @@ import Alamofire
 struct GameRoomListViewModel {
 	public static func getGameRoomList(programId: Int, completion: @escaping (([GameRoomListModel]) -> Void)) {
 		let url = "https://garamgaebi.shop/game/\(programId)/rooms"
-		let headers: HTTPHeaders = [
-			"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-		]
 		
-		AF.request(url, method: .get, headers: headers)
+		AF.request(url, method: .get, interceptor: MyRequestInterceptor())
 			.validate()
 			.responseDecodable(of: GameRoomListModelResponse.self) { response in
 				switch response.result {

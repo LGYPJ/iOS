@@ -46,4 +46,42 @@ class ProfileServiceViewModel {
             }
         }
     }
+    
+    // MARK: - [POST] 회원탈퇴 추가
+    public static func postWithdrawl(memberIdx: Int, content: String?, category: String, completion: @escaping ((Bool) -> Void)) {
+        
+        let url = "https://garamgaebi.shop/member/member-inactived"
+        
+        let header : HTTPHeaders = [
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
+        ]
+        let bodyData: Parameters = [
+            "memberIdx": memberIdx,
+            "category": category,
+            "content": content
+        ]
+//        print(bodyData)
+        AF.request(
+            url,
+            method: .post,
+            parameters: bodyData,
+            encoding: JSONEncoding.default,
+            headers: header
+        )
+        .validate()
+        .responseDecodable(of: WithdrawalResponse.self) { response in
+            switch response.result {
+            case .success(let response):
+                if response.isSuccess {
+                    print("성공(회원탈퇴): \(response.message)")
+                    completion(response.result.inactive_success)
+                } else {
+                    print("실패(회원탈퇴): \(response.message)")
+                }
+            case .failure(let error):
+                print("실패(AF-회원탈퇴): \(error.localizedDescription)")
+            }
+        }
+    }
 }

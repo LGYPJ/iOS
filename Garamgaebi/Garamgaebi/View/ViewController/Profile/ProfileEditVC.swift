@@ -131,26 +131,6 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.alpha = 0
     }
     
-    lazy var belongLabel = UILabel().then {
-        $0.text = "한 줄 소개 *"
-        $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
-    }
-    lazy var belongTextField = UITextField().then {
-        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-        $0.placeholder = "18자 이내로 입력해주세요 (예: 프리랜서 백엔드 개발자)"
-        $0.basicTextField()
-        
-        $0.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
-        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
-        $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
-        $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
-    }
-    lazy var belongTextCountLabel = UILabel().then {
-        $0.textColor = UIColor(hex: 0xAEAEAE)
-        $0.font = UIFont.NotoSansKR(type: .Bold, size: 12)
-        $0.text = "\(belongTextCount)/\(maxBelongCount)"
-    }
-    
     lazy var emailLabel = UILabel().then {
         $0.text = "이메일 *"
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
@@ -170,6 +150,26 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.text = "이메일 형식이 올바르지 않습니다"
         $0.textColor = .red
         $0.alpha = 0
+    }
+    
+    lazy var belongLabel = UILabel().then {
+        $0.text = "한 줄 소개"
+        $0.font = UIFont.NotoSansKR(type: .Bold, size: 16)
+    }
+    lazy var belongTextField = UITextField().then {
+        $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        $0.placeholder = "18자 이내로 입력해주세요 (예: 프리랜서 백엔드 개발자)"
+        $0.basicTextField()
+        
+        $0.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
+        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
+        $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
+        $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+    }
+    lazy var belongTextCountLabel = UILabel().then {
+        $0.textColor = UIColor(hex: 0xAEAEAE)
+        $0.font = UIFont.NotoSansKR(type: .Bold, size: 12)
+        $0.text = "\(belongTextCount)/\(maxBelongCount)"
     }
     
     lazy var introduceLabel = UILabel().then {
@@ -230,8 +230,6 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         emailTextField.delegate = self
         introduceTextField.delegate = self
         
-        // 삭제, 밑에 setObserver에 있음
-//        NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: UITextField.textDidChangeNotification, object: belongTextField)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -327,9 +325,24 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             $0.leading.trailing.equalTo(nickNameTextField)
         }
         
+        /// 이메일
+        emailLabel.snp.makeConstraints {
+            $0.top.equalTo(nickNameTextField.snp.bottom).offset(16)
+            $0.leading.equalTo(nickNameLabel)
+        }
+        emailTextField.snp.makeConstraints {
+            $0.top.equalTo(emailLabel.snp.bottom).offset(8)
+            $0.leading.trailing.equalTo(belongTextField)
+            $0.height.equalTo(nickNameTextField)
+        }
+        emailAlertLabel.snp.makeConstraints {
+            $0.top.equalTo(emailTextField.snp.bottom).offset(2)
+            $0.leading.trailing.equalTo(emailTextField)
+        }
+        
         /// 소속
         belongLabel.snp.makeConstraints {
-            $0.top.equalTo(nickNameTextField.snp.bottom).offset(16)
+            $0.top.equalTo(emailTextField.snp.bottom).offset(16)
             $0.leading.equalTo(nickNameLabel)
         }
         belongTextField.snp.makeConstraints {
@@ -342,28 +355,13 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             $0.trailing.equalTo(belongTextField)
         }
         
-        /// 이메일
-        emailLabel.snp.makeConstraints {
-            $0.top.equalTo(belongTextField.snp.bottom).offset(16)
-            $0.leading.equalTo(belongLabel)
-        }
-        emailTextField.snp.makeConstraints {
-            $0.top.equalTo(emailLabel.snp.bottom).offset(8)
-            $0.leading.trailing.equalTo(belongTextField)
-            $0.height.equalTo(nickNameTextField)
-        }
-        emailAlertLabel.snp.makeConstraints {
-            $0.top.equalTo(emailTextField.snp.bottom).offset(2)
-            $0.leading.trailing.equalTo(emailTextField)
-        }
-        
         /// 별 처리
         contigureStarText()
         
         /// 자기소개
         introduceLabel.snp.makeConstraints {
-            $0.top.equalTo(emailTextField.snp.bottom).offset(16)
-            $0.leading.equalTo(emailLabel)
+            $0.top.equalTo(belongTextField.snp.bottom).offset(16)
+            $0.leading.equalTo(nickNameLabel)
         }
         introduceTextField.snp.makeConstraints {
             $0.top.equalTo(introduceLabel.snp.bottom).offset(8)
@@ -402,18 +400,12 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         attributedString1.addAttribute(.foregroundColor, value: UIColor.mainBlue, range: range1)
         // 기존 라벨에 attributedString 객체 속성 부여
         nickNameLabel.attributedText = attributedString1
-        
-        let belongText = belongLabel.text ?? ""
-        let attributedString2 = NSMutableAttributedString(string: belongText)
-        let range2 = (belongText as NSString).range(of: "*")
-        attributedString2.addAttribute(.foregroundColor, value: UIColor.mainBlue, range: range2)
-        belongLabel.attributedText = attributedString2
-        
+
         let emailText = emailLabel.text ?? ""
-        let attributedString3 = NSMutableAttributedString(string: emailText)
-        let range3 = (emailText as NSString).range(of: "*")
-        attributedString3.addAttribute(.foregroundColor, value: UIColor.mainBlue, range: range3)
-        emailLabel.attributedText = attributedString3
+        let attributedString2 = NSMutableAttributedString(string: emailText)
+        let range2 = (emailText as NSString).range(of: "*")
+        attributedString2.addAttribute(.foregroundColor, value: UIColor.mainBlue, range: range2)
+        emailLabel.attributedText = attributedString2
     }
     
     @objc func textFieldActivated(_ sender: UITextField) {
@@ -461,11 +453,11 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/edit"
         
-        // http 요청 헤더 지정
-        let header : HTTPHeaders = [
-            "Content-Type": "multipart/form-data",
-            "Authorization": "Bearer \(token ?? "")"
-        ]
+//        // http 요청 헤더 지정
+//        let header : HTTPHeaders = [
+//            "Content-Type": "multipart/form-data",
+//            "Authorization": "Bearer \(token ?? "")"
+//        ]
         
         let subParam: [String: Any] = [
             "memberIdx": String(memberIdx),
@@ -487,13 +479,17 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             if let imageData = profileImage?.pngData() {
                 multipartFormData.append(imageData, withName: "image", fileName: "\(imageData).png", mimeType: "multipart/form-data")
             }
-        }, to: url, method: .post, headers: header)
+        }, to: url, method: .post,
+//                  headers: header
+                  interceptor: MyRequestInterceptor()
+        )
         .validate()
         .responseDecodable(of: ProfileEditResponse.self) { response in
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
                     print("성공(프로필수정): \(response.message)")
+                    UserDefaults.standard.set(nickName, forKey: "nickname")
                     completion(response.isSuccess)
                 } else {
                     print("실패(프로필수정): \(response.message)")
@@ -547,11 +543,6 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     }
     
     // MARK: - validateUserInfo()
-//    private func validateUserInfo() {
-//        if isValidNickName &&  isValidEmail {
-//            buttonActivated()
-//        }
-//    }
     private func validNickname() {
         if isValidNickName {
             hideAlert(textField: self.nickNameTextField, alertLabel: self.nickNameAlertLabel)
@@ -594,31 +585,6 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
             print(">>>ERROR: typeText ProfileEditVC")
         }
     }
-    
-//    // 갤러리 권한 체크
-//    func checkAlbumPermission(){
-//        PHPhotoLibrary.requestAuthorization( { status in
-//            switch status{
-//            case .authorized:
-//                print("Album: 권한 허용")
-//                DispatchQueue.main.async {
-//                    // 이미지 피커 열기
-//                    self.imagePicker.delegate = self
-//                    self.imagePicker.sourceType = .photoLibrary
-//                    self.imagePicker.modalPresentationStyle = .fullScreen
-//
-//                    self.present(self.imagePicker, animated: true, completion: nil)
-//                }
-//            case .denied:
-//                print("Album: 권한 거부")
-//            case .restricted, .notDetermined:
-//                print("Album: 선택하지 않음")
-//            default:
-//                break
-//            }
-//        })
-//    }
-    
 }
 
 extension ProfileEditVC {
@@ -689,23 +655,7 @@ extension ProfileEditVC: UITextViewDelegate {
         introduceTextCount = introduceTextField.text?.count ?? 0
         NotificationCenter.default.post(name: Notification.Name("textDidChange"), object: textView)
     }
-    
-    // 삭제해야함
-//    // TextView 글자수 제한
-//    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-//        guard let str = textView.text else { return true }
-//        let newLenght = str.count + text.count - range.length
-//
-//        introduceTextCountLabel.text = "\(str.count)/100"
-//        return newLenght <= 100
-//    }
-//
-//    // 키보드
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        self.view.endEditing(true)
-//    }
-//
-    
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder() // TextField 비활성화
         return true
@@ -730,58 +680,6 @@ extension ProfileEditVC: PHPickerViewControllerDelegate {
         }
     }
 }
-
-extension ProfileEditVC : UIImagePickerControllerDelegate, UINavigationControllerDelegate{
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
-        guard let selectedImage = info[.originalImage] as? UIImage else {
-            fatalError("Expected a dictionary containing an image, but was provided the following: \(info)")
-        }
-//        let imageData = selectedImage.jpegData(compressionQuality: 0.5)
-        self.dismiss(animated: false) {
-            DispatchQueue.main.async {
-                self.profileImageView.image = selectedImage
-            }
-        }
-    }
-
-    func PhotoAuth() -> Bool {
-        // 포토 라이브러리 접근 권한
-        let authorizationStatus = PHPhotoLibrary.authorizationStatus()
-        
-        var isAuth = false
-        
-        switch authorizationStatus {
-        case .authorized: return true // 사용자가 앱에 사진 라이브러리에 대한 액세스 권한을 명시 적으로 부여했습니다.
-        case .denied: break // 사용자가 사진 라이브러리에 대한 앱 액세스를 명시 적으로 거부했습니다.
-        case .limited: break // ?
-        case .notDetermined: // 사진 라이브러리 액세스에는 명시적인 사용자 권한이 필요하지만 사용자가 아직 이러한 권한을 부여하거나 거부하지 않았습니다
-            PHPhotoLibrary.requestAuthorization { (state) in
-                if state == .authorized {
-                    isAuth = true
-                }
-            }
-            return isAuth
-        case .restricted: break // 앱이 사진 라이브러리에 액세스 할 수있는 권한이 없으며 사용자는 이러한 권한을 부여 할 수 없습니다.
-        default: break
-        }
-        
-        return false;
-    }
-
-}
-
-// 이건 왜 있는거임?
-//
-//extension UILabel {
-//    func asColor(targetString: String, color: UIColor) {
-//        let fullText = text ?? ""
-//        let attributedString = NSMutableAttributedString(string: fullText)
-//        let range = (fullText as NSString).range(of: targetString)
-//        attributedString.addAttribute(.foregroundColor, value: color, range: range)
-//        attributedText = attributedString
-//    }
-//}
 
 extension ProfileEditVC {
     private func configureGestureRecognizer() {
@@ -829,8 +727,6 @@ extension ProfileEditVC {
         if distance == 0 {
             return
         }
-        // return to origin scrollOffset
-//        self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset), animated: true)
         self.scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
         scrollOffset = 0
         distance = 0

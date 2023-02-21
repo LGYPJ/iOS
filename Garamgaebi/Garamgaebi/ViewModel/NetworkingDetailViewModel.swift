@@ -14,14 +14,11 @@ class NetworkingDetailViewModel {
 //		let dummyData = NetworkingDetailInfo(programIdx: networkingId,title: "유료 네트워킹1", date: "2023-04-15T18:00:00", location: "가천관", fee: 10000, endDate: "2023-04-08T18:00:00", programStatus: "OPEN", userButtonStatus: "CANCEL")
 //		completion(dummyData)
 		let url = "https://garamgaebi.shop/networkings/\(networkingId)/info"
-		let headers: HTTPHeaders = [
-			"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-		]
 		let params: Parameters = [
 			"member-idx": memberId
 		]
 
-		AF.request(url, method: .get, parameters: params, headers: headers)
+		AF.request(url, method: .get, parameters: params, interceptor: MyRequestInterceptor())
 			.validate()
 			.responseDecodable(of: NetworkingDetailInfoResponse.self) { resposne in
 				switch resposne.result {
@@ -50,13 +47,10 @@ class NetworkingDetailViewModel {
 //		]
 //		completion(dummyData)
 		let url = "https://garamgaebi.shop/networkings/\(networkingId)/participants"
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-        ]
 		let params: Parameters = [
 			"member-idx": UserDefaults.standard.integer(forKey: "memberIdx")
 		]
-		AF.request(url, method: .get, parameters: params, headers: headers)
+		AF.request(url, method: .get, parameters: params, interceptor: MyRequestInterceptor())
 			.validate()
 			.responseDecodable(of: NetworkingDetailAttentdantResponse.self) { response in
 				switch response.result {
