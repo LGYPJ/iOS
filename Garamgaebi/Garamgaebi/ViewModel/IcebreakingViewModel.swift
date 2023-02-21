@@ -61,15 +61,11 @@ struct IceBreakingPatchIndexModelResponse: Codable {
 struct IcebreakingViewModel {
 	public static func postGameUser(roomId: String, memberId: Int, completion: @escaping ((Int) -> Void)) {
 		let url = "https://garamgaebi.shop/game/member"
-		let headers: HTTPHeaders = [
-			"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-		]
 		let body: [String: Any] = [
 			"roomId": roomId,
 			"memberIdx": memberId
 		]
-		
-		AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers)
+		AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default, interceptor: MyRequestInterceptor())
 			.validate()
 			.responseDecodable(of: IceBreakingChangeUserModelResposne.self) { response in
 				switch response.result {
@@ -88,14 +84,10 @@ struct IcebreakingViewModel {
 	
 	public static func getCurrentGameUserWithPost(roomId: String, completion: @escaping (([IceBrakingCurrentUserModel]) -> Void)) {
 		let url = "https://garamgaebi.shop/game/members"
-		let headers: HTTPHeaders = [
-			"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-		]
 		let body: [String: String] = [
 			"roomId": roomId
 		]
-		
-		AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers)
+		AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default, interceptor: MyRequestInterceptor())
 			.validate()
 			.responseDecodable(of: IceBrakingCurrentUserModelResponse.self) { response in
 				switch response.result {
@@ -113,15 +105,11 @@ struct IcebreakingViewModel {
 	
 	public static func deleteGameUser(roomId: String, memberId: Int, completion: @escaping (() -> Void)) {
 		let url = "https://garamgaebi.shop/game/member"
-		let headers: HTTPHeaders = [
-			"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-		]
 		let body: [String: Any] = [
 			"roomId": roomId,
 			"memberIdx": memberId
 		]
-		
-		AF.request(url, method: .delete, parameters: body, encoding: JSONEncoding.default, headers: headers)
+		AF.request(url, method: .delete, parameters: body, encoding: JSONEncoding.default, interceptor: MyRequestInterceptor())
 			.validate()
 			.responseDecodable(of: IceBreakingDeleteUserModelResponse.self) { response in
 				switch response.result {
@@ -142,11 +130,7 @@ struct IcebreakingViewModel {
 	
 	public static func getGameImage(programId: Int, completion: @escaping (([String]) -> Void)) {
 		let url = "https://garamgaebi.shop/game/\(programId)/images"
-		let headers: HTTPHeaders = [
-			"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-		]
-		
-		AF.request(url, method: .get, headers: headers)
+		AF.request(url, method: .get, interceptor: MyRequestInterceptor())
 			.validate()
 			.responseDecodable(of: IceBreakingImageModelResponse.self) { response in
 				switch response.result {
@@ -164,14 +148,10 @@ struct IcebreakingViewModel {
 	
 	public static func patchCurrentIndex(roomId: String, completion: @escaping (() -> Void)) {
 		let url = "https://garamgaebi.shop/game/current-idx"
-		let headers: HTTPHeaders = [
-			"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-		]
 		let body: [String: String] = [
 			"roomId": roomId
 		]
-		
-		AF.request(url, method: .patch, parameters: body,encoding: JSONEncoding.default, headers: headers)
+		AF.request(url, method: .patch, parameters: body,encoding: JSONEncoding.default, interceptor: MyRequestInterceptor())
 			.validate()
 			.responseDecodable(of: IceBreakingPatchIndexModelResponse.self) { response in
 				switch response.result {
@@ -186,4 +166,5 @@ struct IcebreakingViewModel {
 				}
 			}
 	}
+    
 }

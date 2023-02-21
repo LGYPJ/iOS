@@ -10,8 +10,6 @@ import Alamofire
 // 홈 화면 ViewModel
 class HomeViewModel {
     // MARK: Request [Seminar]
-    
-    // 홈 화면 Seminar 조회 request
     public static func getHomeSeminarInfo(completion: @escaping (([HomeSeminarInfo]) -> Void)) {
         let url = "https://garamgaebi.shop/seminars/main"
 		AF.request(url, method: .get, interceptor: MyRequestInterceptor())
@@ -32,24 +30,11 @@ class HomeViewModel {
                 }
             }
     }
- 
     
     // MARK: Request [Networking]
-    
-    // 홈 화면 Networking 조회 request
     public static func getHomeNetworkingInfo(completion: @escaping (([HomeNetworkingInfo]) -> Void)) {
         let url = "https://garamgaebi.shop/networkings/main"
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-        ]
-//        let dummy =
-//        [
-//            HomeNetworkingInfo(programIdx: 1, title: "네트워킹1", date: "2023-02-25T18:00:00", location: "가천관", type: "NETWORKING", payment: "FREE", status: "THIS_MONTH", isOpen: "OPEN"),
-//            HomeNetworkingInfo(programIdx: 1, title: "네트워킹2", date: "2023-02-25T18:00:00", location: "가천관", type: "NETWORKING", payment: "FREE", status: "READY", isOpen: "OPEN"),
-//            HomeNetworkingInfo(programIdx: 1, title: "네트워킹3", date: "2023-02-25T18:00:00", location: "가천관", type: "NETWORKING", payment: "FREE", status: "CLOSED", isOpen: "OPEN"),
-//        ]
-//        completion(dummy)
-        AF.request(url, method: .get, headers: headers)
+        AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
             .responseDecodable(of: HomeNetworkingInfoResponse.self) { response in
                 switch response.result {
@@ -69,15 +54,9 @@ class HomeViewModel {
     }
     
     // MARK: Request [가람개비 유저]
-    
-    // 홈 화면 가람개비 유저 조회 request
     public static func getRecommendUsersInfo(completion: @escaping (([RecommendUsersInfo]) -> Void)) {
         let url = "https://garamgaebi.shop/profile/profiles"
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-        ]
-        
-        AF.request(url, method: .get, headers: headers)
+        AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
             .responseDecodable(of: RecommendUsersInfoResponse.self) { response in
                 switch response.result {
@@ -96,24 +75,10 @@ class HomeViewModel {
             }
     }
     
-    
     // MARK: Request [내 모임]
-    
-    // 홈 화면 내 모임 조회 request
     public static func getHomeMyEventInfo(memberId: Int, completion: @escaping (([MyEventInfoReady]) -> Void)) {
         let url = "https://garamgaebi.shop/programs/\(memberId)/ready"
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-        ]
-        
-//        completion(
-//            [MyEventInfoReady(programIdx: 1, title: "2차 세미나", date: "2023-12-25T18:00:00", location: "가천대", type: "SEMINAR", payment: "PREMEUM", status: "THIS_MONTH", isOpen: "OPEN"),
-//             MyEventInfoReady(programIdx: 1, title: "2차 세미나", date: "2023-02-02T07:28:55.749Z", location: "가천대", type: "SEMINAR", payment: "PREMEUM", status: "THIS_MONTH", isOpen: "OPEN"),
-//             MyEventInfoReady(programIdx: 1, title: "2차 세미나", date: "2023-02-25T18:00:00", location: "가천대", type: "SEMINAR", payment: "PREMEUM", status: "THIS_MONTH", isOpen: "OPEN")
-//            ]
-//        )
-        
-        AF.request(url, method: .get, headers: headers)
+        AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
             .responseDecodable(of: MyEventInfoReadyResponse.self) { response in
                 switch response.result {
@@ -131,6 +96,5 @@ class HomeViewModel {
                 }
             }
     }
-   
-   
+    
 }

@@ -18,7 +18,6 @@ final class MyRequestInterceptor: RequestInterceptor {
         }
         var urlRequest = urlRequest
         urlRequest.setValue("Bearer " + accessToken, forHTTPHeaderField: "Authorization")
-        print(urlRequest.headers)
         completion(.success(urlRequest))
     }
     
@@ -55,7 +54,6 @@ final class MyRequestInterceptor: RequestInterceptor {
         default:
             completion(.doNotRetry)
         }
-        
         
     }
 }

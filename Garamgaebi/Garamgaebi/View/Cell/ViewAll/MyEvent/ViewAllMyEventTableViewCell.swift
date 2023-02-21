@@ -114,7 +114,7 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
     
     lazy var zeroDataImage: UIImageView = {
         let img = UIImageView()
-        img.image = UIImage(named: "today")
+        img.image = UIImage(named: "warning")
         img.tintColor = .mainGray.withAlphaComponent(0.8)
         return img
     }()

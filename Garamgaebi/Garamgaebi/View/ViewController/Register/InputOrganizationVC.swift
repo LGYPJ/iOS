@@ -47,7 +47,7 @@ class InputOrganizationVC: UIViewController {
         let buttonDescription = UILabel()
         buttonDescription.text = "본인의 경력을\n적어주세요"
         buttonDescription.numberOfLines = 0
-        buttonDescription.font = UIFont.NotoSansKR(type: .Regular, size: 16)
+        buttonDescription.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         buttonDescription.textColor = UIColor(hex: 0x8A8A8A)
         
         let buttonImage = UIImageView(image: UIImage(named: "careerIcon"))
@@ -91,7 +91,7 @@ class InputOrganizationVC: UIViewController {
         let buttonDescription = UILabel()
         buttonDescription.text = "본인이 받은 교육을\n적어주세요"
         buttonDescription.numberOfLines = 0
-        buttonDescription.font = UIFont.NotoSansKR(type: .Regular, size: 16)
+        buttonDescription.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         buttonDescription.textColor = UIColor(hex: 0x8A8A8A)
         
         let buttonImage = UIImageView(image: UIImage(named: "educationIcon"))

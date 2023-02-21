@@ -506,17 +506,18 @@ class ProfileVC: UIViewController {
         let url = "https://garamgaebi.shop/profile/\(memberIdx)"
         let authorization = "Bearer \(token ?? "")"
         
-        // http 요청 헤더 지정
-        let header : HTTPHeaders = [
-            "Content-Type": "application/json",
-            "Authorization": authorization
-        ]
+//        // http 요청 헤더 지정
+//        let header : HTTPHeaders = [
+//            "Content-Type": "application/json",
+//            "Authorization": authorization
+//        ]
         
         // httpBody에 parameters 추가
         AF.request(
             url, // 주소
             method: .get, // 전송 타입
-            headers: header // 헤더 지정
+//            headers: header // 헤더 지정
+            interceptor: MyRequestInterceptor()
         )
         .validate() // statusCode:  200..<300
         .responseDecodable(of: ProfileResponse.self) { response in
@@ -576,18 +577,19 @@ class ProfileVC: UIViewController {
         let url = "https://garamgaebi.shop/profile/sns/\(memberIdx)"
         let authorization = "Bearer \(token ?? "")"
         
-        // http 요청 헤더 지정
-        let header: HTTPHeaders = [
-            "Content-Type" : "application/json",
-            "Authorization": authorization
-        ]
+//        // http 요청 헤더 지정
+//        let header: HTTPHeaders = [
+//            "Content-Type" : "application/json",
+//            "Authorization": authorization
+//        ]
         
         // httpBody에 parameters 추가
         AF.request(
             url,
             method: .get,
             encoding: JSONEncoding.default,
-            headers: header
+//            headers: header
+            interceptor: MyRequestInterceptor()
         )
         .validate()
         .responseDecodable(of: SnsResponse.self) { response in
@@ -613,18 +615,19 @@ class ProfileVC: UIViewController {
         let url = "https://garamgaebi.shop/profile/career/\(memberIdx)"
         let authorization = "Bearer \(token ?? "")"
         
-        // http 요청 헤더 지정
-        let header: HTTPHeaders = [
-            "Content-Type" : "application/json",
-            "Authorization": authorization
-        ]
+//        // http 요청 헤더 지정
+//        let header: HTTPHeaders = [
+//            "Content-Type" : "application/json",
+//            "Authorization": authorization
+//        ]
         
         // httpBody에 parameters 추가
         AF.request(
             url,
             method: .get,
             encoding: JSONEncoding.default,
-            headers: header
+//            headers: header
+            interceptor: MyRequestInterceptor()
         )
         .validate()
         .responseDecodable(of: CareerResponse.self) { response in
@@ -651,18 +654,19 @@ class ProfileVC: UIViewController {
         let url = "https://garamgaebi.shop/profile/education/\(memberIdx)"
         let authorization = "Bearer \(token ?? "")"
         
-        // http 요청 헤더 지정
-        let header: HTTPHeaders = [
-            "Content-Type" : "application/json",
-            "Authorization": authorization
-        ]
+//        // http 요청 헤더 지정
+//        let header: HTTPHeaders = [
+//            "Content-Type" : "application/json",
+//            "Authorization": authorization
+//        ]
         
         // httpBody에 parameters 추가
         AF.request(
             url,
             method: .get,
             encoding: JSONEncoding.default,
-            headers: header
+//            headers: header
+            interceptor: MyRequestInterceptor()
         )
         .validate()
         .responseDecodable(of: EducationResponse.self) { response in

@@ -25,18 +25,7 @@ class SplashVC: UIViewController {
         }
         view.backgroundColor = .white
         
-        // 일단 그냥 로그인
         login()
-        
-        //TODO: 로그아웃 상태이면 onboarding으로 넘겨주기
-        /*
-         
-         
-         
-         
-         
-         
-         */
     }
     
     // MARK: - Functions
@@ -48,15 +37,33 @@ class SplashVC: UIViewController {
         present(vc, animated: true)
     }
     
+    private func showOnboarding() {
+        let vc = OnboardingVC()
+        vc.modalPresentationStyle = .fullScreen
+        vc.modalTransitionStyle = .crossDissolve
+        present(vc, animated: true)
+    }
+    
     private func login() {
-        let usersocialEmail = UserDefaults.standard.string(forKey: "socialEmail")!
+        let usersocialEmail = UserDefaults.standard.string(forKey: "socialEmail") ?? ""
         print("로그인 된 socialEmail: \(usersocialEmail)")
         
         LoginViewModel.postLogin(socialEmail: usersocialEmail, completion: { [weak self] result in
-            UserDefaults.standard.set(result.accessToken, forKey: "BearerToken")
-            //UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
-            UserDefaults.standard.set(45, forKey: "memberIdx")
-            self?.showHome()
+            switch result {
+            case .success(let result):
+                if result.isSuccess {
+                    print("성공(자동로그인): \(result.message)")
+                    UserDefaults.standard.set(result.result?.accessToken, forKey: "BearerToken")
+                    UserDefaults.standard.set(result.result?.memberIdx, forKey: "memberIdx")
+                    self?.showHome()
+                } else {
+                    print(">>> Onboarding 화면으로 이동")
+                    print("실패(자동로그인): \(result.message)")
+                    self?.showOnboarding()
+                }
+            case .failure(let error):
+                print("실패(AF-자동로그인): \(error.localizedDescription)")
+            }
         })
     }
 }

@@ -15,14 +15,11 @@ class SeminarDetailViewModel {
 //		let dummyData = SeminarDetailInfo(programIdx: seminarId	,title: "무료 세미나1", date: "2023-01-15T18:00:00", location: "가천관", fee: 0, endDate: "2023-01-08T18:00:00", programStatus: "CLOSED_CONFIRM", userButtonStatus: "APPLY")
 //		completion(dummyData)
 		let url = "https://garamgaebi.shop/seminars/\(seminarId)/info"
-		let headers: HTTPHeaders = [
-			"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-		]
 		let params: Parameters = [
 			"member-idx": memberId
 		]
 
-		AF.request(url, method: .get, parameters: params, headers: headers)
+		AF.request(url, method: .get, parameters: params, interceptor: MyRequestInterceptor())
 			.validate()
 			.responseDecodable(of: SeminarDetailInfoResponse.self) { response in
 				switch response.result {
@@ -51,13 +48,10 @@ class SeminarDetailViewModel {
 //		]
 //		completion(dummyData)
 		let url = "https://garamgaebi.shop/seminars/\(seminarId)/participants"
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-        ]
 		let params: Parameters = [
 			"member-idx": UserDefaults.standard.integer(forKey: "memberIdx")
 		]
-		AF.request(url, method: .get, parameters: params, headers: headers)
+		AF.request(url, method: .get, parameters: params, interceptor: MyRequestInterceptor())
 			.validate()
 			.responseDecodable(of: SeminarDetailAttentdantResponse.self) { response in
 				switch response.result {
@@ -82,10 +76,7 @@ class SeminarDetailViewModel {
 //		]
 //		completion(dummyData)
 		let url = "https://garamgaebi.shop/seminars/\(seminarId)/presentations"
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-        ]
-		AF.request(url, method: .get , headers: headers)
+		AF.request(url, method: .get , interceptor: MyRequestInterceptor())
 			.validate()
 			.responseDecodable(of: SeminarDetailPreviewResponse.self) { response in
 				switch response.result {

@@ -71,6 +71,31 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         return stackView
     }()
     
+    lazy var zeroDataSeminarBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.borderColor = UIColor(hex: 0x356EFF, alpha: 0.4).cgColor
+        view.layer.borderWidth = 1
+        view.layer.cornerRadius = 12
+        return view
+    }()
+    
+    lazy var zeroDataSeminarImage: UIImageView = {
+        let img = UIImageView()
+        img.image = UIImage(named: "warning")?.withTintColor(UIColor(hex: 0x356EFF, alpha: 0.4))
+        return img
+    }()
+    
+    lazy var zeroDataSeminarDescriptionLabel: UILabel = {
+        let label = UILabel()
+        label.text = "예정된 세미나가 없습니다\n다음 세미나를 기대해주세요:)"
+        label.numberOfLines = 2
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        label.textColor = UIColor(hex: 0x356EFF, alpha: 0.4)
+        label.textAlignment = .center
+        return label
+    }()
+    
     lazy var networkingTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "네트워킹"
@@ -117,6 +142,31 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         stackView.axis = .horizontal
         stackView.alignment = .center
         return stackView
+    }()
+    
+    lazy var zeroDataNetworkingBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.borderColor = UIColor(hex: 0x2294FF, alpha: 0.4).cgColor
+        view.layer.borderWidth = 1
+        view.layer.cornerRadius = 12
+        return view
+    }()
+    
+    lazy var zeroDataNetworkingImage: UIImageView = {
+        let img = UIImageView()
+        img.image = UIImage(named: "warning")?.withTintColor(UIColor(hex: 0x2294FF, alpha: 0.4))
+        return img
+    }()
+    
+    lazy var zeroDataNetworkingDescriptionLabel: UILabel = {
+        let label = UILabel()
+        label.text = "예정된 네트워킹이 없습니다\n다음 네트워킹을 기대해주세요:)"
+        label.numberOfLines = 2
+        label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        label.textColor = UIColor(hex: 0x2294FF, alpha: 0.4)
+        label.textAlignment = .center
+        return label
     }()
     
     lazy var seminarCollectionView: UICollectionView = {
@@ -171,7 +221,7 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     
     lazy var interSpcace: UIView = {
         let view = UIView()
-        view.backgroundColor = .mainLightGray
+        view.backgroundColor = UIColor(hex: 0xEBF0F6)
         return view
     }()
     
@@ -192,11 +242,19 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         self.contentView.addSubview(seminarViewAllStack)
         self.contentView.addSubview(seminarCollectionView)
         
+        self.contentView.addSubview(zeroDataSeminarBackgroundView)
+        zeroDataSeminarBackgroundView.addSubview(zeroDataSeminarImage)
+        zeroDataSeminarBackgroundView.addSubview(zeroDataSeminarDescriptionLabel)
+        
         self.contentView.addSubview(networkingTitleLabel)
         self.contentView.addSubview(networkingPopUpButton)
         networkingPopUpButton.addSubview(networkingPopUpButtonImage)
         self.contentView.addSubview(networkingViewAllStack)
         self.contentView.addSubview(networkingCollectionView)
+        
+        self.contentView.addSubview(zeroDataNetworkingBackgroundView)
+        zeroDataNetworkingBackgroundView.addSubview(zeroDataNetworkingImage)
+        zeroDataNetworkingBackgroundView.addSubview(zeroDataNetworkingDescriptionLabel)
         
         self.contentView.addSubview(interSpcace)
         
@@ -204,10 +262,15 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         configNotificationCenter()
     }
     
+    override func layoutIfNeeded() {
+        configureZeroCell()
+    }
+    
     func configSubViewLayouts() {
         seminarTitleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(16)
             make.left.equalToSuperview().inset(16)
+            make.height.equalTo(26)
         }
         seminarPopUpButton.snp.makeConstraints { make in
             make.centerY.equalTo(seminarTitleLabel.snp.centerY)
@@ -231,9 +294,25 @@ class HomeEventInfoTableViewCell: UITableViewCell {
             make.height.equalTo(140)
         }
         
+        zeroDataSeminarBackgroundView.snp.makeConstraints { make in
+            make.top.equalTo(seminarTitleLabel.snp.bottom).offset(12)
+            make.left.right.equalToSuperview().inset(16)
+            make.height.equalTo(140)
+        }
+        
+        zeroDataSeminarImage.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().inset(24)
+        }
+        zeroDataSeminarDescriptionLabel.snp.makeConstraints { make in
+            make.top.equalTo(zeroDataSeminarImage.snp.bottom).offset(8)
+            make.centerX.equalToSuperview()
+        }
+        
         networkingTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(seminarCollectionView.snp.bottom).offset(40)
             make.left.equalToSuperview().inset(16)
+            make.height.equalTo(26)
         }
         networkingPopUpButton.snp.makeConstraints { make in
             make.centerY.equalTo(networkingTitleLabel.snp.centerY)
@@ -247,24 +326,56 @@ class HomeEventInfoTableViewCell: UITableViewCell {
             make.centerY.equalToSuperview()
         }
         networkingViewAllStack.snp.makeConstraints { make in
-            make.top.equalTo(networkingTitleLabel.snp.top)
+            make.centerY.equalTo(networkingTitleLabel.snp.centerY)
             make.right.equalToSuperview().inset(16)
         }
 
         networkingCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(networkingViewAllStack.snp.bottom).offset(12)
+            make.top.equalTo(networkingTitleLabel.snp.bottom).offset(12)
             make.centerX.equalToSuperview()
             make.width.equalToSuperview()
             make.height.equalTo(140)
         }
         
+        zeroDataNetworkingBackgroundView.snp.makeConstraints { make in
+            make.top.equalTo(networkingTitleLabel.snp.bottom).offset(12)
+            make.left.right.equalToSuperview().inset(16)
+            make.height.equalTo(140)
+        }
+        
+        zeroDataNetworkingImage.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().inset(24)
+        }
+        zeroDataNetworkingDescriptionLabel.snp.makeConstraints { make in
+            make.top.equalTo(zeroDataNetworkingImage.snp.bottom).offset(8)
+            make.centerX.equalToSuperview()
+        }
+        
         interSpcace.snp.makeConstraints { make in
-            make.top.equalTo(networkingCollectionView.snp.bottom).offset(16)
+            make.top.equalTo(zeroDataNetworkingBackgroundView.snp.bottom).offset(16)
             make.left.right.equalToSuperview()
             make.height.equalTo(8)
         }
     }
     
+    private func configureZeroCell() {
+        if seminarList.count == 0 {
+            seminarCollectionView.isHidden = true
+            zeroDataSeminarBackgroundView.isHidden = false
+        } else {
+            seminarCollectionView.isHidden = false
+            zeroDataSeminarBackgroundView.isHidden = true
+        }
+        
+        if networkingList.count == 0 {
+            networkingCollectionView.isHidden = true
+            zeroDataNetworkingBackgroundView.isHidden = false
+        } else {
+            networkingCollectionView.isHidden = false
+            zeroDataNetworkingBackgroundView.isHidden = true
+        }
+    }
     
     func configNotificationCenter() {
         NotificationCenter.default.addObserver(self, selector: #selector(presentHomeSeminarInfo(_:)), name: Notification.Name("presentHomeSeminarInfo"), object: nil)
@@ -287,15 +398,11 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     }
     
     @objc func presentHomeSeminarInfo(_ notification: NSNotification) {
-    
         guard let seminarListBase = notification.object as? [HomeSeminarInfo] else { return }
         
         // 초기화
         seminarList.removeAll()
         
-        // TODO: - 서버 정상화 이후 수정
-        
-        // 홈 화면 세미나 리스트 필터링 - 수정 후
         if let value = seminarListBase.filter({$0.status == "THIS_MONTH"}).compactMap({$0}).first {
             seminarList.append(value)
         }
@@ -306,15 +413,12 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         
         // 컬렉션뷰 reload
         seminarCollectionView.reloadData()
-        
         NotificationCenter.default.post(name: Notification.Name("HomeTableViewReload"), object: nil)
-        
     }
     
     @objc func presentHomeNetworkingInfo(_ notification: NSNotification) {
-        
         guard let networkingListBase = notification.object as? [HomeNetworkingInfo] else { return }
-       
+        
         // 초기화
         networkingList.removeAll()
         
@@ -322,24 +426,20 @@ class HomeEventInfoTableViewCell: UITableViewCell {
         if let value = networkingListBase.filter({$0.status == "THIS_MONTH"}).compactMap({$0}).first {
             networkingList.append(value)
         }
-        
         if let value = networkingListBase.filter({$0.status == "READY"}).compactMap({$0}).first {
             networkingList.append(value)
         }
-        
         networkingListBase.filter{$0.status == "CLOSED"}.compactMap{$0}.forEach{networkingList.append($0)}
  
         // 컬렉션뷰 reload
         networkingCollectionView.reloadData()
-        
         NotificationCenter.default.post(name: Notification.Name("HomeTableViewReload"), object: nil)
-        
     }
     
     @objc func presentHomeSeminarPopUpVC(_ touch: UITapGestureRecognizer) {
         NotificationCenter.default.post(name: Notification.Name("getScrollDirection"), object: nil)
         popUpX = seminarPopUpButton.layer.frame.midX - 32
-        popUpY = seminarPopUpButton.layer.frame.midY + 90.1 - scrollDirection
+        popUpY = seminarPopUpButton.layer.frame.maxY + 71 + 2.1 - scrollDirection
         
         let vc = HomeSeminarPopUpVC(x: popUpX, y: popUpY)
         NotificationCenter.default.post(name: Notification.Name("pushEventPopUpView"), object: vc)
@@ -348,7 +448,7 @@ class HomeEventInfoTableViewCell: UITableViewCell {
     @objc func presentHomeNetworkingPopUpVC(_ touch: UITapGestureRecognizer) {
         NotificationCenter.default.post(name: Notification.Name("getScrollDirection"), object: nil)
         popUpX = networkingPopUpButton.layer.frame.midX - 32
-        popUpY = networkingPopUpButton.layer.frame.midY + 88.4 - scrollDirection
+        popUpY = networkingPopUpButton.layer.frame.maxY + 71 + 1.4 - scrollDirection
         
         let vc = HomeNetworkingPopUpVC(x: popUpX, y: popUpY)
         NotificationCenter.default.post(name: Notification.Name("pushEventPopUpView"), object: vc)
