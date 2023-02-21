@@ -506,17 +506,10 @@ class ProfileVC: UIViewController {
         let url = "https://garamgaebi.shop/profile/\(memberIdx)"
         let authorization = "Bearer \(token ?? "")"
         
-//        // http 요청 헤더 지정
-//        let header : HTTPHeaders = [
-//            "Content-Type": "application/json",
-//            "Authorization": authorization
-//        ]
-        
         // httpBody에 parameters 추가
         AF.request(
             url, // 주소
             method: .get, // 전송 타입
-//            headers: header // 헤더 지정
             interceptor: MyRequestInterceptor()
         )
         .validate() // statusCode:  200..<300
@@ -549,7 +542,6 @@ class ProfileVC: UIViewController {
                     }
                     // 프로필 이미지
                     if let urlString = result?.profileUrl {
-//                        let processor = DownsamplingImageProcessor(size: self.profileImageView.bounds.size)
                         let processor = RoundCornerImageProcessor(cornerRadius: self.profileImageView.layer.cornerRadius)
                         guard let url = URL(string: urlString) else { return }
                         self.profileImageView.kf.setImage(with: url, options: [
@@ -577,18 +569,11 @@ class ProfileVC: UIViewController {
         let url = "https://garamgaebi.shop/profile/sns/\(memberIdx)"
         let authorization = "Bearer \(token ?? "")"
         
-//        // http 요청 헤더 지정
-//        let header: HTTPHeaders = [
-//            "Content-Type" : "application/json",
-//            "Authorization": authorization
-//        ]
-        
         // httpBody에 parameters 추가
         AF.request(
             url,
             method: .get,
             encoding: JSONEncoding.default,
-//            headers: header
             interceptor: MyRequestInterceptor()
         )
         .validate()
@@ -615,18 +600,11 @@ class ProfileVC: UIViewController {
         let url = "https://garamgaebi.shop/profile/career/\(memberIdx)"
         let authorization = "Bearer \(token ?? "")"
         
-//        // http 요청 헤더 지정
-//        let header: HTTPHeaders = [
-//            "Content-Type" : "application/json",
-//            "Authorization": authorization
-//        ]
-        
         // httpBody에 parameters 추가
         AF.request(
             url,
             method: .get,
             encoding: JSONEncoding.default,
-//            headers: header
             interceptor: MyRequestInterceptor()
         )
         .validate()
@@ -652,20 +630,12 @@ class ProfileVC: UIViewController {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/education/\(memberIdx)"
-        let authorization = "Bearer \(token ?? "")"
-        
-//        // http 요청 헤더 지정
-//        let header: HTTPHeaders = [
-//            "Content-Type" : "application/json",
-//            "Authorization": authorization
-//        ]
         
         // httpBody에 parameters 추가
         AF.request(
             url,
             method: .get,
             encoding: JSONEncoding.default,
-//            headers: header
             interceptor: MyRequestInterceptor()
         )
         .validate()
@@ -854,7 +824,6 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
 extension ProfileVC: SnsButtonTappedDelegate {
     func snsEditButtonDidTap(snsIdx: Int, type: String, address: String) {
         // 화면 전환
-//        print("받은 snsIdx: \(snsIdx)")
         let nextVC = ProfileInputSNSVC()
         
         // 편집 모드
