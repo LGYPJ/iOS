@@ -12,11 +12,7 @@ class ProfileServiceViewModel {
     public static func postQna(memberIdx: Int, email: String, category: String, content: String, completion: @escaping ((Bool) -> Void)) {
         
         let url = "https://garamgaebi.shop/profile/qna"
-        
-        let header : HTTPHeaders = [
-            "Content-Type": "application/json",
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-        ]
+
         let bodyData: Parameters = [
             "memberIdx": memberIdx,
             "email": email,
@@ -29,7 +25,7 @@ class ProfileServiceViewModel {
             method: .post,
             parameters: bodyData,
             encoding: JSONEncoding.default,
-            headers: header
+            interceptor: MyRequestInterceptor()
         )
         .validate()
         .responseDecodable(of: ProfilePostResponse.self) { response in
@@ -51,11 +47,7 @@ class ProfileServiceViewModel {
     public static func postWithdrawl(memberIdx: Int, content: String?, category: String, completion: @escaping ((Bool) -> Void)) {
         
         let url = "https://garamgaebi.shop/member/member-inactived"
-        
-        let header : HTTPHeaders = [
-            "Content-Type": "application/json",
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-        ]
+
         let bodyData: Parameters = [
             "memberIdx": memberIdx,
             "category": category,
@@ -67,7 +59,7 @@ class ProfileServiceViewModel {
             method: .post,
             parameters: bodyData,
             encoding: JSONEncoding.default,
-            headers: header
+            interceptor: MyRequestInterceptor()
         )
         .validate()
         .responseDecodable(of: WithdrawalResponse.self) { response in

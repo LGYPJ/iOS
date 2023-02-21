@@ -15,11 +15,7 @@ class ProfileHistoryViewModel {
     public static func postSNS(memberIdx: Int, type: String, address: String, completion: @escaping ((Bool) -> Void)) {
         
         let url = "https://garamgaebi.shop/profile/sns"
-        
-        let header : HTTPHeaders = [
-            "Content-Type": "application/json",
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-        ]
+
         let bodyData: Parameters = [
             "memberIdx": memberIdx,
             "address": address,
@@ -31,7 +27,7 @@ class ProfileHistoryViewModel {
             method: .post,
             parameters: bodyData,
             encoding: JSONEncoding.default,
-            headers: header
+            interceptor: MyRequestInterceptor()
         )
         .validate()
         .responseDecodable(of: ProfilePostResponse.self) { response in
@@ -53,10 +49,6 @@ class ProfileHistoryViewModel {
         
         let url = "https://garamgaebi.shop/profile/sns"
         
-        let header : HTTPHeaders = [
-            "Content-Type": "application/json",
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-        ]
         let bodyData: Parameters = [
             "snsIdx": snsIdx,
             "address": address,
@@ -68,7 +60,7 @@ class ProfileHistoryViewModel {
             method: .patch,
             parameters: bodyData,
             encoding: JSONEncoding.default,
-            headers: header
+            interceptor: MyRequestInterceptor()
         )
         .validate()
         .responseDecodable(of: ProfilePostResponse.self) { response in
@@ -90,16 +82,11 @@ class ProfileHistoryViewModel {
         
         let url = "https://garamgaebi.shop/profile/sns/\(snsIdx)"
         
-        let header : HTTPHeaders = [
-            "Content-Type": "application/json",
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-        ]
-        
         AF.request(
             url,
             method: .delete,
             encoding: JSONEncoding.default,
-            headers: header
+            interceptor: MyRequestInterceptor()
         )
         .validate()
         .responseDecodable(of: ProfilePostResponse.self) { response in
@@ -122,10 +109,6 @@ class ProfileHistoryViewModel {
         
         let url = "https://garamgaebi.shop/profile/career"
         
-        let header : HTTPHeaders = [
-            "Content-Type": "application/json",
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-        ]
         let bodyData: Parameters = [
             "memberIdx": memberIdx,
             "company": company,
@@ -140,7 +123,7 @@ class ProfileHistoryViewModel {
             method: .post,
             parameters: bodyData,
             encoding: JSONEncoding.default,
-            headers: header
+            interceptor: MyRequestInterceptor()
         )
         .validate()
         .responseDecodable(of: ProfilePostResponse.self) { response in
@@ -162,10 +145,6 @@ class ProfileHistoryViewModel {
         
         let url = "https://garamgaebi.shop/profile/career"
         
-        let header : HTTPHeaders = [
-            "Content-Type": "application/json",
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-        ]
         let bodyData: Parameters = [
             "careerIdx": careerIdx,
             "company": company,
@@ -180,7 +159,7 @@ class ProfileHistoryViewModel {
             method: .patch,
             parameters: bodyData,
             encoding: JSONEncoding.default,
-            headers: header
+            interceptor: MyRequestInterceptor()
         )
         .validate()
         .responseDecodable(of: ProfilePostResponse.self) { response in
@@ -202,16 +181,11 @@ class ProfileHistoryViewModel {
         
         let url = "https://garamgaebi.shop/profile/career/\(careerIdx)"
         
-        let header : HTTPHeaders = [
-            "Content-Type": "application/json",
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-        ]
-        
         AF.request(
             url,
             method: .delete,
             encoding: JSONEncoding.default,
-            headers: header
+            interceptor: MyRequestInterceptor()
         )
         .validate()
         .responseDecodable(of: ProfilePostResponse.self) { response in
@@ -233,11 +207,7 @@ class ProfileHistoryViewModel {
     public static func postEducation(memberIdx: Int, institution: String, major: String, isLearning: String, startDate: String, endDate: String, completion: @escaping ((Bool) -> Void)) {
         
         let url = "https://garamgaebi.shop/profile/education"
-        
-        let header : HTTPHeaders = [
-            "Content-Type": "application/json",
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-        ]
+
         let bodyData: Parameters = [
             "memberIdx": memberIdx,
             "institution": institution,
@@ -252,7 +222,7 @@ class ProfileHistoryViewModel {
             method: .post,
             parameters: bodyData,
             encoding: JSONEncoding.default,
-            headers: header
+            interceptor: MyRequestInterceptor()
         )
         .validate()
         .responseDecodable(of: ProfilePostResponse.self) { response in
@@ -273,11 +243,7 @@ class ProfileHistoryViewModel {
     public static func patchEducation(educationIdx: Int, institution: String, major: String, isLearning: String, startDate: String, endDate: String, completion: @escaping ((Bool) -> Void)) {
         
         let url = "https://garamgaebi.shop/profile/education"
-        
-        let header : HTTPHeaders = [
-            "Content-Type": "application/json",
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-        ]
+
         let bodyData: Parameters = [
             "educationIdx": educationIdx,
             "institution": institution,
@@ -292,7 +258,7 @@ class ProfileHistoryViewModel {
             method: .patch,
             parameters: bodyData,
             encoding: JSONEncoding.default,
-            headers: header
+            interceptor: MyRequestInterceptor()
         )
         .validate()
         .responseDecodable(of: ProfilePostResponse.self) { response in
@@ -314,16 +280,11 @@ class ProfileHistoryViewModel {
         
         let url = "https://garamgaebi.shop/profile/education/\(educationIdx)"
         
-        let header : HTTPHeaders = [
-            "Content-Type": "application/json",
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
-        ]
-        
         AF.request(
             url,
             method: .delete,
             encoding: JSONEncoding.default,
-            headers: header
+            interceptor: MyRequestInterceptor()
         )
         .validate()
         .responseDecodable(of: ProfilePostResponse.self) { response in

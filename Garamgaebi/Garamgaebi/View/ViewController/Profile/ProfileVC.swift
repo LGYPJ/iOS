@@ -504,7 +504,6 @@ class ProfileVC: UIViewController {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/\(memberIdx)"
-        let authorization = "Bearer \(token ?? "")"
         
         // httpBody에 parameters 추가
         AF.request(
@@ -567,7 +566,6 @@ class ProfileVC: UIViewController {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/sns/\(memberIdx)"
-        let authorization = "Bearer \(token ?? "")"
         
         // httpBody에 parameters 추가
         AF.request(
@@ -598,7 +596,6 @@ class ProfileVC: UIViewController {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/career/\(memberIdx)"
-        let authorization = "Bearer \(token ?? "")"
         
         // httpBody에 parameters 추가
         AF.request(
