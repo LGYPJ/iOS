@@ -55,7 +55,7 @@ class SplashVC: UIViewController {
         LoginViewModel.postLogin(socialEmail: usersocialEmail, completion: { [weak self] result in
             UserDefaults.standard.set(result.accessToken, forKey: "BearerToken")
             //UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
-            UserDefaults.standard.set(45, forKey: "memberIdx")
+//            UserDefaults.standard.set(48, forKey: "memberIdx")
             self?.showHome()
         })
     }

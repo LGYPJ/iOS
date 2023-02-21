@@ -125,6 +125,8 @@ class IceBreakingRoomVC: UIViewController {
 			self.cardCollectionView.reloadData()
 		}
 	}
+	private var currentUserId: Int = 0
+	private var currentUserIndex: Int = 0
 	
     // MARK: - Life Cycle
 	init(programId: Int ,roomId: String, roomName: String) {
@@ -290,7 +292,7 @@ extension IceBreakingRoomVC {
 	// 소켓 연결해제
 	private func disconnectSocket() {
 		userList = []
-		sendMessageWithSocket(type: "EXIT", message: "", profileUrl: "")
+		sendMessageWithSocket(type: "EXIT", message: "\(self.memberId)", profileUrl: "")
 		WebSocketManager.shared.socketClient.disconnect()
 //		socketClient.disconnect()
 	}
@@ -300,16 +302,80 @@ extension IceBreakingRoomVC {
 		if currentIndex < (imageList.count) {
 			// 해당 인덱스로 스크롤
 			cardCollectionView.scrollToItem(at: IndexPath(row: currentIndex, section: 1), at: .centeredHorizontally, animated: true)
-			userCollectionview.scrollToItem(at: IndexPath(row: currentIndex % userList.count, section: 0), at: .centeredHorizontally, animated: true)
-			
 			cardCollectionView.reloadData()
-			userCollectionview.reloadData()
 		}
+		
 		// 다음 버튼 서서히 사라지는 애니메이션
-		if currentIndex == (imageList.count) {
+//		if currentIndex == (imageList.count) {
+//			configureNextButtonStatus(false)
+//		}
+		
+		currentUserIndex += 1
+		
+		if currentUserIndex == userList.count {
+			currentUserIndex -= userList.count
+		}
+		userCollectionview.scrollToItem(at: IndexPath(row: currentUserIndex, section: 0), at: .centeredHorizontally, animated: true)
+		userCollectionview.reloadData()
+		
+		// 자신 차례이고, 마지막 카드가 아니라면 다음 버튼 활성화
+		if userList[currentUserIndex].memberIdx == self.memberId && currentIndex != imageList.count {
+			configureNextButtonStatus(true)
+		} else {
 			configureNextButtonStatus(false)
 		}
 		
+		
+	}
+	
+	private func findCurrentUserIndexAndScroll() {
+		currentUserIndex = 0
+		for user in userList {
+			if user.memberIdx == currentUserId {
+				break
+			}
+			currentUserIndex += 1
+		}
+		
+		if currentUserIndex == userList.count {
+			currentUserIndex -= userList.count
+		}
+		print(currentUserIndex)
+		userCollectionview.scrollToItem(at: IndexPath(row: currentUserIndex, section: 0), at: .centeredHorizontally, animated: true)
+		userCollectionview.reloadData()
+		
+		
+		// 자신 차례이고, 마지막 카드가 아니라면 다음 버튼 활성화
+		if userList[currentUserIndex].memberIdx == self.memberId && currentIndex != imageList.count {
+			configureNextButtonStatus(true)
+		} else {
+			configureNextButtonStatus(false)
+		}
+	}
+	
+	private func findNextUserIndexAndScroll() {
+		currentUserIndex = 0
+		for user in userList {
+			currentUserIndex += 1
+			if user.memberIdx == currentUserId {
+				break
+			}
+		}
+		
+		if currentUserIndex == userList.count {
+			currentUserIndex -= userList.count
+		}
+		
+		userCollectionview.scrollToItem(at: IndexPath(row: currentUserIndex, section: 0), at: .centeredHorizontally, animated: true)
+		userCollectionview.reloadData()
+		
+		
+		// 자신 차례이고, 마지막 카드가 아니라면 다음 버튼 활성화
+		if userList[currentUserIndex].memberIdx == self.memberId && currentIndex != imageList.count {
+			configureNextButtonStatus(true)
+		} else {
+			configureNextButtonStatus(false)
+		}
 	}
 	
 	// 뒤로가기 버튼 did tap
@@ -323,7 +389,7 @@ extension IceBreakingRoomVC {
 	// 다음 카드 버튼 did tap
 	@objc private func didTapNextButton() {
 		IcebreakingViewModel.patchCurrentIndex(roomId: self.roomId, completion: {
-			self.sendMessageWithSocket(type: "TALK", message: "NEXT", profileUrl: "")
+			self.sendMessageWithSocket(type: "NEXT", message: "\(self.memberId)", profileUrl: "")
 		})
 	}
 }
@@ -390,13 +456,13 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 				}
 				
 				// 자신 차례일 경우만 다음버튼 보이게
-				if !userList.isEmpty {
-					if userList[currentIndex % userList.count].memberIdx == self.memberId && (currentIndex != (imageList.count - 1)) {
-						configureNextButtonStatus(true)
-					} else {
-						configureNextButtonStatus(false)
-					}
-				}
+//				if !userList.isEmpty {
+//					if userList[currentIndex % userList.count].memberIdx == self.memberId && (currentIndex != (imageList.count - 1)) {
+//						configureNextButtonStatus(true)
+//					} else {
+//						configureNextButtonStatus(false)
+//					}
+//				}
 				
 				
 				return cell
@@ -458,16 +524,31 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 			// 서버에 유저 등록
 			IcebreakingViewModel.getCurrentGameUserWithPost(roomId: self.roomId, completion: { result in
 				self.userList = result
+				
+				self.findNextUserIndexAndScroll()
 			})
 		// 다음 버튼 눌렀을때 전송
-		case "TALK":
-			// message가 NEXT라면 스크롤
-			if jsonMessage == "NEXT" {
-				scrollToNextItem()
-			}
+		case "NEXT":
+//			self.currentUserId = Int(jsonMessage) ?? 0
+			
+			
+			scrollToNextItem()
+//			findNextUserIndexAndScroll()
 		// 유저가 퇴장했을때 전송
 		case "EXIT":
 			print("socket: \(jsonNickname)님이 퇴장하셨습니다!")
+			
+			if userList[currentUserIndex].memberIdx == Int(jsonMessage) ?? 0 {
+//				currentUserIndex += 1
+//				if currentUserIndex == userList.count {
+//					currentUserIndex -= userList.count
+//				}
+//				userCollectionview.scrollToItem(at: IndexPath(row: currentUserIndex, section: 0), at: .centeredHorizontally, animated: true)
+//				userCollectionview.reloadData()
+				
+				findNextUserIndexAndScroll()
+			}
+			
 			// 유저가 퇴장하면 기존 유저들이 다시 유저목록을 받아옴
 			IcebreakingViewModel.getCurrentGameUserWithPost(roomId: self.roomId, completion: { result in
 				self.userList = result
@@ -487,8 +568,9 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 		print("Stomp socket is connected")
 		subscribeSocket()
 		// 연결 후 서버에 자신 등록
-		IcebreakingViewModel.postGameUser(roomId: self.roomId, memberId: self.memberId, completion: { index in
-			self.currentIndex = index
+		IcebreakingViewModel.postGameUser(roomId: self.roomId, memberId: self.memberId, completion: { result in
+			self.currentIndex = result.currentImgIdx
+			self.currentUserId = result.currentMemberIdx
 			// enter 메세지 전송
 			self.sendMessageWithSocket(type: "ENTER", message: "", profileUrl: "")
 		})

@@ -18,6 +18,7 @@ struct IceBreakingChangeUserModelResposne: Codable {
 struct IceBreakingChangeUserModel: Codable {
 	let message: String
 	let currentImgIdx: Int
+	let currentMemberIdx: Int
 }
 
 // 현재 유저 조회
@@ -59,7 +60,7 @@ struct IceBreakingPatchIndexModelResponse: Codable {
 }
 
 struct IcebreakingViewModel {
-	public static func postGameUser(roomId: String, memberId: Int, completion: @escaping ((Int) -> Void)) {
+	public static func postGameUser(roomId: String, memberId: Int, completion: @escaping ((IceBreakingChangeUserModel) -> Void)) {
 		let url = "https://garamgaebi.shop/game/member"
 		let headers: HTTPHeaders = [
 			"Authorization": "Bearer \(UserDefaults.standard.string(forKey: "BearerToken") ?? "")"
@@ -75,8 +76,10 @@ struct IcebreakingViewModel {
 				switch response.result {
 				case .success(let result):
 					if result.isSuccess {
+						guard let result = result.result else {return}
 						print("성공(게임 방 유저 추가): roomId: \(roomId)")
-						completion(result.result?.currentImgIdx ?? 0)
+						completion(result)
+						
 					} else {
 						print("실패(게임 방 유저 추가): \(result.message)")
 					}
