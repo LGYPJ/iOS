@@ -24,7 +24,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
     var isAutoInput: Bool = false
     
     private let maxInputCount = 22
-    private var autoInputTextCount = 0 {
+    var autoInputTextCount = 0 {
         didSet {
             if autoInputTextCount > maxInputCount {
                 autoInputTextCount = maxInputCount - 1
@@ -93,7 +93,11 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         textField.text = ""
         textField.basicTextField()
         textField.placeholder = "표시할 이름을 입력해주세요 (예:블로그, 깃허브 등)"
+        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+        
+        // 글자수 계산
+        textField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
         return textField
     }()
     
@@ -484,7 +488,7 @@ extension ProfileInputSNSVC {
             autoInputTextCount = typeTextField.text?.count ?? 0
             NotificationCenter.default.post(name: Notification.Name("textDidChange"), object: sender)
         case linkTextField:
-            autoInputTextCount = linkTextField.text?.count ?? 0
+            linkTextCount = linkTextField.text?.count ?? 0
             NotificationCenter.default.post(name: Notification.Name("textDidChange"), object: sender)
         default:
             print(">>>ERROR: typeText ProfileSNSVC")

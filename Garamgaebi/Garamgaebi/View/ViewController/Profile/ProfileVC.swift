@@ -853,6 +853,7 @@ extension ProfileVC: SnsButtonTappedDelegate {
         nextVC.snsIdx = snsIdx
         nextVC.typeTextField.text = type
         nextVC.linkTextField.text = newAddress
+        nextVC.autoInputTextCount = type.count
 
         navigationController?.pushViewController(nextVC, animated: true)
     }
