@@ -100,7 +100,6 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         // 이미지 centerCrop
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
-        view.backgroundColor = .mainLightGray
         //view.image = UIImage(named: "DefaultProfileImage")
         
         return view
