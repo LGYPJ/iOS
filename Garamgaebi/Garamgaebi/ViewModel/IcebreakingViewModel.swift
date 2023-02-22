@@ -108,11 +108,11 @@ struct IcebreakingViewModel {
 	}
 	
 	// 게임방 유저 삭제
-	public static func deleteGameUser(roomId: String, memberId: Int, completion: @escaping (() -> Void)) {
+	public static func deleteGameUser(roomId: String, nextMemberIdx: Int, completion: @escaping (() -> Void)) {
 		let url = "https://garamgaebi.shop/game/member"
 		let body: [String: Any] = [
 			"roomId": roomId,
-			"nextMemberIdx": memberId
+			"nextMemberIdx": nextMemberIdx
 		]
 		AF.request(url, method: .delete, parameters: body, encoding: JSONEncoding.default, interceptor: MyRequestInterceptor())
 			.validate()
@@ -153,10 +153,11 @@ struct IcebreakingViewModel {
 	}
 	
 	// 인덱스 플러스
-	public static func patchCurrentIndex(roomId: String, completion: @escaping (() -> Void)) {
+	public static func patchCurrentIndex(roomId: String, nextMemberIdx: Int, completion: @escaping (() -> Void)) {
 		let url = "https://garamgaebi.shop/game/current-idx"
-		let body: [String: String] = [
-			"roomId": roomId
+		let body: [String: Any] = [
+			"roomId": roomId,
+			"nextMemberIdx": nextMemberIdx
 		]
 		AF.request(url, method: .patch, parameters: body,encoding: JSONEncoding.default, interceptor: MyRequestInterceptor())
 			.validate()
