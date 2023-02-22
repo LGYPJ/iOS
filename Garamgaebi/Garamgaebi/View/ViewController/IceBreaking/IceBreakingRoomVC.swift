@@ -113,7 +113,6 @@ class IceBreakingRoomVC: UIViewController {
 	private let roomName: String
 	private let memberId: Int
 	private let nickname: String
-//	private var socketClient = StompClientLib()
 	private var userList: [IceBrakingCurrentUserModel] = [] {
 		didSet {
 			self.userCollectionview.reloadData()
@@ -241,15 +240,17 @@ extension IceBreakingRoomVC {
 	private func configureNextButtonStatus(_ isEnable: Bool) {
 		if isEnable {
 			UIView.animate(withDuration: 0.5, animations: {
+				self.nextButton.isEnabled = true
 				self.nextButton.alpha = 1
 			}, completion: { [weak self] _ in
-				self?.nextButton.isEnabled = true
+//				self?.nextButton.isEnabled = true
 			})
 		} else {
 			UIView.animate(withDuration: 0.5, animations: {
 				self.nextButton.alpha = 0
+				self.nextButton.isEnabled = false
 			}, completion: { [weak self] _ in
-				self?.nextButton.isEnabled = false
+//				self?.nextButton.isEnabled = false
 			})
 		}
 	}
@@ -374,6 +375,7 @@ extension IceBreakingRoomVC {
 	
 	// 다음 카드 버튼 did tap
 	@objc private func didTapNextButton() {
+		nextButton.isEnabled = false
 		let nextMemberIndex = findNextUserIndex()
 		let nextMemberIdx = userList[nextMemberIndex].memberIdx
 		
