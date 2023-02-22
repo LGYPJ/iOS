@@ -107,7 +107,7 @@
 		60B344702990BADA00A18CBB /* RegisterUserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B3446F2990BADA00A18CBB /* RegisterUserViewModel.swift */; };
 		60B344742990BBA000A18CBB /* RegisterUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B344732990BBA000A18CBB /* RegisterUserModel.swift */; };
 		60BC582E29715A2A00FBF1C3 /* CompleteRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BC582D29715A2A00FBF1C3 /* CompleteRegisterVC.swift */; };
-		60BD04F02973A25D00F4B433 /* RecommendUsersColectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD04EF2973A25D00F4B433 /* RecommendUsersColectionViewCell.swift */; };
+		60BD04F02973A25D00F4B433 /* RecommendUsersCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD04EF2973A25D00F4B433 /* RecommendUsersCollectionViewCell.swift */; };
 		60BD04F22973A3EC00F4B433 /* RecommendUsersInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD04F12973A3EC00F4B433 /* RecommendUsersInfoTableViewCell.swift */; };
 		60BD04F42973A47E00F4B433 /* HomeUserDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD04F32973A47E00F4B433 /* HomeUserDataModel.swift */; };
 		60BD04F62973AD2600F4B433 /* HomeMyEventInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD04F52973AD2600F4B433 /* HomeMyEventInfoTableViewCell.swift */; };
@@ -269,7 +269,7 @@
 		60B3446F2990BADA00A18CBB /* RegisterUserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterUserViewModel.swift; sourceTree = "<group>"; };
 		60B344732990BBA000A18CBB /* RegisterUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterUserModel.swift; sourceTree = "<group>"; };
 		60BC582D29715A2A00FBF1C3 /* CompleteRegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteRegisterVC.swift; sourceTree = "<group>"; };
-		60BD04EF2973A25D00F4B433 /* RecommendUsersColectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendUsersColectionViewCell.swift; sourceTree = "<group>"; };
+		60BD04EF2973A25D00F4B433 /* RecommendUsersCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendUsersCollectionViewCell.swift; sourceTree = "<group>"; };
 		60BD04F12973A3EC00F4B433 /* RecommendUsersInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendUsersInfoTableViewCell.swift; sourceTree = "<group>"; };
 		60BD04F32973A47E00F4B433 /* HomeUserDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUserDataModel.swift; sourceTree = "<group>"; };
 		60BD04F52973AD2600F4B433 /* HomeMyEventInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMyEventInfoTableViewCell.swift; sourceTree = "<group>"; };
@@ -456,7 +456,7 @@
 				601823322972DDCA00160EF4 /* HomeEventInfoTabelViewCell.swift */,
 				601823342972F04500160EF4 /* HomeEventCollectionViewCell.swift */,
 				60BD04F12973A3EC00F4B433 /* RecommendUsersInfoTableViewCell.swift */,
-				60BD04EF2973A25D00F4B433 /* RecommendUsersColectionViewCell.swift */,
+				60BD04EF2973A25D00F4B433 /* RecommendUsersCollectionViewCell.swift */,
 				60BD04F52973AD2600F4B433 /* HomeMyEventInfoTableViewCell.swift */,
 				60BD04F72973C37C00F4B433 /* HomeMyEventColectionViewCell.swift */,
 			);
@@ -1155,7 +1155,7 @@
 				6055D84729701F6B00C86D53 /* InputEducationVC.swift in Sources */,
 				60A4BC152992264000C24DAC /* NotificationViewModel.swift in Sources */,
 				2CED690329867F1800C838BD /* NetworkingDetailViewModel.swift in Sources */,
-				60BD04F02973A25D00F4B433 /* RecommendUsersColectionViewCell.swift in Sources */,
+				60BD04F02973A25D00F4B433 /* RecommendUsersCollectionViewCell.swift in Sources */,
 				60F73A92299CC6260015E25F /* SplashVC.swift in Sources */,
 				60093A8B296E7EFB00F76783 /* LoginVC.swift in Sources */,
 				60BD04FF2973EBE600F4B433 /* HomeNotificationTableViewCell.swift in Sources */,

@@ -9,7 +9,7 @@ import UIKit
 
 class HomeEventCollectionViewCell: UICollectionViewCell {
 
-    static let identifier = "HomeEventCollectionViewCell"
+    static let identifier = String(describing: HomeEventCollectionViewCell.self)
     
     // MARK: - Subviews
     

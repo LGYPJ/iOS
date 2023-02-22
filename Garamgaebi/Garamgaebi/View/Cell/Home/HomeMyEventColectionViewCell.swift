@@ -8,9 +8,9 @@
 
 import UIKit
 
-class HomeMyEventColectionViewCell: UICollectionViewCell {
+class HomeMyEventCollectionViewCell: UICollectionViewCell {
     
-    static let identifier = "HomeMyEventColectionViewCell"
+    static let identifier = String(describing: HomeMyEventCollectionViewCell.self)
     public var programIdx = Int()
     public var payment = String()
     public var type = String()

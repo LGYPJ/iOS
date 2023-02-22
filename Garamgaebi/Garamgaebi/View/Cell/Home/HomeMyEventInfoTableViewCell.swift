@@ -47,7 +47,7 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
         view.showsVerticalScrollIndicator = false
         view.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
         view.clipsToBounds = true
-        view.register(HomeMyEventColectionViewCell.self, forCellWithReuseIdentifier: HomeMyEventColectionViewCell.identifier)
+        view.register(HomeMyEventCollectionViewCell.self, forCellWithReuseIdentifier: HomeMyEventCollectionViewCell.identifier)
         return view
     }()
     
@@ -156,7 +156,7 @@ extension HomeMyEventInfoTableViewCell: UICollectionViewDataSource, UICollection
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeMyEventColectionViewCell.identifier, for: indexPath) as? HomeMyEventColectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeMyEventCollectionViewCell.identifier, for: indexPath) as? HomeMyEventCollectionViewCell else {
             return UICollectionViewCell()
         }
         cell.configure(myEventList[indexPath.row])
