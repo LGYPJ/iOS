@@ -533,6 +533,7 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 			if currentUserId == Int(jsonMessage) ?? 0 {
 				let index = findNextUserIndex()
 				scrollUserTo(index: index)
+				currentUserId = userList[index].memberIdx
 			}
 			
 			// 유저가 퇴장하면 기존 유저들이 다시 유저목록을 받아옴
