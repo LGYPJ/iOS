@@ -26,6 +26,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window = UIWindow(windowScene: windowScene)
         
         let rootViewController = SplashVC()
+//        let rootViewController = ErrorPageView()
 //        let rootViewController = TabBarController()
         //let rootViewController = EventApplyCancelVC()
         //let rootViewController = HomeVC()

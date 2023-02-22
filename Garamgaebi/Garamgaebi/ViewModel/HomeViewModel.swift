@@ -10,7 +10,7 @@ import Alamofire
 // 홈 화면 ViewModel
 class HomeViewModel {
     // MARK: Request [Seminar]
-    public static func getHomeSeminarInfo(completion: @escaping (([HomeSeminarInfo]) -> Void)) {
+    public static func getHomeSeminarInfo(completion: @escaping ((Result<HomeSeminarInfoResponse, AFError>) -> Void)) {
         let url = "https://garamgaebi.shop/seminars/main"
 		AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
@@ -18,14 +18,15 @@ class HomeViewModel {
                 switch response.result {
                 case .success(let result):
                     if result.isSuccess {
-                        guard let result = result.result else {return}
-                        completion(result)
+                        completion(response.result)
                     } else {
                         // 통신은 정상적으로 됐으나(200), error발생
+                        completion(response.result)
                         print("실패(홈 화면 Seminar 조회): \(result.message)")
                     }
                 case .failure(let error):
                     // 실제 HTTP에러 ex)404
+                    completion(response.result)
                     print("실패(AF-홈 화면 Seminar 조회): \(error.localizedDescription)")
                 }
             }

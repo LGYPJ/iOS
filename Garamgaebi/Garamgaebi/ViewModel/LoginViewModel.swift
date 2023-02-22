@@ -30,6 +30,7 @@ class LoginViewModel {
                         completion(response.result)
 					}
 				case .failure(let error):
+                    completion(response.result)
 					print("실패(AF-로그인): \(error.localizedDescription)")
 				}
 			}

@@ -144,7 +144,21 @@ class HomeVC: UIViewController {
         
         // 세미나 정보 API
         HomeViewModel.getHomeSeminarInfo { [weak self] result in
-            self?.homeSeminarInfo = result
+            switch result {
+            case .success(let result):
+                if result.isSuccess {
+                    guard let result = result.result else { return }
+                    self?.homeSeminarInfo = result
+                } else {
+                    
+                }
+            case .failure(let error):
+                // 네트워킹 문제일 시 errorView로 이동
+                print("실패(AF-홈 화면 Seminar 조회): \(error.localizedDescription)")
+                let errorView = ErrorPageView()
+                errorView.modalPresentationStyle = .fullScreen
+                self?.present(errorView, animated: false)
+            }
         }
         // 네트워킹 정보 API
         HomeViewModel.getHomeNetworkingInfo { [weak self] result in
