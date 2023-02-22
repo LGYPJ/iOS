@@ -127,6 +127,7 @@ class IceBreakingRoomVC: UIViewController {
 	}
 	private var currentUserId: Int = 0
 	private var currentUserIndex: Int = 0
+	private var isLastCard: Bool = false
 	
     // MARK: - Life Cycle
 	init(programId: Int ,roomId: String, roomName: String) {
@@ -268,14 +269,10 @@ extension IceBreakingRoomVC {
 		WebSocketManager.shared.socketClient.openSocketWithURLRequest(
 			request: NSURLRequest(url: url),
 			delegate: self)
-//		socketClient.openSocketWithURLRequest(
-//			request: NSURLRequest(url: url),
-//			delegate: self)
 	}
 	// socket 구독
 	private func subscribeSocket() {
 		WebSocketManager.shared.socketClient.subscribe(destination: "/topic/game/room/\(self.roomId)")
-//		socketClient.subscribe(destination: "/topic/game/room/\(self.roomId)")
 	}
 	// socket 메세지 전송
 	private func sendMessageWithSocket(type: String, message: String, profileUrl: String) {
@@ -287,14 +284,12 @@ extension IceBreakingRoomVC {
 			"profileUrl": profileUrl
 		]
 		WebSocketManager.shared.socketClient.sendJSONForDict(dict: payloadObject as AnyObject, toDestination: "/app/game/message")
-//		socketClient.sendJSONForDict(dict: payloadObject as AnyObject, toDestination: "/app/game/message")
 	}
 	// 소켓 연결해제
 	private func disconnectSocket() {
 		
 		sendMessageWithSocket(type: "EXIT", message: "\(self.memberId)", profileUrl: "")
 		WebSocketManager.shared.socketClient.disconnect()
-//		socketClient.disconnect()
 	}
 	// 다음 아이템으로 스크롤
 	private func scrollToNextItem() {
@@ -305,8 +300,16 @@ extension IceBreakingRoomVC {
 			cardCollectionView.reloadData()
 		}
 		
+		// 마지막 카드면 다음버튼 비활성화gi
+		if currentIndex == (imageList.count - 1) {
+			configureNextButtonStatus(false)
+			isLastCard = true
+		}
+		
 		let index = findCurrentUserIndex()
 		scrollUserTo(index: index)
+		
+		
 	}
 	
 	private func findNextUserIndex() -> Int {
@@ -344,7 +347,7 @@ extension IceBreakingRoomVC {
 		userCollectionview.reloadData()
 		
 		// 자신 차례이고, 마지막 카드가 아니라면 다음 버튼 활성화
-		if userList[index].memberIdx == self.memberId && index != imageList.count && isStart {
+		if userList[index].memberIdx == self.memberId && !isLastCard && isStart {
 			configureNextButtonStatus(true)
 		} else {
 			configureNextButtonStatus(false)
@@ -440,16 +443,7 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 				} else{
 					cell.contentImageView.isHidden = true
 				}
-				
-				// 자신 차례일 경우만 다음버튼 보이게
-//				if !userList.isEmpty {
-//					if userList[currentIndex % userList.count].memberIdx == self.memberId && (currentIndex != (imageList.count - 1)) {
-//						configureNextButtonStatus(true)
-//					} else {
-//						configureNextButtonStatus(false)
-//					}
-//				}
-				
+
 				
 				return cell
 			default:
