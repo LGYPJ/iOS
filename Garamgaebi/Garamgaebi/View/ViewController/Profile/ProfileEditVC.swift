@@ -100,7 +100,6 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         // 이미지 centerCrop
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
-        view.backgroundColor = .mainLightGray
         //view.image = UIImage(named: "DefaultProfileImage")
         
         return view
@@ -162,7 +161,6 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         $0.basicTextField()
         
         $0.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
-        $0.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         $0.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         $0.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
     }
@@ -497,8 +495,7 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     @objc func allTextFieldFilledIn() {
         /* 모든 textField가 채워졌으면 프로필 저장 버튼 활성화 */
         if self.isValidNickName,
-           self.isValidEmail,
-           self.belongTextField.text?.count != 0 {
+           self.isValidEmail {
             buttonActivated()
         } else { // 프로필 저장버튼 비활성화
             buttonInactivated()

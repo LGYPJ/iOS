@@ -405,21 +405,14 @@ class OtherProfileVC: UIViewController {
                 } else {
                     print("실패(\(self.memberIdx) 프로필): \(response.message)")
                     if (response.code == 2001) { // 존재하지 않는 회원
-                        self.scrollView.snp.removeConstraints()
-                        self.errorImageView.snp.makeConstraints {
-                            $0.height.width.equalTo(70)
-                            $0.centerX.equalToSuperview()
-                            $0.bottom.equalTo(self.errorMsgStackView.snp.top).offset(-16)
-                        }
-                        self.errorMsgStackView.snp.makeConstraints {
-                            $0.centerX.equalToSuperview()
-                            $0.centerY.equalToSuperview().offset(20)
-                            $0.width.equalTo(380)
-                        }
+                        self.showErrorView()
                     }
                 }
             case .failure(let error):
                 print("실패(AF-\(self.memberIdx) 프로필): \(error.localizedDescription)")
+                self.errorTitle.text = "페이지를 불러올 수 없습니다"
+                self.errorDesc.text = "다시 시도해주세요"
+                self.showErrorView()
             }
         }
     }
@@ -668,6 +661,20 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
         }, completion: {(isCompleted) in
             toastLabel.removeFromSuperview()
         })
+    }
+    
+    func showErrorView() {
+        self.scrollView.snp.removeConstraints()
+        self.errorImageView.snp.makeConstraints {
+            $0.height.width.equalTo(70)
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(self.errorMsgStackView.snp.top).offset(-16)
+        }
+        self.errorMsgStackView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalToSuperview().offset(20)
+            $0.width.equalTo(380)
+        }
     }
 }
 

@@ -289,7 +289,7 @@ class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
         
         sendBtn.snp.makeConstraints { /// 회원탈퇴 버튼
             $0.height.equalTo(48)
-            $0.bottom.equalToSuperview().inset(16)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
             $0.leading.trailing.equalTo(emailTextField)
         }
         
