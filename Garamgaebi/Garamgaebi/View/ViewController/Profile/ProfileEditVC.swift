@@ -453,12 +453,6 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/edit"
         
-//        // http 요청 헤더 지정
-//        let header : HTTPHeaders = [
-//            "Content-Type": "multipart/form-data",
-//            "Authorization": "Bearer \(token ?? "")"
-//        ]
-        
         let subParam: [String: Any] = [
             "memberIdx": String(memberIdx),
             "nickname": nickName,
@@ -480,7 +474,6 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
                 multipartFormData.append(imageData, withName: "image", fileName: "\(imageData).png", mimeType: "multipart/form-data")
             }
         }, to: url, method: .post,
-//                  headers: header
                   interceptor: MyRequestInterceptor()
         )
         .validate()

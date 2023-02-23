@@ -119,7 +119,7 @@ class OtherProfileVC: UIViewController {
         view.contentInset = .zero
         view.isScrollEnabled = false
     
-        view.layer.cornerRadius = 13 // 테스트
+        view.layer.cornerRadius = 18
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         
         view.register(ProfileSNSTableViewCell.self, forCellReuseIdentifier: ProfileSNSTableViewCell.identifier)
@@ -146,7 +146,7 @@ class OtherProfileVC: UIViewController {
         view.contentInset = .zero
         view.isScrollEnabled = false
         
-        view.layer.cornerRadius = 14 // 테스트
+        view.layer.cornerRadius = 18
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         
         view.register(ProfileHistoryTableViewCell.self, forCellReuseIdentifier: ProfileHistoryTableViewCell.identifier)
@@ -172,7 +172,7 @@ class OtherProfileVC: UIViewController {
         view.contentInset = .zero
         view.isScrollEnabled = false
         
-        view.layer.cornerRadius = 15 // 테스트
+        view.layer.cornerRadius = 18
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         
         view.register(ProfileHistoryTableViewCell.self, forCellReuseIdentifier: ProfileHistoryTableViewCell.identifier)
@@ -350,23 +350,12 @@ class OtherProfileVC: UIViewController {
     
     // MARK: - [GET] 가람개비 유저 프로필 정보
     func getOtherInfo() {
-        
-        // http 요청 주소 지정
+
         let url = "https://garamgaebi.shop/profile/\(memberIdx)"
         
-        let authorization = "Bearer \(token ?? "")"
-        
-//        // http 요청 헤더 지정
-//        let header : HTTPHeaders = [
-//            "Content-Type": "application/json",
-//            "Authorization": authorization
-//        ]
-        
-        // httpBody에 parameters 추가
         AF.request(
-            url, // 주소
-            method: .get, // 전송 타입
-//            headers: header // 헤더 지정
+            url,
+            method: .get,
             interceptor: MyRequestInterceptor()
         )
         .validate()
@@ -441,20 +430,10 @@ class OtherProfileVC: UIViewController {
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/sns/\(memberIdx)"
         
-        let authorization = "Bearer \(token ?? "")"
-        
-//        // http 요청 헤더 지정
-//        let header: HTTPHeaders = [
-//            "Content-Type" : "application/json",
-//            "Authorization": authorization
-//        ]
-        
-        // httpBody에 parameters 추가
         AF.request(
             url,
             method: .get,
             encoding: JSONEncoding.default,
-//            headers: header
             interceptor: MyRequestInterceptor()
         )
         .validate()
@@ -479,21 +458,11 @@ class OtherProfileVC: UIViewController {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/career/\(memberIdx)"
-        
-        let authorization = "Bearer \(token ?? "")"
-        
-//        // http 요청 헤더 지정
-//        let header: HTTPHeaders = [
-//            "Content-Type" : "application/json",
-//            "Authorization": authorization
-//        ]
-        
-        // httpBody에 parameters 추가
+
         AF.request(
             url,
             method: .get,
             encoding: JSONEncoding.default,
-//            headers: header
             interceptor: MyRequestInterceptor()
         )
         .validate()
@@ -517,23 +486,12 @@ class OtherProfileVC: UIViewController {
     // MARK: - [GET] Education 조회
     func getEducationData(completion: @escaping (([EducationResult])) -> Void) {
         
-        // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/education/\(memberIdx)"
         
-        let authorization = "Bearer \(token ?? "")"
-        
-//        // http 요청 헤더 지정
-//        let header: HTTPHeaders = [
-//            "Content-Type" : "application/json",
-//            "Authorization": authorization
-//        ]
-        
-        // httpBody에 parameters 추가
         AF.request(
             url,
             method: .get,
             encoding: JSONEncoding.default,
-//            headers: header
             interceptor: MyRequestInterceptor()
         )
         .validate()
@@ -567,7 +525,7 @@ class OtherProfileVC: UIViewController {
             snsTableView.snp.makeConstraints {
                 $0.top.equalToSuperview().offset(47) // 헤더 크기
                 $0.leading.trailing.equalToSuperview().inset(1)
-                $0.bottom.equalToSuperview().inset(1)
+                $0.bottom.equalToSuperview().inset(0.5)
                 $0.height.equalTo(snsCount * 65)
             }
         }
@@ -585,7 +543,7 @@ class OtherProfileVC: UIViewController {
             careerTableView.snp.makeConstraints {
                 $0.top.equalToSuperview().offset(47) // 헤더 크기
                 $0.leading.trailing.equalToSuperview().inset(1)
-                $0.bottom.equalToSuperview().inset(1)
+                $0.bottom.equalToSuperview().inset(0.5)
                 $0.height.equalTo(careerCount * 90)
             }
         }
@@ -603,7 +561,7 @@ class OtherProfileVC: UIViewController {
             eduTableView.snp.makeConstraints {
                 $0.top.equalToSuperview().offset(47) // 헤더 크기
                 $0.leading.trailing.equalToSuperview().inset(1)
-                $0.bottom.equalToSuperview().inset(1)
+                $0.bottom.equalToSuperview().inset(0.5)
                 $0.height.equalTo(eduCount * 90)
             }
         }
@@ -642,9 +600,7 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileSNSTableViewCell.identifier, for: indexPath) as? ProfileSNSTableViewCell else { return UITableViewCell()}
             
             let type = snsData[indexPath.row].type
-            if type != nil {
-                cell.snsTypeLabel.text = type
-            } else { cell.snsTypeLabel.text = "기타" }
+            cell.snsTypeLabel.text = type
             cell.snsLinkLabel.text = snsData[indexPath.row].address
             cell.editButton.isHidden = true
             

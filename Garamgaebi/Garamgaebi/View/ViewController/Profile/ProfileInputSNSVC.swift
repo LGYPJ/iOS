@@ -24,7 +24,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
     var isAutoInput: Bool = false
     
     private let maxInputCount = 22
-    private var autoInputTextCount = 0 {
+    var autoInputTextCount = 0 {
         didSet {
             if autoInputTextCount > maxInputCount {
                 autoInputTextCount = maxInputCount - 1
@@ -32,6 +32,14 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
             }
             else {
                 autoInputTextCountLabel.text = "\(autoInputTextCount)/\(maxInputCount)"
+            }
+        }
+    }
+    private let maxLinkCount = 140
+    private var linkTextCount = 0 {
+        didSet {
+            if linkTextCount > maxLinkCount {
+                linkTextCount = maxLinkCount - 1
             }
         }
     }
@@ -85,7 +93,11 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         textField.text = ""
         textField.basicTextField()
         textField.placeholder = "표시할 이름을 입력해주세요 (예:블로그, 깃허브 등)"
+        textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+        
+        // 글자수 계산
+        textField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
         return textField
     }()
     
@@ -107,6 +119,9 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
+        
+        // 글자수 계산
+        textField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
         
         return textField
     }()
@@ -184,9 +199,6 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         addSubViews()
         configLayouts()
         configureGestureRecognizer()
-        
-        // SNS 링크 글자수 제한 (140자)
-        NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: UITextField.textDidChangeNotification, object: linkTextField)
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -434,26 +446,6 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         sender.layer.borderWidth = 1
     }
     
-//    @objc private func textDidChange(_ notification: Notification) {
-//            if let textField = notification.object as? UITextField {
-//                let maxLength = 140
-//                if let text = textField.text {
-//
-//                    if text.count > maxLength {
-//                        // 140글자 넘어가면 자동으로 키보드 내려감
-//                        textField.resignFirstResponder()
-//                    }
-//
-//                    // 초과되는 텍스트 제거
-//                    if text.count >= maxLength {
-//                        let index = text.index(text.startIndex, offsetBy: maxLength)
-//                        let newString = text[text.startIndex..<index]
-//                        textField.text = String(newString)
-//                    }
-//                }
-//            }
-//        }
-    
     // 뒤로가기 버튼 did tap
     @objc private func didTapBackBarButton() {
         self.navigationController?.popViewController(animated: true)
@@ -495,6 +487,9 @@ extension ProfileInputSNSVC {
         case typeTextField:
             autoInputTextCount = typeTextField.text?.count ?? 0
             NotificationCenter.default.post(name: Notification.Name("textDidChange"), object: sender)
+        case linkTextField:
+            linkTextCount = linkTextField.text?.count ?? 0
+            NotificationCenter.default.post(name: Notification.Name("textDidChange"), object: sender)
         default:
             print(">>>ERROR: typeText ProfileSNSVC")
         }
@@ -505,8 +500,8 @@ extension ProfileInputSNSVC {
     }
     
     @objc private func validTextCount(_ notification: Notification) {
-        // typeTextField일 때 (SNS 직접 입력)
         if let textField = notification.object as? UITextField {
+            // typeTextField일 때 (SNS 직접 입력)
             if textField == typeTextField {
                 if let text = textField.text {
                     if text.count > maxInputCount {
@@ -516,6 +511,21 @@ extension ProfileInputSNSVC {
                     // 초과되는 텍스트 제거
                     if text.count >= maxInputCount {
                         let index = text.index(text.startIndex, offsetBy: maxInputCount)
+                        let newString = text[text.startIndex..<index]
+                        textField.text = String(newString)
+                    }
+                }
+            }
+            // linkTextField일 때
+            if textField == linkTextField {
+                if let text = textField.text {
+                    if text.count > maxLinkCount {
+                        // 최대글자 넘어가면 자동으로 키보드 내려감
+                        textField.resignFirstResponder()
+                    }
+                    // 초과되는 텍스트 제거
+                    if text.count >= maxLinkCount {
+                        let index = text.index(text.startIndex, offsetBy: maxLinkCount)
                         let newString = text[text.startIndex..<index]
                         textField.text = String(newString)
                     }
