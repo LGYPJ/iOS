@@ -60,11 +60,11 @@ struct IceBreakingPatchIndexModelResponse: Codable {
 }
 
 struct IcebreakingViewModel {
+	// 게임방 입장
 	public static func postGameUser(roomId: String, memberId: Int, completion: @escaping ((IceBreakingChangeUserModel) -> Void)) {
 		let url = "https://garamgaebi.shop/game/member"
 		let body: [String: Any] = [
-			"roomId": roomId,
-			"memberIdx": memberId
+			"roomId": roomId
 		]
 		AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default, interceptor: MyRequestInterceptor())
 			.validate()
@@ -85,6 +85,7 @@ struct IcebreakingViewModel {
 			}
 	}
 	
+	// 게임방 유저 불러오기
 	public static func getCurrentGameUserWithPost(roomId: String, completion: @escaping (([IceBrakingCurrentUserModel]) -> Void)) {
 		let url = "https://garamgaebi.shop/game/members"
 		let body: [String: String] = [
@@ -106,11 +107,12 @@ struct IcebreakingViewModel {
 			}
 	}
 	
-	public static func deleteGameUser(roomId: String, memberId: Int, completion: @escaping (() -> Void)) {
+	// 게임방 유저 삭제
+	public static func deleteGameUser(roomId: String, nextMemberIdx: Int, completion: @escaping (() -> Void)) {
 		let url = "https://garamgaebi.shop/game/member"
 		let body: [String: Any] = [
 			"roomId": roomId,
-			"memberIdx": memberId
+			"nextMemberIdx": nextMemberIdx
 		]
 		AF.request(url, method: .delete, parameters: body, encoding: JSONEncoding.default, interceptor: MyRequestInterceptor())
 			.validate()
@@ -131,6 +133,7 @@ struct IcebreakingViewModel {
 			}
 	}
 	
+	// 게임 이미지 불러오기
 	public static func getGameImage(programId: Int, completion: @escaping (([String]) -> Void)) {
 		let url = "https://garamgaebi.shop/game/\(programId)/images"
 		AF.request(url, method: .get, interceptor: MyRequestInterceptor())
@@ -149,10 +152,12 @@ struct IcebreakingViewModel {
 			}
 	}
 	
-	public static func patchCurrentIndex(roomId: String, completion: @escaping (() -> Void)) {
+	// 인덱스 플러스
+	public static func patchCurrentIndex(roomId: String, nextMemberIdx: Int, completion: @escaping (() -> Void)) {
 		let url = "https://garamgaebi.shop/game/current-idx"
-		let body: [String: String] = [
-			"roomId": roomId
+		let body: [String: Any] = [
+			"roomId": roomId,
+			"nextMemberIdx": nextMemberIdx
 		]
 		AF.request(url, method: .patch, parameters: body,encoding: JSONEncoding.default, interceptor: MyRequestInterceptor())
 			.validate()
