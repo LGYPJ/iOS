@@ -8,6 +8,7 @@
 import Foundation
 import Alamofire
 
+let retryLimit = 3
 
 final class MyRequestInterceptor: RequestInterceptor {
     func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
@@ -38,11 +39,13 @@ final class MyRequestInterceptor: RequestInterceptor {
                 .responseDecodable(of: LoginModelResponse.self) { response in
                     switch response.result {
                     case .success(let result):
-                        if result.isSuccess {
+                        if result.isSuccess,
+                           request.retryCount < retryLimit
+                        {
                             guard let passData = result.result else {return}
                             UserDefaults.standard.set(passData.accessToken, forKey: "BearerToken")
                             UserDefaults.standard.set(passData.memberIdx, forKey: "memberIdx")
-                            completion(.retry)
+                            completion(.retryWithDelay(1))
                         } else {
                             print("실패 : Token Refresh Fail : \(error)")
                         }

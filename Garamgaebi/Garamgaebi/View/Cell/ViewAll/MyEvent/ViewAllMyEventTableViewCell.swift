@@ -260,7 +260,7 @@ class ViewAllMyEventTableViewCell: UITableViewCell {
         settingButtonConfig(SettingButtonStatus.CLOSED)
         baseView.isHidden = false
         zeroDataBackgroundView.isHidden = true
-        settingButton.isHidden = true
+        settingButton.isHidden = false
         dateTimeView.backgroundColor = UIColor(hex: 0xF5F5F5)
         
         // item.date -> (String -> Date)

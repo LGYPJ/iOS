@@ -49,7 +49,7 @@ class RecommendUsersInfoTableViewCell: UITableViewCell {
         view.contentInset = .zero
         view.backgroundColor = .clear
         view.clipsToBounds = true
-        view.register(RecommendUsersColectionViewCell.self, forCellWithReuseIdentifier: RecommendUsersColectionViewCell.identifier)
+        view.register(RecommendUsersCollectionViewCell.self, forCellWithReuseIdentifier: RecommendUsersCollectionViewCell.identifier)
         
         return view
     }()
@@ -212,7 +212,7 @@ extension RecommendUsersInfoTableViewCell: UICollectionViewDataSource, UICollect
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendUsersColectionViewCell.identifier, for: indexPath) as? RecommendUsersColectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendUsersCollectionViewCell.identifier, for: indexPath) as? RecommendUsersCollectionViewCell else {
             return UICollectionViewCell()
         }
         

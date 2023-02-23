@@ -8,9 +8,9 @@
 import UIKit
 import Kingfisher
 
-class RecommendUsersColectionViewCell: UICollectionViewCell {
+class RecommendUsersCollectionViewCell: UICollectionViewCell {
     
-    static let identifier = String(describing: RecommendUsersColectionViewCell.self)
+    static let identifier = String(describing: RecommendUsersCollectionViewCell.self)
     // MARK: - Subviews
     
     lazy var imageInfoView: UIImageView = {

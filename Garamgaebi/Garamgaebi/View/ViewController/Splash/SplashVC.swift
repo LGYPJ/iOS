@@ -25,7 +25,13 @@ class SplashVC: UIViewController {
         }
         view.backgroundColor = .white
         
+//        login()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         login()
+        
     }
     
     // MARK: - Functions
@@ -63,6 +69,9 @@ class SplashVC: UIViewController {
                 }
             case .failure(let error):
                 print("실패(AF-자동로그인): \(error.localizedDescription)")
+                let errorView = ErrorPageView()
+                errorView.modalPresentationStyle = .fullScreen
+                self?.present(errorView, animated: false)
             }
         })
     }

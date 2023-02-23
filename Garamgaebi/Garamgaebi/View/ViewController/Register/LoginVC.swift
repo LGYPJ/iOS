@@ -16,7 +16,7 @@ class LoginVC: UIViewController {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "가람개비"
-        label.textColor = .mainBlack
+        label.textColor = .mainBlue
         label.font = UIFont.NotoSansKR(type: .Bold, size: 36)
         return label
     }()
