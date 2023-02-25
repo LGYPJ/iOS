@@ -170,7 +170,9 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         
         $0.addTarget(self, action: #selector(logoutButtonDidTap), for: .touchUpInside)
     }
-    
+    lazy var seperateLine = UIView().then {
+        $0.backgroundColor = UIColor(hex: 0xAEAEAE)
+    }
     lazy var withdrawalLabel = UIButton().then {
         $0.setTitle("회원탈퇴", for: .normal)
         $0.titleLabel?.font = UIFont.NotoSansKR(type: .Bold, size: 16)
@@ -218,8 +220,10 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         scrollView.showsVerticalScrollIndicator = false
         
         // addSubview
-        [noticeSubtitleLabel, noticeLabel, emailSubtitleLabel, emailTextField, emailAlertLabel, questionTypeSubtitleLabel, questionTypeTextField, contentTextField, agreeCheckBtn, agreemsgLabel, sendBtn, logoutLabel, withdrawalLabel]
+        [noticeSubtitleLabel, noticeLabel, emailSubtitleLabel, emailTextField, emailAlertLabel, questionTypeSubtitleLabel, questionTypeTextField, contentTextField, agreeCheckBtn, agreemsgLabel, sendBtn]
             .forEach {contentView.addSubview($0)}
+        [logoutLabel, seperateLine, withdrawalLabel].forEach { contentView.addSubview($0)
+        }
         
         contentView.addSubview(contentLengthLabel)
         
@@ -314,15 +318,22 @@ class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
         
         sendBtn.snp.makeConstraints { /// 메일 보내기 버튼
             $0.top.equalTo(agreemsgLabel.snp.bottom).offset(40)
-            $0.bottom.equalTo(logoutLabel.snp.top).offset(-20)
             $0.leading.trailing.equalTo(emailTextField)
         }
         
         logoutLabel.snp.makeConstraints { /// 로그아웃
-            $0.bottom.equalTo(withdrawalLabel.snp.top).offset(5)
+            $0.top.equalTo(sendBtn.snp.bottom).offset(60)
+            $0.bottom.equalTo(seperateLine.snp.top).offset(4)
             $0.centerX.equalTo(withdrawalLabel)
         }
-
+        
+        seperateLine.snp.makeConstraints { /// 구분선
+            $0.centerX.equalTo(withdrawalLabel)
+            $0.bottom.equalTo(withdrawalLabel.snp.top).offset(4)
+            $0.height.equalTo(1)
+            $0.width.equalTo(7)
+        }
+        
         withdrawalLabel.snp.makeConstraints { /// 회원탈퇴
             $0.bottom.equalTo(contentView).inset(16)
             $0.centerX.equalToSuperview()
