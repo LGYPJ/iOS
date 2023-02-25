@@ -589,7 +589,7 @@ extension ProfileEditVC {
                 if let text = textField.text {
                     if text.count > maxBelongCount {
                         // 최대글자 넘어가면 자동으로 키보드 내려감
-                        textField.resignFirstResponder()
+//                        textField.resignFirstResponder()
                     }
                     // 초과되는 텍스트 제거
                     if text.count >= maxBelongCount {
@@ -607,7 +607,7 @@ extension ProfileEditVC {
                 if let text = textField.text {
                     if text.count > maxIntroduceCount {
                         // 최대글자 넘어가면 자동으로 키보드 내려감
-                        textField.resignFirstResponder()
+//                        textField.resignFirstResponder()
                     }
                     // 초과되는 텍스트 제거
                     if text.count >= maxIntroduceCount {

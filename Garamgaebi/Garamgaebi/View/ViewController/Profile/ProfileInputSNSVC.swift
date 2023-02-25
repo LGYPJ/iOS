@@ -567,7 +567,7 @@ extension ProfileInputSNSVC {
                 if let text = textField.text {
                     if text.count > maxInputCount {
                         // 최대글자 넘어가면 자동으로 키보드 내려감
-                        textField.resignFirstResponder()
+//                        textField.resignFirstResponder()
                     }
                     // 초과되는 텍스트 제거
                     if text.count >= maxInputCount {
@@ -582,7 +582,7 @@ extension ProfileInputSNSVC {
                 if let text = textField.text {
                     if text.count > maxLinkCount {
                         // 최대글자 넘어가면 자동으로 키보드 내려감
-                        textField.resignFirstResponder()
+//                        textField.resignFirstResponder()
                     }
                     // 초과되는 텍스트 제거
                     if text.count >= maxLinkCount {

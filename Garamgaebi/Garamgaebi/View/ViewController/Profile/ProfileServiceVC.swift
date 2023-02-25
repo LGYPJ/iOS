@@ -601,7 +601,7 @@ extension ProfileServiceVC {
             if let text = textView.text {
                 if text.count > maxTextCount {
                     // 100글자 넘어가면 자동으로 키보드 내려감
-                    textView.resignFirstResponder()
+//                    textView.resignFirstResponder()
                 }
                 // 초과되는 텍스트 제거
                 if text.count >= maxTextCount {
