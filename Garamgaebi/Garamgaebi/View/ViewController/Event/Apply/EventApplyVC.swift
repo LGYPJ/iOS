@@ -656,10 +656,10 @@ extension EventApplyVC {
 		
 //		nameTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
 //		nameTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
-//
+////
 //		nicknameTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
 //		nicknameTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
-//
+////
 //		numberTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
 //		numberTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
 		
@@ -684,7 +684,7 @@ extension EventApplyVC {
 	}
 	
 	private func validName() {
-		if isValidName {
+		if isValidName || nameTextField.text == "" {
 			HideAlert(textField: self.nameTextField, alertLabel: self.nameAlertLabel)
 		} else {
 			showAlert(textField: self.nameTextField, alertLabel: self.nameAlertLabel, status: self.isValidName)
@@ -692,7 +692,7 @@ extension EventApplyVC {
 	}
 	
 	private func validNickname() {
-		if isValidNickname {
+		if isValidNickname || nicknameTextField.text == "" {
 			HideAlert(textField: self.nicknameTextField, alertLabel: self.nicknameAlertLabel)
 		} else {
 			showAlert(textField: self.nicknameTextField, alertLabel: self.nicknameAlertLabel, status: self.isValidNickname)
@@ -700,7 +700,7 @@ extension EventApplyVC {
 	}
 	
 	private func validNumber() {
-		if isValidNumber {
+		if isValidNumber || numberTextField.text == "" {
 			HideAlert(textField: self.numberTextField, alertLabel: self.numberAlertLabel)
 		} else {
 			showAlert(textField: self.numberTextField, alertLabel: self.numberAlertLabel, status: self.isValidNumber)
@@ -763,22 +763,7 @@ extension EventApplyVC {
 //	}
 //
 //	@objc func textFieldInactivated(_ sender: UITextField) {
-//		switch sender {
-//		case nameTextField:
-//			if isValidName {
-//				sender.layer.borderColor = UIColor.mainGray.cgColor
-//			}
-//		case nicknameTextField:
-//			if isValidNickname {
-//				sender.layer.borderColor = UIColor.mainGray.cgColor
-//			}
-//		case numberTextField:
-//			if isValidNumber {
-//				sender.layer.borderColor = UIColor.mainGray.cgColor
-//			}
-//		default:
-//			return
-//		}
+//		sender.layer.borderColor = UIColor.mainGray.cgColor
 //	}
 	
 	@objc private func clipBoardImageViewDidTap() {
@@ -878,41 +863,47 @@ extension EventApplyVC: UITextFieldDelegate {
 	}
 	
 	func textFieldDidBeginEditing(_ textField: UITextField) {
-		switch textField {
-		case nameTextField:
-			if isValidName {
-				textField.layer.borderColor = UIColor.mainBlack.cgColor
-			}
-		case nicknameTextField:
-			if isValidNickname {
-				textField.layer.borderColor = UIColor.mainBlack.cgColor
-			}
-		case numberTextField:
-			if isValidNumber {
-				textField.layer.borderColor = UIColor.mainBlack.cgColor
-			}
-		default:
-			return
-		}
+//		switch textField {
+//		case nameTextField:
+//			if isValidName {
+//				textField.layer.borderColor = UIColor.mainBlack.cgColor
+//			}
+//		case nicknameTextField:
+//			if isValidNickname {
+//				textField.layer.borderColor = UIColor.mainBlack.cgColor
+//			}
+//		case numberTextField:
+//			if isValidNumber {
+//				textField.layer.borderColor = UIColor.mainBlack.cgColor
+//			}
+//		default:
+//			return
+//		}
+		
+		textField.layer.borderColor = UIColor.mainBlack.cgColor
+		
+		
 	}
 	
 	func textFieldDidEndEditing(_ textField: UITextField) {
-		switch textField {
-		case nameTextField:
-			if isValidName {
-				textField.layer.borderColor = UIColor.mainGray.cgColor
-			}
-		case nicknameTextField:
-			if isValidNickname {
-				textField.layer.borderColor = UIColor.mainGray.cgColor
-			}
-		case numberTextField:
-			if isValidNumber {
-				textField.layer.borderColor = UIColor.mainGray.cgColor
-			}
-		default:
-			return
-		}
+//		switch textField {
+//		case nameTextField:
+//			if isValidName {
+//				textField.layer.borderColor = UIColor.mainGray.cgColor
+//			}
+//		case nicknameTextField:
+//			if isValidNickname {
+//				textField.layer.borderColor = UIColor.mainGray.cgColor
+//			}
+//		case numberTextField:
+//			if isValidNumber {
+//				textField.layer.borderColor = UIColor.mainGray.cgColor
+//			}
+//		default:
+//			return
+//		}
+		
+		textField.layer.borderColor = UIColor.mainGray.cgColor
 		
 	}
 
