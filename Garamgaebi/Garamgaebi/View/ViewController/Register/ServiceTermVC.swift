@@ -232,7 +232,7 @@ class ServiceTermVC: UIViewController {
         성명 :민세림
         직책 :-
         직급 :-
-        연락처 :01082131722, gachon2023@gmail.com, -
+        연락처 :-
         ※ 개인정보 보호 담당부서로 연결됩니다.
 
 
