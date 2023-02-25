@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
-class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
+class ProfileWithdrawalVC: UIViewController, BottomSheetSelectDelegate {
     func textFieldChanged() {
         reasonTypeTextField.layer.borderColor = UIColor.mainGray.cgColor
         allTextFieldFilledIn()

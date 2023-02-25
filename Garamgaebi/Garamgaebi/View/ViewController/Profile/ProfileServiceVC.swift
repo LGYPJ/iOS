@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
-class ProfileServiceVC: UIViewController, SelectServiceDataDelegate {
+class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
     
     // MARK: - Properties
     private var isChecking: Bool = false

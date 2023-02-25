@@ -10,7 +10,7 @@ import UIKit
 import Then
 import Alamofire
 
-class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
+class ProfileInputSNSVC: UIViewController, BottomSheetSelectDelegate {
     func textFieldChanged() {
         typeTextField.layer.borderColor = UIColor.mainGray.cgColor
         allTextFieldFilledIn()
