@@ -66,6 +66,8 @@ class EventSeminarDetailVC: UIViewController {
 			tableView.reloadData()
 		}
 	}
+	
+	let refreshControl = UIRefreshControl()
 
     // MARK: - Life Cycle
 	
@@ -84,6 +86,7 @@ class EventSeminarDetailVC: UIViewController {
 		configureTableView()
 		configureViews()
 		fetchSeminarInfo()
+		configureRefreshControl()
 		
 		self.navigationController?.interactivePopGestureRecognizer?.delegate = self
 		
@@ -95,18 +98,6 @@ class EventSeminarDetailVC: UIViewController {
 		self.tabBarController?.tabBar.isHidden = true
 		fetchSeminarInfo()
 	}
-    
-	@objc private func presentPopupVC(_ notification: NSNotification) {
-		let data: SeminarDetailPreview = notification.object as! SeminarDetailPreview
-		let vc = SeminarPreviewPopUpVC(previewInfo: data)
-		vc.modalPresentationStyle = .overFullScreen
-		
-		self.present(vc, animated: false)
-		
-	}
-
-    
-
 }
 
 extension EventSeminarDetailVC {
@@ -178,6 +169,11 @@ extension EventSeminarDetailVC {
 		}
 	}
 	
+	private func configureRefreshControl() {
+		refreshControl.addTarget(self, action: #selector(refreshTable(refresh:)), for: .valueChanged)
+		tableView.refreshControl = refreshControl
+	}
+	
 	
 	// 뒤로가기 버튼 did tap
 	@objc private func didTapBackBarButton() {
@@ -186,6 +182,22 @@ extension EventSeminarDetailVC {
 	
 	@objc private func didTapRegisterButton() {
 		navigationController?.pushViewController(EventApplyVC(type: "SEMINAR" ,programId: self.seminarId), animated: true)
+	}
+	
+	@objc private func presentPopupVC(_ notification: NSNotification) {
+		let data: SeminarDetailPreview = notification.object as! SeminarDetailPreview
+		let vc = SeminarPreviewPopUpVC(previewInfo: data)
+		vc.modalPresentationStyle = .overFullScreen
+		
+		self.present(vc, animated: false)
+	}
+	
+	@objc func refreshTable(refresh: UIRefreshControl) {
+		DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+			self.fetchSeminarInfo()
+			self.tableView.reloadData()
+			refresh.endRefreshing()
+	   }
 	}
 	
 	// MARK: fetch data
