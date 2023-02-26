@@ -51,7 +51,7 @@ class UniEmailAuthVC: UIViewController {
         label.font = UIFont.NotoSansKR(type: .Bold, size: 22)
         return label
     }()
-
+    
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.text = "가람개비 사용을 위해서는 가천대생 인증이 필요해요\n가천대학교 이메일 인증을 진행해주세요"
@@ -356,55 +356,64 @@ class UniEmailAuthVC: UIViewController {
         
         // 메일을 보내면서 uniEmail UserDefault에 저장
         let uniEmail = UniEmailAuthModel(email: "\(userId)@gachon.ac.kr")
-        UserDefaults.standard.set("\(userId)@gachon.ac.kr", forKey: "uniEmail")
-        
+        LoadingView.shared.show()
         UniEmailAuthViewModel.requestSendEmail(uniEmail) { [weak self] result in
+            LoadingView.shared.hide()
             switch result {
             case true:
-                print(">>>Front: 이메일 전송 성공")
+                UserDefaults.standard.set("\(self?.userId)@gachon.ac.kr", forKey: "uniEmail")
+
+                self?.emailNotificationLabel.text = "메일을 받지 못하신 경우, 스팸 메일함을 확인해주세요."
+                self?.emailNotificationLabel.textColor = .mainBlack
+                
+                sender.setTitleColor(UIColor.mainBlue, for: .normal)
+                sender.backgroundColor = .white
+                sender.layer.borderColor = UIColor.mainBlue.cgColor
+                sender.layer.borderWidth = 0.5
+                self?.authNumberTextField.isEnabled = true
+                self?.authNumberSendButton.isEnabled = true
+                var count = 180
+                
+                if self?.timer != nil && ((self?.timer!.isValid) != nil) {
+                    self?.timer?.invalidate()
+                    self?.timer = nil
+                }
+                
+                self?.timer = Timer.scheduledTimer(withTimeInterval: self!.interval, repeats: true, block: { [self]_ in
+                    UIView.transition(with: self!.authNumTitleLabel, duration: 0.33,
+                                      options: .transitionCrossDissolve,
+                                      animations: {
+                        self?.authNumTitleLabel.isHidden = false
+                        self?.authNumberTextField.isHidden = false
+                        self?.authNumberSendButton.isHidden = false
+                        self?.nextButton.isHidden = false
+                    })
+                    
+                    let minutes = count / 60
+                    let seconds = count % 60
+                    count -= 1
+                    
+                    //남은 시간(초)가 0보다 크면
+                    if count > 0 {
+                        sender.setTitle("이메일 재발송하기 (\(minutes)분 \(seconds)초)", for: .normal)
+                    } else {
+                        sender.setTitle("이메일 재발송하기", for: .normal)
+                        sender.setTitleColor(.white, for: .normal)
+                        sender.backgroundColor = .mainBlue
+                        self?.initAuthNumberUI()
+                    }
+                    
+                })
+                
+            case false:
+                self?.emailTextField.shake()
+                self?.emailNotificationLabel.text = "이미 가입한 이메일 입니다"
+                self?.emailNotificationLabel.textColor = UIColor(hex: 0xFF0000)
             default:
-                print(">>>Front: 이메일 전송 실패")
+                print(">>>ERROR sendEmail")
             }
         }
-        sender.setTitleColor(UIColor.mainBlue, for: .normal)
-        sender.backgroundColor = .white
-        sender.layer.borderColor = UIColor.mainBlue.cgColor
-        sender.layer.borderWidth = 0.5
-        authNumberTextField.isEnabled = true
-        authNumberSendButton.isEnabled = true
-        var count = 180
         
-        if timer != nil && timer!.isValid {
-            timer?.invalidate()
-            timer = nil
-        }
-
-        timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true, block: { [self]_ in
-            
-            UIView.transition(with: self.authNumTitleLabel, duration: 0.33,
-                              options: .transitionCrossDissolve,
-                              animations: {
-                self.authNumTitleLabel.isHidden = false
-                self.authNumberTextField.isHidden = false
-                self.authNumberSendButton.isHidden = false
-                self.nextButton.isHidden = false
-            })
-            
-            let minutes = count / 60
-            let seconds = count % 60
-            count -= 1
-            
-            //남은 시간(초)가 0보다 크면
-            if count > 0 {
-                sender.setTitle("이메일 재발송하기 (\(minutes)분 \(seconds)초)", for: .normal)
-            } else {
-                sender.setTitle("이메일 재발송하기", for: .normal)
-                sender.setTitleColor(.white, for: .normal)
-                sender.backgroundColor = .mainBlue
-                initAuthNumberUI()
-            }
-
-        })
     }
     
     @objc
@@ -479,7 +488,7 @@ class UniEmailAuthVC: UIViewController {
                     self.authNumberSendButton.backgroundColor = .mainBlue
                 }
             }
-        // 올바르지 않은 인증번호의 양식 -> 6자리 숫자가 아닐 때
+            // 올바르지 않은 인증번호의 양식 -> 6자리 숫자가 아닐 때
         } else {
             self.authNumberSendButton.isEnabled = false
             DispatchQueue.main.async {
@@ -514,7 +523,7 @@ class UniEmailAuthVC: UIViewController {
     @objc
     func textFieldEditingChanged(_ sender: UITextField) {
         let text = sender.text ?? ""
-
+        
         switch sender {
         case emailTextField:
             self.isValidId = text.isValidId()
@@ -524,7 +533,7 @@ class UniEmailAuthVC: UIViewController {
         default:
             fatalError("Missing TextField...")
         }
-
+        
     }
     
     private func initAuthNumberUI() {
@@ -606,7 +615,7 @@ extension UniEmailAuthVC {
             return
         }
         // return to origin scrollOffset
-//        self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset), animated: true)
+        //        self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset), animated: true)
         self.scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
         scrollOffset = 0
         distance = 0
