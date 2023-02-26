@@ -70,6 +70,8 @@ class EventNetworkingDetailVC: UIViewController {
 			tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .none)
 		}
 	}
+	
+	let refreshControl = UIRefreshControl()
 
 	
     
@@ -91,6 +93,7 @@ class EventNetworkingDetailVC: UIViewController {
 		configureTableView()
 		configureNotification()
 		fetchNetworkingInfo()
+		configureRefreshControl()
 		
 		self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
@@ -199,6 +202,10 @@ extension EventNetworkingDetailVC {
 		NotificationCenter.default.addObserver(self, selector: #selector(validUserApplyProgram(_:)), name: Notification.Name("programId:\(networkingId)"), object: nil)
 	}
 	
+	private func configureRefreshControl() {
+		refreshControl.addTarget(self, action: #selector(refreshTable(refresh:)), for: .valueChanged)
+		tableView.refreshControl = refreshControl
+	}
 	
 	// 뒤로가기 버튼 did tap
 	@objc private func didTapBackBarButton() {
@@ -216,6 +223,14 @@ extension EventNetworkingDetailVC {
 	@objc private func validUserApplyProgram(_ notification: NSNotification) {
 		let notiData: Bool = notification.object as! Bool
 		self.isUserApplyProgram = notiData
+	}
+	
+	@objc func refreshTable(refresh: UIRefreshControl) {
+		DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+			self.fetchNetworkingInfo()
+			self.tableView.reloadData()
+			refresh.endRefreshing()
+	   }
 	}
 
 

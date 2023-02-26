@@ -55,10 +55,15 @@ extension String {
 		guard let date = self.toDate() else {return ""}
 		
 		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "yyyy-MM-dd a h시"
+		dateFormatter.dateFormat = "yyyy-MM-dd a h시 mm분"
 		dateFormatter.locale = Locale(identifier: "ko_KR")
 		
-		return dateFormatter.string(from: date)
+		let stringdate = dateFormatter.string(from: date)
+		if stringdate.contains("00분") {
+			 return stringdate.removeString(target: "00분")
+		}
+		
+		return stringdate
 	}
 	
 	func maxLength(length: Int) -> String {

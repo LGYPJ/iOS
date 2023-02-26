@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		07387C389AB3203B5F1B6292 /* Pods_Garamgaebi_GaramgaebiUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */; };
 		2A5DAD14EE12541BAE988EB7 /* Pods_Garamgaebi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8CB1AB7E398B75581977FAF /* Pods_Garamgaebi.framework */; };
+		2C0495D729AB31CA002E2B92 /* IceBreakingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0495D629AB31CA002E2B92 /* IceBreakingModel.swift */; };
 		2C0538F4296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0538F3296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift */; };
 		2C4083112997CE67000747DF /* WebSocketTestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4083102997CE67000747DF /* WebSocketTestVC.swift */; };
 		2C408319299A9169000747DF /* IcebreakingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C408318299A9169000747DF /* IcebreakingViewModel.swift */; };
@@ -165,6 +166,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2C0495D629AB31CA002E2B92 /* IceBreakingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IceBreakingModel.swift; sourceTree = "<group>"; };
 		2C0538F3296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPreviewCollectionViewCell.swift; sourceTree = "<group>"; };
 		2C4083102997CE67000747DF /* WebSocketTestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketTestVC.swift; sourceTree = "<group>"; };
 		2C408318299A9169000747DF /* IcebreakingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IcebreakingViewModel.swift; sourceTree = "<group>"; };
@@ -529,6 +531,7 @@
 				2C65943C29975E85007D3619 /* EventUserApplyModel.swift */,
 				2CED690C2989426A00C838BD /* EventApplyModel.swift */,
 				600BE591298B9C090040F23F /* MyEventModel.swift */,
+				2C0495D629AB31CA002E2B92 /* IceBreakingModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1263,6 +1266,7 @@
 				2CDD94DE29700E71004B8D56 /* EventNetworkingDetailVC.swift in Sources */,
 				2CDD94F62971952E004B8D56 /* EventApplyVC.swift in Sources */,
 				2CDD94F4297192E9004B8D56 /* EventPreviewTableViewCell.swift in Sources */,
+				2C0495D729AB31CA002E2B92 /* IceBreakingModel.swift in Sources */,
 				601823332972DDCA00160EF4 /* HomeEventInfoTabelViewCell.swift in Sources */,
 				60C6371C2984E1FC00D2C814 /* HomeSeminarPopUpVC.swift in Sources */,
 				60EDD40529765C3400600807 /* ViewAllNetworkingVC.swift in Sources */,

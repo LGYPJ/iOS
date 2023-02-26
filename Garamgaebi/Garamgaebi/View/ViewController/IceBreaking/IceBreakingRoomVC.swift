@@ -126,7 +126,6 @@ class IceBreakingRoomVC: UIViewController {
 	}
 	private var currentUserId: Int = 0
 	private var currentUserIndex: Int = 0
-	private var isLastCard: Bool = false
 	
     // MARK: - Life Cycle
 	init(programId: Int ,roomId: String, roomName: String) {
@@ -242,15 +241,11 @@ extension IceBreakingRoomVC {
 			UIView.animate(withDuration: 0.5, animations: {
 				self.nextButton.isEnabled = true
 				self.nextButton.alpha = 1
-			}, completion: { [weak self] _ in
-//				self?.nextButton.isEnabled = true
 			})
 		} else {
 			UIView.animate(withDuration: 0.5, animations: {
 				self.nextButton.alpha = 0
 				self.nextButton.isEnabled = false
-			}, completion: { [weak self] _ in
-//				self?.nextButton.isEnabled = false
 			})
 		}
 	}
@@ -295,17 +290,14 @@ extension IceBreakingRoomVC {
 	// 다음 아이템으로 스크롤
 	private func scrollToNextItem() {
 		currentIndex += 1
-		if currentIndex < (imageList.count) {
-			// 해당 인덱스로 스크롤
-			cardCollectionView.scrollToItem(at: IndexPath(row: currentIndex, section: 1), at: .centeredHorizontally, animated: true)
-			cardCollectionView.reloadData()
+
+		// 마지막 카드면 다시 처음으로 돌아가게
+		if currentIndex == imageList.count {
+			currentIndex -= imageList.count
 		}
 		
-		// 마지막 카드면 다음버튼 비활성화gi
-		if currentIndex == (imageList.count - 1) {
-			configureNextButtonStatus(false)
-			isLastCard = true
-		}
+		cardCollectionView.scrollToItem(at: IndexPath(row: currentIndex, section: 1), at: .centeredHorizontally, animated: true)
+		cardCollectionView.reloadData()
 		
 		let index = findCurrentUserIndex()
 		scrollUserTo(index: index)
@@ -348,7 +340,7 @@ extension IceBreakingRoomVC {
 		userCollectionview.reloadData()
 		
 		// 자신 차례이고, 마지막 카드가 아니라면 다음 버튼 활성화
-		if userList[index].memberIdx == self.memberId && !isLastCard && isStart {
+		if userList[index].memberIdx == self.memberId && isStart {
 			configureNextButtonStatus(true)
 		} else {
 			configureNextButtonStatus(false)
