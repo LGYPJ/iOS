@@ -70,6 +70,7 @@
 		60093A8F296EC92200F76783 /* InputNickNameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60093A8E296EC92200F76783 /* InputNickNameVC.swift */; };
 		600BE590298B8A800040F23F /* RecommendUsersModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600BE58F298B8A800040F23F /* RecommendUsersModel.swift */; };
 		600BE592298B9C090040F23F /* MyEventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600BE591298B9C090040F23F /* MyEventModel.swift */; };
+		60159A2D29AB86D300CD4202 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60159A2C29AB86D300CD4202 /* LoadingView.swift */; };
 		6018232829726BF600160EF4 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6018232729726BF600160EF4 /* TabBarController.swift */; };
 		6018232A29729DA400160EF4 /* CALayer+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6018232929729DA400160EF4 /* CALayer+.swift */; };
 		601823332972DDCA00160EF4 /* HomeEventInfoTabelViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601823322972DDCA00160EF4 /* HomeEventInfoTabelViewCell.swift */; };
@@ -230,6 +231,7 @@
 		60093A8E296EC92200F76783 /* InputNickNameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputNickNameVC.swift; sourceTree = "<group>"; };
 		600BE58F298B8A800040F23F /* RecommendUsersModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendUsersModel.swift; sourceTree = "<group>"; };
 		600BE591298B9C090040F23F /* MyEventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyEventModel.swift; sourceTree = "<group>"; };
+		60159A2C29AB86D300CD4202 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		6018232729726BF600160EF4 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		6018232929729DA400160EF4 /* CALayer+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+.swift"; sourceTree = "<group>"; };
 		601823322972DDCA00160EF4 /* HomeEventInfoTabelViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeEventInfoTabelViewCell.swift; sourceTree = "<group>"; };
@@ -851,6 +853,7 @@
 				6052F197297A611F0097B3F5 /* ViewController */,
 				6052F198297A612A0097B3F5 /* Cell */,
 				60343A2029A611A0008E524D /* ErrorPageView.swift */,
+				60159A2C29AB86D300CD4202 /* LoadingView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1220,6 +1223,7 @@
 				2CDD94FE2973BAB9004B8D56 /* CustomFlowLayout.swift in Sources */,
 				462C4D65297D34BD00F2E0C6 /* UIButton+.swift in Sources */,
 				2CDD94F82971A389004B8D56 /* IceBreakingRoomListVC.swift in Sources */,
+				60159A2D29AB86D300CD4202 /* LoadingView.swift in Sources */,
 				2CED690F298CBD2800C838BD /* Status.swift in Sources */,
 				2CDD94E329711EB3004B8D56 /* IceBreakingRoomVC.swift in Sources */,
 				60F91409296D446100626C40 /* UIFont+.swift in Sources */,

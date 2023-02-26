@@ -18,6 +18,7 @@ target 'Garamgaebi' do
   pod 'ReactorKit'
   pod 'Starscream'
   pod 'StompClientLib'
+  pod 'lottie-ios'  
   target 'GaramgaebiTests' do
     inherit! :search_paths
     # Pods for testing
