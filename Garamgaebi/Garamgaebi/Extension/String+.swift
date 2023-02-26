@@ -40,6 +40,14 @@ extension String {
         return emailTest.evaluate(with: self)
     }
     
+    // instagram 아이디 정규표현식
+    func isValidInstagramId() -> Bool {
+        let idRegEx = "[A-Za-z0-9._-]{1,}"
+        let idTest = NSPredicate(format: "SELF MATCHES %@", idRegEx)
+        
+        return idTest.evaluate(with: self)
+    }
+    
     func toDate() -> Date? { //"yyyy-MM-dd'T'HH:mm:ss"
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"

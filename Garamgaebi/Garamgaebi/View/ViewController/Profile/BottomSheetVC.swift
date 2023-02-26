@@ -9,7 +9,7 @@ import UIKit
 
 import SnapKit
 
-protocol SelectServiceDataDelegate:  AnyObject {
+protocol BottomSheetSelectDelegate:  AnyObject {
     func typeSelect(type: String)
     func textFieldChanged()
 }
@@ -17,7 +17,7 @@ protocol SelectServiceDataDelegate:  AnyObject {
 class BottomSheetVC: UIViewController {
     
     // MARK: - Properties
-    weak var delegate: SelectServiceDataDelegate?
+    weak var delegate: BottomSheetSelectDelegate?
     
     lazy var titleText = ""
     var T1 = ""

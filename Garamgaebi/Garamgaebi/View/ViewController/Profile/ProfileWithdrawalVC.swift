@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
-class ProfileWithdrawalVC: UIViewController, SelectServiceDataDelegate {
+class ProfileWithdrawalVC: UIViewController, BottomSheetSelectDelegate {
     func textFieldChanged() {
         reasonTypeTextField.layer.borderColor = UIColor.mainGray.cgColor
         allTextFieldFilledIn()
@@ -480,7 +480,7 @@ extension ProfileWithdrawalVC {
             if let text = textView.text {
                 if text.count > maxTextCount {
                     // 100글자 넘어가면 자동으로 키보드 내려감
-                    textView.resignFirstResponder()
+//                    textView.resignFirstResponder()
                 }
                 // 초과되는 텍스트 제거
                 if text.count >= maxTextCount {

@@ -10,12 +10,18 @@ import UIKit
 import Then
 import Alamofire
 
-class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
+class ProfileInputSNSVC: UIViewController, BottomSheetSelectDelegate {
     func textFieldChanged() {
         typeTextField.layer.borderColor = UIColor.mainGray.cgColor
         allTextFieldFilledIn()
     }
     
+    // 유효성 검사
+    var isValidId = true {
+        didSet {
+            self.validId()
+        }
+    }
 
     // MARK: - Properties
     lazy var memberIdx: Int = 0
@@ -120,6 +126,8 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
         
+        // 인스타 아이디 유효성
+        textField.addTarget(self, action: #selector(instagramTextFieldEditingChanged(_:)), for: .editingChanged)
         // 글자수 계산
         textField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
         
@@ -134,6 +142,12 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         
         return label
     }()
+    lazy var instagramIdAlertLabel = UILabel().then {
+        $0.font = UIFont.NotoSansKR(type: .Regular, size: 10)
+        $0.text = "영문문자, 숫자, -, _, . 사용 가능합니다"
+        $0.textColor = .red
+        $0.alpha = 0
+    }
     
     lazy var saveUserProfileButton: UIButton = {
         let button = UIButton()
@@ -222,7 +236,7 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         
         
         /* Labels */
-        [subtitleLinkLabel,subtitleTypeLabel, autoInputTextCountLabel, instagramAtLabel].forEach {
+        [subtitleLinkLabel,subtitleTypeLabel, autoInputTextCountLabel, instagramAtLabel, instagramIdAlertLabel].forEach {
             view.addSubview($0)
         }
     }
@@ -280,6 +294,10 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         instagramAtLabel.snp.makeConstraints { make in
             make.centerY.equalTo(linkTextField)
             make.left.equalTo(linkTextField).offset(12)
+        }
+        instagramIdAlertLabel.snp.makeConstraints { make in
+            make.left.equalTo(linkTextField)
+            make.top.equalTo(linkTextField.snp.bottom).offset(2)
         }
         
         
@@ -424,13 +442,44 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
         }
     }
     
+    private func validId() {
+        if isValidId {
+            hideAlert(textField: self.linkTextField, alertLabel: self.instagramIdAlertLabel)
+        } else {
+            showAlert(textField: self.linkTextField, alertLabel: self.instagramIdAlertLabel, status: self.isValidId)
+        }
+    }
+    
+    private func showAlert(textField: UITextField, alertLabel: UILabel, status: Bool) {
+        UIView.animate(withDuration: 0.3) {
+            textField.layer.borderColor = UIColor.red.cgColor
+            alertLabel.alpha = 1
+        }
+        self.buttonInactivated()
+    }
+    
+    private func hideAlert(textField: UITextField, alertLabel: UILabel) {
+        UIView.animate(withDuration: 0.3) {
+            textField.layer.borderColor = UIColor.mainBlack.cgColor
+            alertLabel.alpha = 0
+        }
+    }
+    
     @objc func allTextFieldFilledIn() {
         
         /* 모든 textField가 채워졌으면 SNS 저장 버튼 활성화 */
         if self.typeTextField.text!.count != 0,
            self.linkTextField.text?.count != 0 {
-            buttonActivated()
-            
+            if typeTextField.text == "인스타그램" {
+                print("인스타그램")
+                if self.isValidId {
+                    buttonActivated()
+                } else {
+                    buttonInactivated()
+                }
+            } else {
+                buttonActivated()
+            }
         } else { // 저장버튼 비활성화
             buttonInactivated()
         }
@@ -444,6 +493,18 @@ class ProfileInputSNSVC: UIViewController, SelectServiceDataDelegate {
     @objc func textFieldInactivated(_ sender: UITextField) {
         sender.layer.borderColor = UIColor.mainGray.cgColor
         sender.layer.borderWidth = 1
+    }
+    
+    @objc func instagramTextFieldEditingChanged(_ sender: UITextField) {
+        let text = sender.text ?? ""
+        switch sender {
+        case linkTextField:
+            if (typeTextField.text == "인스타그램") {
+                self.isValidId = text.isValidInstagramId()
+            }
+        default:
+            fatalError("Missing TextField...")
+        }
     }
     
     // 뒤로가기 버튼 did tap
