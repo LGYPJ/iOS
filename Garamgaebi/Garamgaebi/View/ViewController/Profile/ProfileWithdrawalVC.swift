@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Then
+import KakaoSDKUser
 
 class ProfileWithdrawalVC: UIViewController, BottomSheetSelectDelegate {
     func textFieldChanged() {
@@ -371,7 +372,15 @@ class ProfileWithdrawalVC: UIViewController, BottomSheetSelectDelegate {
                 // 회원 탈퇴가 끝나면 간편 로그인 화면으로 이동
                 let nextVC = LoginVC()
                 
-                //TODO: 카카오에서 언링크시켜줘야함
+                // kakao unlink
+                UserApi.shared.unlink {(error) in
+                    if let error = error {
+                        print(error)
+                    }
+                    else {
+                        print("unlink() success.")
+                    }
+                }
                 
                 nextVC.modalPresentationStyle = .currentContext
                 self.present(nextVC, animated: true)
