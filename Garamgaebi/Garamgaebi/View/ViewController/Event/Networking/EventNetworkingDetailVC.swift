@@ -200,6 +200,7 @@ extension EventNetworkingDetailVC {
 	
 	private func configureNotification() {
 		NotificationCenter.default.addObserver(self, selector: #selector(validUserApplyProgram(_:)), name: Notification.Name("programId:\(networkingId)"), object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(pushOtherProfileInProgramDetail(_:)), name: Notification.Name("pushOtherProfileInProgramDetail"), object: nil)
 	}
 	
 	private func configureRefreshControl() {
@@ -223,6 +224,11 @@ extension EventNetworkingDetailVC {
 	@objc private func validUserApplyProgram(_ notification: NSNotification) {
 		let notiData: Bool = notification.object as! Bool
 		self.isUserApplyProgram = notiData
+	}
+	
+	@objc func pushOtherProfileInProgramDetail(_ notification: NSNotification) {
+		let otherMemberIdx: Int = notification.object as! Int
+		self.navigationController?.pushViewController(OtherProfileVC(memberIdx: otherMemberIdx), animated: true)
 	}
 	
 	@objc func refreshTable(refresh: UIRefreshControl) {
