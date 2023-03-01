@@ -12,7 +12,7 @@ class ViewAllViewModel {
     // MARK: Request [Seminar]
     
     // 이번 달 Seminar 조회 request
-    public static func getSeminarThisMonthInfo(completion: @escaping ((SeminarThisMonthInfo) -> Void)) {
+    public static func getSeminarThisMonthInfo(completion: @escaping ((Result<SeminarThisMonthInfoResponse, AFError>) -> Void)) {
         let url = "https://garamgaebi.shop/seminars/this-month"
         AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
@@ -20,8 +20,7 @@ class ViewAllViewModel {
                 switch response.result {
                 case .success(let result):
                     if result.isSuccess {
-                        guard let result = result.result else {return}
-                        completion(result)
+                        completion(response.result)
                     } else {
                         // 통신은 정상적으로 됐으나(200), error발생
                         print("실패(모아보기 화면 이번 달 Seminar 조회): \(result.message)")
@@ -34,7 +33,7 @@ class ViewAllViewModel {
     }
     
     // 예정된 Seminar 조회 request
-    public static func getSeminarNextMonthInfo(completion: @escaping ((SeminarReadyInfo) -> Void)) {
+    public static func getSeminarNextMonthInfo(completion: @escaping ((Result<SeminarNextMonthInfoResponse, AFError>) -> Void)) {
         let url = "https://garamgaebi.shop/seminars/next-month"
         AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
@@ -42,8 +41,7 @@ class ViewAllViewModel {
                 switch response.result {
                 case .success(let result):
                     if result.isSuccess {
-                        guard let result = result.result else {return}
-                        completion(result)
+                        completion(response.result)
                     } else {
                         // 통신은 정상적으로 됐으나(200), error발생
                         print("실패(모아보기 화면 예정된 Seminar 조회): \(result.message)")
@@ -56,7 +54,7 @@ class ViewAllViewModel {
     }
     
     // 마감된 Seminar 조회 request
-    public static func getSeminarClosedInfo(completion: @escaping (([SeminarClosedInfo]) -> Void)) {
+    public static func getSeminarClosedInfo(completion: @escaping ((Result<SeminarClosedInfoResponse, AFError>) -> Void)) {
         let url = "https://garamgaebi.shop/seminars/closed"
         AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
@@ -64,8 +62,7 @@ class ViewAllViewModel {
                 switch response.result {
                 case .success(let result):
                     if result.isSuccess {
-                        guard let result = result.result else {return}
-                        completion(result)
+                        completion(response.result)
                     } else {
                         // 통신은 정상적으로 됐으나(200), error발생
                         print("실패(모아보기 화면 마감된 Seminar 조회): \(result.message)")
@@ -79,7 +76,7 @@ class ViewAllViewModel {
     
     // MARK: Request [Networking]
     // 이번 달 Networking 조회 request
-    public static func getNetworkingThisMonthInfo(completion: @escaping ((NetworkingThisMonthInfo) -> Void)) {
+    public static func getNetworkingThisMonthInfo(completion: @escaping ((Result<NetworkingThisMonthInfoResponse, AFError>) -> Void)) {
         let url = "https://garamgaebi.shop/networkings/this-month"
         AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
@@ -87,8 +84,7 @@ class ViewAllViewModel {
                 switch response.result {
                 case .success(let result):
                     if result.isSuccess {
-                        guard let result = result.result else {return}
-                        completion(result)
+                        completion(response.result)
                     } else {
                         // 통신은 정상적으로 됐으나(200), error발생
                         print("실패(모아보기 화면 이번 달 Networking 조회): \(result.message)")
@@ -101,7 +97,7 @@ class ViewAllViewModel {
     }
     
     // 예정된 Networking 조회 request
-    public static func getNetworkingNextMonthInfo(completion: @escaping ((NetworkingReadyInfo) -> Void)) {
+    public static func getNetworkingNextMonthInfo(completion: @escaping ((Result<NetworkingNextMonthInfoResponse, AFError>) -> Void)) {
         let url = "https://garamgaebi.shop/networkings/next-month"
         AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
@@ -109,8 +105,7 @@ class ViewAllViewModel {
                 switch response.result {
                 case .success(let result):
                     if result.isSuccess {
-                        guard let result = result.result else {return}
-                        completion(result)
+                        completion(response.result)
                     } else {
                         // 통신은 정상적으로 됐으나(200), error발생
                         print("실패(모아보기 화면 예정된 Networking 조회): \(result.message)")
@@ -123,7 +118,7 @@ class ViewAllViewModel {
     }
     
     // 마감된 Networking 조회 request
-    public static func getNetworkingClosedInfo(completion: @escaping (([NetworkingClosedInfo]) -> Void)) {
+    public static func getNetworkingClosedInfo(completion: @escaping ((Result<NetworkingClosedInfoResponse, AFError>) -> Void)) {
         let url = "https://garamgaebi.shop/networkings/closed"
         AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
@@ -131,8 +126,7 @@ class ViewAllViewModel {
                 switch response.result {
                 case .success(let result):
                     if result.isSuccess {
-                        guard let result = result.result else {return}
-                        completion(result)
+                        completion(response.result)
                     } else {
                         // 통신은 정상적으로 됐으나(200), error발생
                         print("실패(모아보기 화면 마감된 Networking 조회): \(result.message)")
