@@ -14,6 +14,9 @@ class HomeVC: UIViewController {
     // MARK: - Variable
     let memberIdx = UserDefaults.standard.integer(forKey: "memberIdx")
     
+    // UIRefreshControl
+    let refresh = UIRefreshControl()
+    
     var setSeminarData = false
     var setNetworkingData = false
     var setRecommendedUserData = false
@@ -101,6 +104,7 @@ class HomeVC: UIViewController {
         addSubViews()
         configLayouts()
         configNotificationCenter()
+        initRefresh()
         initSetDatas()
         LoadingView.shared.show()
         fetchData {
@@ -390,5 +394,31 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             
         }
     }
+}
+
+extension HomeVC {
+    func initRefresh() {
+        refresh.addTarget(self, action: #selector(refreshTable(refresh:)), for: .valueChanged)
+        refresh.backgroundColor = UIColor.clear
+        self.tableView.refreshControl = refresh
+    }
+    
+    @objc func refreshTable(refresh: UIRefreshControl) {
+        
+        initSetDatas()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.fetchData {
+                if self.setSeminarData,
+                    self.setNetworkingData,
+                    self.setNotificationData,
+                    self.setMyEventData,
+                    self.setRecommendedUserData {
+                    refresh.endRefreshing()
+                }
+            }
+        }
+        
+    }
+    
 }
 
