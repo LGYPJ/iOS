@@ -21,6 +21,7 @@ struct ProfileResult: Decodable {
     let belong: String?
     let content: String?
     let profileUrl: String?
+    let uniEmail: String
 }
 
 // MARK: - ProfileEdit
