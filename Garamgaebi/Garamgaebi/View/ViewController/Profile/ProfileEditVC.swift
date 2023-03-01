@@ -469,8 +469,9 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
                 multipartFormData.append(paramData, withName: key, mimeType: "application/json")
             }
             if let imageData = profileImage?.jpegData(compressionQuality: 0.5) {
-
-                multipartFormData.append(imageData, withName: "image", fileName: "\(imageData).jpeg", mimeType: "multipart/form-data")
+                if (profileImage != UIImage(named: "DefaultProfileImage")) {
+                    multipartFormData.append(imageData, withName: "image", fileName: "\(imageData).jpeg", mimeType: "multipart/form-data")
+                }
             }
         }, to: url, method: .post,
                   interceptor: MyRequestInterceptor()
