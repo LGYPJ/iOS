@@ -11,12 +11,19 @@ class ViewAllMyEventVC: UIViewController {
 
     private let sections: [String] = ["예정된 모임", "지난 모임"]
     
-    private var dataList1: [MyEventInfoReady] = [] {
+    // UIRefreshControl
+    let refresh = UIRefreshControl()
+    
+    var setMyEventInfoReadyData = false
+    var setMyEventInfoCloseData = false
+
+    
+    private var readyInfoList: [MyEventInfoReady] = [] {
         didSet {
             self.tableView.reloadData()
         }
     }
-    private var dataList2: [MyEventInfoClose] = [] {
+    private var closeInfoList: [MyEventInfoClose] = [] {
         didSet {
             self.tableView.reloadData()
         }
@@ -44,14 +51,20 @@ class ViewAllMyEventVC: UIViewController {
         configureTableView()
         addSubViews()
         configLayouts()
+        initRefresh()
+        initSetDatas()
+        LoadingView.shared.show()
+        fetchData {
+            if self.setMyEventInfoReadyData,
+               self.setMyEventInfoCloseData {
+                LoadingView.shared.hide()
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        fetchData()
-        // Data가 없을 때 시연용
-//        dataList1 = []
-//        dataList2 = []
+        
     }
     
     // MARK: - Functions
@@ -69,31 +82,65 @@ class ViewAllMyEventVC: UIViewController {
             make.bottom.equalToSuperview()
         }
     }
-    
-    func fetchData(){
-        
-        // MyEventReadyInfo의 data를 불러옴
-        ViewAllViewModel.getViewAllMyEventReadyInfo(memberId: Int(UserDefaults.standard.string(forKey: "memberIdx")!)!) { [weak self] result in
-            self?.dataList1 = result
-        }
-        
-        // MyEventReadyInfo의 data를 불러옴
-        ViewAllViewModel.getViewAllMyEventCloseInfo(memberId: Int(UserDefaults.standard.string(forKey: "memberIdx")!)!) { [weak self] result in
-            self?.dataList2 = result
-        }
 
-    }
-    
-    @objc private func pushNextView(_ sender: UIButton) {
-        switch sender {
-            //        case notificationViewButton:
-            //            self.navigationController?.pushViewController(HomeNotificationVC(), animated: true)
-            //
-        default:
-            print("error")
+    func fetchData(completion: @escaping (() -> Void)){
+        // MyEventReadyInfo의 data를 불러옴
+        ViewAllViewModel.getViewAllMyEventReadyInfo(memberId: UserDefaults.standard.integer(forKey: "memberIdx")) { [weak self] result in
+            switch result {
+            case .success(let result):
+                if result.isSuccess {
+                    guard let result = result.result else { return }
+                    self?.readyInfoList = result
+                    self?.setMyEventInfoReadyData = true
+                    completion()
+                } else {
+                    // TODO: 뭐든 에러가 있을거임
+                    //애니메이션 끄고 에러핸들링
+                    //LoadingView.shared.hide()
+                }
+            case .failure(let error):
+                // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
+                print("실패(AF-모아보기 MyEventReadyInfo 조회): \(error.localizedDescription)")
+                LoadingView.shared.hide()
+                self?.presentErrorView()
+            }
         }
+        
+        // MyEventReadyInfo의 data를 불러옴
+        ViewAllViewModel.getViewAllMyEventCloseInfo(memberId: UserDefaults.standard.integer(forKey: "memberIdx")) { [weak self] result in
+            switch result {
+            case .success(let result):
+                if result.isSuccess {
+                    guard let result = result.result else { return }
+                    self?.closeInfoList = result
+                    self?.setMyEventInfoCloseData = true
+                    completion()
+                } else {
+                    // TODO: 뭐든 에러가 있을거임
+                    //애니메이션 끄고 에러핸들링
+                    //LoadingView.shared.hide()
+                }
+            case .failure(let error):
+                // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
+                print("실패(AF-모아보기 MyEventCloseInfo 조회): \(error.localizedDescription)")
+                LoadingView.shared.hide()
+                self?.presentErrorView()
+            }
+        }
+        
     }
     
+    func initSetDatas(){
+        self.setMyEventInfoReadyData = false
+        self.setMyEventInfoCloseData = false
+    }
+    
+    func presentErrorView(){
+        let errorView = ErrorPageView()
+        errorView.modalPresentationStyle = .fullScreen
+        self.present(errorView, animated: false)
+    }
+
 }
 
 
@@ -126,20 +173,18 @@ extension ViewAllMyEventVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         switch section {
         case 0:
-            if dataList1.count == 0 {
+            if readyInfoList.count == 0 {
                 return 1
             }
-            return dataList1.count
+            return readyInfoList.count
         case 1:
-            if dataList2.count == 0 {
+            if closeInfoList.count == 0 {
                 return 1
             }
-            return dataList2.count
+            return closeInfoList.count
         default:
-            print(fatalError())
             return 0
         }
     }
@@ -150,13 +195,13 @@ extension ViewAllMyEventVC: UITableViewDataSource, UITableViewDelegate {
         
         switch indexPath.section {
         case 0:
-            if dataList1.count == 0 {
+            if readyInfoList.count == 0 {
                 baseHeight = 100.0
             } else {
                 baseHeight = 80.0
             }
         case 1:
-            if dataList2.count == 0 {
+            if closeInfoList.count == 0 {
                 baseHeight = 100.0
             } else {
                 baseHeight = 80.0
@@ -168,25 +213,21 @@ extension ViewAllMyEventVC: UITableViewDataSource, UITableViewDelegate {
         return baseHeight + edgeInset
     }
     
-    func pushNextView(_ target: UIViewController) {
-        present(target, animated: true)
-    }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ViewAllMyEventTableViewCell.identifier, for: indexPath) as? ViewAllMyEventTableViewCell else {return UITableViewCell()}
         
         switch indexPath.section {
         case 0:
-            if dataList1.count == 0 {
+            if readyInfoList.count == 0 {
                 cell.configureZeroCell(caseString: "예정된 내")
             } else {
-                cell.configureReady(dataList1[indexPath.row])
+                cell.configureReady(readyInfoList[indexPath.row])
             }
         case 1:
-            if dataList2.count == 0 {
+            if closeInfoList.count == 0 {
                 cell.configureZeroCell(caseString: "지난")
             } else {
-                cell.configureClose(dataList2[indexPath.row])
+                cell.configureClose(closeInfoList[indexPath.row])
             }
         default:
             print("dataList Count Error")
@@ -211,3 +252,25 @@ extension ViewAllMyEventVC: UITableViewDataSource, UITableViewDelegate {
     
 }
 
+extension ViewAllMyEventVC {
+    func initRefresh() {
+        refresh.addTarget(self, action: #selector(refreshTable(refresh:)), for: .valueChanged)
+        refresh.backgroundColor = UIColor.clear
+        self.tableView.refreshControl = refresh
+    }
+    
+    @objc func refreshTable(refresh: UIRefreshControl) {
+        
+        initSetDatas()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.fetchData {
+                if self.setMyEventInfoReadyData,
+                   self.setMyEventInfoCloseData {
+                    refresh.endRefreshing()
+                }
+            }
+        }
+        
+    }
+    
+}

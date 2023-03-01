@@ -142,7 +142,7 @@ class ViewAllViewModel {
     // MARK: Request [내 모임]
     
     // 모아보기 예정된 모임 조회 request
-    public static func getViewAllMyEventReadyInfo(memberId: Int, completion: @escaping (([MyEventInfoReady]) -> Void)) {
+    public static func getViewAllMyEventReadyInfo(memberId: Int, completion: @escaping ((Result<MyEventInfoReadyResponse, AFError>) -> Void)) {
         let url = "https://garamgaebi.shop/programs/\(memberId)/ready"
         AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
@@ -150,21 +150,20 @@ class ViewAllViewModel {
                 switch response.result {
                 case .success(let result):
                     if result.isSuccess {
-                        guard let result = result.result else {return}
-                        completion(result)
+                        completion(response.result)
                     } else {
                         // 통신은 정상적으로 됐으나(200), error발생
-                        print("실패(홈 화면 MyEvent 조회): \(result.message)")
+                        print("실패(모아보기 MyEventReadyInfo 조회): \(result.message)")
                     }
                 case .failure(let error):
                     // 실제 HTTP에러 404
-                    print("실패(AF-홈 화면 MyEvent 조회): \(error.localizedDescription)")
+                    print("실패(AF-모아보기 MyEventReadyInfo 조회): \(error.localizedDescription)")
                 }
             }
     }
     
     // 모아보기 마감된 모임 조회 request
-    public static func getViewAllMyEventCloseInfo(memberId: Int, completion: @escaping (([MyEventInfoClose]) -> Void)) {
+    public static func getViewAllMyEventCloseInfo(memberId: Int, completion: @escaping ((Result<MyEventInfoCloseResponse, AFError>) -> Void)) {
         let url = "https://garamgaebi.shop/programs/\(memberId)/close"
         AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
@@ -172,15 +171,14 @@ class ViewAllViewModel {
                 switch response.result {
                 case .success(let result):
                     if result.isSuccess {
-                        guard let result = result.result else {return}
-                        completion(result)
+                        completion(response.result)
                     } else {
                         // 통신은 정상적으로 됐으나(200), error발생
-                        print("실패(홈 화면 MyEvent 조회): \(result.message)")
+                        print("실패(모아보기 MyEventCloseInfo 조회): \(result.message)")
                     }
                 case .failure(let error):
                     // 실제 HTTP에러 404
-                    print("실패(AF-홈 화면 MyEvent 조회): \(error.localizedDescription)")
+                    print("실패(AF-모아보기 MyEventCloseInfo 조회): \(error.localizedDescription)")
                 }
             }
     }
