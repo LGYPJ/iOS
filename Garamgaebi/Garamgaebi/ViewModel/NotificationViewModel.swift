@@ -37,7 +37,7 @@ class NotificationViewModel {
     }
    
     
-    public static func getIsUnreadNotifications(memberIdx: Int, completion: @escaping ((NotificationUnreadInfo) -> Void)) {
+    public static func getIsUnreadNotifications(memberIdx: Int, completion: @escaping ((Result<NotificationUnreadInfoResponse, AFError>) -> Void)) {
         let url = "https://garamgaebi.shop/notification/unread/\(memberIdx)"
         AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
@@ -45,8 +45,7 @@ class NotificationViewModel {
                 switch response.result {
                 case .success(let result):
                     if result.isSuccess {
-                        guard let result = result.result else {return}
-                        completion(result)
+                        completion(response.result)
                     } else {
                         // 통신은 정상적으로 됐으나(200), error발생
                         print("실패(Unread Notification 조회): \(result.message)")

@@ -165,60 +165,125 @@ class HomeVC: UIViewController {
         }
     }
     private func fetchData(completion: @escaping (() -> Void)) {
-        DispatchQueue.global().sync {
-            // 세미나 정보 API
-            HomeViewModel.getHomeSeminarInfo { [weak self] result in
-                switch result {
-                case .success(let result):
-                    if result.isSuccess {
-                        guard let result = result.result else { return }
-                        self?.homeSeminarInfo = result
-                        self?.setSeminarData = true
-                        completion()
-                    } else {
-                        // TODO: 뭐든 에러가 있을거임
-                        //애니메이션 끄고 에러핸들링
-                        //LoadingView.shared.hide()
-                    }
-                case .failure(let error):
-                    // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
-                    print("실패(AF-홈 화면 Seminar 조회): \(error.localizedDescription)")
-                    LoadingView.shared.hide()
-                    let errorView = ErrorPageView()
-                    errorView.modalPresentationStyle = .fullScreen
-                    self?.present(errorView, animated: false)
-                }
-                
-            }
-            // 네트워킹 정보 API
-            HomeViewModel.getHomeNetworkingInfo { [weak self] result in
-                self?.setNetworkingData = true
-                self?.homeNetworkingInfo = result
-                completion()
-            }
-            // 가람개비 유저 10명 추천 API
-            HomeViewModel.getRecommendUsersInfo { [weak self] result in
-                self?.setRecommendedUserData = true
-                self?.recommendUsersInfo = result
-                completion()
-            }
-            // 내 모임 정보 API
-            HomeViewModel.getHomeMyEventInfo(memberId: self.memberIdx) { [weak self] result in
-                self?.setMyEventData = true
-                self?.myEventInfo = result
-                completion()
-            }
-            // 읽지 않은 알림 여부 API
-            NotificationViewModel.getIsUnreadNotifications(memberIdx: self.memberIdx) { [weak self] result in
-                self?.setNotificationData = true
-                if result.isUnreadExist {
-                    self?.notificationViewButton.setImage(UIImage(named: "NotificationUnreadIcon"), for: .normal)
+        // 세미나 정보 API
+        HomeViewModel.getHomeSeminarInfo { [weak self] result in
+            switch result {
+            case .success(let result):
+                if result.isSuccess {
+                    guard let result = result.result else { return }
+                    self?.homeSeminarInfo = result
+                    self?.setSeminarData = true
+                    completion()
                 } else {
-                    self?.notificationViewButton.setImage(UIImage(named: "NotificationIcon"), for: .normal)
+                    // TODO: 뭐든 에러가 있을거임
+                    //애니메이션 끄고 에러핸들링
+                    //LoadingView.shared.hide()
                 }
-                completion()
+            case .failure(let error):
+                // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
+                print("실패(AF-홈 화면 Seminar 조회): \(error.localizedDescription)")
+                LoadingView.shared.hide()
+                self?.presentErrorView()
             }
         }
+        
+        // 네트워킹 정보 API
+        HomeViewModel.getHomeNetworkingInfo { [weak self] result in
+            switch result {
+            case .success(let result):
+                if result.isSuccess {
+                    guard let result = result.result else { return }
+                    self?.setNetworkingData = true
+                    self?.homeNetworkingInfo = result
+                    completion()
+                } else {
+                    // TODO: 뭐든 에러가 있을거임
+                    //애니메이션 끄고 에러핸들링
+                    //LoadingView.shared.hide()
+                }
+            case .failure(let error):
+                // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
+                print("실패(AF-홈 화면 Networking 조회): \(error.localizedDescription)")
+                LoadingView.shared.hide()
+                self?.presentErrorView()
+            }
+        }
+        
+        // 가람개비 유저 10명 추천 API
+        HomeViewModel.getRecommendUsersInfo { [weak self] result in
+            switch result {
+            case .success(let result):
+                if result.isSuccess {
+                    guard let result = result.result else { return }
+                    self?.setRecommendedUserData = true
+                    self?.recommendUsersInfo = result
+                    completion()
+                } else {
+                    // TODO: 뭐든 에러가 있을거임
+                    //애니메이션 끄고 에러핸들링
+                    //LoadingView.shared.hide()
+                }
+            case .failure(let error):
+                // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
+                print("실패(AF-홈 화면 RecommedUsers 조회): \(error.localizedDescription)")
+                LoadingView.shared.hide()
+                self?.presentErrorView()
+            }
+        }
+        // 내 모임 정보 API
+        HomeViewModel.getHomeMyEventInfo(memberId: self.memberIdx) { [weak self] result in
+            switch result {
+            case .success(let result):
+                if result.isSuccess {
+                    guard let result = result.result else { return }
+                    self?.setMyEventData = true
+                    self?.myEventInfo = result
+                    completion()
+                } else {
+                    // TODO: 뭐든 에러가 있을거임
+                    //애니메이션 끄고 에러핸들링
+                    //LoadingView.shared.hide()
+                }
+            case .failure(let error):
+                // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
+                print("실패(AF-홈 화면 MyEvent 조회): \(error.localizedDescription)")
+                LoadingView.shared.hide()
+                self?.presentErrorView()
+            }
+        }
+        // 읽지 않은 알림 여부 API
+        NotificationViewModel.getIsUnreadNotifications(memberIdx: self.memberIdx) { [weak self] result in
+            switch result {
+            case .success(let result):
+                if result.isSuccess {
+                    guard let result = result.result else { return }
+                    self?.setNotificationData = true
+                    if result.isUnreadExist {
+                        self?.notificationViewButton.setImage(UIImage(named: "NotificationUnreadIcon"), for: .normal)
+                    } else {
+                        self?.notificationViewButton.setImage(UIImage(named: "NotificationIcon"), for: .normal)
+                    }
+                    completion()
+                } else {
+                    // TODO: 뭐든 에러가 있을거임
+                    //애니메이션 끄고 에러핸들링
+                    //LoadingView.shared.hide()
+                }
+            case .failure(let error):
+                // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
+                print("실패(AF-Unread Notification 조회): \(error.localizedDescription)")
+                LoadingView.shared.hide()
+                self?.presentErrorView()
+            }
+            
+        }
+        
+    }
+    
+    func presentErrorView(){
+        let errorView = ErrorPageView()
+        errorView.modalPresentationStyle = .fullScreen
+        self.present(errorView, animated: false)
     }
     
     func configNotificationCenter() {
