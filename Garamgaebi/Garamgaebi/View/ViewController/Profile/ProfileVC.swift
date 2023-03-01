@@ -54,11 +54,11 @@ class ProfileVC: UIViewController {
         return button
     }()
     
-    let scrollView = UIScrollView()
+    lazy var scrollView = UIScrollView()
     
-    let contentView = UIView()
+    lazy var contentView = UIView()
     
-    var profileImageView = UIImageView().then {
+    lazy var profileImageView = UIImageView().then {
         // 이미지 centerCrop
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
@@ -66,12 +66,12 @@ class ProfileVC: UIViewController {
         $0.layer.cornerRadius = 50
     }
     
-    let nameLabel = UILabel().then {
+    lazy var nameLabel = UILabel().then {
         $0.textColor = .mainBlack
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 20)
     }
     
-    let belongLabel = UILabel().then {
+    lazy var belongLabel = UILabel().then {
         $0.textColor = .mainBlack
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 16)
     }
@@ -96,7 +96,7 @@ class ProfileVC: UIViewController {
         return stackView
     }()
     
-    let introduceLabel = BasicPaddingLabel().then {
+    lazy var introduceLabel = BasicPaddingLabel().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.textColor = .mainBlack
         $0.numberOfLines = 0
@@ -108,7 +108,7 @@ class ProfileVC: UIViewController {
         $0.layer.cornerRadius = 12
     }
     
-    let profileEditBtn = UIButton().then {
+    lazy var profileEditBtn = UIButton().then {
         $0.basicButton()
         $0.setTitle("내 프로필 편집하기", for: .normal)
         $0.setTitleColor(.mainBlue, for: .normal)
@@ -117,15 +117,15 @@ class ProfileVC: UIViewController {
     
     // 하단 버튼
     // SNS
-    let snsTopRadiusView = UIView().then {
+    lazy var snsTopRadiusView = UIView().then {
         $0.profileTopRadiusView(title: "SNS")
     }
-    let snsDefaultLabel = UILabel().then {
+    lazy var snsDefaultLabel = UILabel().then {
         $0.text = "유저들과 소통을 위해서 SNS 주소를 남겨주세요!"
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.numberOfLines = 0
     }
-    let snsBottomRadiusView = UIView().then {
+    lazy var snsBottomRadiusView = UIView().then {
         $0.profileBottomRadiusView()
     }
     
@@ -147,22 +147,22 @@ class ProfileVC: UIViewController {
         return view
     }()
     
-    let addSnsBtn = UIButton().then {
+    lazy var addSnsBtn = UIButton().then {
         $0.setTitle("SNS 추가", for: .normal)
         $0.profilePlusButton() // 버튼 디자인
     }
     
     // 경력
-    let careerTopRadiusView = UIView().then {
+    lazy var careerTopRadiusView = UIView().then {
         $0.profileTopRadiusView(title: "경력")
     }
-    let careerDefaultLabel = UILabel().then {
+    lazy var careerDefaultLabel = UILabel().then {
         $0.text = "지금 하고 있거나\n이전에 한 일을 알려주세요"
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.textAlignment = .center
         $0.numberOfLines = 0
     }
-    let careerBottomRadiusView = UIView().then {
+    lazy var careerBottomRadiusView = UIView().then {
         $0.profileBottomRadiusView()
     }
     
@@ -184,22 +184,22 @@ class ProfileVC: UIViewController {
         return view
     }()
     
-    let addCareerBtn = UIButton().then {
+    lazy var addCareerBtn = UIButton().then {
         $0.setTitle("경력 추가", for: .normal)
         $0.profilePlusButton() // 버튼 디자인
     }
     
     // 교육
-    let eduTopRadiusView = UIView().then {
+    lazy var eduTopRadiusView = UIView().then {
         $0.profileTopRadiusView(title: "교육")
     }
-    let eduDefaultLabel = UILabel().then {
+    lazy var eduDefaultLabel = UILabel().then {
         $0.text = "지금 다니고 있거나 이전에 다녔던\n학교, 부트캠프 등 교육기관을 입력해주세요"
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.textAlignment = .center
         $0.numberOfLines = 0
     }
-    let eduBottomRadiusView = UIView().then {
+    lazy var eduBottomRadiusView = UIView().then {
         $0.profileBottomRadiusView()
     }
     
@@ -221,7 +221,7 @@ class ProfileVC: UIViewController {
         return view
     }()
     
-    let addEduBtn = UIButton().then {
+    lazy var addEduBtn = UIButton().then {
         let button = UIButton()
         $0.setTitle("교육 추가", for: .normal)
         $0.profilePlusButton() // 버튼 디자인
@@ -542,10 +542,11 @@ class ProfileVC: UIViewController {
                     if let urlString = result?.profileUrl {
                         let processor = RoundCornerImageProcessor(cornerRadius: self.profileImageView.layer.cornerRadius)
                         guard let url = URL(string: urlString) else { return }
+                        self.profileImageView.backgroundColor = .white
                         self.profileImageView.kf.setImage(with: url, options: [
                             .processor(processor),
                             .scaleFactor(UIScreen.main.scale),
-                            .transition(.fade(0.5)),
+//                            .transition(.fade(0.5)),
                             .forceRefresh
                         ])
                     } else {

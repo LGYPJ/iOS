@@ -50,23 +50,23 @@ class OtherProfileVC: UIViewController {
         return button
     }()
     
-    let scrollView = UIScrollView()
+    lazy var scrollView = UIScrollView()
     
-    let contentView = UIView()
+    lazy var contentView = UIView()
     
-    var profileImageView = UIImageView().then {
+    lazy var profileImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 50
         $0.image = UIImage(named: "DefaultProfileImage")
     }
     
-    let nameLabel = UILabel().then {
+    lazy var nameLabel = UILabel().then {
         $0.textColor = .mainBlack
         $0.font = UIFont.NotoSansKR(type: .Bold, size: 20)
     }
     
-    let belongLabel = UILabel().then {
+    lazy var belongLabel = UILabel().then {
         $0.textColor = .mainBlack
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 16)
     }
@@ -90,7 +90,7 @@ class OtherProfileVC: UIViewController {
         return stackView
     }()
     
-    let introduceLabel = BasicPaddingLabel().then {
+    lazy var introduceLabel = BasicPaddingLabel().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.textColor = .mainBlack
         $0.numberOfLines = 0
@@ -104,7 +104,7 @@ class OtherProfileVC: UIViewController {
     
     // 하단 버튼
     // SNS
-    let snsHistoryBox = UIView().then {
+    lazy var snsHistoryBox = UIView().then {
         $0.profileHistoryBox(title: "SNS")
     }
     
@@ -131,7 +131,7 @@ class OtherProfileVC: UIViewController {
 
     
     // 경력
-    let careerHistoryBox = UIView().then {
+    lazy var careerHistoryBox = UIView().then {
         $0.profileHistoryBox(title: "경력")
     }
     
@@ -157,7 +157,7 @@ class OtherProfileVC: UIViewController {
     }()
     
     // 교육
-    let eduHistoryBox = UIView().then {
+    lazy var eduHistoryBox = UIView().then {
         $0.profileHistoryBox(title: "교육")
     }
     
@@ -393,10 +393,11 @@ class OtherProfileVC: UIViewController {
                         let processor = RoundCornerImageProcessor(cornerRadius: self.profileImageView.layer.cornerRadius)
                         guard let url = URL(string: urlString) else { return }
                         
+                        self.profileImageView.backgroundColor = .mainLightGray
                         self.profileImageView.kf.setImage(with: url, options: [
                             .processor(processor),
                             .scaleFactor(UIScreen.main.scale),
-                            .transition(.fade(0.5)),
+                            //.transition(.fade(0.5)),
                             .forceRefresh
                         ])
                     } else {
