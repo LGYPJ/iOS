@@ -14,6 +14,12 @@ class HomeVC: UIViewController {
     // MARK: - Variable
     let memberIdx = UserDefaults.standard.integer(forKey: "memberIdx")
     
+    var setSeminarData = false
+    var setNetworkingData = false
+    var setRecommendedUserData = false
+    var setMyEventData = false
+    var setNotificationData = false
+    
     public var homeSeminarInfo: [HomeSeminarInfo] = [] {
         didSet {
             NotificationCenter.default.post(name: Notification.Name("presentHomeSeminarInfo"), object: homeSeminarInfo)
@@ -95,16 +101,34 @@ class HomeVC: UIViewController {
         addSubViews()
         configLayouts()
         configNotificationCenter()
+        initSetDatas()
+        LoadingView.shared.show()
+        fetchData {
+            if self.setSeminarData,
+                self.setNetworkingData,
+                self.setNotificationData,
+                self.setMyEventData,
+                self.setRecommendedUserData {
+                LoadingView.shared.hide()
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = false
-        fetchData()
     }
     
     
     // MARK: - Functions
+    
+    func initSetDatas(){
+        self.setSeminarData = false
+        self.setNetworkingData = false
+        self.setNotificationData = false
+        self.setMyEventData = false
+        self.setRecommendedUserData = false
+    }
     
     func addSubViews() {
         view.addSubview(headerView)
@@ -140,44 +164,59 @@ class HomeVC: UIViewController {
             make.bottom.equalToSuperview()
         }
     }
-    private func fetchData() {
-        
-        // 세미나 정보 API
-        HomeViewModel.getHomeSeminarInfo { [weak self] result in
-            switch result {
-            case .success(let result):
-                if result.isSuccess {
-                    guard let result = result.result else { return }
-                    self?.homeSeminarInfo = result
-                } else {
-                    
+    private func fetchData(completion: @escaping (() -> Void)) {
+        DispatchQueue.global().sync {
+            // 세미나 정보 API
+            HomeViewModel.getHomeSeminarInfo { [weak self] result in
+                switch result {
+                case .success(let result):
+                    if result.isSuccess {
+                        guard let result = result.result else { return }
+                        self?.homeSeminarInfo = result
+                        self?.setSeminarData = true
+                        completion()
+                    } else {
+                        // TODO: 뭐든 에러가 있을거임
+                        //애니메이션 끄고 에러핸들링
+                        //LoadingView.shared.hide()
+                    }
+                case .failure(let error):
+                    // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
+                    print("실패(AF-홈 화면 Seminar 조회): \(error.localizedDescription)")
+                    LoadingView.shared.hide()
+                    let errorView = ErrorPageView()
+                    errorView.modalPresentationStyle = .fullScreen
+                    self?.present(errorView, animated: false)
                 }
-            case .failure(let error):
-                // 네트워킹 문제일 시 errorView로 이동
-                print("실패(AF-홈 화면 Seminar 조회): \(error.localizedDescription)")
-                let errorView = ErrorPageView()
-                errorView.modalPresentationStyle = .fullScreen
-                self?.present(errorView, animated: false)
+                
             }
-        }
-        // 네트워킹 정보 API
-        HomeViewModel.getHomeNetworkingInfo { [weak self] result in
-            self?.homeNetworkingInfo = result
-        }
-        // 가람개비 유저 10명 추천 API
-        HomeViewModel.getRecommendUsersInfo { [weak self] result in
-            self?.recommendUsersInfo = result
-        }
-        // 내 모임 정보 API
-        HomeViewModel.getHomeMyEventInfo(memberId: memberIdx) { [weak self] result in
-            self?.myEventInfo = result
-        }
-        // 읽지 않은 알림 여부 API
-        NotificationViewModel.getIsUnreadNotifications(memberIdx: memberIdx) { [weak self] result in
-            if result.isUnreadExist {
-                self?.notificationViewButton.setImage(UIImage(named: "NotificationUnreadIcon"), for: .normal)
-            } else {
-                self?.notificationViewButton.setImage(UIImage(named: "NotificationIcon"), for: .normal)
+            // 네트워킹 정보 API
+            HomeViewModel.getHomeNetworkingInfo { [weak self] result in
+                self?.setNetworkingData = true
+                self?.homeNetworkingInfo = result
+                completion()
+            }
+            // 가람개비 유저 10명 추천 API
+            HomeViewModel.getRecommendUsersInfo { [weak self] result in
+                self?.setRecommendedUserData = true
+                self?.recommendUsersInfo = result
+                completion()
+            }
+            // 내 모임 정보 API
+            HomeViewModel.getHomeMyEventInfo(memberId: self.memberIdx) { [weak self] result in
+                self?.setMyEventData = true
+                self?.myEventInfo = result
+                completion()
+            }
+            // 읽지 않은 알림 여부 API
+            NotificationViewModel.getIsUnreadNotifications(memberIdx: self.memberIdx) { [weak self] result in
+                self?.setNotificationData = true
+                if result.isUnreadExist {
+                    self?.notificationViewButton.setImage(UIImage(named: "NotificationUnreadIcon"), for: .normal)
+                } else {
+                    self?.notificationViewButton.setImage(UIImage(named: "NotificationIcon"), for: .normal)
+                }
+                completion()
             }
         }
     }
