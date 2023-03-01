@@ -25,9 +25,16 @@ final class LoadingView: UIView {
         return view
     }()
     
-    private let loadingView: LottieAnimationView = {
-        let view = LottieAnimationView(name: "loading")
-        view.loopMode = .loop
+//    private let loadingView: LottieAnimationView = {
+//        let view = LottieAnimationView(name: "loading")
+//        view.loopMode = .loop
+//        return view
+//    }()
+    
+    private let loadingView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "loadingImage")
+        view.contentMode = .scaleAspectFill
         return view
     }()
     
@@ -78,7 +85,12 @@ final class LoadingView: UIView {
         }
         self.layoutIfNeeded()
         
-        self.loadingView.play()
+//        self.loadingView.play()
+        self.loadingView.rotate360Degrees()
+//        UIView.animate(withDuration: 5.0) {
+//            //self.loadingView.transform = CGAffineTransform(rotationAngle: .pi)
+//
+//        }
         UIView.animate(
             withDuration: 0.7,
             animations: { self.contentView.alpha = 1 }
@@ -86,8 +98,26 @@ final class LoadingView: UIView {
     }
     
     func hide(completion: @escaping () -> () = {}) {
-        self.loadingView.stop()
+//        self.loadingView.stop()
+        self.loadingView.stopRotating()
         self.removeFromSuperview()
         completion()
+    }
+}
+
+extension UIView {
+    func rotate360Degrees(duration: CFTimeInterval = 1.0) {
+        let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
+        rotateAnimation.fromValue = 0.0
+        rotateAnimation.toValue = CGFloat.pi * 2
+        rotateAnimation.duration = duration
+        rotateAnimation.repeatCount = Float.infinity
+        self.layer.add(rotateAnimation, forKey: nil)
+    }
+
+    func stopRotating(){
+        self.layer.sublayers?.removeAll()
+        //or
+//        self.layer.removeAllAnimations()
     }
 }
