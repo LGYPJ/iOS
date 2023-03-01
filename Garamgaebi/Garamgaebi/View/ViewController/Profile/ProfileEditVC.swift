@@ -468,8 +468,9 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
                 let paramData =  try! JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
                 multipartFormData.append(paramData, withName: key, mimeType: "application/json")
             }
-            if let imageData = profileImage?.pngData() {
-                multipartFormData.append(imageData, withName: "image", fileName: "\(imageData).png", mimeType: "multipart/form-data")
+            if let imageData = profileImage?.jpegData(compressionQuality: 0.5) {
+
+                multipartFormData.append(imageData, withName: "image", fileName: "\(imageData).jpeg", mimeType: "multipart/form-data")
             }
         }, to: url, method: .post,
                   interceptor: MyRequestInterceptor()
