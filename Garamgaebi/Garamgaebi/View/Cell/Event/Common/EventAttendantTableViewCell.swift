@@ -238,5 +238,14 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 		return CGSize(width: 44, height: 85)
 	}
 	
+	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		if self.type == "SEMINAR" {
+			NotificationCenter.default.post(name: Notification.Name("pushOtherProfileInProgramDetail"), object: seminarAttendants[indexPath.row].memberIdx)
+		} else {
+			NotificationCenter.default.post(name: Notification.Name("pushOtherProfileInProgramDetail"), object: networkingAttendants[indexPath.row].memberIdx)
+		}
+		
+	}
+	
 	
 }

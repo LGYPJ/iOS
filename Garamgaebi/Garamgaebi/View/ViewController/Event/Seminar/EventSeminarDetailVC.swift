@@ -91,6 +91,7 @@ class EventSeminarDetailVC: UIViewController {
 		self.navigationController?.interactivePopGestureRecognizer?.delegate = self
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(presentPopupVC(_:)), name: Notification.Name("pushSeminarPreviewPopup"), object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(pushOtherProfileInProgramDetail(_:)), name: Notification.Name("pushOtherProfileInProgramDetail"), object: nil)
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -198,6 +199,11 @@ extension EventSeminarDetailVC {
 			self.tableView.reloadData()
 			refresh.endRefreshing()
 	   }
+	}
+	
+	@objc func pushOtherProfileInProgramDetail(_ notification: NSNotification) {
+		let otherMemberIdx: Int = notification.object as! Int
+		self.navigationController?.pushViewController(OtherProfileVC(memberIdx: otherMemberIdx), animated: true)
 	}
 	
 	// MARK: fetch data
