@@ -28,6 +28,7 @@ class ProfileInputSNSVC: UIViewController, BottomSheetSelectDelegate {
     lazy var token = UserDefaults.standard.string(forKey: "BearerToken")
     var snsIdx: Int = 0
     var isAutoInput: Bool = false
+    lazy var tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(viewDidQuestionTap))
     
     private let maxInputCount = 22
     var autoInputTextCount = 0 {
@@ -100,6 +101,7 @@ class ProfileInputSNSVC: UIViewController, BottomSheetSelectDelegate {
         textField.basicTextField()
         textField.placeholder = "표시할 이름을 입력해주세요 (예:블로그, 깃허브 등)"
         textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
+        textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
         
         // 글자수 계산
@@ -338,6 +340,7 @@ class ProfileInputSNSVC: UIViewController, BottomSheetSelectDelegate {
                 //
                 self?.linkTextField.basicTextField()
                 self?.instagramAtLabel.isHidden = true
+                self?.typeTextField.removeGestureRecognizer(self!.tapGestureRecognizer2)
             }
             // 글자수 계산
             self.typeTextField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
@@ -520,14 +523,14 @@ extension ProfileInputSNSVC {
         tapGestureRecognizer.numberOfTapsRequired = 1
         tapGestureRecognizer.isEnabled = true
         tapGestureRecognizer.cancelsTouchesInView = false
-        
-        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(viewDidQuestionTap))
-//        tapGestureRecognizer2.numberOfTapsRequired = 1
-        tapGestureRecognizer2.isEnabled = true
-//        tapGestureRecognizer2.cancelsTouchesInView = false
-        typeTextField.addGestureRecognizer(tapGestureRecognizer2)
-        
         view.addGestureRecognizer(tapGestureRecognizer)
+        
+        tapGestureRecognizer2.numberOfTapsRequired = 1
+        tapGestureRecognizer2.isEnabled = true
+        tapGestureRecognizer2.cancelsTouchesInView = false
+        if (isAutoInput == false) { // SNS 유형이 직접 입력이 아니라면
+            typeTextField.addGestureRecognizer(tapGestureRecognizer2)
+        }
     }
     
     @objc private func viewDidTap() {
@@ -535,9 +538,9 @@ extension ProfileInputSNSVC {
     }
     
     @objc private func viewDidQuestionTap() {
-        //TODO: 직접 입력 편집이 바로바로 안 됨 (포커스 문제?)
         typeTextField.layer.borderColor = UIColor.mainBlack.cgColor
         if (isAutoInput == false) {
+            typeTextField.addGestureRecognizer(tapGestureRecognizer2)
             showBottomSheet()
             self.view.endEditing(true)
         }
