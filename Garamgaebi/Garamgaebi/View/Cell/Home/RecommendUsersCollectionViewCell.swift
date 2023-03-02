@@ -150,7 +150,7 @@ class RecommendUsersCollectionViewCell: UICollectionViewCell {
             self.imageInfoView.kf.setImage(with: url, options: [
                 .processor(processor),
                 .scaleFactor(UIScreen.main.scale),
-                .transition(.fade(0.5)),
+//                .transition(.fade(0.5)),
                 .forceRefresh
             ])
             self.imageDefault.isHidden = true

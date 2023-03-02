@@ -9,19 +9,25 @@ import UIKit
 
 class ViewAllSeminarVC: UIViewController {
     
+    // UIRefreshControl
+    let refresh = UIRefreshControl()
+    
+    var setThisMonthData = false
+    var setNextMonthData = false
+    var setCloseData = false
     
     private let sections: [String] = ["이번 달 세미나", "예정된 세미나", "마감된 세미나"]
-    private var dataList1: [SeminarThisMonthInfo] = [] {
+    private var thisMonthInfoList: [SeminarThisMonthInfo] = [] {
         didSet {
             self.tableView.reloadData()
         }
     }
-    private var dataList2: [SeminarReadyInfo] = [] {
+    private var nextMonthInfoList: [SeminarReadyInfo] = [] {
         didSet {
             self.tableView.reloadData()
         }
     }
-    private var dataList3: [SeminarClosedInfo] = [] {
+    private var closeInfoList: [SeminarClosedInfo] = [] {
         didSet {
             self.tableView.reloadData()
         }
@@ -55,11 +61,21 @@ class ViewAllSeminarVC: UIViewController {
         configureTableView()
         addSubViews()
         configLayouts()
+        initRefresh()
+        initSetDatas()
+        LoadingView.shared.show()
+        fetchData {
+            if self.setThisMonthData,
+               self.setNextMonthData,
+               self.setCloseData {
+                LoadingView.shared.hide()
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        fetchData()
+        
     }
     
     // MARK: - Functions
@@ -78,21 +94,84 @@ class ViewAllSeminarVC: UIViewController {
         }
     }
     
-    func fetchData(){
+    func fetchData(completion: @escaping (() -> Void)){
         // SeminarThisMonthInfo의 data를 불러옴
         ViewAllViewModel.getSeminarThisMonthInfo  { [weak self] result in
-            self?.dataList1 = [result]
+            switch result {
+            case .success(let result):
+                if result.isSuccess {
+                    guard let result = result.result else { return }
+                    self?.thisMonthInfoList = [result]
+                    self?.setThisMonthData = true
+                    completion()
+                } else {
+                    // TODO: 뭐든 에러가 있을거임
+                    //애니메이션 끄고 에러핸들링
+                    //LoadingView.shared.hide()
+                }
+            case .failure(let error):
+                // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
+                print("실패(AF-모아보기 화면 이번 달 Seminar 조회): \(error.localizedDescription)")
+                LoadingView.shared.hide()
+                self?.presentErrorView()
+            }
         }
         
         // SeminarNextMonthInfo의 data를 불러옴
         ViewAllViewModel.getSeminarNextMonthInfo  { [weak self] result in
-            self?.dataList2 = [result]
+            switch result {
+            case .success(let result):
+                if result.isSuccess {
+                    guard let result = result.result else { return }
+                    self?.nextMonthInfoList = [result]
+                    self?.setNextMonthData = true
+                    completion()
+                } else {
+                    // TODO: 뭐든 에러가 있을거임
+                    //애니메이션 끄고 에러핸들링
+                    //LoadingView.shared.hide()
+                }
+            case .failure(let error):
+                // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
+                print("실패(AF-모아보기 화면 예정된 Seminar 조회): \(error.localizedDescription)")
+                LoadingView.shared.hide()
+                self?.presentErrorView()
+            }
         }
         
         // SeminarClosedInfo의 data를 불러옴
         ViewAllViewModel.getSeminarClosedInfo { [weak self] result in
-            self?.dataList3 = result
+            switch result {
+            case .success(let result):
+                if result.isSuccess {
+                    guard let result = result.result else { return }
+                    self?.closeInfoList = result
+                    self?.setCloseData = true
+                    completion()
+                } else {
+                    // TODO: 뭐든 에러가 있을거임
+                    //애니메이션 끄고 에러핸들링
+                    //LoadingView.shared.hide()
+                }
+            case .failure(let error):
+                // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
+                print("실패(AF-모아보기 화면 마감된 Seminar 조회): \(error.localizedDescription)")
+                LoadingView.shared.hide()
+                self?.presentErrorView()
+            }
         }
+    }
+    
+    func initSetDatas(){
+        self.setThisMonthData = false
+        self.setNextMonthData = false
+        self.setCloseData = false
+    }
+    
+    func presentErrorView(){
+        let errorView = ErrorPageView()
+        errorView.modalPresentationStyle = .fullScreen
+        self.present(errorView, animated: false)
     }
     
 }
@@ -122,20 +201,20 @@ extension ViewAllSeminarVC: UITableViewDataSource, UITableViewDelegate {
         
         switch section {
         case 0:
-            if dataList1.count == 0 {
+            if thisMonthInfoList.count == 0 {
                 return 1
             }
-            return dataList1.count
+            return thisMonthInfoList.count
         case 1:
-            if dataList2.count == 0 {
+            if nextMonthInfoList.count == 0 {
                 return 1
             }
-            return dataList2.count
+            return nextMonthInfoList.count
         case 2:
-            if dataList3.count == 0 {
+            if closeInfoList.count == 0 {
                 return 1
             }
-            return dataList3.count
+            return closeInfoList.count
         default:
             print(">>> ERROR: ViewAllSeminarVC dataList count")
             return 0
@@ -148,19 +227,19 @@ extension ViewAllSeminarVC: UITableViewDataSource, UITableViewDelegate {
         
         switch indexPath.section {
         case 0:
-            if dataList1.count == 0 {
+            if thisMonthInfoList.count == 0 {
                 baseHeight = 100.0
             } else {
                 baseHeight = 140.0
             }
         case 1:
-            if dataList2.count == 0 {
+            if nextMonthInfoList.count == 0 {
                 baseHeight = 100.0
             } else {
                 baseHeight = 140.0
             }
         case 2:
-            if dataList3.count == 0 {
+            if closeInfoList.count == 0 {
                 baseHeight = 100.0
             } else {
                 baseHeight = 140.0
@@ -179,27 +258,27 @@ extension ViewAllSeminarVC: UITableViewDataSource, UITableViewDelegate {
         
         switch indexPath.section {
         case 0:
-            if dataList1.count == 0 {
+            if thisMonthInfoList.count == 0 {
                 cell.configureZeroCell(caseString: "이번 달은")
                 cell.isUserInteractionEnabled = false
             } else {
-                cell.configureThisMonthInfo(dataList1[indexPath.row])
+                cell.configureThisMonthInfo(thisMonthInfoList[indexPath.row])
                 cell.isUserInteractionEnabled = true
             }
         case 1:
-            if dataList2.count == 0 {
+            if nextMonthInfoList.count == 0 {
                 cell.configureZeroCell(caseString: "예정된")
                 cell.isUserInteractionEnabled = false
             } else {
-                cell.configureReadyInfo(dataList2[indexPath.row])
+                cell.configureReadyInfo(nextMonthInfoList[indexPath.row])
                 cell.isUserInteractionEnabled = true
             }
         case 2:
-            if dataList3.count == 0 {
+            if closeInfoList.count == 0 {
                 cell.configureZeroCell(caseString: "마감된")
                 cell.isUserInteractionEnabled = false
             } else {
-                cell.configureClosedInfo(dataList3[indexPath.row])
+                cell.configureClosedInfo(closeInfoList[indexPath.row])
                 cell.isUserInteractionEnabled = true
             }
         default:
@@ -225,7 +304,7 @@ extension ViewAllSeminarVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         if indexPath.section == 1,
-           dataList2[indexPath.row].isOpen == "BEFORE_OPEN" {
+           nextMonthInfoList[indexPath.row].isOpen == "BEFORE_OPEN" {
             return nil
         }
         return indexPath
@@ -235,11 +314,11 @@ extension ViewAllSeminarVC: UITableViewDataSource, UITableViewDelegate {
         var postObject: MyEventToDetailInfo = MyEventToDetailInfo(programIdx: 0, type: "")
         switch indexPath.section {
         case 0:
-            postObject = MyEventToDetailInfo(programIdx: dataList1[indexPath.row].programIdx, type: dataList1[indexPath.row].type)
+            postObject = MyEventToDetailInfo(programIdx: thisMonthInfoList[indexPath.row].programIdx, type: thisMonthInfoList[indexPath.row].type)
         case 1:
-            postObject = MyEventToDetailInfo(programIdx: dataList2[indexPath.row].programIdx, type: dataList2[indexPath.row].type)
+            postObject = MyEventToDetailInfo(programIdx: nextMonthInfoList[indexPath.row].programIdx, type: nextMonthInfoList[indexPath.row].type)
         case 2:
-            postObject = MyEventToDetailInfo(programIdx: dataList3[indexPath.row].programIdx, type: dataList3[indexPath.row].type)
+            postObject = MyEventToDetailInfo(programIdx: closeInfoList[indexPath.row].programIdx, type: closeInfoList[indexPath.row].type)
         default:
             print(">>> ERROR: ViewAllSeminarVC didSelectRowAt dataList Error")
         }
@@ -250,3 +329,26 @@ extension ViewAllSeminarVC: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
+extension ViewAllSeminarVC {
+    func initRefresh() {
+        refresh.addTarget(self, action: #selector(refreshTable(refresh:)), for: .valueChanged)
+        refresh.backgroundColor = UIColor.clear
+        self.tableView.refreshControl = refresh
+    }
+    
+    @objc func refreshTable(refresh: UIRefreshControl) {
+        
+        initSetDatas()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.fetchData {
+                if self.setThisMonthData,
+                   self.setNextMonthData,
+                   self.setCloseData {
+                    refresh.endRefreshing()
+                }
+            }
+        }
+        
+    }
+    
+}

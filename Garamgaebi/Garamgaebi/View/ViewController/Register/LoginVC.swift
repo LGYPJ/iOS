@@ -64,6 +64,20 @@ class LoginVC: UIViewController {
         view.backgroundColor = .white
         addSubViews()
         configLayouts()
+        
+        
+        // TODO: 임시 kakaoLogin unlink (삭제예정)
+        // kakao unlink
+//        UserApi.shared.unlink {(error) in
+//            if let error = error {
+//                print(error)
+//            }
+//            else {
+//                print("unlink() success.")
+//            }
+//        }
+        
+        
     }
     
     // MARK: - Functions
@@ -181,7 +195,6 @@ class LoginVC: UIViewController {
                         }
                         else {
                             UserDefaults.standard.set(user?.kakaoAccount?.email, forKey: "socialEmail")
-                            
                             let usersocialEmail = UserDefaults.standard.string(forKey: "socialEmail")!
                             
                             // 해당 socialEmail이 존재하는 계정이면 바로 로그인
@@ -202,6 +215,30 @@ class LoginVC: UIViewController {
                                     print("실패(AF-간편로그인): \(error.localizedDescription)")
                                 }
                             })
+                            
+                            
+                            //TODO: socialEmail -> identifier로 수정 후 postLogin의 socialEmail을 identifier로 수정
+//                            UserDefaults.standard.set(user?.id, forKey: "userIdentifier")
+//                            let userIdentifier = UserDefaults.standard.string(forKey: "userIdentifier")!
+//                            print("identifier: \(userIdentifier)")
+//
+//                            LoginViewModel.postLogin(socialEmail: userIdentifier, completion: { [weak self] result in
+//                                switch result {
+//                                case .success(let result):
+//                                    if result.isSuccess {
+//                                        print("성공(간편로그인): \(result.message)")
+//                                        UserDefaults.standard.set(result.result?.accessToken, forKey: "BearerToken")
+//                                        UserDefaults.standard.set(result.result?.memberIdx, forKey: "memberIdx")
+//                                        self?.showHome()
+//                                    } else {
+//                                        print("실패(간편로그인): \(result.message)")
+//                                        print(">>> 교육, 경력 기입 화면으로 이동")
+//                                        self?.presentNextView()
+//                                    }
+//                                case .failure(let error):
+//                                    print("실패(AF-간편로그인): \(error.localizedDescription)")
+//                                }
+//                            })
                             
                         }
                     }

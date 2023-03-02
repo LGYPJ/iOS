@@ -33,7 +33,7 @@ class HomeViewModel {
     }
     
     // MARK: Request [Networking]
-    public static func getHomeNetworkingInfo(completion: @escaping (([HomeNetworkingInfo]) -> Void)) {
+    public static func getHomeNetworkingInfo(completion: @escaping ((Result<HomeNetworkingInfoResponse, AFError>) -> Void)) {
         let url = "https://garamgaebi.shop/networkings/main"
         AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
@@ -41,8 +41,7 @@ class HomeViewModel {
                 switch response.result {
                 case .success(let result):
                     if result.isSuccess {
-                        guard let result = result.result else {return}
-                        completion(result)
+                        completion(response.result)
                     } else {
                         // 통신은 정상적으로 됐으나(200), error발생
                         print("실패(홈 화면 Networking 조회): \(result.message)")
@@ -55,7 +54,7 @@ class HomeViewModel {
     }
     
     // MARK: Request [가람개비 유저]
-    public static func getRecommendUsersInfo(completion: @escaping (([RecommendUsersInfo]) -> Void)) {
+    public static func getRecommendUsersInfo(completion: @escaping ((Result<RecommendUsersInfoResponse, AFError>) -> Void)) {
         let url = "https://garamgaebi.shop/profile/profiles"
         AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
@@ -63,8 +62,7 @@ class HomeViewModel {
                 switch response.result {
                 case .success(let result):
                     if result.isSuccess {
-                        guard let result = result.result else {return}
-                        completion(result)
+                        completion(response.result)
                     } else {
                         // 통신은 정상적으로 됐으나(200), error발생
                         print("실패(홈 화면 RecommedUsers 조회): \(result.message)")
@@ -77,7 +75,7 @@ class HomeViewModel {
     }
     
     // MARK: Request [내 모임]
-    public static func getHomeMyEventInfo(memberId: Int, completion: @escaping (([MyEventInfoReady]) -> Void)) {
+    public static func getHomeMyEventInfo(memberId: Int, completion: @escaping ((Result<MyEventInfoReadyResponse, AFError>) -> Void)) {
         let url = "https://garamgaebi.shop/programs/\(memberId)/ready"
         AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
@@ -85,8 +83,7 @@ class HomeViewModel {
                 switch response.result {
                 case .success(let result):
                     if result.isSuccess {
-                        guard let result = result.result else {return}
-                        completion(result)
+                        completion(response.result)
                     } else {
                         // 통신은 정상적으로 됐으나(200), error발생
                         print("실패(홈 화면 MyEvent 조회): \(result.message)")
