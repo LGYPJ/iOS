@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 class EventAttendantCollectionViewCell: UICollectionViewCell {
 	
@@ -45,6 +46,10 @@ class EventAttendantCollectionViewCell: UICollectionViewCell {
 		super.prepareForReuse()
 		profileImageView.layer.borderWidth = 0
 		userNameLabel.textColor = .mainBlack
+		profileImageView.kf.cancelDownloadTask()
+		profileImageView.kf.setImage(with: URL(string: ""))
+		profileImageView.image = nil
+		
 	}
 }
 

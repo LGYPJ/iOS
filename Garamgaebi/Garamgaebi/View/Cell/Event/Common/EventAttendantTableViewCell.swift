@@ -189,15 +189,15 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EventAttendantCollectionViewCell.identifier, for: indexPath) as? EventAttendantCollectionViewCell else {return UICollectionViewCell()}
 		
 		if self.type == "SEMINAR" {
+			let cellData = self.seminarAttendants[indexPath.row]
 			
 			// 탈퇴한 회원 처리
-			if seminarAttendants[indexPath.row].memberIdx == -1 {
+			if cellData.memberIdx == -1 {
 				cell.profileImageView.image = UIImage(named: "ExitProfileImage")
 				cell.userNameLabel.text = "알 수 없음"
 				cell.userNameLabel.textColor = .mainGray
 				cell.isUserInteractionEnabled = false
 			} else {
-				let cellData = self.seminarAttendants[indexPath.row]
 				
 				cell.profileImageView.kf.indicatorType = .activity
 				cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg ?? ""), placeholder: UIImage(named: "DefaultProfileImage"), options: [.forceRefresh])
@@ -221,10 +221,10 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 //				NotificationCenter.default.post(name: Notification.Name("programId:\(programId)"), object: false)
 //			}
 			
-			
+			let cellData = self.networkingAttendants[indexPath.row]
 			
 			// 탈퇴한 회원 처리
-			if networkingAttendants[indexPath.row].memberIdx == -1 {
+			if cellData.memberIdx == -1 {
 				cell.profileImageView.image = UIImage(named: "ExitProfileImage")
 				cell.userNameLabel.text = "알 수 없음"
 				cell.userNameLabel.textColor = .mainGray
