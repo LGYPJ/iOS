@@ -51,10 +51,10 @@ class SplashVC: UIViewController {
     }
     
     private func login() {
-        let usersocialEmail = UserDefaults.standard.string(forKey: "socialEmail") ?? ""
-        print("로그인 된 socialEmail: \(usersocialEmail)")
+        let userIdentifier = UserDefaults.standard.string(forKey: "identifier") ?? ""
+        print("로그인 된 identifier: \(userIdentifier)")
         
-        LoginViewModel.postLogin(socialEmail: usersocialEmail, completion: { [weak self] result in
+        LoginViewModel.postLogin(identifier: userIdentifier, completion: { [weak self] result in
             switch result {
             case .success(let result):
                 if result.isSuccess {

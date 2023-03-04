@@ -32,7 +32,7 @@ final class MyRequestInterceptor: RequestInterceptor {
         case 401:
             let url = "https://garamgaebi.shop/member/login"
             let body: [String: Any] = [
-                "socialEmail": UserDefaults.standard.string(forKey: "socialEmail")!,
+                "identifier": UserDefaults.standard.string(forKey: "identifier")!,
             ]
             AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default)
                 .validate()

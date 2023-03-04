@@ -9,11 +9,11 @@ import Alamofire
 
 class LoginViewModel {
 	
-	public static func postLogin(socialEmail: String, completion: @escaping ((Result<LoginModelResponse, AFError>) -> Void)) {
+	public static func postLogin(identifier: String, completion: @escaping ((Result<LoginModelResponse, AFError>) -> Void)) {
 		let url = "https://garamgaebi.shop/member/login"
 		
 		let body: [String: Any] = [
-			"socialEmail": socialEmail,
+			"identifier": identifier,
 		]
 		
 		AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default)

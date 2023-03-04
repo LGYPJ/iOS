@@ -139,12 +139,12 @@ class CompleteRegisterVC: UIViewController {
     private func register() {
         let usernickname = UserDefaults.standard.string(forKey: "nickname")!
         let userprofileEmail = UserDefaults.standard.string(forKey: "profileEmail")!
-        let usersocialEmail = UserDefaults.standard.string(forKey: "socialEmail")!
+        let userIdentifier = UserDefaults.standard.string(forKey: "identifier")!
         let useruniEmail = UserDefaults.standard.string(forKey: "uniEmail")!
         let userstatus = "ACTIVE"
         // TODO: password 추후 제거 예정
 
-        let userInfo =  RegisterUserInfo(nickname: usernickname, profileEmail: userprofileEmail, socialEmail: usersocialEmail, uniEmail: useruniEmail, status: userstatus)
+        let userInfo =  RegisterUserInfo(nickname: usernickname, profileEmail: userprofileEmail, identifier: userIdentifier, uniEmail: useruniEmail, status: userstatus)
         print(userInfo)
         
          //response 받은 memberIdx로 회원가입 API post
@@ -172,10 +172,10 @@ class CompleteRegisterVC: UIViewController {
     }
 	
 	private func login() {
-        let usersocialEmail = UserDefaults.standard.string(forKey: "socialEmail")!
-        print("로그인 된 socialEmail: \(usersocialEmail)")
+        let userIdentifier = UserDefaults.standard.string(forKey: "identifier")!
+        print("로그인 된 identifier: \(userIdentifier)")
 
-        LoginViewModel.postLogin(socialEmail: usersocialEmail, completion: { [weak self] result in
+        LoginViewModel.postLogin(identifier: userIdentifier, completion: { [weak self] result in
             switch result {
             case .success(let result):
                 if result.isSuccess {

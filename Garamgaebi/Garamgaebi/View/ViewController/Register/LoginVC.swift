@@ -150,12 +150,12 @@ class LoginVC: UIViewController {
                             print(error)
                         }
                         else {
-                            UserDefaults.standard.set(user?.kakaoAccount?.email, forKey: "socialEmail")
+                            UserDefaults.standard.set(user?.kakaoAccount?.email, forKey: "identifier")
                             
-                            let usersocialEmail = UserDefaults.standard.string(forKey: "socialEmail")!
+                            let userIdentifier = UserDefaults.standard.string(forKey: "identifier")!
                             
-                            // 해당 socialEmail이 존재하는 계정이면 바로 로그인
-                            LoginViewModel.postLogin(socialEmail: usersocialEmail, completion: { [weak self] result in
+                            // 해당 identifier이 존재하는 계정이면 바로 로그인
+                            LoginViewModel.postLogin(identifier: userIdentifier, completion: { [weak self] result in
                                 switch result {
                                 case .success(let result):
                                     if result.isSuccess {
@@ -194,11 +194,11 @@ class LoginVC: UIViewController {
                             print(error)
                         }
                         else {
-                            UserDefaults.standard.set(user?.kakaoAccount?.email, forKey: "socialEmail")
-                            let usersocialEmail = UserDefaults.standard.string(forKey: "socialEmail")!
+                            UserDefaults.standard.set(user?.kakaoAccount?.email, forKey: "identifier")
+                            let userIdentifier = UserDefaults.standard.string(forKey: "identifier")!
                             
-                            // 해당 socialEmail이 존재하는 계정이면 바로 로그인
-                            LoginViewModel.postLogin(socialEmail: usersocialEmail, completion: { [weak self] result in
+                            // 해당 identifier이 존재하는 계정이면 바로 로그인
+                            LoginViewModel.postLogin(identifier: userIdentifier, completion: { [weak self] result in
                                 switch result {
                                 case .success(let result):
                                     if result.isSuccess {

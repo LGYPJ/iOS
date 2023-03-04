@@ -12,7 +12,7 @@ import Alamofire
 class RegisterUserViewModel {
     // nickname, -> UserDefault
     // profileEmail, -> UserDefault
-    // socialEmail, -> ?
+    // identifier, -> ?
     // uniEmail, -> ? (UserDefault로 해야되나 ???)
     // status(enum[ "ACTIVE", "INACTIVE" ]), -> ACTIVE로 넘기면 됨
     // password -> 추후 제거 예정
@@ -23,7 +23,7 @@ class RegisterUserViewModel {
         let body: [String: Any] = [
             "nickname": parameter.nickname,
             "profileEmail": parameter.profileEmail,
-            "socialEmail": parameter.socialEmail,
+            "identifier": parameter.identifier,
             "uniEmail": parameter.uniEmail,
             "status": parameter.status,
         ]
