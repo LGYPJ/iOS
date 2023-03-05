@@ -25,7 +25,7 @@ class SplashVC: UIViewController {
         }
         view.backgroundColor = .white
         
-//        login()
+        //        login()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -51,6 +51,15 @@ class SplashVC: UIViewController {
     }
     
     private func login() {
+        if UserDefaults.standard.bool(forKey: "kakaoLogin") {
+           kakaoLogin()
+        } else if UserDefaults.standard.bool(forKey: "appleLogin") {
+            // TODO: apple 자동로그인 구현 예정
+        }
+    }
+    
+    public func kakaoLogin() {
+        
         let accessToken = UserDefaults.standard.string(forKey: "accessToken") ?? ""
         print("accessToken: \(accessToken)")
         
@@ -75,4 +84,5 @@ class SplashVC: UIViewController {
             }
         })
     }
+    
 }

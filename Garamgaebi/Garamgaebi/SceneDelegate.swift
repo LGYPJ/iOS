@@ -25,14 +25,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = scene as? UIWindowScene else { return }
         self.window = UIWindow(windowScene: windowScene)
         
-//        let rootViewController = SplashVC()
+        let rootViewController = SplashVC()
 //        let rootViewController = ErrorPageView()
 //        let rootViewController = TabBarController()
         //let rootViewController = EventApplyCancelVC()
         //let rootViewController = HomeVC()
         //let rootViewController = HomeNotificationVC()
 //        let rootViewController = OnboardingVC()
-        let rootViewController = LoginVC()
+        //let rootViewController = LoginVC()
 //        let rootViewController = UniEmailAuthVC()
 //        let rootViewController = InputNickNameVC()
 //        let rootViewController = InputEmailVC()
