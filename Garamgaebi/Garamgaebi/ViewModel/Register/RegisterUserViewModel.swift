@@ -19,11 +19,11 @@ class RegisterUserViewModel {
     
     // response로 memberIdx 받아옴
     public static func requestRegisterUser(parameter : RegisterUserInfo, completion: @escaping (RegisterMemberIdx) -> ()) {
-        let url = "https://garamgaebi.shop/member/post"
+        let url = "https://garamgaebi.shop/member/post/kakao"
         let body: [String: Any] = [
             "nickname": parameter.nickname,
             "profileEmail": parameter.profileEmail,
-            "identifier": parameter.identifier,
+            "accessToken": parameter.accessToken,
             "uniEmail": parameter.uniEmail,
             "status": parameter.status,
         ]

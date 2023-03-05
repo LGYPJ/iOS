@@ -18,7 +18,7 @@ struct RegisterUserInfoResponse: Codable {
 struct RegisterUserInfo: Codable {
     let nickname: String
     let profileEmail: String
-    let identifier: String
+    let accessToken: String
     let uniEmail: String
     let status: String
 }

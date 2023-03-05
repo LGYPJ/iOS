@@ -144,6 +144,8 @@ class LoginVC: UIViewController {
                     print("카카오 톡으로 로그인 성공")
                     guard let accessToken = oauthToken?.accessToken else { return }
                     UserDefaults.standard.set(accessToken, forKey: "accessToken")
+                    UserDefaults.standard.set(true, forKey: "kakaoLogin")
+                    UserDefaults.standard.set(false, forKey: "appleLogin")
                     LoginViewModel.postLogin(accessToken: accessToken, completion: { [weak self] result in
                         switch result {
                         case .success(let result):
@@ -174,6 +176,8 @@ class LoginVC: UIViewController {
                     print("카카오 계정으로 로그인 성공")
                     guard let accessToken = oauthToken?.accessToken else { return }
                     UserDefaults.standard.set(accessToken, forKey: "accessToken")
+                    UserDefaults.standard.set(true, forKey: "kakaoLogin")
+                    UserDefaults.standard.set(false, forKey: "appleLogin")
                     LoginViewModel.postLogin(accessToken: accessToken, completion: { [weak self] result in
                         switch result {
                         case .success(let result):
