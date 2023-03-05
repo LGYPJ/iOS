@@ -13,7 +13,8 @@ class LoginViewModel {
 		let url = "https://garamgaebi.shop/member/login/kakao"
 		
 		let body: [String: Any] = [
-			"accessToken": accessToken,
+			"access_token": accessToken,
+            "fcmToken": ""
 		]
 		
 		AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default)
