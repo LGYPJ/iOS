@@ -13,7 +13,7 @@ class LoginViewModel {
 		let url = "https://garamgaebi.shop/member/login/kakao"
 		
 		let body: [String: Any] = [
-			"access_token": accessToken,
+			"accessToken": accessToken,
             "fcmToken": ""
 		]
 		
