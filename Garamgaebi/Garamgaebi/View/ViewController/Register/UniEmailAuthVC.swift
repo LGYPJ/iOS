@@ -361,7 +361,8 @@ class UniEmailAuthVC: UIViewController {
             LoadingView.shared.hide()
             switch result {
             case true:
-                UserDefaults.standard.set("\(self?.userId)@gachon.ac.kr", forKey: "uniEmail")
+                guard let userId = self?.userId else {return}
+                UserDefaults.standard.set("\(userId)@gachon.ac.kr", forKey: "uniEmail")
 
                 self?.emailNotificationLabel.text = "메일을 받지 못하신 경우, 스팸 메일함을 확인해주세요."
                 self?.emailNotificationLabel.textColor = .mainBlack
