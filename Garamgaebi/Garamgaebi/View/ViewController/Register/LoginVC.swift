@@ -142,39 +142,26 @@ class LoginVC: UIViewController {
                     print(error)
                 } else {
                     print("카카오 톡으로 로그인 성공")
-                    
-                    _ = oauthToken
-                    /// 로그인 관련 메소드 추가
-                    UserApi.shared.me() {(user, error) in
-                        if let error = error {
-                            print(error)
+                    guard let accessToken = oauthToken?.accessToken else { return }
+                    UserDefaults.standard.set(accessToken, forKey: "accessToken")
+                    print(accessToken)
+                    LoginViewModel.postLogin(identifier: accessToken, completion: { [weak self] result in
+                        switch result {
+                        case .success(let result):
+                            if result.isSuccess {
+                                print("성공(간편로그인): \(result.message)")
+                                UserDefaults.standard.set(result.result?.accessToken, forKey: "BearerToken")
+                                UserDefaults.standard.set(result.result?.memberIdx, forKey: "memberIdx")
+                                self?.showHome()
+                            } else {
+                                print("실패(간편로그인): \(result.message)")
+                                print(">>> 교육, 경력 기입 화면으로 이동")
+                                self?.presentNextView()
+                            }
+                        case .failure(let error):
+                            print("실패(AF-간편로그인): \(error.localizedDescription)")
                         }
-                        else {
-                            UserDefaults.standard.set(user?.kakaoAccount?.email, forKey: "identifier")
-                            
-                            let userIdentifier = UserDefaults.standard.string(forKey: "identifier")!
-                            
-                            // 해당 identifier이 존재하는 계정이면 바로 로그인
-                            LoginViewModel.postLogin(identifier: userIdentifier, completion: { [weak self] result in
-                                switch result {
-                                case .success(let result):
-                                    if result.isSuccess {
-                                        print("성공(간편로그인): \(result.message)")
-                                        UserDefaults.standard.set(result.result?.accessToken, forKey: "BearerToken")
-                                        UserDefaults.standard.set(result.result?.memberIdx, forKey: "memberIdx")
-                                        self?.showHome()
-                                    } else {
-                                        print("실패(간편로그인): \(result.message)")
-                                        print(">>> 교육, 경력 기입 화면으로 이동")
-                                        self?.presentNextView()
-                                    }
-                                case .failure(let error):
-                                    print("실패(AF-간편로그인): \(error.localizedDescription)")
-                                }
-                            })
-                            
-                        }
-                    }
+                    })
                 }
             }
         }
@@ -186,63 +173,26 @@ class LoginVC: UIViewController {
                     print("로그인 실패")
                 } else {
                     print("카카오 계정으로 로그인 성공")
-                    _ = oauthToken
-                    /// 관련 메소드 추가
-                    
-                    UserApi.shared.me() {(user, error) in
-                        if let error = error {
-                            print(error)
+                    guard let accessToken = oauthToken?.accessToken else { return }
+                    UserDefaults.standard.set(accessToken, forKey: "accessToken")
+                    print(accessToken)
+                    LoginViewModel.postLogin(identifier: accessToken, completion: { [weak self] result in
+                        switch result {
+                        case .success(let result):
+                            if result.isSuccess {
+                                print("성공(간편로그인): \(result.message)")
+                                UserDefaults.standard.set(result.result?.accessToken, forKey: "BearerToken")
+                                UserDefaults.standard.set(result.result?.memberIdx, forKey: "memberIdx")
+                                self?.showHome()
+                            } else {
+                                print("실패(간편로그인): \(result.message)")
+                                print(">>> 교육, 경력 기입 화면으로 이동")
+                                self?.presentNextView()
+                            }
+                        case .failure(let error):
+                            print("실패(AF-간편로그인): \(error.localizedDescription)")
                         }
-                        else {
-                            UserDefaults.standard.set(user?.kakaoAccount?.email, forKey: "identifier")
-                            let userIdentifier = UserDefaults.standard.string(forKey: "identifier")!
-                            
-                            // 해당 identifier이 존재하는 계정이면 바로 로그인
-                            LoginViewModel.postLogin(identifier: userIdentifier, completion: { [weak self] result in
-                                switch result {
-                                case .success(let result):
-                                    if result.isSuccess {
-                                        print("성공(간편로그인): \(result.message)")
-                                        UserDefaults.standard.set(result.result?.accessToken, forKey: "BearerToken")
-                                        UserDefaults.standard.set(result.result?.memberIdx, forKey: "memberIdx")
-                                        self?.showHome()
-                                    } else {
-                                        print("실패(간편로그인): \(result.message)")
-                                        print(">>> 교육, 경력 기입 화면으로 이동")
-                                        self?.presentNextView()
-                                    }
-                                case .failure(let error):
-                                    print("실패(AF-간편로그인): \(error.localizedDescription)")
-                                }
-                            })
-                            
-                            
-                            //TODO: socialEmail -> identifier로 수정 후 postLogin의 socialEmail을 identifier로 수정
-//                            UserDefaults.standard.set(user?.id, forKey: "userIdentifier")
-//                            let userIdentifier = UserDefaults.standard.string(forKey: "userIdentifier")!
-//                            print("identifier: \(userIdentifier)")
-//
-//                            LoginViewModel.postLogin(socialEmail: userIdentifier, completion: { [weak self] result in
-//                                switch result {
-//                                case .success(let result):
-//                                    if result.isSuccess {
-//                                        print("성공(간편로그인): \(result.message)")
-//                                        UserDefaults.standard.set(result.result?.accessToken, forKey: "BearerToken")
-//                                        UserDefaults.standard.set(result.result?.memberIdx, forKey: "memberIdx")
-//                                        self?.showHome()
-//                                    } else {
-//                                        print("실패(간편로그인): \(result.message)")
-//                                        print(">>> 교육, 경력 기입 화면으로 이동")
-//                                        self?.presentNextView()
-//                                    }
-//                                case .failure(let error):
-//                                    print("실패(AF-간편로그인): \(error.localizedDescription)")
-//                                }
-//                            })
-                            
-                        }
-                    }
-                    
+                    })
                 }
             }
         }
