@@ -9,11 +9,11 @@ import Alamofire
 
 class LoginViewModel {
 	
-	public static func postLogin(identifier: String, completion: @escaping ((Result<LoginModelResponse, AFError>) -> Void)) {
-		let url = "https://garamgaebi.shop/member/login"
+	public static func postLogin(accessToken: String, completion: @escaping ((Result<LoginModelResponse, AFError>) -> Void)) {
+		let url = "https://garamgaebi.shop/member/login/kakao"
 		
 		let body: [String: Any] = [
-			"identifier": identifier,
+			"accessToken": accessToken,
 		]
 		
 		AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default)
@@ -22,8 +22,6 @@ class LoginViewModel {
 				switch response.result {
 				case .success(let result):
 					if result.isSuccess {
-//                        guard let passData = result.result else {return}
-//                        completion(passData)
                         completion(response.result)
 					} else {
 						print("실패(로그인): \(result.message)")

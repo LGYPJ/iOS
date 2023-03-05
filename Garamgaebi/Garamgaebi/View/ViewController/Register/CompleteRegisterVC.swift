@@ -172,10 +172,10 @@ class CompleteRegisterVC: UIViewController {
     }
 	
 	private func login() {
-        let userIdentifier = UserDefaults.standard.string(forKey: "identifier")!
-        print("로그인 된 identifier: \(userIdentifier)")
+        let accessToken = UserDefaults.standard.string(forKey: "accessToken")!
+        print("accessToken: \(accessToken)")
 
-        LoginViewModel.postLogin(identifier: userIdentifier, completion: { [weak self] result in
+        LoginViewModel.postLogin(accessToken: accessToken, completion: { [weak self] result in
             switch result {
             case .success(let result):
                 if result.isSuccess {
