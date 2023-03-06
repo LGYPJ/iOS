@@ -49,25 +49,7 @@ class RecommendUsersCollectionViewCell: UICollectionViewCell {
         label.numberOfLines = 0
         return label
     }()
-    
-    lazy var groupInfoLabel: UILabel = {
-        let label = UILabel()
-        label.text = "group dummy"
-        label.font = UIFont.NotoSansKR(type: .Regular, size: 10)
-        label.textColor = .mainBlack
-        label.textAlignment = .center
-        return label
-    }()
-    
-    lazy var detailInfoLabel: UILabel = {
-        let label = UILabel()
-        label.text = "detail dummy"
-        label.font = UIFont.NotoSansKR(type: .Regular, size: 10)
-        label.textColor = .mainBlack
-        label.textAlignment = .center
-        return label
-    }()
-    
+
     // MARK: - Life Cycles
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -89,8 +71,6 @@ class RecommendUsersCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(contentInfoView)
         contentInfoView.addSubview(nickNameInfoLabel)
         contentInfoView.addSubview(belongInfoLabel)
-        contentInfoView.addSubview(groupInfoLabel)
-        contentInfoView.addSubview(detailInfoLabel)
     }
     
     func configSubViewLayouts() {
@@ -118,19 +98,6 @@ class RecommendUsersCollectionViewCell: UICollectionViewCell {
         
         belongInfoLabel.snp.makeConstraints { make in
             make.top.equalTo(nickNameInfoLabel.snp.bottom).offset(8)
-            make.left.right.equalToSuperview()
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().inset(12)
-        }
-        
-        groupInfoLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(detailInfoLabel.snp.top)
-            make.left.right.equalToSuperview()
-            make.centerX.equalToSuperview()
-        }
-        
-        detailInfoLabel.snp.makeConstraints { make in
-            make.top.equalTo(groupInfoLabel.snp.bottom)
             make.left.right.equalToSuperview()
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().inset(12)
@@ -163,24 +130,13 @@ class RecommendUsersCollectionViewCell: UICollectionViewCell {
         
         // 닉네임
         nickNameInfoLabel.text = item.nickName
-        
-        //TODO: 서버 dto 바뀐 후 detail, group 삭제
-        
-        // belong이 있으면 belong만 보여주고 아니면 group,detail
+
         switch(item.belong != nil){
         case true:
             belongInfoLabel.isHidden = false
-            groupInfoLabel.isHidden = true
-            detailInfoLabel.isHidden = true
-            
             belongInfoLabel.text = item.belong
         default:
             belongInfoLabel.isHidden = true
-            groupInfoLabel.isHidden = false
-            detailInfoLabel.isHidden = false
-            
-            groupInfoLabel.text = item.group
-            detailInfoLabel.text = item.detail
         }
 
     }
