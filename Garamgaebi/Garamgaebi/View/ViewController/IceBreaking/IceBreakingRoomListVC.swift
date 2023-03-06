@@ -120,7 +120,7 @@ extension IceBreakingRoomListVC {
 	
 	// 게임 방 리스트 fetch
 	private func fetchGameRoomData() {
-		GameRoomListViewModel.getGameRoomList(programId: self.programId, completion: {[weak self] result in
+		IceBreakingRoomListViewModel.getGameRoomList(programId: self.programId, completion: {[weak self] result in
 			self?.roomList = result
 		})
 	}

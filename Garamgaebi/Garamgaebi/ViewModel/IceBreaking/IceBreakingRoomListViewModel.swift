@@ -1,5 +1,5 @@
 //
-//  GameRoomListViewModel.swift
+//  IceBreakingRoomListViewModel.swift
 //  Garamgaebi
 //
 //  Created by 정현우 on 2023/02/10.
@@ -7,7 +7,7 @@
 
 import Alamofire
 
-struct GameRoomListViewModel {
+struct IceBreakingRoomListViewModel {
 	public static func getGameRoomList(programId: Int, completion: @escaping (([GameRoomListModel]) -> Void)) {
 		let url = "https://garamgaebi.shop/game/\(programId)/rooms"
 		
