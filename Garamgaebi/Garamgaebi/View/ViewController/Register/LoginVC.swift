@@ -152,6 +152,7 @@ class LoginVC: UIViewController {
                             if result.isSuccess {
                                 print("성공(간편로그인): \(result.message)")
                                 UserDefaults.standard.set(result.result?.accessToken, forKey: "BearerToken")
+                                UserDefaults.standard.set(result.result?.refreshToken, forKey: "refreshToken")
                                 UserDefaults.standard.set(result.result?.memberIdx, forKey: "memberIdx")
                                 self?.showHome()
                             } else {
@@ -184,6 +185,7 @@ class LoginVC: UIViewController {
                             if result.isSuccess {
                                 print("성공(간편로그인): \(result.message)")
                                 UserDefaults.standard.set(result.result?.accessToken, forKey: "BearerToken")
+                                UserDefaults.standard.set(result.result?.refreshToken, forKey: "refreshToken")
                                 UserDefaults.standard.set(result.result?.memberIdx, forKey: "memberIdx")
                                 self?.showHome()
                             } else {
