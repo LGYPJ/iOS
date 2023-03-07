@@ -71,8 +71,9 @@ class SplashVC: UIViewController {
                     UserDefaults.standard.set(result.result?.refreshToken, forKey: "refreshToken")
                     UserDefaults.standard.set(result.result?.memberIdx, forKey: "memberIdx")
                     self?.showHome()
-                } else if result.code == 2006 {
-                    // 유효하지 않은 토큰의 경우 소셜로그인으로 이동
+                } else if result.code == 2006 || result.code == 2027 {
+                    // 유효하지 않은 토큰의 경우 소셜로그인으로 이동 2006
+                    // 리프레시토큰도 만료되었거나 -> Onboarding 건너뛰고 카카오로그인으로 2027
                     print(">>> 소셜로그인 화면으로 이동 (유효하지 않은 토큰)")
                     print("실패(자동로그인): \(result.message)")
                     self?.showLogin()
@@ -81,12 +82,8 @@ class SplashVC: UIViewController {
                     print(">>> Onboarding 화면으로 이동 (서버오류, ex.최초로그인시에는 refreshToken이 존재하지 않음, 또는 올바르지 않은 토큰)")
                     print("실패(자동로그인): \(result.message)")
                     self?.showOnboarding()
-                    
                 }
             case .failure(let error):
-                // TODO: 아래와 같음
-                // 경우 1 -> 리프레시토큰도 만료되었거나 -> Onboarding 건너뛰고 카카오로그인으로
-                // 경우 2 -> 네트워킹 이슈 아래와 같음
                 print("실패(AF-자동로그인): \(error.localizedDescription)")
                 let errorView = ErrorPageView()
                 errorView.modalPresentationStyle = .fullScreen
