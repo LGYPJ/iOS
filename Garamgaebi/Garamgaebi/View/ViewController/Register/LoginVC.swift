@@ -146,7 +146,7 @@ class LoginVC: UIViewController {
                     UserDefaults.standard.set(accessToken, forKey: "accessToken")
                     UserDefaults.standard.set(true, forKey: "kakaoLogin")
                     UserDefaults.standard.set(false, forKey: "appleLogin")
-                    LoginViewModel.postLogin(accessToken: accessToken, completion: { [weak self] result in
+                    LoginViewModel.postLoginKakao(accessToken: accessToken, completion: { [weak self] result in
                         switch result {
                         case .success(let result):
                             if result.isSuccess {
@@ -178,7 +178,7 @@ class LoginVC: UIViewController {
                     UserDefaults.standard.set(accessToken, forKey: "accessToken")
                     UserDefaults.standard.set(true, forKey: "kakaoLogin")
                     UserDefaults.standard.set(false, forKey: "appleLogin")
-                    LoginViewModel.postLogin(accessToken: accessToken, completion: { [weak self] result in
+                    LoginViewModel.postLoginKakao(accessToken: accessToken, completion: { [weak self] result in
                         switch result {
                         case .success(let result):
                             if result.isSuccess {

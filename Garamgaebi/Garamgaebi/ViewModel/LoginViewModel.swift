@@ -9,7 +9,7 @@ import Alamofire
 
 class LoginViewModel {
 	
-	public static func postLogin(accessToken: String, completion: @escaping ((Result<LoginModelResponse, AFError>) -> Void)) {
+	public static func postLoginKakao(accessToken: String, completion: @escaping ((Result<LoginModelResponse, AFError>) -> Void)) {
 		let url = "https://garamgaebi.shop/member/login/kakao"
 		
 		let body: [String: Any] = [
@@ -35,4 +35,5 @@ class LoginViewModel {
 			}
 		
 	}
+
 }

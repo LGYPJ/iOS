@@ -63,7 +63,7 @@ class SplashVC: UIViewController {
         let accessToken = UserDefaults.standard.string(forKey: "accessToken") ?? ""
         print("accessToken: \(accessToken)")
         
-        LoginViewModel.postLogin(accessToken: accessToken, completion: { [weak self] result in
+        LoginViewModel.postLoginKakao(accessToken: accessToken, completion: { [weak self] result in
             switch result {
             case .success(let result):
                 if result.isSuccess {
