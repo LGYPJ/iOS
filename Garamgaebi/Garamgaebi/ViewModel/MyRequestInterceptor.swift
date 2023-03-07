@@ -30,9 +30,9 @@ final class MyRequestInterceptor: RequestInterceptor {
         // retry 최대 개수 정해줄수있음
         switch response.statusCode {
         case 401:
-            let url = "https://garamgaebi.shop/member/login"
+            let url = "https://garamgaebi.shop/member/login/auto"
             let body: [String: Any] = [
-                "identifier": UserDefaults.standard.string(forKey: "identifier")!,
+                "refreshToken": UserDefaults.standard.string(forKey: "refreshToken")!,
             ]
             AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default)
                 .validate()
@@ -44,6 +44,7 @@ final class MyRequestInterceptor: RequestInterceptor {
                         {
                             guard let passData = result.result else {return}
                             UserDefaults.standard.set(passData.accessToken, forKey: "BearerToken")
+                            UserDefaults.standard.set(passData.refreshToken, forKey: "refreshToken")
                             UserDefaults.standard.set(passData.memberIdx, forKey: "memberIdx")
                             completion(.retryWithDelay(1))
                         } else {
