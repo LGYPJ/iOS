@@ -51,24 +51,19 @@ class SplashVC: UIViewController {
     }
     
     private func login() {
-        if UserDefaults.standard.bool(forKey: "kakaoLogin") {
-           kakaoLogin()
-        } else if UserDefaults.standard.bool(forKey: "appleLogin") {
-            // TODO: apple 자동로그인 구현 예정
-        }
+        autoLogin()
     }
     
-    public func kakaoLogin() {
+    public func autoLogin() {
+        let refreshToken = UserDefaults.standard.string(forKey: "refreshToken") ?? ""
         
-        let accessToken = UserDefaults.standard.string(forKey: "accessToken") ?? ""
-        print("accessToken: \(accessToken)")
-        
-        LoginViewModel.postLoginKakao(accessToken: accessToken, completion: { [weak self] result in
+        LoginViewModel.postLoginAuto(refreshToken: "refreshToken", completion: { [weak self] result in
             switch result {
             case .success(let result):
                 if result.isSuccess {
                     print("성공(자동로그인): \(result.message)")
                     UserDefaults.standard.set(result.result?.accessToken, forKey: "BearerToken")
+                    UserDefaults.standard.set(result.result?.refreshToken, forKey: "refreshToken")
                     UserDefaults.standard.set(result.result?.memberIdx, forKey: "memberIdx")
                     self?.showHome()
                 } else {
@@ -77,6 +72,9 @@ class SplashVC: UIViewController {
                     self?.showOnboarding()
                 }
             case .failure(let error):
+                // TODO: 아래와 같음
+                // 경우 1 -> 리프레시토큰도 만료되었거나 -> Onboarding 건너뛰고 카카오로그인으로
+                // 경우 2 -> 네트워킹 이슈 아래와 같음
                 print("실패(AF-자동로그인): \(error.localizedDescription)")
                 let errorView = ErrorPageView()
                 errorView.modalPresentationStyle = .fullScreen
