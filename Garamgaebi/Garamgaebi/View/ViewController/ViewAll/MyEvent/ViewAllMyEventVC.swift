@@ -276,11 +276,7 @@ extension ViewAllMyEventVC {
     }
 	
 	@objc func refreshByNotification() {
-		self.fetchData {
-			if self.setMyEventInfoReadyData,
-			   self.setMyEventInfoCloseData {
-			}
-		}
+		self.fetchData {}
 	}
     
 }

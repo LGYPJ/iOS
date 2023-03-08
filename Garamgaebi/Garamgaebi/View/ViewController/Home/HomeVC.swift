@@ -116,6 +116,8 @@ class HomeVC: UIViewController {
                 LoadingView.shared.hide()
             }
         }
+		
+		NotificationCenter.default.addObserver(self, selector: #selector(refreshByNotification), name: Notification.Name("ReloadMyEvent"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -419,6 +421,11 @@ extension HomeVC {
         }
         
     }
+	
+	@objc func refreshByNotification() {
+		self.fetchData {}
+		
+	}
     
 }
 
