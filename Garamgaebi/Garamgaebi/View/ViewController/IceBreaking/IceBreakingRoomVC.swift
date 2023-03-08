@@ -3,7 +3,7 @@
 //  Garamgaebi
 //
 //  Created by 정현우 on 2023/01/13.
-//
+//  로직 인수인계 https://peridot-bosworth-d13.notion.site/57ef4e48483e4309880585adb606fbf2
 
 import UIKit
 import SnapKit
@@ -153,7 +153,7 @@ class IceBreakingRoomVC: UIViewController {
 		// 앱 백그라운드 전환 시 disconnect
 		NotificationCenter.default.addObserver(self, selector: #selector(didTapBackBarButton), name: UIApplication.didEnterBackgroundNotification, object: nil)
 		
-		UserDefaults.standard.setValue(roomId, forKey: "roomId")
+//		UserDefaults.standard.setValue(roomId, forKey: "roomId")
 		
 		configureCollectionView()
 		configureViews()
@@ -488,7 +488,7 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 			return
 		}
 		// 빈 값 전송할 경우 빈 문자열로 전송(nil X -> "" O)
-		guard let jsonType = json["type"], // ENTER, TALK, EXIT
+		guard let jsonType = json["type"], // ENTER, NEXT, EXIT
 			  let jsonNickname = json["sender"],
 			  let jsonMessage = json["message"],
 			  let jsonProfileUrl = json["profileUrl"]
@@ -501,7 +501,7 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 		// 유저가 입장했을때 전송
 		case "ENTER":
 			print("socket: \(jsonNickname)님이 입장하셨습니다!")
-			// 서버에 유저 등록
+			// 서버에서 유저 목록을 받아옴
 			IcebreakingViewModel.getCurrentGameUserWithPost(roomId: self.roomId, completion: { result in
 				self.userList = result
 				
@@ -538,11 +538,11 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 		
 		
 	}
-	// 연결해제 후 전송
+	// 연결해제 후 호출
 	func stompClientDidDisconnect(client: StompClientLib!) {
 		print("Stomp socket is disconnected")
 	}
-	// 연결 후 전송
+	// 연결 후 호출
 	func stompClientDidConnect(client: StompClientLib!) {
 		print("Stomp socket is connected")
 		subscribeSocket()
@@ -550,7 +550,6 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 		IcebreakingViewModel.postGameUser(roomId: self.roomId, memberId: self.memberId, completion: { result in
 			self.currentIndex = result.currentImgIdx
 			self.currentUserId = result.currentMemberIdx
-			
 			
 			// enter 메세지 전송
 			self.sendMessageWithSocket(type: "ENTER", message: "", profileUrl: "")

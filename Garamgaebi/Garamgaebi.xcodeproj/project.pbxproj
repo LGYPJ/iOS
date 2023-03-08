@@ -14,7 +14,7 @@
 		2C4083112997CE67000747DF /* WebSocketTestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4083102997CE67000747DF /* WebSocketTestVC.swift */; };
 		2C408319299A9169000747DF /* IcebreakingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C408318299A9169000747DF /* IcebreakingViewModel.swift */; };
 		2C40831D299CB1BA000747DF /* IceBreakingRoomVC_Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C40831C299CB1BA000747DF /* IceBreakingRoomVC_Test.swift */; };
-		2C65943929968B63007D3619 /* GameRoomListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C65943829968B63007D3619 /* GameRoomListViewModel.swift */; };
+		2C65943929968B63007D3619 /* IceBreakingRoomListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C65943829968B63007D3619 /* IceBreakingRoomListViewModel.swift */; };
 		2C65943B29968BB5007D3619 /* GameRoomListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C65943A29968BB5007D3619 /* GameRoomListModel.swift */; };
 		2C65943D29975E85007D3619 /* EventUserApplyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C65943C29975E85007D3619 /* EventUserApplyModel.swift */; };
 		2C8A4EF129A098A4004E1FCB /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8A4EF029A098A4004E1FCB /* WebSocketManager.swift */; };
@@ -172,7 +172,7 @@
 		2C4083102997CE67000747DF /* WebSocketTestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketTestVC.swift; sourceTree = "<group>"; };
 		2C408318299A9169000747DF /* IcebreakingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IcebreakingViewModel.swift; sourceTree = "<group>"; };
 		2C40831C299CB1BA000747DF /* IceBreakingRoomVC_Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IceBreakingRoomVC_Test.swift; sourceTree = "<group>"; };
-		2C65943829968B63007D3619 /* GameRoomListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomListViewModel.swift; sourceTree = "<group>"; };
+		2C65943829968B63007D3619 /* IceBreakingRoomListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IceBreakingRoomListViewModel.swift; sourceTree = "<group>"; };
 		2C65943A29968BB5007D3619 /* GameRoomListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomListModel.swift; sourceTree = "<group>"; };
 		2C65943C29975E85007D3619 /* EventUserApplyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventUserApplyModel.swift; sourceTree = "<group>"; };
 		2C8A4EF029A098A4004E1FCB /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
@@ -347,6 +347,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2C20762629B57F0D00B4F6B3 /* IceBreaking */ = {
+			isa = PBXGroup;
+			children = (
+				2C65943829968B63007D3619 /* IceBreakingRoomListViewModel.swift */,
+				2C408318299A9169000747DF /* IcebreakingViewModel.swift */,
+			);
+			path = IceBreaking;
+			sourceTree = "<group>";
+		};
+		2C20762729B57F9A00B4F6B3 /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				2CED6900298390EA00C838BD /* SeminarDetailViewModel.swift */,
+				2CED690229867F1800C838BD /* NetworkingDetailViewModel.swift */,
+				2CED690629878AB200C838BD /* EventApplyCancelViewModel.swift */,
+				2CED690A298940E200C838BD /* EventApplyViewModel.swift */,
+			);
+			path = Event;
+			sourceTree = "<group>";
+		};
 		46AB1231299D3D5D0013371C /* Profile */ = {
 			isa = PBXGroup;
 			children = (
@@ -715,18 +735,14 @@
 		60829927297FBCB300240036 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				2C20762729B57F9A00B4F6B3 /* Event */,
+				2C20762629B57F0D00B4F6B3 /* IceBreaking */,
 				46AB1231299D3D5D0013371C /* Profile */,
 				60513F33298E35630065CD15 /* Register */,
 				6082992B297FBDB000240036 /* HomeViewModel.swift */,
-				2CED6900298390EA00C838BD /* SeminarDetailViewModel.swift */,
 				2CED6910298D251500C838BD /* LoginViewModel.swift */,
-				2CED690229867F1800C838BD /* NetworkingDetailViewModel.swift */,
-				2CED690629878AB200C838BD /* EventApplyCancelViewModel.swift */,
 				60DCC894298A45AD002E7714 /* ViewAllViewModel.swift */,
-				2CED690A298940E200C838BD /* EventApplyViewModel.swift */,
 				60A4BC142992264000C24DAC /* NotificationViewModel.swift */,
-				2C65943829968B63007D3619 /* GameRoomListViewModel.swift */,
-				2C408318299A9169000747DF /* IcebreakingViewModel.swift */,
 				60F92C52299F4904000AC1C3 /* MyRequestInterceptor.swift */,
 			);
 			path = ViewModel;
@@ -1252,7 +1268,7 @@
 				60A128B429975412000E5752 /* UIImage+.swift in Sources */,
 				60513F39298E5D470065CD15 /* RegisterCareerModel.swift in Sources */,
 				6038243E296D80FB00E12CC2 /* OnboardingCollectionViewCell.swift in Sources */,
-				2C65943929968B63007D3619 /* GameRoomListViewModel.swift in Sources */,
+				2C65943929968B63007D3619 /* IceBreakingRoomListViewModel.swift in Sources */,
 				60BC582E29715A2A00FBF1C3 /* CompleteRegisterVC.swift in Sources */,
 				6038243F296D96CC00E12CC2 /* OnboardingVC.swift in Sources */,
 				609A53D4296AB47300BBD338 /* SceneDelegate.swift in Sources */,

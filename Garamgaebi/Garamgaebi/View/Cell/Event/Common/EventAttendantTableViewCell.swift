@@ -190,37 +190,45 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 		
 		if self.type == "SEMINAR" {
 			let cellData = self.seminarAttendants[indexPath.row]
-			cell.profileImageView.kf.indicatorType = .activity
-			cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg ?? ""), placeholder: UIImage(named: "DefaultProfileImage"), options: [.forceRefresh])
 			
-			cell.userNameLabel.text = cellData.nickname.maxLength(length: 5)
-			
-			if indexPath.row == 0 && isUserApply {
-				cell.profileImageView.layer.borderWidth = 2
-				cell.userNameLabel.textColor = .mainBlue
-			}
-		} else {
-			if isUserApply {
-				NotificationCenter.default.post(name: Notification.Name("programId:\(programId)"), object: true)
+			// 탈퇴한 회원 처리
+			if cellData.memberIdx == -1 {
+				cell.profileImageView.image = UIImage(named: "ExitProfileImage")
+				cell.userNameLabel.text = "알 수 없음"
+				cell.userNameLabel.textColor = .mainGray
+				cell.isUserInteractionEnabled = false
 			} else {
-				NotificationCenter.default.post(name: Notification.Name("programId:\(programId)"), object: false)
+				
+				cell.profileImageView.kf.indicatorType = .activity
+				cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg ?? ""), placeholder: UIImage(named: "DefaultProfileImage"), options: [.forceRefresh])
+				cell.userNameLabel.text = cellData.nickname.maxLength(length: 5)
+				cell.userNameLabel.textColor = .mainBlack
+				cell.isUserInteractionEnabled = true
 			}
-			
-			
-			
-			
 			
 			// 자신이 참여중인경우 파란테두리
 			if indexPath.row == 0 && isUserApply {
 				cell.profileImageView.layer.borderWidth = 2
 				cell.userNameLabel.textColor = .mainBlue
+				cell.isUserInteractionEnabled = false
 			}
 			
+			
+		} else {
+//			if isUserApply {
+//				NotificationCenter.default.post(name: Notification.Name("programId:\(programId)"), object: true)
+//			} else {
+//				NotificationCenter.default.post(name: Notification.Name("programId:\(programId)"), object: false)
+//			}
+			
+			let cellData = self.networkingAttendants[indexPath.row]
+			
 			// 탈퇴한 회원 처리
-			if networkingAttendants[indexPath.row].nickname == "-" {
+			if cellData.memberIdx == -1 {
 				cell.profileImageView.image = UIImage(named: "ExitProfileImage")
 				cell.userNameLabel.text = "알 수 없음"
 				cell.userNameLabel.textColor = .mainGray
+				cell.isUserInteractionEnabled = false
 			} else {
 				let cellData = self.networkingAttendants[indexPath.row]
 				
@@ -228,6 +236,14 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 				cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg ?? ""), placeholder: UIImage(named: "DefaultProfileImage"), options: [.forceRefresh])
 				cell.userNameLabel.text = cellData.nickname.maxLength(length: 5)
 				cell.userNameLabel.textColor = .mainBlack
+				cell.isUserInteractionEnabled = true
+			}
+			
+			// 자신이 참여중인경우 파란테두리
+			if indexPath.row == 0 && isUserApply {
+				cell.profileImageView.layer.borderWidth = 2
+				cell.userNameLabel.textColor = .mainBlue
+				cell.isUserInteractionEnabled = false
 			}
 		}
 		
