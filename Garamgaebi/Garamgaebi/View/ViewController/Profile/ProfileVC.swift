@@ -521,10 +521,8 @@ class ProfileVC: UIViewController {
                     self.belongLabel.text = result?.belong
                     self.emailLabel.text = result?.profileEmail
                     
-                    // TODO: VC에 있는 AF.request들 모두 ProfileViewModel 만들어서 옮기고 리팩터링
-                    // UserDefaults 저장 (임시)
                     UserDefaults.standard.set(result?.uniEmail, forKey: "uniEmail")
-                    UserDefaults.standard.set(result?.nickName, forKey: "nickName")
+                    UserDefaults.standard.set(result?.nickName, forKey: "nickname")
                     
                     // 자기소개
                     if let userIntro = result?.content { // 자기소개

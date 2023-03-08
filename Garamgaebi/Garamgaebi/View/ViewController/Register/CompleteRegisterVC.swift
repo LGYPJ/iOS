@@ -136,15 +136,15 @@ class CompleteRegisterVC: UIViewController {
         }
     }
     
-    private func register() {
+    private func registerKakao() {
         let usernickname = UserDefaults.standard.string(forKey: "nickname")!
         let userprofileEmail = UserDefaults.standard.string(forKey: "profileEmail")!
-        let usersocialEmail = UserDefaults.standard.string(forKey: "socialEmail")!
+        let accessToken = UserDefaults.standard.string(forKey: "accessToken")!
         let useruniEmail = UserDefaults.standard.string(forKey: "uniEmail")!
         let userstatus = "ACTIVE"
         // TODO: password 추후 제거 예정
 
-        let userInfo =  RegisterUserInfo(nickname: usernickname, profileEmail: userprofileEmail, socialEmail: usersocialEmail, uniEmail: useruniEmail, status: userstatus)
+        let userInfo =  RegisterUserInfo(nickname: usernickname, profileEmail: userprofileEmail, accessToken: accessToken, uniEmail: useruniEmail, status: userstatus)
         print(userInfo)
         
          //response 받은 memberIdx로 회원가입 API post
@@ -172,10 +172,10 @@ class CompleteRegisterVC: UIViewController {
     }
 	
 	private func login() {
-        let usersocialEmail = UserDefaults.standard.string(forKey: "socialEmail")!
-        print("로그인 된 socialEmail: \(usersocialEmail)")
+        let accessToken = UserDefaults.standard.string(forKey: "accessToken")!
+        print("accessToken: \(accessToken)")
 
-        LoginViewModel.postLogin(socialEmail: usersocialEmail, completion: { [weak self] result in
+        LoginViewModel.postLoginKakao(accessToken: accessToken, completion: { [weak self] result in
             switch result {
             case .success(let result):
                 if result.isSuccess {
@@ -202,9 +202,13 @@ class CompleteRegisterVC: UIViewController {
     
     @objc
     private func presentHomeButtonTapped(_ sender: UIButton) {
-        // TODO: 모두 완료 후 login() 지우기
-        register()
-//        login()
+        if UserDefaults.standard.bool(forKey: "kakaoLogin") {
+            registerKakao()
+        } else if UserDefaults.standard.bool(forKey: "appleLogin") {
+            // registerApple
+        }
+        
+        
     }
     
     @objc

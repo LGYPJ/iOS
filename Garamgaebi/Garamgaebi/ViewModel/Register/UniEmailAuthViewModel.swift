@@ -31,7 +31,7 @@ class UniEmailAuthViewModel {
                 }
                 
             case .failure(let error):
-                print("DEBUG: 이메일 전송 실패", error.localizedDescription)
+                print("AF-DEBUG: 이메일 전송 실패", error.localizedDescription)
             }
         }
     }
@@ -56,7 +56,7 @@ class UniEmailAuthViewModel {
                     completion(false)
                 }
             case .failure(let error):
-                print("DEBUG: 이메일 전송 실패", error.localizedDescription)
+                print("AF-DEBUG: 이메일 전송 실패", error.localizedDescription)
             }
         }
     }

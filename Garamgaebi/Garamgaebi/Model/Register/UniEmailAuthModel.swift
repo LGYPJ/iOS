@@ -11,15 +11,11 @@ struct UniEmailAuthModelResponse: Codable {
     let isSuccess: Bool
     let code: Int
     let message: String
-    let result: UniEmailAuthModelResult?
+    let result: Bool?
 }
 
 struct UniEmailAuthModel: Codable {
     let email: String
-}
-
-struct UniEmailAuthModelResult: Codable {
-    let message: String
 }
 
 struct UniEmailAuthNumberModelResponse: Codable {

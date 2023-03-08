@@ -25,7 +25,7 @@ class SplashVC: UIViewController {
         }
         view.backgroundColor = .white
         
-//        login()
+        //        login()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,21 +49,37 @@ class SplashVC: UIViewController {
         vc.modalTransitionStyle = .crossDissolve
         present(vc, animated: true)
     }
+    private func showLogin() {
+        let vc = LoginVC()
+        vc.modalPresentationStyle = .fullScreen
+        vc.modalTransitionStyle = .crossDissolve
+        present(vc, animated: true)
+    }
     
     private func login() {
-        let usersocialEmail = UserDefaults.standard.string(forKey: "socialEmail") ?? ""
-        print("로그인 된 socialEmail: \(usersocialEmail)")
-        
-        LoginViewModel.postLogin(socialEmail: usersocialEmail, completion: { [weak self] result in
+        autoLogin()
+    }
+    
+    public func autoLogin() {
+        let refreshToken = UserDefaults.standard.string(forKey: "refreshToken") ?? ""
+        LoginViewModel.postLoginAuto(refreshToken: refreshToken, completion: { [weak self] result in
             switch result {
             case .success(let result):
                 if result.isSuccess {
                     print("성공(자동로그인): \(result.message)")
                     UserDefaults.standard.set(result.result?.accessToken, forKey: "BearerToken")
+                    UserDefaults.standard.set(result.result?.refreshToken, forKey: "refreshToken")
                     UserDefaults.standard.set(result.result?.memberIdx, forKey: "memberIdx")
                     self?.showHome()
-                } else {
-                    print(">>> Onboarding 화면으로 이동")
+                } else if result.code == 2006 || result.code == 2027 {
+                    // 유효하지 않은 토큰의 경우 소셜로그인으로 이동 2006
+                    // 리프레시토큰도 만료되었거나 -> Onboarding 건너뛰고 카카오로그인으로 2027
+                    print(">>> 소셜로그인 화면으로 이동 (유효하지 않은 토큰)")
+                    print("실패(자동로그인): \(result.message)")
+                    self?.showLogin()
+                }
+                else {
+                    print(">>> Onboarding 화면으로 이동 (서버오류, ex.최초로그인시에는 refreshToken이 존재하지 않음, 또는 올바르지 않은 토큰)")
                     print("실패(자동로그인): \(result.message)")
                     self?.showOnboarding()
                 }
@@ -75,4 +91,5 @@ class SplashVC: UIViewController {
             }
         })
     }
+    
 }

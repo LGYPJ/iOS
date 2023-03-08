@@ -19,6 +19,4 @@ struct RecommendUsersInfo: Decodable {
     let nickName: String
     let profileUrl: String?
     let belong: String?
-    let group: String
-    let detail: String
 }
