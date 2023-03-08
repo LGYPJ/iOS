@@ -396,19 +396,28 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
     
     // 로그아웃 버튼 did tap
     @objc private func logoutButtonDidTap() {
-        
-        // 로그아웃 버튼 누르면 로그인 화면으로
-        let nextVC = LoginVC()
-        // 호출하는 화면의 크기와 동일한 화면크기로 불려짐. 기존의 뷰들은 아예 삭제
-        nextVC.modalPresentationStyle = .currentContext
-        
-        // 로그아웃 시 UserDefaults에 저장된 모든 정보 삭제
-        for key in UserDefaults.standard.dictionaryRepresentation().keys {
-            UserDefaults.standard.removeObject(forKey: key.description)
+        // 로그아웃 동의 다이얼로그
+        let logoutCheckAlert = UIAlertController(title: "로그아웃하시겠습니까?", message: "", preferredStyle: .alert)
+        // 로그아웃 선택지
+        let logoutNoAction = UIAlertAction(title: "아니오", style: .default, handler: nil)
+        let logoutYesAction = UIAlertAction(title: "예", style: .default) { [self] (_) in
+            // 로그아웃 진행
+            let nextVC = LoginVC()
+            // 호출하는 화면의 크기와 동일한 화면크기로 불려짐. 기존의 뷰들은 아예 삭제
+            nextVC.modalPresentationStyle = .currentContext
+            
+            // 로그아웃 시 UserDefaults에 저장된 모든 정보 삭제
+            for key in UserDefaults.standard.dictionaryRepresentation().keys {
+                UserDefaults.standard.removeObject(forKey: key.description)
+            }
+            print(">>> Remove All UserDefaults")
+            print("성공(로그아웃): 로그아웃에 성공하였습니다.")
+            present(nextVC, animated: true)
         }
-        print(">>> Remove All UserDefaults")
-        print("성공(로그아웃): 로그아웃에 성공하였습니다.")
-        present(nextVC, animated: true)
+        // 로그아웃 동의 다이얼로그 띄우기
+        logoutCheckAlert.addAction(logoutNoAction)
+        logoutCheckAlert.addAction(logoutYesAction)
+        self.present(logoutCheckAlert, animated: true, completion: nil)
     }
     
     // 회원탈퇴 버튼 did tap

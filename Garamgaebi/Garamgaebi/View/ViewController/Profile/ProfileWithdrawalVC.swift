@@ -367,25 +367,35 @@ class ProfileWithdrawalVC: UIViewController, BottomSheetSelectDelegate {
             content = "nil"
         }
         
-        ProfileServiceViewModel.postWithdrawl(memberIdx: memberIdx, content: content, category: category) { result in
-            if result {
-                // 회원 탈퇴가 끝나면 간편 로그인 화면으로 이동
-                let nextVC = LoginVC()
-                
-                // kakao unlink
-                UserApi.shared.unlink {(error) in
-                    if let error = error {
-                        print(error)
+        // 회원탈퇴 동의 다이얼로그
+        let withdrawalCheckAlert = UIAlertController(title: "탈퇴하시겠습니까?", message: "", preferredStyle: .alert)
+        // 회원탈퇴 선택지
+        let withdrawalNoAction = UIAlertAction(title: "아니오", style: .default, handler: nil)
+        let withdrawalYesAction = UIAlertAction(title: "예", style: .default) { [self] (_) in
+            ProfileServiceViewModel.postWithdrawl(memberIdx: memberIdx, content: content, category: category) { result in
+                if result {
+                    // 회원 탈퇴가 끝나면 간편 로그인 화면으로 이동
+                    let nextVC = LoginVC()
+                    
+                    // kakao unlink
+                    UserApi.shared.unlink {(error) in
+                        if let error = error {
+                            print(error)
+                        }
+                        else {
+                            print("unlink() success.")
+                        }
                     }
-                    else {
-                        print("unlink() success.")
-                    }
+                    
+                    nextVC.modalPresentationStyle = .currentContext
+                    self.present(nextVC, animated: true)
                 }
-                
-                nextVC.modalPresentationStyle = .currentContext
-                self.present(nextVC, animated: true)
             }
         }
+        // 회원탈퇴 동의 다이얼로그 띄우기
+        withdrawalCheckAlert.addAction(withdrawalNoAction)
+        withdrawalCheckAlert.addAction(withdrawalYesAction)
+        self.present(withdrawalCheckAlert, animated: true, completion: nil)
     }
     
     @objc
