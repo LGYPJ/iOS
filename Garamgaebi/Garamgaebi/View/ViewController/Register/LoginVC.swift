@@ -65,19 +65,17 @@ class LoginVC: UIViewController {
         addSubViews()
         configLayouts()
         
-        
         // TODO: 임시 kakaoLogin unlink (삭제예정)
         // kakao unlink
-//        UserApi.shared.unlink {(error) in
-//            if let error = error {
-//                print(error)
-//            }
-//            else {
-//                print("unlink() success.")
-//            }
-//        }
-        
-        
+        UserApi.shared.unlink {(error) in
+            if let error = error {
+                print(error)
+            }
+            else {
+                print("unlink() success.")
+            }
+        }
+
     }
     
     // MARK: - Functions
