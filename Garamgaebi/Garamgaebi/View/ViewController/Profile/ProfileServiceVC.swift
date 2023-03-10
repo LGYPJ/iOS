@@ -656,24 +656,20 @@ extension ProfileServiceVC {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             
             var safeArea = self.view.frame
-            //safeArea.size.height -= view.safeAreaInsets.top * 1.5 // 이 부분 조절하면서 스크롤 올리는 정도 변경
-            //safeArea.size.height -= headerView.frame.height // scrollView 말고 view에 headerView가 있기때문에 제외
+            safeArea.size.height -= view.safeAreaInsets.top // 이 부분 조절하면서 스크롤 올리는 정도 변경
+            safeArea.size.height -= headerView.frame.height // scrollView 말고 view에 headerView가 있기때문에 제외
             safeArea.size.height += scrollView.contentOffset.y
             safeArea.size.height -= keyboardSize.height + (UIScreen.main.bounds.height*0.04) // Adjust buffer to your liking
-            // determine which UIView was selected and if it is covered by keyboard
             
+            // determine which UIView was selected and if it is covered by keyboard
             let activeField: UIView? = [emailTextField, contentTextField].first { $0.isFirstResponder }
             if let activeField = activeField {
-                if safeArea.contains(CGPoint(x: 0, y: activeField.frame.maxY + headerView.frame.maxY)) {
+                if safeArea.contains(CGPoint(x: 0, y: activeField.frame.maxY)) {
                     print("No need to Scroll")
                     return
                 } else {
-                    distance = (activeField.frame.maxY + headerView.frame.maxY) - (safeArea.size.height + view.safeAreaInsets.top)
-                    if activeField == contentTextField {
-                        distance += (agreemsgLabel.frame.height * 2) * 1.2 // 아래 체크버튼까지 보이게 키보드 올림 + 여유공간 20%
-                    }
+                    distance = activeField.frame.maxY - safeArea.size.height
                     scrollOffset = scrollView.contentOffset.y
-                    print(scrollOffset)
                     self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset + distance), animated: true)
                 }
             }
