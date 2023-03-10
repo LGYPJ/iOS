@@ -550,7 +550,7 @@ class ProfileVC: UIViewController {
                         self.profileImageView.kf.setImage(with: url, options: [
                             .processor(processor),
                             .scaleFactor(UIScreen.main.scale),
-//                            .transition(.fade(0.5)),
+//                            .transition(.fade(0.3)),
                             .forceRefresh
                         ])
                     } else {
