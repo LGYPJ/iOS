@@ -356,9 +356,7 @@ class UniEmailAuthVC: UIViewController {
         
         // 메일을 보내면서 uniEmail UserDefault에 저장
         let uniEmail = UniEmailAuthModel(email: "\(userId)@gachon.ac.kr")
-        LoadingView.shared.show()
         UniEmailAuthViewModel.requestSendEmail(uniEmail) { [weak self] result in
-            LoadingView.shared.hide()
             switch result {
             case true:
                 guard let userId = self?.userId else {return}

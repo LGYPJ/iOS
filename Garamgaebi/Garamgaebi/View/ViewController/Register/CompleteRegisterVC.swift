@@ -181,6 +181,7 @@ class CompleteRegisterVC: UIViewController {
                 if result.isSuccess {
                     print("성공(로그인): \(result.message)")
                     UserDefaults.standard.set(result.result?.accessToken, forKey: "BearerToken")
+                    UserDefaults.standard.set(result.result?.refreshToken, forKey: "refreshToken")
                     UserDefaults.standard.set(result.result?.memberIdx, forKey: "memberIdx")
                     self?.presentHome()
                 } else {

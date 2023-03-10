@@ -19,6 +19,20 @@ class ServiceTermVC: UIViewController {
         return view
     }()
     
+    lazy var closeButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("닫기", for: .normal)
+        button.setTitleColor(UIColor(hex: 0xFF0000), for: .normal)
+        button.setTitleColor(UIColor.gray, for: .highlighted)
+        button.titleLabel?.font = UIFont.NotoSansKR(type: .Regular, size: 16)
+        button.addTarget(self, action: #selector(closeView), for: .touchUpInside)
+        return button
+    }()
+    
+    lazy var scrollView = UIScrollView()
+    
+    lazy var contentView = UIView()
+    
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "가람개비 이용약관"
@@ -29,6 +43,7 @@ class ServiceTermVC: UIViewController {
     
     lazy var serviceTermTextView: UITextView = {
         let view = UITextView()
+        view.isUserInteractionEnabled = false
         return view
     }()
     
@@ -289,7 +304,10 @@ class ServiceTermVC: UIViewController {
         
         view.addSubview(headerView)
         headerView.addSubview(titleLabel)
-        view.addSubview(serviceTermTextView)
+        headerView.addSubview(closeButton)
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubview(serviceTermTextView)
         
         //headerView
         headerView.snp.makeConstraints { make in
@@ -304,11 +322,37 @@ class ServiceTermVC: UIViewController {
             make.centerY.equalToSuperview()
         }
         
-        serviceTermTextView.snp.makeConstraints { make in
-            make.top.equalTo(headerView.snp.bottom).offset(8)
-            make.left.right.equalToSuperview().inset(12)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(8)
+        // closeButton
+        closeButton.snp.makeConstraints { make in
+            make.right.equalToSuperview().inset(12)
+            make.centerY.equalTo(titleLabel.snp.centerY)
         }
+        
+        // scrollView
+        scrollView.snp.makeConstraints { make in
+            make.top.equalTo(headerView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        // contentView
+        contentView.snp.makeConstraints { make in
+            make.top.bottom.leading.trailing.equalTo(scrollView)
+            make.width.equalTo(scrollView)
+        }
+        
+        // serviceTermTextView
+        serviceTermTextView.snp.makeConstraints { make in
+            make.top.equalTo(contentView.snp.top).inset(8)
+            make.left.right.equalToSuperview().inset(12)
+            make.height.equalTo(serviceTermTextView.contentSize.height)
+            make.bottom.equalToSuperview().inset(8)
+        }
+
+    }
+    
+    @objc func closeView() {
+        self.dismiss(animated: true)
     }
     
     private func configureViews() {

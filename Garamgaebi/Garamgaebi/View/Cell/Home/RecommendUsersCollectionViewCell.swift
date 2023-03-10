@@ -74,21 +74,27 @@ class RecommendUsersCollectionViewCell: UICollectionViewCell {
     }
     
     func configSubViewLayouts() {
+        // imageInfoView
         imageInfoView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.left.right.equalToSuperview()
             make.height.equalTo(100)
         }
+        
+        // imageDefault
         imageDefault.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(20)
             make.left.right.equalToSuperview().inset(30)
         }
+        
+        // contentInfoView
         contentInfoView.snp.makeConstraints { make in
             make.top.equalTo(imageInfoView.snp.bottom)
             make.left.right.equalToSuperview().inset(6)
             make.bottom.equalToSuperview()
         }
         
+        // nickNameInfoLabel
         nickNameInfoLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(8)
             make.height.equalTo(20)
@@ -96,11 +102,11 @@ class RecommendUsersCollectionViewCell: UICollectionViewCell {
             make.centerX.equalToSuperview()
         }
         
+        // belongInfoLabel
         belongInfoLabel.snp.makeConstraints { make in
             make.top.equalTo(nickNameInfoLabel.snp.bottom).offset(8)
             make.left.right.equalToSuperview()
             make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().inset(12)
         }
     }
     
