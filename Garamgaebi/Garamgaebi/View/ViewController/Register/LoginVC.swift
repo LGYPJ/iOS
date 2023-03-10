@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import KakaoSDKUser
+import AuthenticationServices
 
 class LoginVC: UIViewController {
     
@@ -55,6 +56,7 @@ class LoginVC: UIViewController {
         button.backgroundColor = UIColor.init(hex: 0x1C1C1C)
         button.setTitleColor(UIColor.white, for: .normal)
         button.layer.cornerRadius = 12
+        button.addTarget(self, action: #selector(appleLogin), for: .touchUpInside)
         return button
     }()
     
@@ -215,4 +217,55 @@ class LoginVC: UIViewController {
         present(vc, animated: true)
     }
     
+    //애플 소셜 로그인
+    @objc func appleLogin(_ sender: Any) {
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+        
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
+        authorizationController.performRequests()
+    }
+    
+}
+
+extension LoginVC: ASAuthorizationControllerPresentationContextProviding, ASAuthorizationControllerDelegate{
+    
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.view.window!
+    }
+    
+    // Apple ID 연동 성공 시
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        switch authorization.credential {
+            // Apple ID
+        case let appleIDCredential as ASAuthorizationAppleIDCredential:
+            
+            // 계정 정보 가져오기
+            let userIdentifier = appleIDCredential.user
+            let fullName = appleIDCredential.fullName
+            let email = appleIDCredential.email
+            let idToken = appleIDCredential.identityToken!
+            let tokeStr = String(data: idToken, encoding: .utf8)
+            
+            UserDefaults.standard.set(idToken, forKey: "accessToken")
+            UserDefaults.standard.set(false, forKey: "kakaoLogin")
+            UserDefaults.standard.set(true, forKey: "appleLogin")
+            
+            print("User ID : \(userIdentifier)")
+            print("User Email : \(email ?? "")")
+            print("User Name : \((fullName?.givenName ?? "") + (fullName?.familyName ?? ""))")
+            print("token : \(String(describing: tokeStr))")
+            
+        default:
+            break
+        }
+    }
+    
+    // Apple ID 연동 실패 시
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        // Handle error.
+    }
 }

@@ -254,6 +254,7 @@
 		6055D84629701F6B00C86D53 /* InputEducationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputEducationVC.swift; sourceTree = "<group>"; };
 		6082992B297FBDB000240036 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		6082992E297FC20C00240036 /* EventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventService.swift; sourceTree = "<group>"; };
+		6093E03329BB7F9A004DD691 /* Garamgaebi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Garamgaebi.entitlements; sourceTree = "<group>"; };
 		609A53CE296AB47300BBD338 /* Garamgaebi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Garamgaebi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		609A53D1296AB47300BBD338 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		609A53D3296AB47300BBD338 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -781,6 +782,7 @@
 		609A53D0296AB47300BBD338 /* Garamgaebi */ = {
 			isa = PBXGroup;
 			children = (
+				6093E03329BB7F9A004DD691 /* Garamgaebi.entitlements */,
 				609A53D1296AB47300BBD338 /* AppDelegate.swift */,
 				609A53D3296AB47300BBD338 /* SceneDelegate.swift */,
 				2CED690E298CBD2800C838BD /* Status.swift */,
@@ -1464,6 +1466,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Garamgaebi/Garamgaebi.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1499,6 +1502,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Garamgaebi/Garamgaebi.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
