@@ -845,6 +845,7 @@ extension EventApplyVC {
 				}
 				alert.addAction(confirmAction)
 				self?.present(alert, animated: true)
+				NotificationCenter.default.post(name: NSNotification.Name("ReloadMyEvent"), object: nil)
 			} else {
 				let alert = UIAlertController(title: result.message, message: nil, preferredStyle: .alert)
 				let confirmAction = UIAlertAction(title: "확인", style: .default)

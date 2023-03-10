@@ -21,6 +21,7 @@ class EventAttendantCollectionViewCell: UICollectionViewCell {
 		imageView.tintColor = .mainGray
 		imageView.clipsToBounds = true
 		imageView.layer.borderColor = UIColor.mainBlue.cgColor
+		imageView.contentMode = .scaleAspectFill
 		
 		return imageView
 	}()

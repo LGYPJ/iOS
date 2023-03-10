@@ -168,6 +168,23 @@ class IceBreakingRoomVC: UIViewController {
 		
 	}
 	
+	override func viewWillDisappear(_ animated: Bool) {
+		// didTapBackBarButton에서 pop만 뺀 로직
+		if memberId != currentUserId || userList.count == 1 {
+			IcebreakingViewModel.deleteGameUser(roomId: self.roomId, nextMemberIdx: -1, completion: {
+				self.disconnectSocket()
+			})
+		} else {
+			let nextMemberIndex = findNextUserIndex()
+			let nextMemberIdx = userList[nextMemberIndex].memberIdx
+			
+			IcebreakingViewModel.deleteGameUser(roomId: self.roomId, nextMemberIdx: nextMemberIdx, completion: {
+				self.disconnectSocket()
+			})
+		}
+		super.viewWillDisappear(animated)
+	}
+	
 }
 
 extension IceBreakingRoomVC {

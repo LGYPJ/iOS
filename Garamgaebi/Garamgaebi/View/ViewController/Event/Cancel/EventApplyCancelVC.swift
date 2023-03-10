@@ -607,6 +607,7 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 				sheet.addAction(closeAction)
 				
 				self?.present(sheet, animated: true)
+				NotificationCenter.default.post(name: NSNotification.Name("ReloadMyEvent"), object: nil)
 			}
 			
 		})
