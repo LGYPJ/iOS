@@ -199,7 +199,7 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 				cell.isUserInteractionEnabled = false
 			} else {
 				
-				cell.profileImageView.kf.indicatorType = .activity
+				cell.profileImageView.kf.indicatorType = .none
 				cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg ?? ""), placeholder: UIImage(named: "DefaultProfileImage"), options: [.forceRefresh])
 				cell.userNameLabel.text = cellData.nickname.maxLength(length: 5)
 				cell.userNameLabel.textColor = .mainBlack
@@ -232,7 +232,7 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 			} else {
 				let cellData = self.networkingAttendants[indexPath.row]
 				
-				cell.profileImageView.kf.indicatorType = .activity
+				cell.profileImageView.kf.indicatorType = .none
 				cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg ?? ""), placeholder: UIImage(named: "DefaultProfileImage"), options: [.forceRefresh])
 				cell.userNameLabel.text = cellData.nickname.maxLength(length: 5)
 				cell.userNameLabel.textColor = .mainBlack
