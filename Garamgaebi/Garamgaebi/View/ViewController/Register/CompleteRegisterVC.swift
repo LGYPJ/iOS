@@ -151,16 +151,14 @@ class CompleteRegisterVC: UIViewController {
         RegisterUserViewModel.requestRegisterUser(parameter: userInfo) { [weak self] result in
             UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
             if self?.myCareer == nil {
-                guard let passMyEducation = RegisterEducationInfo(memberIdx: result.memberIdx, institution: (self?.myEducation!.institution)!, major: self?.myEducation!.major ?? "", isLearning: self?.myEducation!.isLearning ?? "", startDate: (self?.myEducation!.startDate)!, endDate: self?.myEducation!.endDate ?? "") as? RegisterEducationInfo else {
-                    return
-                }
+                let passMyEducation = RegisterEducationInfo(memberIdx: result.memberIdx, institution: (self?.myEducation?.institution)!, major: (self?.myEducation?.major)!, isLearning: (self?.myEducation?.isLearning)!, startDate: (self?.myEducation?.startDate)!, endDate: (self?.myEducation?.endDate)!)
                 RegisterEducationViewModel.requestInputEducation(passMyEducation) { result in
                     if result {
                         self?.login()
                     }
                 }
             } else {
-                guard let passMyCareer = RegisterCareerInfo(memberIdx: result.memberIdx, company: (self?.myCareer!.company)!, position: self?.myCareer!.position ?? "", isWorking: self?.myCareer!.isWorking ?? "", startDate: (self?.myCareer!.startDate)!, endDate: self?.myCareer!.endDate ?? "") as? RegisterCareerInfo else { return }
+                let passMyCareer = RegisterCareerInfo(memberIdx: result.memberIdx, company: (self?.myCareer?.company)!, position: (self?.myCareer?.position)!, isWorking: (self?.myCareer?.isWorking)!, startDate: (self?.myCareer?.startDate)!, endDate: (self?.myCareer?.endDate)!)
                 RegisterCareerViewModel.requestInputCareer(passMyCareer) { result in
                     if result {
                         self?.login()
