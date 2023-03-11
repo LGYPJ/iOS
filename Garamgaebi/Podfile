@@ -18,7 +18,6 @@ target 'Garamgaebi' do
   pod 'ReactorKit'
   pod 'Starscream'
   pod 'StompClientLib'
-  pod 'lottie-ios'
   pod 'Firebase/Messaging'  
   target 'GaramgaebiTests' do
     inherit! :search_paths
