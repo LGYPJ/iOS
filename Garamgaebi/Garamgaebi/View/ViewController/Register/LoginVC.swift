@@ -12,6 +12,8 @@ import AuthenticationServices
 
 class LoginVC: UIViewController {
     
+    var fcmToken = String()
+    
     // MARK: - Subviews
     
     lazy var titleLabel: UILabel = {
@@ -66,6 +68,10 @@ class LoginVC: UIViewController {
         view.backgroundColor = .white
         addSubViews()
         configLayouts()
+
+        if let token = UserDefaults.standard.string(forKey: "fcmToken") {
+            self.fcmToken = token
+        }
         
         // TODO: 임시 kakaoLogin unlink (삭제예정)
         // kakao unlink
@@ -146,7 +152,7 @@ class LoginVC: UIViewController {
                     UserDefaults.standard.set(accessToken, forKey: "accessToken")
                     UserDefaults.standard.set(true, forKey: "kakaoLogin")
                     UserDefaults.standard.set(false, forKey: "appleLogin")
-                    LoginViewModel.postLoginKakao(accessToken: accessToken, completion: { [weak self] result in
+                    LoginViewModel.postLoginKakao(accessToken: accessToken, fcmToken: self.fcmToken, completion: { [weak self] result in
                         switch result {
                         case .success(let result):
                             if result.isSuccess {
@@ -179,7 +185,7 @@ class LoginVC: UIViewController {
                     UserDefaults.standard.set(accessToken, forKey: "accessToken")
                     UserDefaults.standard.set(true, forKey: "kakaoLogin")
                     UserDefaults.standard.set(false, forKey: "appleLogin")
-                    LoginViewModel.postLoginKakao(accessToken: accessToken, completion: { [weak self] result in
+                    LoginViewModel.postLoginKakao(accessToken: accessToken, fcmToken: self.fcmToken,completion: { [weak self] result in
                         switch result {
                         case .success(let result):
                             if result.isSuccess {

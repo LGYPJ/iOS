@@ -24,7 +24,7 @@ class SplashVC: UIViewController {
             make.centerX.centerY.equalTo(view.safeAreaLayoutGuide)
         }
         view.backgroundColor = .white
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(getFCMToken(_:)), name: Notification.Name("FCMToken"), object: nil)
         //        login()
     }
     
@@ -92,4 +92,9 @@ class SplashVC: UIViewController {
         })
     }
     
+    // fcmToken 받아오기
+    @objc private func getFCMToken(_ notification: NSNotification) {
+        let token: String = notification.userInfo?["token"] as! String
+        UserDefaults.standard.set(token, forKey: "fcmToken")
+    }
 }

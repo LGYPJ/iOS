@@ -11,7 +11,7 @@ import SnapKit
 class CompleteRegisterVC: UIViewController {
     let myCareer: RegisterCareerInfo?
     let myEducation: RegisterEducationInfo?
-    
+    var fcmToken = String()
     init(myCareer: RegisterCareerInfo?, myEducation: RegisterEducationInfo?) {
         self.myCareer = myCareer
         self.myEducation = myEducation
@@ -77,6 +77,9 @@ class CompleteRegisterVC: UIViewController {
         configLayouts()
         configNickname()
         configureGestureRecognizer()
+        if let token = UserDefaults.standard.string(forKey: "fcmToken") {
+            self.fcmToken = token
+        }
     }
     
     
@@ -173,7 +176,7 @@ class CompleteRegisterVC: UIViewController {
         let accessToken = UserDefaults.standard.string(forKey: "accessToken")!
         print("accessToken: \(accessToken)")
 
-        LoginViewModel.postLoginKakao(accessToken: accessToken, completion: { [weak self] result in
+        LoginViewModel.postLoginKakao(accessToken: accessToken, fcmToken: fcmToken, completion: { [weak self] result in
             switch result {
             case .success(let result):
                 if result.isSuccess {
