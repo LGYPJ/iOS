@@ -149,25 +149,25 @@ class LoginVC: UIViewController {
                 } else {
                     print("카카오 톡으로 로그인 성공")
                     guard let accessToken = oauthToken?.accessToken else { return }
-                    UserDefaults.standard.set(accessToken, forKey: "accessToken")
+                    UserDefaults.standard.set(accessToken, forKey: "accessTokenKakao")
                     UserDefaults.standard.set(true, forKey: "kakaoLogin")
                     UserDefaults.standard.set(false, forKey: "appleLogin")
                     LoginViewModel.postLoginKakao(accessToken: accessToken, fcmToken: self.fcmToken, completion: { [weak self] result in
                         switch result {
                         case .success(let result):
                             if result.isSuccess {
-                                print("성공(간편로그인): \(result.message)")
+                                print("성공(간편로그인(카카오)): \(result.message)")
                                 UserDefaults.standard.set(result.result?.tokenInfo?.accessToken, forKey: "BearerToken")
                                 UserDefaults.standard.set(result.result?.tokenInfo?.refreshToken, forKey: "refreshToken")
                                 UserDefaults.standard.set(result.result?.tokenInfo?.memberIdx, forKey: "memberIdx")
                                 self?.showHome()
                             } else {
-                                print("실패(간편로그인): \(result.message)")
+                                print("실패(간편로그인(카카오)): \(result.message)")
                                 print(">>> 교육, 경력 기입 화면으로 이동")
                                 self?.presentNextView()
                             }
                         case .failure(let error):
-                            print("실패(AF-간편로그인): \(error.localizedDescription)")
+                            print("실패(AF-간편로그인(카카오)): \(error.localizedDescription)")
                         }
                     })
                 }
@@ -189,18 +189,18 @@ class LoginVC: UIViewController {
                         switch result {
                         case .success(let result):
                             if result.isSuccess {
-                                print("성공(간편로그인): \(result.message)")
+                                print("성공(간편로그인(카카오)): \(result.message)")
                                 UserDefaults.standard.set(result.result?.tokenInfo?.accessToken, forKey: "BearerToken")
                                 UserDefaults.standard.set(result.result?.tokenInfo?.refreshToken, forKey: "refreshToken")
                                 UserDefaults.standard.set(result.result?.tokenInfo?.memberIdx, forKey: "memberIdx")
                                 self?.showHome()
                             } else {
-                                print("실패(간편로그인): \(result.message)")
+                                print("실패(간편로그인(카카오)): \(result.message)")
                                 print(">>> 교육, 경력 기입 화면으로 이동")
                                 self?.presentNextView()
                             }
                         case .failure(let error):
-                            print("실패(AF-간편로그인): \(error.localizedDescription)")
+                            print("실패(AF-간편로그인(카카오)): \(error.localizedDescription)")
                         }
                     })
                 }
@@ -254,16 +254,35 @@ extension LoginVC: ASAuthorizationControllerPresentationContextProviding, ASAuth
             let fullName = appleIDCredential.fullName
             let email = appleIDCredential.email
             let idToken = appleIDCredential.identityToken!
-            let tokeStr = String(data: idToken, encoding: .utf8)
-            
-            UserDefaults.standard.set(idToken, forKey: "accessToken")
-            UserDefaults.standard.set(false, forKey: "kakaoLogin")
-            UserDefaults.standard.set(true, forKey: "appleLogin")
+            let tokenStr = String(data: idToken, encoding: .utf8)
+            guard let idTokenString = tokenStr else { return }
             
             print("User ID : \(userIdentifier)")
             print("User Email : \(email ?? "")")
             print("User Name : \((fullName?.givenName ?? "") + (fullName?.familyName ?? ""))")
-            print("token : \(String(describing: tokeStr))")
+            print("token : \(String(describing: idTokenString))")
+            
+            UserDefaults.standard.set(idTokenString, forKey: "accessTokenApple")
+            UserDefaults.standard.set(false, forKey: "kakaoLogin")
+            UserDefaults.standard.set(true, forKey: "appleLogin")
+            LoginViewModel.postLoginApple(idToken: idTokenString, fcmToken: self.fcmToken) { [weak self] result in
+                switch result {
+                case .success(let result):
+                    if result.isSuccess {
+                        print("성공(간편로그인(애플)): \(result.message)")
+                        UserDefaults.standard.set(result.result?.tokenInfo?.accessToken, forKey: "BearerToken")
+                        UserDefaults.standard.set(result.result?.tokenInfo?.refreshToken, forKey: "refreshToken")
+                        UserDefaults.standard.set(result.result?.tokenInfo?.memberIdx, forKey: "memberIdx")
+                        self?.showHome()
+                    } else {
+                        print("실패(간편로그인(애플)): \(result.message)")
+                        print(">>> 교육, 경력 기입 화면으로 이동")
+                        self?.presentNextView()
+                    }
+                case .failure(let error):
+                    print("실패(AF-간편로그인(애플)): \(error.localizedDescription)")
+                }
+            }
             
         default:
             break
