@@ -186,6 +186,8 @@ class CompleteRegisterVC: UIViewController {
                     UserDefaults.standard.set(result.result?.tokenInfo?.accessToken, forKey: "BearerToken")
                     UserDefaults.standard.set(result.result?.tokenInfo?.refreshToken, forKey: "refreshToken")
                     UserDefaults.standard.set(result.result?.tokenInfo?.memberIdx, forKey: "memberIdx")
+                    UserDefaults.standard.set(result.result?.uniEmail, forKey: "memberIdx")
+                    UserDefaults.standard.set(result.result?.nickname, forKey: "nickname")
                     self?.presentHome()
                 } else {
                     print("실패(로그인(카카오)): \(result.message)")
@@ -241,6 +243,8 @@ class CompleteRegisterVC: UIViewController {
                     UserDefaults.standard.set(result.result?.tokenInfo?.accessToken, forKey: "BearerToken")
                     UserDefaults.standard.set(result.result?.tokenInfo?.refreshToken, forKey: "refreshToken")
                     UserDefaults.standard.set(result.result?.tokenInfo?.memberIdx, forKey: "memberIdx")
+                    UserDefaults.standard.set(result.result?.uniEmail, forKey: "memberIdx")
+                    UserDefaults.standard.set(result.result?.nickname, forKey: "nickname")
                     self?.presentHome()
                 } else {
                     print("실패(로그인(애플)): \(result.message)")

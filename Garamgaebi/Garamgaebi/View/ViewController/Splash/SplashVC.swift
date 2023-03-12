@@ -70,6 +70,8 @@ class SplashVC: UIViewController {
                     UserDefaults.standard.set(result.result?.tokenInfo?.accessToken, forKey: "BearerToken")
                     UserDefaults.standard.set(result.result?.tokenInfo?.refreshToken, forKey: "refreshToken")
                     UserDefaults.standard.set(result.result?.tokenInfo?.memberIdx, forKey: "memberIdx")
+                    UserDefaults.standard.set(result.result?.uniEmail, forKey: "memberIdx")
+                    UserDefaults.standard.set(result.result?.nickname, forKey: "nickname")
                     self?.showHome()
                 } else if result.code == 2006 || result.code == 2027 {
                     // 유효하지 않은 토큰의 경우 소셜로그인으로 이동 2006

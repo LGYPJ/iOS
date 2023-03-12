@@ -160,6 +160,8 @@ class LoginVC: UIViewController {
                                 UserDefaults.standard.set(result.result?.tokenInfo?.accessToken, forKey: "BearerToken")
                                 UserDefaults.standard.set(result.result?.tokenInfo?.refreshToken, forKey: "refreshToken")
                                 UserDefaults.standard.set(result.result?.tokenInfo?.memberIdx, forKey: "memberIdx")
+                                UserDefaults.standard.set(result.result?.uniEmail, forKey: "memberIdx")
+                                UserDefaults.standard.set(result.result?.nickname, forKey: "nickname")
                                 self?.showHome()
                             } else {
                                 print("실패(간편로그인(카카오)): \(result.message)")
@@ -193,6 +195,8 @@ class LoginVC: UIViewController {
                                 UserDefaults.standard.set(result.result?.tokenInfo?.accessToken, forKey: "BearerToken")
                                 UserDefaults.standard.set(result.result?.tokenInfo?.refreshToken, forKey: "refreshToken")
                                 UserDefaults.standard.set(result.result?.tokenInfo?.memberIdx, forKey: "memberIdx")
+                                UserDefaults.standard.set(result.result?.uniEmail, forKey: "memberIdx")
+                                UserDefaults.standard.set(result.result?.nickname, forKey: "nickname")
                                 self?.showHome()
                             } else {
                                 print("실패(간편로그인(카카오)): \(result.message)")
@@ -273,6 +277,8 @@ extension LoginVC: ASAuthorizationControllerPresentationContextProviding, ASAuth
                         UserDefaults.standard.set(result.result?.tokenInfo?.accessToken, forKey: "BearerToken")
                         UserDefaults.standard.set(result.result?.tokenInfo?.refreshToken, forKey: "refreshToken")
                         UserDefaults.standard.set(result.result?.tokenInfo?.memberIdx, forKey: "memberIdx")
+                        UserDefaults.standard.set(result.result?.uniEmail, forKey: "memberIdx")
+                        UserDefaults.standard.set(result.result?.nickname, forKey: "nickname")
                         self?.showHome()
                     } else {
                         print("실패(간편로그인(애플)): \(result.message)")
