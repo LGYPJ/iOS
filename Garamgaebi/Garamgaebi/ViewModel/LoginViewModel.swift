@@ -39,7 +39,7 @@ class LoginViewModel {
     }
     
     public static func postLoginApple(idToken: String, fcmToken: String, completion: @escaping ((Result<LoginModelResponse, AFError>) -> Void)) {
-        let url = "https://garamgaebi.shop/member/login/kakao"
+        let url = "https://garamgaebi.shop/member/login/apple"
 
         let body: [String: Any] = [
             "idToken": idToken,
