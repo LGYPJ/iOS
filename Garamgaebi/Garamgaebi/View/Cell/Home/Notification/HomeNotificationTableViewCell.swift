@@ -80,11 +80,20 @@ class HomeNotificationTableViewCell: UITableViewCell {
             imgView.image = UIImage(named: "alarmIcon")
             categoryLabel.text = "마감임박"
         case "APPLY_COMPLETE":
-            imgView.image = UIImage(named: "checkCircleIcon")
+            imgView.image = UIImage(named: "checkCircleIcon1")
             categoryLabel.text = "신청완료"
         case "APPLY_CANCEL_COMPLETE":
-            imgView.image = UIImage(named: "checkCircleIcon")
+            imgView.image = UIImage(named: "checkCircleIcon1")
             categoryLabel.text = "신청취소완료"
+        case "APPLY_CONFIRM":
+            imgView.image = UIImage(named: "checkCircleIcon2")
+            categoryLabel.text = "신청확정"
+        case "NON_DEPOSIT_CANCEL":
+            imgView.image = UIImage(named: "checkCircleIcon2")
+            categoryLabel.text = "미입금취소"
+        case "REFUND_COMPLETE":
+            imgView.image = UIImage(named: "checkCircleIcon3")
+            categoryLabel.text = "환불완료"
         default:
             print(">>>ERROR: notificationType config")
         }
