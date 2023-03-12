@@ -157,9 +157,9 @@ class LoginVC: UIViewController {
                         case .success(let result):
                             if result.isSuccess {
                                 print("성공(간편로그인): \(result.message)")
-                                UserDefaults.standard.set(result.result?.accessToken, forKey: "BearerToken")
-                                UserDefaults.standard.set(result.result?.refreshToken, forKey: "refreshToken")
-                                UserDefaults.standard.set(result.result?.memberIdx, forKey: "memberIdx")
+                                UserDefaults.standard.set(result.result?.tokenInfo?.accessToken, forKey: "BearerToken")
+                                UserDefaults.standard.set(result.result?.tokenInfo?.refreshToken, forKey: "refreshToken")
+                                UserDefaults.standard.set(result.result?.tokenInfo?.memberIdx, forKey: "memberIdx")
                                 self?.showHome()
                             } else {
                                 print("실패(간편로그인): \(result.message)")
@@ -190,9 +190,9 @@ class LoginVC: UIViewController {
                         case .success(let result):
                             if result.isSuccess {
                                 print("성공(간편로그인): \(result.message)")
-                                UserDefaults.standard.set(result.result?.accessToken, forKey: "BearerToken")
-                                UserDefaults.standard.set(result.result?.refreshToken, forKey: "refreshToken")
-                                UserDefaults.standard.set(result.result?.memberIdx, forKey: "memberIdx")
+                                UserDefaults.standard.set(result.result?.tokenInfo?.accessToken, forKey: "BearerToken")
+                                UserDefaults.standard.set(result.result?.tokenInfo?.refreshToken, forKey: "refreshToken")
+                                UserDefaults.standard.set(result.result?.tokenInfo?.memberIdx, forKey: "memberIdx")
                                 self?.showHome()
                             } else {
                                 print("실패(간편로그인): \(result.message)")
