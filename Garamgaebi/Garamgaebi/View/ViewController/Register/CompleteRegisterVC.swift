@@ -7,6 +7,8 @@
 
 import UIKit
 import SnapKit
+import KakaoSDKUser
+import AuthenticationServices
 
 class CompleteRegisterVC: UIViewController {
     let myCareer: RegisterCareerInfo?
@@ -142,58 +144,113 @@ class CompleteRegisterVC: UIViewController {
     private func registerKakao() {
         let usernickname = UserDefaults.standard.string(forKey: "nickname")!
         let userprofileEmail = UserDefaults.standard.string(forKey: "profileEmail")!
-        let accessToken = UserDefaults.standard.string(forKey: "accessToken")!
+        let accessToken = UserDefaults.standard.string(forKey: "accessTokenKakao")!
         let useruniEmail = UserDefaults.standard.string(forKey: "uniEmail")!
         let userstatus = "ACTIVE"
-        // TODO: password 추후 제거 예정
 
         let userInfo =  RegisterUserInfo(nickname: usernickname, profileEmail: userprofileEmail, accessToken: accessToken, uniEmail: useruniEmail, status: userstatus)
         print(userInfo)
         
          //response 받은 memberIdx로 회원가입 API post
-        RegisterUserViewModel.requestRegisterUser(parameter: userInfo) { [weak self] result in
+        RegisterUserViewModel.requestRegisterUserKakao(parameter: userInfo) { [weak self] result in
             UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
             if self?.myCareer == nil {
                 let passMyEducation = RegisterEducationInfo(memberIdx: result.memberIdx, institution: (self?.myEducation?.institution)!, major: (self?.myEducation?.major)!, isLearning: (self?.myEducation?.isLearning)!, startDate: (self?.myEducation?.startDate)!, endDate: (self?.myEducation?.endDate)!)
                 RegisterEducationViewModel.requestInputEducation(passMyEducation) { result in
                     if result {
-                        self?.login()
+                        self?.loginKakao()
                     }
                 }
             } else {
                 let passMyCareer = RegisterCareerInfo(memberIdx: result.memberIdx, company: (self?.myCareer?.company)!, position: (self?.myCareer?.position)!, isWorking: (self?.myCareer?.isWorking)!, startDate: (self?.myCareer?.startDate)!, endDate: (self?.myCareer?.endDate)!)
                 RegisterCareerViewModel.requestInputCareer(passMyCareer) { result in
                     if result {
-                        self?.login()
+                        self?.loginKakao()
                     }
                 }
             }
                                                             
         }
     }
-	
-	private func login() {
-        let accessToken = UserDefaults.standard.string(forKey: "accessToken")!
-        print("accessToken: \(accessToken)")
 
+	private func loginKakao() {
+        let accessToken = UserDefaults.standard.string(forKey: "accessTokenKakao")!
+        print("accessToken: \(accessToken)")
+        UserDefaults.standard.set(true, forKey: "kakaoLogin")
+        UserDefaults.standard.set(false, forKey: "appleLogin")
         LoginViewModel.postLoginKakao(accessToken: accessToken, fcmToken: fcmToken, completion: { [weak self] result in
             switch result {
             case .success(let result):
                 if result.isSuccess {
-                    print("성공(로그인): \(result.message)")
+                    print("성공(로그인(카카오)): \(result.message)")
                     UserDefaults.standard.set(result.result?.tokenInfo?.accessToken, forKey: "BearerToken")
                     UserDefaults.standard.set(result.result?.tokenInfo?.refreshToken, forKey: "refreshToken")
                     UserDefaults.standard.set(result.result?.tokenInfo?.memberIdx, forKey: "memberIdx")
                     self?.presentHome()
                 } else {
-                    print("실패(로그인): \(result.message)")
+                    print("실패(로그인(카카오)): \(result.message)")
                     print("버튼 다시 눌러보세요")
                 }
             case .failure(let error):
-                print("실패(AF-로그인): \(error.localizedDescription)")
+                print("실패(AF-로그인(카카오)): \(error.localizedDescription)")
             }
         })
 	}
+    
+    private func registerApple() {
+        let usernickname = UserDefaults.standard.string(forKey: "nickname")!
+        let userprofileEmail = UserDefaults.standard.string(forKey: "profileEmail")!
+        let accessToken = UserDefaults.standard.string(forKey: "accessTokenApple")!
+        let useruniEmail = UserDefaults.standard.string(forKey: "uniEmail")!
+        let userstatus = "ACTIVE"
+
+        let userInfo =  RegisterUserInfo(nickname: usernickname, profileEmail: userprofileEmail, accessToken: accessToken, uniEmail: useruniEmail, status: userstatus)
+        print(userInfo)
+        
+         //response 받은 memberIdx로 회원가입 API post
+        RegisterUserViewModel.requestRegisterUserApple(parameter: userInfo) { [weak self] result in
+            UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
+            if self?.myCareer == nil {
+                let passMyEducation = RegisterEducationInfo(memberIdx: result.memberIdx, institution: (self?.myEducation?.institution)!, major: (self?.myEducation?.major)!, isLearning: (self?.myEducation?.isLearning)!, startDate: (self?.myEducation?.startDate)!, endDate: (self?.myEducation?.endDate)!)
+                RegisterEducationViewModel.requestInputEducation(passMyEducation) { result in
+                    if result {
+                        self?.loginApple()
+                    }
+                }
+            } else {
+                let passMyCareer = RegisterCareerInfo(memberIdx: result.memberIdx, company: (self?.myCareer?.company)!, position: (self?.myCareer?.position)!, isWorking: (self?.myCareer?.isWorking)!, startDate: (self?.myCareer?.startDate)!, endDate: (self?.myCareer?.endDate)!)
+                RegisterCareerViewModel.requestInputCareer(passMyCareer) { result in
+                    if result {
+                        self?.loginApple()
+                    }
+                }
+            }
+        }
+    }
+    
+    private func loginApple() {
+        let accessToken = UserDefaults.standard.string(forKey: "accessTokenApple")!
+        print("accessToken: \(accessToken)")
+        UserDefaults.standard.set(false, forKey: "kakaoLogin")
+        UserDefaults.standard.set(true, forKey: "appleLogin")
+        LoginViewModel.postLoginApple(idToken: accessToken, fcmToken: fcmToken, completion: { [weak self] result in
+            switch result {
+            case .success(let result):
+                if result.isSuccess {
+                    print("성공(로그인(애플)): \(result.message)")
+                    UserDefaults.standard.set(result.result?.tokenInfo?.accessToken, forKey: "BearerToken")
+                    UserDefaults.standard.set(result.result?.tokenInfo?.refreshToken, forKey: "refreshToken")
+                    UserDefaults.standard.set(result.result?.tokenInfo?.memberIdx, forKey: "memberIdx")
+                    self?.presentHome()
+                } else {
+                    print("실패(로그인(애플)): \(result.message)")
+                    print("버튼 다시 눌러보세요")
+                }
+            case .failure(let error):
+                print("실패(AF-로그인(애플)): \(error.localizedDescription)")
+            }
+        })
+    }
     
     private func presentHome(){
         let nextVC = TabBarController()
@@ -205,18 +262,17 @@ class CompleteRegisterVC: UIViewController {
     @objc
     private func presentHomeButtonTapped(_ sender: UIButton) {
         if UserDefaults.standard.bool(forKey: "kakaoLogin") {
+            print(">>kakao")
             registerKakao()
         } else if UserDefaults.standard.bool(forKey: "appleLogin") {
-            // registerApple
+            print(">>apple")
+             registerApple()
         }
-        
-        
     }
     
     @objc
     private func toggleButton(_ sender: UIButton) {
         sender.isSelected.toggle()
-        
         if checkAgreeTermsConditionsButton.isSelected {
             presentHomeButton.isEnabled = true
             UIView.animate(withDuration: 0.33) {
@@ -232,7 +288,6 @@ class CompleteRegisterVC: UIViewController {
             
         }
     }
-
 }
 
 extension CompleteRegisterVC {
