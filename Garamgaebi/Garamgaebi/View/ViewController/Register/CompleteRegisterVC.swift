@@ -186,7 +186,7 @@ class CompleteRegisterVC: UIViewController {
                     UserDefaults.standard.set(result.result?.tokenInfo?.accessToken, forKey: "BearerToken")
                     UserDefaults.standard.set(result.result?.tokenInfo?.refreshToken, forKey: "refreshToken")
                     UserDefaults.standard.set(result.result?.tokenInfo?.memberIdx, forKey: "memberIdx")
-                    UserDefaults.standard.set(result.result?.uniEmail, forKey: "memberIdx")
+                    UserDefaults.standard.set(result.result?.uniEmail, forKey: "uniEmail")
                     UserDefaults.standard.set(result.result?.nickname, forKey: "nickname")
                     self?.presentHome()
                 } else {
@@ -243,7 +243,7 @@ class CompleteRegisterVC: UIViewController {
                     UserDefaults.standard.set(result.result?.tokenInfo?.accessToken, forKey: "BearerToken")
                     UserDefaults.standard.set(result.result?.tokenInfo?.refreshToken, forKey: "refreshToken")
                     UserDefaults.standard.set(result.result?.tokenInfo?.memberIdx, forKey: "memberIdx")
-                    UserDefaults.standard.set(result.result?.uniEmail, forKey: "memberIdx")
+                    UserDefaults.standard.set(result.result?.uniEmail, forKey: "uniEmail")
                     UserDefaults.standard.set(result.result?.nickname, forKey: "nickname")
                     self?.presentHome()
                 } else {
