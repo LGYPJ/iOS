@@ -127,6 +127,9 @@ class IceBreakingRoomVC: UIViewController {
 	private var currentUserId: Int = 0
 	private var currentUserIndex: Int = 0
 	
+	// 유저 프로필 이미지 캐싱을 위한 캐싱 인스턴스
+	private let cache = ImageCache.default
+	
     // MARK: - Life Cycle
 	init(programId: Int ,roomId: String, roomName: String) {
 		self.memberId = UserDefaults.standard.integer(forKey: "memberIdx")
@@ -159,6 +162,9 @@ class IceBreakingRoomVC: UIViewController {
 		configureViews()
 		configureButtonTarget()
 		fetchGameImage()
+		
+		// 이미지 캐싱 600초(10분)지나면 파기
+		cache.memoryStorage.config.expiration = .seconds(600)
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {

@@ -212,6 +212,7 @@ class OtherProfileVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureLayouts()
+		self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -687,4 +688,10 @@ extension OtherProfileVC: SnsButtonTappedDelegate {
     func copyButtonDidTap() {
         showToast(message: "클립보드에 복사되었습니다")
     }
+}
+
+extension OtherProfileVC: UIGestureRecognizerDelegate {
+	func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+		return true
+	}
 }
