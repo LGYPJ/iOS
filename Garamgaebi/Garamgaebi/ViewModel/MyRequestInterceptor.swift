@@ -43,9 +43,9 @@ final class MyRequestInterceptor: RequestInterceptor {
                            request.retryCount < retryLimit
                         {
                             guard let passData = result.result else {return}
-                            UserDefaults.standard.set(passData.accessToken, forKey: "BearerToken")
-                            UserDefaults.standard.set(passData.refreshToken, forKey: "refreshToken")
-                            UserDefaults.standard.set(passData.memberIdx, forKey: "memberIdx")
+                            UserDefaults.standard.set(passData.tokenInfo?.accessToken, forKey: "BearerToken")
+                            UserDefaults.standard.set(passData.tokenInfo?.refreshToken, forKey: "refreshToken")
+                            UserDefaults.standard.set(passData.tokenInfo?.memberIdx, forKey: "memberIdx")
                             completion(.retryWithDelay(1))
                         } else {
                             print("실패 : Token Refresh Fail : \(error)")

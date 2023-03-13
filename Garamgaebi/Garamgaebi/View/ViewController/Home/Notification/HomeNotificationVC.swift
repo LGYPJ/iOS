@@ -162,6 +162,8 @@ extension HomeNotificationVC {
     }
     
     @objc private func didTapBackBarButton() {
+        // 뒤로 갈때 홈 VC 리로드
+        NotificationCenter.default.post(name: NSNotification.Name("ReloadMyEvent"), object: nil)
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -180,8 +182,6 @@ extension HomeNotificationVC {
     }
     
     @objc func refreshTable(refresh: UIRefreshControl) {
-        print(">>>upRefresh")
-
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
             self?.notificationList.removeAll()
             self?.fetchData(lastNotiIdx: nil, hasNext: true)
@@ -199,7 +199,6 @@ extension HomeNotificationVC {
         
         // 스크롤 할 수 있는 영역보다 더 스크롤된 경우 (하단에서 스크롤이 더 된 경우)
         if maximumOffset < currentOffset {
-            print(">>>DownRefresh")
             DispatchQueue.main.asyncAfter(deadline: .now()) { [weak self] in
                 self?.fetchData(lastNotiIdx: self?.lastNotificationIdx, hasNext: self?.hasNext)
                 self?.tableView.reloadData()

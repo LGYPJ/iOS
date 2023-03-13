@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Lottie
 import SnapKit
 
 // 네트워크 작업 대기 시에 띄우는 로딩 애니메이션 뷰 클래스
@@ -24,12 +23,6 @@ final class LoadingView: UIView {
         view.alpha = 0
         return view
     }()
-    
-//    private let loadingView: LottieAnimationView = {
-//        let view = LottieAnimationView(name: "loading")
-//        view.loopMode = .loop
-//        return view
-//    }()
     
     private let loadingView: UIImageView = {
         let view = UIImageView()

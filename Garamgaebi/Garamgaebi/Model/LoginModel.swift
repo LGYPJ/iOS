@@ -15,7 +15,13 @@ struct LoginModelResponse: Codable {
 }
 
 struct LoginModel: Codable {
-	let grantType: String
+    let tokenInfo: tokenInfoModel?
+    let uniEmail: String?
+    let nickname: String?
+}
+
+struct tokenInfoModel: Codable {
+    let grantType: String
     let accessToken: String
     let refreshToken: String
     let refreshTokenExpirationTime: Int
