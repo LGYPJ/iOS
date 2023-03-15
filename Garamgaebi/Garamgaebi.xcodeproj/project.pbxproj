@@ -121,6 +121,7 @@
 		60BD04FF2973EBE600F4B433 /* HomeNotificationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD04FE2973EBE600F4B433 /* HomeNotificationTableViewCell.swift */; };
 		60BD05012973F6C900F4B433 /* HomeNotificationDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD05002973F6C900F4B433 /* HomeNotificationDataModel.swift */; };
 		60BD05032974187700F4B433 /* UnderlineSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BD05022974187700F4B433 /* UnderlineSegmentedControl.swift */; };
+		60C2ACDA29C17BE20065EE4E /* DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C2ACD929C17BE20065EE4E /* DeepLink.swift */; };
 		60C6371A2984E1F100D2C814 /* HomeNetworkingPopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C637192984E1F100D2C814 /* HomeNetworkingPopUpVC.swift */; };
 		60C6371C2984E1FC00D2C814 /* HomeSeminarPopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C6371B2984E1FC00D2C814 /* HomeSeminarPopUpVC.swift */; };
 		60D0CFC0298FC443008C24F3 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D0CFBF298FC443008C24F3 /* UIView+.swift */; };
@@ -288,6 +289,7 @@
 		60BD04FE2973EBE600F4B433 /* HomeNotificationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNotificationTableViewCell.swift; sourceTree = "<group>"; };
 		60BD05002973F6C900F4B433 /* HomeNotificationDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNotificationDataModel.swift; sourceTree = "<group>"; };
 		60BD05022974187700F4B433 /* UnderlineSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineSegmentedControl.swift; sourceTree = "<group>"; };
+		60C2ACD929C17BE20065EE4E /* DeepLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLink.swift; sourceTree = "<group>"; };
 		60C637192984E1F100D2C814 /* HomeNetworkingPopUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNetworkingPopUpVC.swift; sourceTree = "<group>"; };
 		60C6371B2984E1FC00D2C814 /* HomeSeminarPopUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSeminarPopUpVC.swift; sourceTree = "<group>"; };
 		60D0CFBF298FC443008C24F3 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
@@ -674,6 +676,7 @@
 				60382438296D66E500E12CC2 /* Register */,
 				60F913FB296D2EFA00626C40 /* Home */,
 				60F913FC296D2F0000626C40 /* ViewAll */,
+				60C2ACD929C17BE20065EE4E /* DeepLink.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -1261,6 +1264,7 @@
 				60EC5310298900700068BD5F /* Date+.swift in Sources */,
 				46704AEA297F9D2B005E63EA /* ProfileHistoryTableViewCell.swift in Sources */,
 				468A713B2990BD9000696FC6 /* OtherProfileVC.swift in Sources */,
+				60C2ACDA29C17BE20065EE4E /* DeepLink.swift in Sources */,
 				60BD04F62973AD2600F4B433 /* HomeMyEventInfoTableViewCell.swift in Sources */,
 				60A4BC132992257000C24DAC /* NotificationModel.swift in Sources */,
 				60513F3D298E5FB40065CD15 /* RegisterCareerViewModel.swift in Sources */,

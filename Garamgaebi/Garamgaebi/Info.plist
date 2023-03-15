@@ -12,7 +12,17 @@
 				<string>kakaof660903d82252a06c824795c15178d2b</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>garamgaebi</string>
+			</array>
+		</dict>
 	</array>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<string>NO</string>
 	<key>KAKAO_APP_KEY</key>
 	<string>f660903d82252a06c824795c15178d2b</string>
 	<key>LSApplicationQueriesSchemes</key>
@@ -51,7 +61,5 @@
 		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
-	<key>FirebaseAppDelegateProxyEnabled</key>
-	<string>NO</string>
 </dict>
 </plist>
