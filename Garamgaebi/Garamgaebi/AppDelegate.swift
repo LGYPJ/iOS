@@ -89,16 +89,47 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         print(messageID)
         print(">>>!!!>")
         let state = UIApplication.shared.applicationState
+        // TODO: 푸시알림 탭하면 해당 (세미나/네트워킹)으로 이동
+        let userInfo = response.notification.request.content.userInfo
+        guard var rootViewController = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.window?.rootViewController else {
+            return
+        }
         
+        guard let programType = userInfo["programType"] as? String else { return }
         if state == .background {
             print(">> background")
-            
         } else if state == .inactive {
             print(">> inactive")
-            // programIdx 29번인 뷰로 이동하는 코드 -> 백그라운드에서 눌렀을떄
+            
+            NotificationCenter.default.post(name: NSNotification.Name("ReloadMyEvent"), object: nil)
+            
+            switch programType {
+            case "SEMINAR":
+                NotificationCenter.default.post(name: Notification.Name("pushSeminarDetailVC"), object: MyEventToDetailInfo(programIdx: Int(userInfo["programIdx"] as! String)! , type: userInfo["programType"] as! String))
+                
+            case "NETWORKING":
+                NotificationCenter.default.post(name: Notification.Name("pushNetworkingDetailVC"), object: MyEventToDetailInfo(programIdx: Int(userInfo["programIdx"] as! String)! , type: userInfo["programType"] as! String))
+            default:
+                print(">>> ERROR Push Notification PROGRAMTYPE ERROR")
+            }
+            
+            //            if seminarList[indexPath.row].isOpen == "OPEN" {
+            //                NotificationCenter.default.post(name: Notification.Name("pushSeminarDetailVC"), object: MyEventToDetailInfo(programIdx: seminarList[indexPath.row].programIdx, type: seminarList[indexPath.row].type))
+            //            }
         } else if state == .active {
             print(">> active")
-            // programIdx 29번인 뷰로 이동하는 코드 ->
+            
+            NotificationCenter.default.post(name: NSNotification.Name("ReloadMyEvent"), object: nil)
+            
+            
+            switch programType {
+            case "SEMINAR":
+                NotificationCenter.default.post(name: Notification.Name("pushSeminarDetailVC"), object: MyEventToDetailInfo(programIdx: Int(userInfo["programIdx"] as! String)! , type: userInfo["programType"] as! String))
+            case "NETWORKING":
+                NotificationCenter.default.post(name: Notification.Name("pushNetworkingDetailVC"), object: MyEventToDetailInfo(programIdx: Int(userInfo["programIdx"] as! String)! , type: userInfo["programType"] as! String))
+            default:
+                print(">>> ERROR Push Notification PROGRAMTYPE ERROR")
+            }
         }
         completionHandler()
     }
