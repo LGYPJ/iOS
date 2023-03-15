@@ -370,9 +370,9 @@ class ProfileVC: UIViewController {
         snsBottomRadiusView.snp.makeConstraints {
             $0.top.equalTo(snsTopRadiusView.snp.bottom).offset(-1)
             $0.leading.trailing.equalTo(snsTopRadiusView)
+            $0.height.equalTo(80)
         }
         addSnsBtn.snp.makeConstraints { /// SNS 추가 버튼
-            $0.top.equalTo(snsDefaultLabel).offset(12)
             $0.bottom.equalTo(snsBottomRadiusView).inset(12)
             $0.centerX.equalTo(snsBottomRadiusView)
         }
@@ -389,11 +389,11 @@ class ProfileVC: UIViewController {
         careerBottomRadiusView.snp.makeConstraints {
             $0.top.equalTo(careerTopRadiusView.snp.bottom).offset(-1)
             $0.leading.trailing.equalTo(careerTopRadiusView)
+            $0.height.equalTo(80)
 //            $0.height.equalTo(dataList.count * 65 + 72)
         }
         
         addCareerBtn.snp.makeConstraints { /// 경력 추가 버튼
-            $0.top.equalTo(careerDefaultLabel).offset(12)
             $0.bottom.equalToSuperview().inset(12)
             $0.centerX.equalToSuperview()
         }
@@ -411,10 +411,10 @@ class ProfileVC: UIViewController {
             $0.top.equalTo(eduTopRadiusView.snp.bottom).offset(-1)
             $0.leading.trailing.equalTo(eduTopRadiusView)
             $0.bottom.equalTo(scrollView).offset(-16)
+            $0.height.equalTo(80)
         }
         
         addEduBtn.snp.makeConstraints { /// 교육 추가 버튼
-            $0.top.equalTo(eduDefaultLabel).inset(12)
             $0.bottom.equalTo(eduBottomRadiusView).inset(12)
             $0.centerX.equalTo(eduBottomRadiusView)
         }
@@ -679,6 +679,11 @@ class ProfileVC: UIViewController {
                 $0.height.equalTo(snsCount * 65)
             }
         }
+        snsBottomRadiusView.snp.removeConstraints()
+        snsBottomRadiusView.snp.makeConstraints {
+            $0.top.equalTo(snsTopRadiusView.snp.bottom).offset(-1)
+            $0.leading.trailing.equalTo(snsTopRadiusView)
+        }
     }
     
     func showCareerDefaultLabel() {
@@ -700,6 +705,11 @@ class ProfileVC: UIViewController {
             }
             careerDefaultLabel.snp.removeConstraints()
         }
+        careerBottomRadiusView.snp.removeConstraints()
+        careerBottomRadiusView.snp.makeConstraints {
+            $0.top.equalTo(careerTopRadiusView.snp.bottom).offset(-1)
+            $0.leading.trailing.equalTo(careerTopRadiusView)
+        }
     }
     
     func showEducationDefaultLabel() {
@@ -720,6 +730,12 @@ class ProfileVC: UIViewController {
                 $0.bottom.equalTo(addEduBtn.snp.top).offset(-12)
                 $0.height.equalTo(eduCount * 90)
             }
+        }
+        eduBottomRadiusView.snp.removeConstraints()
+        eduBottomRadiusView.snp.makeConstraints {
+            $0.top.equalTo(eduTopRadiusView.snp.bottom).offset(-1)
+            $0.leading.trailing.equalTo(eduTopRadiusView)
+            $0.bottom.equalTo(scrollView).offset(-16)
         }
     }
     
