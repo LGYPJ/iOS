@@ -372,6 +372,7 @@ class ProfileVC: UIViewController {
             $0.leading.trailing.equalTo(snsTopRadiusView)
         }
         addSnsBtn.snp.makeConstraints { /// SNS 추가 버튼
+            $0.top.equalTo(snsDefaultLabel).offset(12)
             $0.bottom.equalTo(snsBottomRadiusView).inset(12)
             $0.centerX.equalTo(snsBottomRadiusView)
         }
@@ -392,6 +393,7 @@ class ProfileVC: UIViewController {
         }
         
         addCareerBtn.snp.makeConstraints { /// 경력 추가 버튼
+            $0.top.equalTo(careerDefaultLabel).offset(12)
             $0.bottom.equalToSuperview().inset(12)
             $0.centerX.equalToSuperview()
         }
@@ -412,6 +414,7 @@ class ProfileVC: UIViewController {
         }
         
         addEduBtn.snp.makeConstraints { /// 교육 추가 버튼
+            $0.top.equalTo(eduDefaultLabel).inset(12)
             $0.bottom.equalTo(eduBottomRadiusView).inset(12)
             $0.centerX.equalTo(eduBottomRadiusView)
         }
