@@ -340,6 +340,7 @@ class ProfileInputSNSVC: UIViewController, BottomSheetSelectDelegate {
                 //
                 self?.linkTextField.basicTextField()
                 self?.instagramAtLabel.isHidden = true
+                self?.instagramIdAlertLabel.alpha = 0
                 self?.typeTextField.removeGestureRecognizer(self!.tapGestureRecognizer2)
             }
             // 글자수 계산
@@ -352,6 +353,7 @@ class ProfileInputSNSVC: UIViewController, BottomSheetSelectDelegate {
                 //
                 self?.linkTextField.basicTextField()
                 self?.instagramAtLabel.isHidden = true
+                self?.instagramIdAlertLabel.alpha = 0
             }
         }
     }
