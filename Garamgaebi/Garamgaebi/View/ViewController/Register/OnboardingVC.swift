@@ -142,7 +142,7 @@ class OnboardingVC: UIViewController {
         
         if currentPage == onboardingData.count - 1 {
             // LoginVC로 화면전환
-            let nextVC = LoginVC()
+            let nextVC = LoginVC(pushProgramIdx: nil, pushProgramtype: nil)
             nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
             nextVC.modalPresentationStyle = .fullScreen
             present(nextVC, animated: true)

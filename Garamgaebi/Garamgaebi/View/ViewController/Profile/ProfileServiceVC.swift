@@ -402,7 +402,7 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
         let logoutNoAction = UIAlertAction(title: "아니오", style: .default, handler: nil)
         let logoutYesAction = UIAlertAction(title: "예", style: .default) { [self] (_) in
             // 로그아웃 진행
-            let nextVC = LoginVC()
+            let nextVC = LoginVC(pushProgramIdx: nil, pushProgramtype: nil)
             // 호출하는 화면의 크기와 동일한 화면크기로 불려짐. 기존의 뷰들은 아예 삭제
             nextVC.modalPresentationStyle = .currentContext
             

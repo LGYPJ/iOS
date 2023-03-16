@@ -9,6 +9,18 @@ import UIKit
 
 class TabBarController: UITabBarController {
     
+    var pushProgramIdx: Int?
+    var pushProgramtype: String?
+    init(pushProgramIdx: Int?, pushProgramtype: String?) {
+        self.pushProgramIdx = pushProgramIdx
+        self.pushProgramtype = pushProgramtype
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -20,7 +32,7 @@ class TabBarController: UITabBarController {
     
     private func setupVCs() {
         viewControllers = [
-            createNavController(for: HomeVC(), title: "홈", image: UIImage(named: "TabBarIconHome")!),
+            createNavController(for: HomeVC(pushProgramIdx: self.pushProgramIdx, pushProgramtype: self.pushProgramtype), title: "홈", image: UIImage(named: "TabBarIconHome")!),
             createNavController(for: ViewAllVC(), title: "모아보기", image: UIImage(named: "TabBarIconViewAll")!),
             createNavController(for: ProfileVC(), title: "내 프로필", image: UIImage.init(named: "TabBarIconProfile")!),
         ]
@@ -32,7 +44,6 @@ class TabBarController: UITabBarController {
                 let _ = $0.view
             }
         }
-        
     }
     
     fileprivate func createNavController(for rootViewController: UIViewController,

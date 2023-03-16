@@ -53,11 +53,11 @@ class ViewAllMyEventVC: UIViewController {
         configLayouts()
         initRefresh()
         initSetDatas()
-        LoadingView.shared.show()
+//        LoadingView.shared.show()
         fetchData {
             if self.setMyEventInfoReadyData,
                self.setMyEventInfoCloseData {
-                LoadingView.shared.hide()
+//                LoadingView.shared.hide()
             }
         }
 		
@@ -103,7 +103,7 @@ class ViewAllMyEventVC: UIViewController {
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-모아보기 MyEventReadyInfo 조회): \(error.localizedDescription)")
-                LoadingView.shared.hide()
+//                LoadingView.shared.hide()
                 self?.presentErrorView()
             }
         }
@@ -125,7 +125,7 @@ class ViewAllMyEventVC: UIViewController {
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-모아보기 MyEventCloseInfo 조회): \(error.localizedDescription)")
-                LoadingView.shared.hide()
+//                LoadingView.shared.hide()
                 self?.presentErrorView()
             }
         }

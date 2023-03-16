@@ -257,7 +257,7 @@ class CompleteRegisterVC: UIViewController {
     }
     
     private func presentHome(){
-        let nextVC = TabBarController()
+        let nextVC = TabBarController(pushProgramIdx: nil, pushProgramtype: nil)
         nextVC.modalTransitionStyle = .crossDissolve // .coverVertical
         nextVC.modalPresentationStyle = .fullScreen
         self.present(nextVC, animated: true)

@@ -23,6 +23,17 @@ class HomeVC: UIViewController {
     var setMyEventData = false
     var setNotificationData = false
     
+    var pushProgramIdx: Int?
+    var pushProgramtype: String?
+    init(pushProgramIdx: Int?, pushProgramtype: String?) {
+        self.pushProgramIdx = pushProgramIdx
+        self.pushProgramtype = pushProgramtype
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     public var homeSeminarInfo: [HomeSeminarInfo] = [] {
         didSet {
             NotificationCenter.default.post(name: Notification.Name("presentHomeSeminarInfo"), object: homeSeminarInfo)
@@ -99,6 +110,13 @@ class HomeVC: UIViewController {
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        if self.pushProgramtype != nil,
+           self.pushProgramIdx != nil {
+            print(pushProgramtype)
+            view.backgroundColor = .mainPurple
+            self.navigationController?.pushViewController(EventSeminarDetailVC(seminarId: pushProgramIdx!), animated: true)
+        }
+        print(pushProgramtype)
         configureViews()
         configureTableView()
         addSubViews()
@@ -106,14 +124,14 @@ class HomeVC: UIViewController {
         configNotificationCenter()
         initRefresh()
         initSetDatas()
-        LoadingView.shared.show()
+//        LoadingView.shared.show()
         fetchData {
             if self.setSeminarData,
                 self.setNetworkingData,
                 self.setNotificationData,
                 self.setMyEventData,
                 self.setRecommendedUserData {
-                LoadingView.shared.hide()
+//                LoadingView.shared.hide()
             }
         }
 		
@@ -123,6 +141,9 @@ class HomeVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = false
+        
+        
+
     }
     
     
@@ -188,7 +209,7 @@ class HomeVC: UIViewController {
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-홈 화면 Seminar 조회): \(error.localizedDescription)")
-                LoadingView.shared.hide()
+//                LoadingView.shared.hide()
                 self?.presentErrorView()
             }
         }
@@ -210,7 +231,7 @@ class HomeVC: UIViewController {
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-홈 화면 Networking 조회): \(error.localizedDescription)")
-                LoadingView.shared.hide()
+//                LoadingView.shared.hide()
                 self?.presentErrorView()
             }
         }
@@ -232,7 +253,7 @@ class HomeVC: UIViewController {
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-홈 화면 RecommedUsers 조회): \(error.localizedDescription)")
-                LoadingView.shared.hide()
+//                LoadingView.shared.hide()
                 self?.presentErrorView()
             }
         }
@@ -253,7 +274,7 @@ class HomeVC: UIViewController {
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-홈 화면 MyEvent 조회): \(error.localizedDescription)")
-                LoadingView.shared.hide()
+//                LoadingView.shared.hide()
                 self?.presentErrorView()
             }
         }
@@ -278,7 +299,7 @@ class HomeVC: UIViewController {
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-Unread Notification 조회): \(error.localizedDescription)")
-                LoadingView.shared.hide()
+//                LoadingView.shared.hide()
                 self?.presentErrorView()
             }
             

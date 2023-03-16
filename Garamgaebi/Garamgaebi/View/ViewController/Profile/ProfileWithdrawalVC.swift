@@ -375,7 +375,7 @@ class ProfileWithdrawalVC: UIViewController, BottomSheetSelectDelegate {
             ProfileServiceViewModel.postWithdrawl(memberIdx: memberIdx, content: content, category: category) { result in
                 if result {
                     // 회원 탈퇴가 끝나면 간편 로그인 화면으로 이동
-                    let nextVC = LoginVC()
+                    let nextVC = LoginVC(pushProgramIdx: nil, pushProgramtype: nil)
                     
                     // kakao unlink
                     UserApi.shared.unlink {(error) in
