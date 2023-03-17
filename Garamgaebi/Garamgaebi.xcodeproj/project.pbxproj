@@ -92,6 +92,8 @@
 		6055D8432970183500C86D53 /* InputOrganizationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D8422970183400C86D53 /* InputOrganizationVC.swift */; };
 		6055D84529701F5700C86D53 /* InputCareerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D84429701F5700C86D53 /* InputCareerVC.swift */; };
 		6055D84729701F6B00C86D53 /* InputEducationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D84629701F6B00C86D53 /* InputEducationVC.swift */; };
+		6055F2E229C2CE0B00A7A4B2 /* LogoutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055F2E129C2CE0B00A7A4B2 /* LogoutViewModel.swift */; };
+		6055F2E429C2CE7F00A7A4B2 /* LogoutModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055F2E329C2CE7F00A7A4B2 /* LogoutModel.swift */; };
 		6082992C297FBDB000240036 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6082992B297FBDB000240036 /* HomeViewModel.swift */; };
 		6082992F297FC20C00240036 /* EventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6082992E297FC20C00240036 /* EventService.swift */; };
 		609A53D2296AB47300BBD338 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609A53D1296AB47300BBD338 /* AppDelegate.swift */; };
@@ -255,6 +257,8 @@
 		6055D8422970183400C86D53 /* InputOrganizationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputOrganizationVC.swift; sourceTree = "<group>"; };
 		6055D84429701F5700C86D53 /* InputCareerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputCareerVC.swift; sourceTree = "<group>"; };
 		6055D84629701F6B00C86D53 /* InputEducationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputEducationVC.swift; sourceTree = "<group>"; };
+		6055F2E129C2CE0B00A7A4B2 /* LogoutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutViewModel.swift; sourceTree = "<group>"; };
+		6055F2E329C2CE7F00A7A4B2 /* LogoutModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutModel.swift; sourceTree = "<group>"; };
 		6082992B297FBDB000240036 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		6082992E297FC20C00240036 /* EventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventService.swift; sourceTree = "<group>"; };
 		6093E03329BB7F9A004DD691 /* Garamgaebi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Garamgaebi.entitlements; sourceTree = "<group>"; };
@@ -553,6 +557,7 @@
 				603215FE297A742100ACBB04 /* ViewAll */,
 				2CED68FE29838B2E00C838BD /* SeminarDetailModel.swift */,
 				2CED6912298D258D00C838BD /* LoginModel.swift */,
+				6055F2E329C2CE7F00A7A4B2 /* LogoutModel.swift */,
 				2CED690429867F3300C838BD /* NetworkingDetailModel.swift */,
 				2C65943A29968BB5007D3619 /* GameRoomListModel.swift */,
 				2C65943C29975E85007D3619 /* EventUserApplyModel.swift */,
@@ -750,6 +755,7 @@
 				60DCC894298A45AD002E7714 /* ViewAllViewModel.swift */,
 				60A4BC142992264000C24DAC /* NotificationViewModel.swift */,
 				60F92C52299F4904000AC1C3 /* MyRequestInterceptor.swift */,
+				6055F2E129C2CE0B00A7A4B2 /* LogoutViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1195,6 +1201,7 @@
 				60BD04FF2973EBE600F4B433 /* HomeNotificationTableViewCell.swift in Sources */,
 				6082992F297FC20C00240036 /* EventService.swift in Sources */,
 				2C65943D29975E85007D3619 /* EventUserApplyModel.swift in Sources */,
+				6055F2E429C2CE7F00A7A4B2 /* LogoutModel.swift in Sources */,
 				60BD04FA2973C55D00F4B433 /* HomeMyEventDataModel.swift in Sources */,
 				60513F3B298E5F070065CD15 /* RegisterEducationModel.swift in Sources */,
 				6038243C296D7E3F00E12CC2 /* OnboardingDataModel.swift in Sources */,
@@ -1298,6 +1305,7 @@
 				2CDD94F4297192E9004B8D56 /* EventPreviewTableViewCell.swift in Sources */,
 				2C0495D729AB31CA002E2B92 /* IceBreakingModel.swift in Sources */,
 				601823332972DDCA00160EF4 /* HomeEventInfoTabelViewCell.swift in Sources */,
+				6055F2E229C2CE0B00A7A4B2 /* LogoutViewModel.swift in Sources */,
 				60C6371C2984E1FC00D2C814 /* HomeSeminarPopUpVC.swift in Sources */,
 				60EDD40529765C3400600807 /* ViewAllNetworkingVC.swift in Sources */,
 				60BD04F42973A47E00F4B433 /* HomeUserDataModel.swift in Sources */,

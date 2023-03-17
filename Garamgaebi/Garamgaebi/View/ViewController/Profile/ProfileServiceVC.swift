@@ -401,18 +401,36 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
         // 로그아웃 선택지
         let logoutNoAction = UIAlertAction(title: "아니오", style: .default, handler: nil)
         let logoutYesAction = UIAlertAction(title: "예", style: .default) { [self] (_) in
-            // 로그아웃 진행
-            let nextVC = LoginVC(pushProgramIdx: nil, pushProgramtype: nil)
-            // 호출하는 화면의 크기와 동일한 화면크기로 불려짐. 기존의 뷰들은 아예 삭제
-            nextVC.modalPresentationStyle = .currentContext
-            
-            // 로그아웃 시 UserDefaults에 저장된 모든 정보 삭제
-            for key in UserDefaults.standard.dictionaryRepresentation().keys {
-                UserDefaults.standard.removeObject(forKey: key.description)
+            let accessToken = UserDefaults.standard.string(forKey: "BearerToken") ?? ""
+            let fcmToken = UserDefaults.standard.string(forKey: "fcmToken") ?? ""
+            let refreshToken = UserDefaults.standard.string(forKey: "refreshToken") ?? ""
+            print(fcmToken)
+            LogoutViewModel.postLogout(accessToken: accessToken, refreshToken: refreshToken, fcmToken: fcmToken) { [weak self] result in
+                switch result {
+                case .success(let result):
+                    if result.isSuccess {
+                        print("성공(로그아웃): \(result.message)")
+                        // 로그아웃 진행
+                        let nextVC = LoginVC(pushProgramIdx: nil, pushProgramtype: nil)
+                        // 호출하는 화면의 크기와 동일한 화면크기로 불려짐. 기존의 뷰들은 아예 삭제
+                        nextVC.modalPresentationStyle = .currentContext
+                        
+                        // 로그아웃 시 UserDefaults에 저장된 모든 정보 삭제
+                        for key in UserDefaults.standard.dictionaryRepresentation().keys {
+                            UserDefaults.standard.removeObject(forKey: key.description)
+                        }
+                        present(nextVC, animated: true)
+                    }
+                    else {
+                        print("실패(로그아웃): \(result.message)")
+                    }
+                case .failure(let error):
+                    print("실패(AF-로그아웃): \(error.localizedDescription)")
+                    let errorView = ErrorPageView()
+                    errorView.modalPresentationStyle = .fullScreen
+                    self?.present(errorView, animated: false)
+                }
             }
-            print(">>> Remove All UserDefaults")
-            print("성공(로그아웃): 로그아웃에 성공하였습니다.")
-            present(nextVC, animated: true)
         }
         // 로그아웃 동의 다이얼로그 띄우기
         logoutCheckAlert.addAction(logoutNoAction)
