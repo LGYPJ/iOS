@@ -106,45 +106,21 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             print(">> inactive")
             
             NotificationCenter.default.post(name: NSNotification.Name("ReloadMyEvent"), object: nil)
-            
-            switch programType as! String {
-            case "SEMINAR" :
-                let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as! SceneDelegate
-                let programIdx = Int(userInfo["programIdx"] as! String)!
-                let programType = userInfo["programType"] as! String
-                print("123")
-                print(programIdx)
-                print("123")
-                sceneDelegate.window?.rootViewController = TabBarController(pushProgramIdx: programIdx, pushProgramtype: programType)
-                sceneDelegate.window?.makeKeyAndVisible()
-                
-            case "NETWORKING":
-                NotificationCenter.default.post(name: Notification.Name("pushNetworkingDetailVC"), object: MyEventToDetailInfo(programIdx: Int(userInfo["programIdx"] as! String)! , type: userInfo["programType"] as! String))
-            default:
-                print(">>> ERROR Push Notification PROGRAMTYPE ERROR")
-            }
-            
-            //            if seminarList[indexPath.row].isOpen == "OPEN" {
-            //                NotificationCenter.default.post(name: Notification.Name("pushSeminarDetailVC"), object: MyEventToDetailInfo(programIdx: seminarList[indexPath.row].programIdx, type: seminarList[indexPath.row].type))
-            //            }
+            let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as! SceneDelegate
+            let programIdx = Int(userInfo["programIdx"] as! String)!
+            let programType = userInfo["programType"] as! String
+            sceneDelegate.window?.rootViewController = TabBarController(pushProgramIdx: programIdx, pushProgramtype: programType)
+            sceneDelegate.window?.makeKeyAndVisible()
+
         } else if state == .active {
             print(">> active")
             
             NotificationCenter.default.post(name: NSNotification.Name("ReloadMyEvent"), object: nil)
-            
-            
-            switch programType as! String{
-            case "SEMINAR":
-                let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as! SceneDelegate
-                let programIdx = Int(userInfo["programIdx"] as! String)!
-                let programType = userInfo["programType"] as! String
-                sceneDelegate.window?.rootViewController = TabBarController(pushProgramIdx: programIdx, pushProgramtype: programType)
-                sceneDelegate.window?.makeKeyAndVisible()
-            case "NETWORKING":
-                NotificationCenter.default.post(name: Notification.Name("pushNetworkingDetailVC"), object: MyEventToDetailInfo(programIdx: Int(userInfo["programIdx"] as! String)! , type: userInfo["programType"] as! String))
-            default:
-                print(">>> ERROR Push Notification PROGRAMTYPE ERROR")
-            }
+            let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as! SceneDelegate
+            let programIdx = Int(userInfo["programIdx"] as! String)!
+            let programType = userInfo["programType"] as! String
+            sceneDelegate.window?.rootViewController = TabBarController(pushProgramIdx: programIdx, pushProgramtype: programType)
+            sceneDelegate.window?.makeKeyAndVisible()
         }
         completionHandler()
     }

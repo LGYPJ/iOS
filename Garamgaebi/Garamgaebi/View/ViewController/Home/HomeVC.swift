@@ -110,13 +110,23 @@ class HomeVC: UIViewController {
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("################TOKEN")
+        print("#")
+        print("#")
+        print(">>> HomeVC - accessToken: \(UserDefaults.standard.string(forKey: "BearerToken"))")
+        print(">>> HomeVC - refreshToken: \(UserDefaults.standard.string(forKey: "refreshToken"))")
+        print(">>> HomeVC - fcmToken: \(UserDefaults.standard.string(forKey: "fcmToken"))")
+        print("#")
+        print("#")
+        print("################TOKEN")
         if self.pushProgramtype != nil,
            self.pushProgramIdx != nil {
-            print(pushProgramtype)
-            view.backgroundColor = .mainPurple
-            self.navigationController?.pushViewController(EventSeminarDetailVC(seminarId: pushProgramIdx!), animated: true)
+            if pushProgramtype == "SEMINAR" {
+                self.navigationController?.pushViewController(EventSeminarDetailVC(seminarId: pushProgramIdx!), animated: true)
+            } else if pushProgramtype == "NETWORKING" {
+                self.navigationController?.pushViewController(EventNetworkingDetailVC(networkingId: pushProgramIdx!), animated: true)
+            }
         }
-        print(pushProgramtype)
         configureViews()
         configureTableView()
         addSubViews()
