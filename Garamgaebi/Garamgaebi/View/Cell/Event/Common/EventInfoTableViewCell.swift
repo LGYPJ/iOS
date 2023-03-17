@@ -15,6 +15,7 @@ class EventInfoTableViewCell: UITableViewCell {
 	// n차 세미나, 네트워킹과 같은 제목 label
 	lazy var eventNameLabel: UILabel = {
 		let label = UILabel()
+		label.text = " "
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
 		label.textColor = .mainBlack
 		
