@@ -62,6 +62,7 @@ class EventApplyVC: UIViewController {
 	
 	lazy var eventNameLabel: UILabel = {
 		let label = UILabel()
+		label.text = " "
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
 		label.textColor = .mainBlack
 		
