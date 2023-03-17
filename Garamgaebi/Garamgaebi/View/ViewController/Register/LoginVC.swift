@@ -13,7 +13,17 @@ import AuthenticationServices
 class LoginVC: UIViewController {
     
     var fcmToken = String()
+    var pushProgramIdx: Int?
+    var pushProgramtype: String?
+    init(pushProgramIdx: Int?, pushProgramtype: String?) {
+        self.pushProgramIdx = pushProgramIdx
+        self.pushProgramtype = pushProgramtype
+        super.init(nibName: nil, bundle: nil)
+    }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     // MARK: - Subviews
     
     lazy var titleLabel: UILabel = {
@@ -221,7 +231,7 @@ class LoginVC: UIViewController {
     }
     
     private func showHome() {
-        let vc = TabBarController()
+        let vc = TabBarController(pushProgramIdx: nil, pushProgramtype: nil)
         vc.modalPresentationStyle = .fullScreen
         vc.modalTransitionStyle = .crossDissolve
         present(vc, animated: true)

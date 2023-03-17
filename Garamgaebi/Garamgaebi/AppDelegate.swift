@@ -57,15 +57,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func getNotificationSettings() {
-           UNUserNotificationCenter.current().getNotificationSettings { settings in
-               print("Notification settings: \(settings)")
-               guard settings.authorizationStatus == .authorized else { return }
-               DispatchQueue.main.async {
-                   UIApplication.shared.registerForRemoteNotifications()
-               }
-               
-           }
-       }
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            print("Notification settings: \(settings)")
+            guard settings.authorizationStatus == .authorized else { return }
+            DispatchQueue.main.async {
+                UIApplication.shared.registerForRemoteNotifications()
+            }
+            
+        }
+    }
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
@@ -73,9 +73,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let userInfo = notification.request.content.userInfo
         
-        print(">>>!!###!>")
+        print(">>>푸시받음")
         print(userInfo)
-        print(">>>!!###!>")
+        print(">>>푸시받음")
         //푸시 받았을때
         completionHandler([.banner, .list, .sound])
     }
@@ -85,74 +85,60 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         //푸시 클릭시
         let messageID = response.notification.request.identifier
-        print(">>>!!!>")
+        print(">>>푸시 클릭")
         print(messageID)
-        print(">>>!!!>")
+        print(">>>푸시 클릭")
         let state = UIApplication.shared.applicationState
         // TODO: 푸시알림 탭하면 해당 (세미나/네트워킹)으로 이동
         let userInfo = response.notification.request.content.userInfo
-        guard var rootViewController = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.window?.rootViewController else {
-            return
-        }
-        
-        guard let programType = userInfo["programType"] as? String else { return }
+        print(userInfo)
+        let programIdx = Int(userInfo["programIdx"] as! String)!
+        let programType = userInfo["programType"] as! String
         if state == .background {
             print(">> background")
+            let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as! SceneDelegate
+            
+            sceneDelegate.window?.rootViewController = SplashVC(pushProgramIdx: programIdx, pushProgramtype: programType)
+            sceneDelegate.window?.makeKeyAndVisible()
+            
+            
         } else if state == .inactive {
             print(">> inactive")
             
             NotificationCenter.default.post(name: NSNotification.Name("ReloadMyEvent"), object: nil)
-            
-            switch programType {
-            case "SEMINAR":
-                NotificationCenter.default.post(name: Notification.Name("pushSeminarDetailVC"), object: MyEventToDetailInfo(programIdx: Int(userInfo["programIdx"] as! String)! , type: userInfo["programType"] as! String))
-                
-            case "NETWORKING":
-                NotificationCenter.default.post(name: Notification.Name("pushNetworkingDetailVC"), object: MyEventToDetailInfo(programIdx: Int(userInfo["programIdx"] as! String)! , type: userInfo["programType"] as! String))
-            default:
-                print(">>> ERROR Push Notification PROGRAMTYPE ERROR")
-            }
-            
-            //            if seminarList[indexPath.row].isOpen == "OPEN" {
-            //                NotificationCenter.default.post(name: Notification.Name("pushSeminarDetailVC"), object: MyEventToDetailInfo(programIdx: seminarList[indexPath.row].programIdx, type: seminarList[indexPath.row].type))
-            //            }
+            let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as! SceneDelegate
+            let programIdx = Int(userInfo["programIdx"] as! String)!
+            let programType = userInfo["programType"] as! String
+            sceneDelegate.window?.rootViewController = TabBarController(pushProgramIdx: programIdx, pushProgramtype: programType)
+            sceneDelegate.window?.makeKeyAndVisible()
+
         } else if state == .active {
             print(">> active")
             
             NotificationCenter.default.post(name: NSNotification.Name("ReloadMyEvent"), object: nil)
-            
-            
-            switch programType {
-            case "SEMINAR":
-                NotificationCenter.default.post(name: Notification.Name("pushSeminarDetailVC"), object: MyEventToDetailInfo(programIdx: Int(userInfo["programIdx"] as! String)! , type: userInfo["programType"] as! String))
-            case "NETWORKING":
-                NotificationCenter.default.post(name: Notification.Name("pushNetworkingDetailVC"), object: MyEventToDetailInfo(programIdx: Int(userInfo["programIdx"] as! String)! , type: userInfo["programType"] as! String))
-            default:
-                print(">>> ERROR Push Notification PROGRAMTYPE ERROR")
-            }
+            let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as! SceneDelegate
+            let programIdx = Int(userInfo["programIdx"] as! String)!
+            let programType = userInfo["programType"] as! String
+            sceneDelegate.window?.rootViewController = TabBarController(pushProgramIdx: programIdx, pushProgramtype: programType)
+            sceneDelegate.window?.makeKeyAndVisible()
         }
         completionHandler()
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-    
+        
+        // 여기는 그냥 받는부분
+        
         if let messageID = userInfo[gcmMessageIDKey] {
             print("Message ID: \(messageID)")
         }
-        print(">>>>")
-        print(userInfo)
-        print(">>>>")
         
-        print(userInfo["programType"])
-        print(userInfo["notificationType"])
-        print(userInfo["content"])
-        print(userInfo["programIdx"])
+        print(">>>> didReceiveRemoteNotification")
+        print(userInfo)
+        print(">>>> didReceiveRemoteNotification")
         
         NotificationCenter.default.post(name: NSNotification.Name("ReloadMyEvent"), object: nil)
-        print(">>>>")
-        print("reload HomeVC")
-        print(">>>>")
         Messaging.messaging().appDidReceiveMessage(userInfo)
         
         completionHandler(UIBackgroundFetchResult.newData)
