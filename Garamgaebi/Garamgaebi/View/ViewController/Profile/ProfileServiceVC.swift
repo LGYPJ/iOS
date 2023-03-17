@@ -123,7 +123,7 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.mainGray.cgColor
         $0.layer.cornerRadius = 12
-        $0.textContainerInset = UIEdgeInsets(top: 10.0, left: 12.0, bottom: 16.0, right: 12.0)
+        $0.textContainerInset = UIEdgeInsets(top: 12.0, left: 8.0, bottom: 12.0, right: 8.0)
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.text = textViewPlaceHolder
         $0.textColor = .mainGray

@@ -327,19 +327,19 @@ class OtherProfileVC: UIViewController {
         }
         
         // 하단
-        snsHistoryBox.snp.makeConstraints { /// SNS
-            $0.top.equalTo(introduceLabel.snp.bottom).offset(16)
-            $0.leading.trailing.equalTo(introduceLabel)
-        }
-        careerHistoryBox.snp.makeConstraints { /// 경력
-            $0.top.equalTo(snsHistoryBox.snp.bottom).offset(16)
-            $0.leading.trailing.equalTo(snsHistoryBox)
-        }
-        eduHistoryBox.snp.makeConstraints { /// 교육
-            $0.top.equalTo(careerHistoryBox.snp.bottom).offset(16)
-            $0.leading.trailing.equalTo(careerHistoryBox)
-            $0.bottom.equalTo(scrollView).inset(16)
-        }
+//        snsHistoryBox.snp.makeConstraints { /// SNS
+//            $0.top.equalTo(introduceLabel.snp.bottom).offset(16)
+//            $0.leading.trailing.equalTo(introduceLabel)
+//        }
+//        careerHistoryBox.snp.makeConstraints { /// 경력
+//            $0.top.equalTo(snsHistoryBox.snp.bottom).offset(16)
+//            $0.leading.trailing.equalTo(snsHistoryBox)
+//        }
+//        eduHistoryBox.snp.makeConstraints { /// 교육
+//            $0.top.equalTo(careerHistoryBox.snp.bottom).offset(16)
+//            $0.leading.trailing.equalTo(careerHistoryBox)
+//            $0.bottom.equalTo(scrollView).inset(16)
+//        }
     }
     
     @objc func emailLabelDidTap() {
@@ -437,6 +437,10 @@ class OtherProfileVC: UIViewController {
             case .success(let response):
                 if response.isSuccess {
                     let result = response.result
+                    self.snsHistoryBox.snp.makeConstraints { /// SNS
+                        $0.top.equalTo(self.introduceLabel.snp.bottom).offset(16)
+                        $0.leading.trailing.equalTo(self.introduceLabel)
+                    }
                     completion(result)
                     
                 } else {
@@ -467,6 +471,10 @@ class OtherProfileVC: UIViewController {
                 if response.isSuccess {
 
                     let result = response.result
+                    self.careerHistoryBox.snp.makeConstraints { /// 경력
+                        $0.top.equalTo(self.snsHistoryBox.snp.bottom).offset(16)
+                        $0.leading.trailing.equalTo(self.snsHistoryBox)
+                    }
                     completion(result)
                     
                 } else {
@@ -496,6 +504,11 @@ class OtherProfileVC: UIViewController {
                 if response.isSuccess {
 
                     let result = response.result
+                    self.eduHistoryBox.snp.makeConstraints { /// 교육
+                        $0.top.equalTo(self.careerHistoryBox.snp.bottom).offset(16)
+                        $0.leading.trailing.equalTo(self.careerHistoryBox)
+                        $0.bottom.equalTo(self.scrollView).inset(16)
+                    }
                     completion(result)
                     
                 } else {
