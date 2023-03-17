@@ -20,7 +20,7 @@ class InputNickNameVC: UIViewController {
     // MARK: - Subviews
     
     lazy var pagingImage: UIImageView = {
-        let view = UIImageView(image: UIImage(named: "PagingImage2"))
+        let view = UIImageView(image: UIImage(named: "pagingImage2"))
         return view
     }()
     

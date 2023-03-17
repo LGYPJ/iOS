@@ -14,7 +14,7 @@ class InputOrganizationVC: UIViewController {
     // MARK: - Subviews
     
     lazy var pagingImage: UIImageView = {
-        let view = UIImageView(image: UIImage(named: "PagingImage4"))
+        let view = UIImageView(image: UIImage(named: "pagingImage4"))
         return view
     }()
     

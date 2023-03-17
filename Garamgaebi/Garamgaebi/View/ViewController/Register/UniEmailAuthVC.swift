@@ -40,7 +40,7 @@ class UniEmailAuthVC: UIViewController {
     }()
     
     lazy var pagingImage: UIImageView = {
-        let view = UIImageView(image: UIImage(named: "PagingImage1"))
+        let view = UIImageView(image: UIImage(named: "pagingImage1"))
         return view
     }()
     

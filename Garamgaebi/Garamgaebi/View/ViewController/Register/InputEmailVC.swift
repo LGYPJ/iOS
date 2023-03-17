@@ -21,7 +21,7 @@ class InputEmailVC: UIViewController {
     // MARK: - Subviews
     
     lazy var pagingImage: UIImageView = {
-        let view = UIImageView(image: UIImage(named: "PagingImage3"))
+        let view = UIImageView(image: UIImage(named: "pagingImage3"))
         return view
     }()
     
