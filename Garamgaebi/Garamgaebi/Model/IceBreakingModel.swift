@@ -58,3 +58,19 @@ struct IceBreakingPatchIndexModelResponse: Codable {
 	let message: String
 	let result: String?
 }
+
+// 게임 시작한지 여부 확인
+struct IceBreakingIsStartedModelResponse: Codable {
+	let isSuccess: Bool
+	let code: Int
+	let message: String
+	let result: Bool?
+}
+
+// 게임 시작으로 변경
+struct IceBreakingPatchGameStartModelResponse: Codable {
+	let isSuccess: Bool
+	let code: Int
+	let message: String
+	let result: String?
+}

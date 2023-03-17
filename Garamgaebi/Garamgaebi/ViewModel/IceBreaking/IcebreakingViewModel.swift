@@ -122,5 +122,51 @@ struct IcebreakingViewModel {
 				}
 			}
 	}
+	
+	// 진행중인 게임인지 확인
+	public static func getGameIsStartedWithPost(roomId: String, completion: @escaping ((Bool) -> Void)) {
+		let url = "https://garamgaebi.shop/game/isStarted"
+		let body: [String: String] = [
+			"roomId": roomId
+		]
+		
+		AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default, interceptor: MyRequestInterceptor())
+			.validate()
+			.responseDecodable(of: IceBreakingIsStartedModelResponse.self) { response in
+				switch response.result {
+				case .success(let result):
+					if result.isSuccess {
+						completion(result.result ?? false)
+					} else {
+						print("실패(게임 성공여부 조회): \(result.message)")
+					}
+				case .failure(let error):
+					print("실패(AF-게임 성공여부 조회): \(error.localizedDescription)")
+				}
+			}
+	}
+	
+	// 게임 시작 시 진행중인 게임으로 변경
+	public static func patchGameStart(roomId: String, completion: @escaping (() -> Void)) {
+		let url = "https://garamgaebi.shop/game/startGame"
+		let body: [String: String] = [
+			"roomId": roomId
+		]
+		
+		AF.request(url, method: .patch, parameters: body, encoding: JSONEncoding.default, interceptor: MyRequestInterceptor())
+			.validate()
+			.responseDecodable(of: IceBreakingPatchGameStartModelResponse.self) { response in
+				switch response.result {
+				case .success(let result):
+					if result.isSuccess {
+						completion()
+					} else {
+						print("실패(게임 시작하기): \(result.message)")
+					}
+				case .failure(let error):
+					print("실패(AF-게임 시작하기): \(error.localizedDescription)")
+				}
+			}
+	}
     
 }

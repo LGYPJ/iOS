@@ -152,9 +152,25 @@ extension IceBreakingRoomListVC: UICollectionViewDelegate, UICollectionViewDataS
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		let vc = IceBreakingRoomVC(programId: self.programId, roomId: roomList[indexPath.row].roomId, roomName: roomNameList[indexPath.row])
-//		let vc = IceBreakingRoomVC_Test(programId: self.programId, roomId: roomList[indexPath.row].roomId, roomName: roomNameList[indexPath.row])
-		navigationController?.pushViewController(vc, animated: true)
+		let roomId = roomList[indexPath.row].roomId
+		let vc = IceBreakingRoomVC(programId: self.programId, roomId: roomId, roomName: roomNameList[indexPath.row])
+		
+		IcebreakingViewModel.getGameIsStartedWithPost(roomId: roomId, completion: { result in
+			if result {
+				// 진행중인 게임이라 alert
+				let alert = UIAlertController(title: "이미 진행중인 게임입니다.", message: "참여하시겠습니까?", preferredStyle: .alert)
+				let cancelAction = UIAlertAction(title: "취소", style: .destructive)
+				let enterAction = UIAlertAction(title: "참가", style: .default) { _ in
+					self.navigationController?.pushViewController(vc, animated: true)
+				}
+				
+				alert.addAction(cancelAction)
+				alert.addAction(enterAction)
+				self.present(alert, animated: true)
+			} else {
+				self.navigationController?.pushViewController(vc, animated: true)
+			}
+		})
 	}
 	
 	

@@ -370,6 +370,35 @@ extension IceBreakingRoomVC {
 		}
 	}
 	
+	private func flipStartCard() {
+		guard let cell = cardCollectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? IceBreakingStartCardCollectionViewCell else {return}
+		
+		UIView.transition(with: cell.contentView, duration: 0.3, options: .transitionFlipFromLeft, animations: {
+			cell.contentView.alpha = 0
+			cell.titleLabel.alpha = 0
+			// completion에 cell 인스턴스들 isHidden처리
+		}, completion: { _ in
+			if self.currentIndex < self.imageList.count {
+				self.cardCollectionView.scrollToItem(at: IndexPath(row: self.currentIndex, section: 1), at: .centeredHorizontally, animated: false)
+			} else {
+				// index 초과인경우 마지막카드 표시
+				self.cardCollectionView.scrollToItem(at: IndexPath(row: self.imageList.count - 1, section: 1), at: .centeredHorizontally, animated: false)
+			}
+			
+			self.isStart = true
+			
+			if self.currentUserId == self.memberId {
+				self.configureNextButtonStatus(true)
+			} else {
+				self.configureNextButtonStatus(false)
+			}
+			
+			
+		})
+				
+				
+	}
+	
 	// 뒤로가기 버튼 did tap
 	@objc private func didTapBackBarButton() {
 		if memberId != currentUserId || userList.count == 1 {
@@ -473,31 +502,11 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		// 시작하기 눌렀을때
 		if collectionView == cardCollectionView && indexPath.section == 0 {
-			guard let cell = collectionView.cellForItem(at: indexPath) as? IceBreakingStartCardCollectionViewCell  else {return}
-			// 시작하기 눌렀을때
-				UIView.transition(with: cell.contentView, duration: 0.3, options: .transitionFlipFromLeft, animations: {
-					cell.contentView.alpha = 0
-					cell.titleLabel.alpha = 0
-				}, completion: { _ in
-					if self.currentIndex < self.imageList.count {
-						self.cardCollectionView.scrollToItem(at: IndexPath(row: self.currentIndex, section: 1), at: .centeredHorizontally, animated: false)
-					} else {
-						// index 초과인경우 마지막카드 표시
-						self.cardCollectionView.scrollToItem(at: IndexPath(row: self.imageList.count - 1, section: 1), at: .centeredHorizontally, animated: false)
-					}
-					
-					self.isStart = true
-					
-					if self.currentUserId == self.memberId {
-						self.configureNextButtonStatus(true)
-					} else {
-						self.configureNextButtonStatus(false)
-					}
-					
-					
-				})
-			
+			IcebreakingViewModel.patchGameStart(roomId: self.roomId, completion: {
+				self.sendMessageWithSocket(type: "START", message: "", profileUrl: "")
+			})
 		}
 	}
 }
@@ -531,6 +540,10 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 				let index = self.findCurrentUserIndex()
 				self.scrollUserTo(index: index)
 			})
+		// 어떤 유저가 시작하기 클릭 시 전송
+		case "START":
+			print("socket: 게임이 시작됩니다.")
+			flipStartCard()
 		// 다음 버튼 눌렀을때 전송
 		case "NEXT":
 			self.currentUserId = Int(jsonMessage) ?? 0

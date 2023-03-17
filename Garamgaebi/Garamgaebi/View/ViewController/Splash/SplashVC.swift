@@ -79,6 +79,7 @@ class SplashVC: UIViewController {
                 if result.isSuccess {
                     print("성공(자동로그인): \(result.message)")
                     UserDefaults.standard.set(result.result?.tokenInfo?.accessToken, forKey: "BearerToken")
+					print(result.result?.tokenInfo?.accessToken)
                     UserDefaults.standard.set(result.result?.tokenInfo?.refreshToken, forKey: "refreshToken")
                     UserDefaults.standard.set(result.result?.tokenInfo?.memberIdx, forKey: "memberIdx")
                     UserDefaults.standard.set(result.result?.uniEmail, forKey: "uniEmail")
