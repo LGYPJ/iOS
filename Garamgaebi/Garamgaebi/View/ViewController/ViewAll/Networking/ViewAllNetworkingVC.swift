@@ -100,8 +100,11 @@ class ViewAllNetworkingVC: UIViewController {
             switch result {
             case .success(let result):
                 if result.isSuccess {
-                    guard let result = result.result else { return }
-                    self?.thisMonthInfoList = [result]
+                    if let result = result.result {
+                        self?.thisMonthInfoList = [result]
+                    } else {
+                        self?.thisMonthInfoList = []
+                    }
                     self?.setThisMonthData = true
                     completion()
                 } else {
@@ -122,8 +125,11 @@ class ViewAllNetworkingVC: UIViewController {
             switch result {
             case .success(let result):
                 if result.isSuccess {
-                    guard let result = result.result else { return }
-                    self?.nextMonthInfoList = [result]
+                    if let result = result.result {
+                        self?.nextMonthInfoList = [result]
+                    } else {
+                        self?.nextMonthInfoList = []
+                    }
                     self?.setNextMonthData = true
                     completion()
                 } else {
@@ -144,8 +150,11 @@ class ViewAllNetworkingVC: UIViewController {
             switch result {
             case .success(let result):
                 if result.isSuccess {
-                    guard let result = result.result else { return }
-                    self?.closeInfoList = result
+                    if let result = result.result {
+                        self?.closeInfoList = result
+                    } else {
+                        self?.closeInfoList = []
+                    }
                     self?.setCloseData = true
                     completion()
                 } else {

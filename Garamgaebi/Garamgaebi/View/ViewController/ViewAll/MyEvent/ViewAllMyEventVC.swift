@@ -91,8 +91,11 @@ class ViewAllMyEventVC: UIViewController {
             switch result {
             case .success(let result):
                 if result.isSuccess {
-                    guard let result = result.result else { return }
-                    self?.readyInfoList = result
+                    if let result = result.result {
+                        self?.readyInfoList = result
+                    } else {
+                        self?.readyInfoList = []
+                    }
                     self?.setMyEventInfoReadyData = true
                     completion()
                 } else {
@@ -113,8 +116,11 @@ class ViewAllMyEventVC: UIViewController {
             switch result {
             case .success(let result):
                 if result.isSuccess {
-                    guard let result = result.result else { return }
-                    self?.closeInfoList = result
+                    if let result = result.result {
+                        self?.closeInfoList = result
+                    } else {
+                        self?.closeInfoList = []
+                    }
                     self?.setMyEventInfoCloseData = true
                     completion()
                 } else {

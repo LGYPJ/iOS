@@ -207,8 +207,11 @@ class HomeVC: UIViewController {
             switch result {
             case .success(let result):
                 if result.isSuccess {
-                    guard let result = result.result else { return }
-                    self?.homeSeminarInfo = result
+                    if let result = result.result {
+                        self?.homeSeminarInfo = result
+                    } else {
+                        self?.homeSeminarInfo = []
+                    }
                     self?.setSeminarData = true
                     completion()
                 } else {
@@ -229,9 +232,12 @@ class HomeVC: UIViewController {
             switch result {
             case .success(let result):
                 if result.isSuccess {
-                    guard let result = result.result else { return }
+                    if let result = result.result {
+                        self?.homeNetworkingInfo = result
+                    } else {
+                        self?.homeNetworkingInfo = []
+                    }
                     self?.setNetworkingData = true
-                    self?.homeNetworkingInfo = result
                     completion()
                 } else {
                     // TODO: 뭐든 에러가 있을거임
@@ -251,9 +257,12 @@ class HomeVC: UIViewController {
             switch result {
             case .success(let result):
                 if result.isSuccess {
-                    guard let result = result.result else { return }
+                    if let result = result.result {
+                        self?.recommendUsersInfo = result
+                    } else {
+                        self?.recommendUsersInfo = []
+                    }
                     self?.setRecommendedUserData = true
-                    self?.recommendUsersInfo = result
                     completion()
                 } else {
                     // TODO: 뭐든 에러가 있을거임
@@ -272,9 +281,12 @@ class HomeVC: UIViewController {
             switch result {
             case .success(let result):
                 if result.isSuccess {
-                    guard let result = result.result else { return }
+                    if let result = result.result {
+                        self?.myEventInfo = result
+                    } else {
+                        self?.myEventInfo = []
+                    }
                     self?.setMyEventData = true
-                    self?.myEventInfo = result
                     completion()
                 } else {
                     // TODO: 뭐든 에러가 있을거임
