@@ -92,6 +92,7 @@ class ViewAllVC: UIViewController {
         configureViews()
         addSubViews()
         configLayouts()
+        addChild(pageViewController)
         
         NotificationCenter.default.addObserver(self, selector: #selector(pushEventDetailVC(_:)), name: Notification.Name("pushEventDetailVC"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(pushApplyCancelVC(_:)), name: Notification.Name("pushEventApplyCancelVC"), object: nil)
