@@ -61,7 +61,6 @@ class EventApplyCancelVC: UIViewController {
 
 	lazy var programNameLabel: UILabel = {
 		let label = UILabel()
-		label.text = " "
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
 		label.textColor = .mainBlack
 		
@@ -420,6 +419,7 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 		programNameLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().offset(12)
 			$0.leading.equalToSuperview().inset(16)
+			$0.height.equalTo(29)
 		}
 		
         // seminarInfoStackView

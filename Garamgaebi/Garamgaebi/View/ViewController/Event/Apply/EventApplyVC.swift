@@ -62,7 +62,6 @@ class EventApplyVC: UIViewController {
 	
 	lazy var eventNameLabel: UILabel = {
 		let label = UILabel()
-		label.text = " "
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
 		label.textColor = .mainBlack
 		
@@ -617,6 +616,7 @@ extension EventApplyVC {
 		eventNameLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().offset(5.5)
 			$0.leading.equalToSuperview().inset(16)
+			$0.height.equalTo(29)
 		}
 		
         // eventInfoStackView

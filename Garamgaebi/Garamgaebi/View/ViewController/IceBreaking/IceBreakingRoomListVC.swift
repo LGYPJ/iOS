@@ -158,7 +158,7 @@ extension IceBreakingRoomListVC: UICollectionViewDelegate, UICollectionViewDataS
 		IcebreakingViewModel.getGameIsStartedWithPost(roomId: roomId, completion: { result in
 			if result {
 				// 진행중인 게임이라 alert
-				let alert = UIAlertController(title: "이미 진행중인 게임입니다.", message: "참여하시겠습니까?", preferredStyle: .alert)
+				let alert = UIAlertController(title: "이미 진행중인 게임입니다.", message: "참가하시겠습니까?", preferredStyle: .alert)
 				let cancelAction = UIAlertAction(title: "취소", style: .destructive)
 				let enterAction = UIAlertAction(title: "참가", style: .default) { _ in
 					self.navigationController?.pushViewController(vc, animated: true)
