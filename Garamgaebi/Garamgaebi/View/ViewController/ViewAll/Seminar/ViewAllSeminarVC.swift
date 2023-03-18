@@ -63,12 +63,10 @@ class ViewAllSeminarVC: UIViewController {
         configLayouts()
         initRefresh()
         initSetDatas()
-//        LoadingView.shared.show()
         fetchData {
             if self.setThisMonthData,
                self.setNextMonthData,
                self.setCloseData {
-//                LoadingView.shared.hide()
             }
         }
     }
@@ -110,12 +108,10 @@ class ViewAllSeminarVC: UIViewController {
                 } else {
                     // TODO: 뭐든 에러가 있을거임
                     //애니메이션 끄고 에러핸들링
-                    //LoadingView.shared.hide()
                 }
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-모아보기 화면 이번 달 Seminar 조회): \(error.localizedDescription)")
-//                LoadingView.shared.hide()
                 self?.presentErrorView()
             }
         }
@@ -135,12 +131,10 @@ class ViewAllSeminarVC: UIViewController {
                 } else {
                     // TODO: 뭐든 에러가 있을거임
                     //애니메이션 끄고 에러핸들링
-                    //LoadingView.shared.hide()
                 }
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-모아보기 화면 예정된 Seminar 조회): \(error.localizedDescription)")
-//                LoadingView.shared.hide()
                 self?.presentErrorView()
             }
         }
@@ -160,12 +154,10 @@ class ViewAllSeminarVC: UIViewController {
                 } else {
                     // TODO: 뭐든 에러가 있을거임
                     //애니메이션 끄고 에러핸들링
-                    //LoadingView.shared.hide()
                 }
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-모아보기 화면 마감된 Seminar 조회): \(error.localizedDescription)")
-//                LoadingView.shared.hide()
                 self?.presentErrorView()
             }
         }

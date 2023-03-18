@@ -37,14 +37,12 @@ class HomeVC: UIViewController {
     public var homeSeminarInfo: [HomeSeminarInfo] = [] {
         didSet {
             NotificationCenter.default.post(name: Notification.Name("presentHomeSeminarInfo"), object: homeSeminarInfo)
-            self.tableView.reloadData()
         }
     }
     
     public var homeNetworkingInfo: [HomeNetworkingInfo] = [] {
         didSet {
             NotificationCenter.default.post(name: Notification.Name("presentHomeNetworkingInfo"), object: homeNetworkingInfo)
-            self.tableView.reloadData()
         }
     }
     
@@ -58,14 +56,12 @@ class HomeVC: UIViewController {
             }
             // 셔플해서 전달
             NotificationCenter.default.post(name: Notification.Name("presentRecommendUsersInfo"), object: usersInfo.shuffled())
-            self.tableView.reloadData()
         }
     }
     
     public var myEventInfo: [MyEventInfoReady] = [] {
         didSet {
             NotificationCenter.default.post(name: Notification.Name("presentMyEventInfo"), object: myEventInfo)
-            self.tableView.reloadData()
         }
     }
     
@@ -134,18 +130,18 @@ class HomeVC: UIViewController {
         configNotificationCenter()
         initRefresh()
         initSetDatas()
-//        LoadingView.shared.show()
-        fetchData {
-            if self.setSeminarData,
-                self.setNetworkingData,
-                self.setNotificationData,
-                self.setMyEventData,
-                self.setRecommendedUserData {
-//                LoadingView.shared.hide()
+        LoadingView.shared.show()
+        DispatchQueue.main.async {
+            self.fetchData {
+                if self.setSeminarData,
+                    self.setNetworkingData,
+                    self.setNotificationData,
+                    self.setMyEventData,
+                    self.setRecommendedUserData {
+                    LoadingView.shared.hide()
+                }
             }
         }
-		
-		NotificationCenter.default.addObserver(self, selector: #selector(refreshByNotification), name: Notification.Name("ReloadMyEvent"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -342,6 +338,7 @@ class HomeVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(postScrollDirection), name: Notification.Name("getScrollDirection"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(postOtherProfileMemberIdx(_:)), name: Notification.Name("postOtherProfileMemberIdx"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(pushEventPopUpView(_:)), name: Notification.Name("pushEventPopUpView"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshByNotification), name: Notification.Name("ReloadMyEvent"), object: nil)
     }
 
     @objc private func pushNextView(_ sender: UIButton) {

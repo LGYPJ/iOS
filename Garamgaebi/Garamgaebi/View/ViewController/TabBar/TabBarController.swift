@@ -36,9 +36,10 @@ class TabBarController: UITabBarController {
             createNavController(for: ViewAllVC(), title: "모아보기", image: UIImage(named: "TabBarIconViewAll")!),
             createNavController(for: ProfileVC(), title: "내 프로필", image: UIImage.init(named: "TabBarIconProfile")!),
         ]
-        // TabBarController의 하위계층들을 미리 로딩하는 로직
+        // HomeVC의 세미나/네트워킹 모아보기 버튼 활성화를 위한 TabbarController 하위계층 중 ViewAllVC를 미리 로딩
         self.viewControllers?.forEach {
-            if let navController = $0 as? UINavigationController {
+            if let navController = $0 as? UINavigationController,
+               $0.tabBarItem.title == "모아보기" {
                 let _ = navController.topViewController?.view
             } else {
                 let _ = $0.view
