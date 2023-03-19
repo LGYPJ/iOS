@@ -209,8 +209,21 @@ extension EventSeminarDetailVC {
 	// MARK: fetch data
 	private func fetchSeminarInfo() {
 		SeminarDetailViewModel.requestSeminarDetailInfo(memberId: self.memberId, seminarId: self.seminarId, completion: {[weak self] result in
-			self?.seminarInfo = result
+			switch result {
+			case .success(let result):
+				guard let result = result.result else {return}
+				self?.seminarInfo = result
+			case .failure(_):
+				self?.refreshControl.endRefreshing()
+				self?.presentErrorView()
+			}
 		})
+	}
+	
+	private func presentErrorView() {
+		let errorView = ErrorPageView()
+		errorView.modalPresentationStyle = .fullScreen
+		self.present(errorView, animated: false)
 	}
 	
 	

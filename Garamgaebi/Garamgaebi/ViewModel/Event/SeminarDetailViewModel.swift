@@ -11,7 +11,7 @@ import Alamofire
 class SeminarDetailViewModel {
 	// MARK: requestData
 	// 세미나 정보 request
-	public static func requestSeminarDetailInfo(memberId: Int, seminarId: Int, completion: @escaping ((SeminarDetailInfo) -> Void)) {
+	public static func requestSeminarDetailInfo(memberId: Int, seminarId: Int, completion: @escaping ((Result<SeminarDetailInfoResponse, AFError>) -> Void)) {
 //		let dummyData = SeminarDetailInfo(programIdx: seminarId	,title: "무료 세미나1", date: "2023-01-15T18:00:00", location: "가천관", fee: 0, endDate: "2023-01-08T18:00:00", programStatus: "CLOSED_CONFIRM", userButtonStatus: "APPLY")
 //		completion(dummyData)
 		let url = "https://garamgaebi.shop/seminars/\(seminarId)/info"
@@ -25,14 +25,15 @@ class SeminarDetailViewModel {
 				switch response.result {
 				case .success(let result):
 					if result.isSuccess {
-						guard let result = result.result else {return}
-						completion(result)
+						completion(response.result)
 					} else {
 						// 통신은 정상적으로 됐으나(200), error발생
+						completion(response.result)
 						print("실패(세미나 상세정보): \(result.message)")
 					}
 				case .failure(let error):
 					// 실제 HTTP에러 404
+					completion(response.result)
 					print("실패(AF-세미나 상세정보): \(error.localizedDescription)")
 				}
 			}
