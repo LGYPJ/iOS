@@ -10,7 +10,7 @@ import Alamofire
 class NetworkingDetailViewModel {
 	// MARK: requestData
 	// 세미나 정보 request
-	public static func requestNetworkingDetailInfo(memberId: Int, networkingId: Int, completion: @escaping ((NetworkingDetailInfo) -> Void)) {
+	public static func requestNetworkingDetailInfo(memberId: Int, networkingId: Int, completion: @escaping ((Result<NetworkingDetailInfoResponse, AFError>) -> Void)) {
 //		let dummyData = NetworkingDetailInfo(programIdx: networkingId,title: "유료 네트워킹1", date: "2023-04-15T18:00:00", location: "가천관", fee: 10000, endDate: "2023-04-08T18:00:00", programStatus: "OPEN", userButtonStatus: "CANCEL")
 //		completion(dummyData)
 		let url = "https://garamgaebi.shop/networkings/\(networkingId)/info"
@@ -20,18 +20,19 @@ class NetworkingDetailViewModel {
 
 		AF.request(url, method: .get, parameters: params, interceptor: MyRequestInterceptor())
 			.validate()
-			.responseDecodable(of: NetworkingDetailInfoResponse.self) { resposne in
-				switch resposne.result {
+			.responseDecodable(of: NetworkingDetailInfoResponse.self) { response in
+				switch response.result {
 				case .success(let result):
 					if result.isSuccess {
-						guard let result = result.result else {return}
-						completion(result)
+						completion(response.result)
 					} else {
 						// 통신은 정상적으로 됐으나(200), error발생
+						completion(response.result)
 						print("실패(네트워킹 상세정보): \(result.message)")
 					}
 				case .failure(let error):
 					// 실제 HTTP에러 404
+					completion(response.result)
 					print("실패(AF-네트워킹 상세정보): \(error.localizedDescription)")
 				}
 			}

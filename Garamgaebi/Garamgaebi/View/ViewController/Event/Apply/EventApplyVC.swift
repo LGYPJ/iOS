@@ -422,15 +422,33 @@ extension EventApplyVC {
 		switch self.type {
 		case "SEMINAR":
 			SeminarDetailViewModel.requestSeminarDetailInfo(memberId: self.memberId, seminarId: self.programId, completion: {[weak self] result in
-				self?.seminarInfo = result
+				switch result {
+				case .success(let result):
+					guard let result = result.result else {return}
+					self?.seminarInfo = result
+				case .failure(_):
+					self?.presentErrorView()
+				}
 			})
 		case "NETWORKING":
 			NetworkingDetailViewModel.requestNetworkingDetailInfo(memberId: self.memberId, networkingId: self.programId, completion: {[weak self] result in
-				self?.networkingInfo = result
+				switch result {
+				case .success(let result):
+					guard let result = result.result else {return}
+					self?.networkingInfo = result
+				case .failure(_):
+					self?.presentErrorView()
+				}
 			})
 		default:
 			return
 		}
+	}
+	
+	private func presentErrorView() {
+		let errorView = ErrorPageView()
+		errorView.modalPresentationStyle = .fullScreen
+		self.present(errorView, animated: false)
 	}
 	
 	private func configureWithSeminarData() {
