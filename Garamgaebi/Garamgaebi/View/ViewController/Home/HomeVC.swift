@@ -218,7 +218,8 @@ class HomeVC: UIViewController {
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-홈 화면 Seminar 조회): \(error.localizedDescription)")
-//                LoadingView.shared.hide()
+                LoadingView.shared.hide()
+                self?.refresh.endRefreshing()
                 self?.presentErrorView()
             }
         }
@@ -243,7 +244,8 @@ class HomeVC: UIViewController {
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-홈 화면 Networking 조회): \(error.localizedDescription)")
-//                LoadingView.shared.hide()
+                LoadingView.shared.hide()
+                self?.refresh.endRefreshing()
                 self?.presentErrorView()
             }
         }
@@ -268,7 +270,8 @@ class HomeVC: UIViewController {
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-홈 화면 RecommedUsers 조회): \(error.localizedDescription)")
-//                LoadingView.shared.hide()
+                LoadingView.shared.hide()
+                self?.refresh.endRefreshing()
                 self?.presentErrorView()
             }
         }
@@ -292,7 +295,8 @@ class HomeVC: UIViewController {
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-홈 화면 MyEvent 조회): \(error.localizedDescription)")
-//                LoadingView.shared.hide()
+                LoadingView.shared.hide()
+                self?.refresh.endRefreshing()
                 self?.presentErrorView()
             }
         }
@@ -317,7 +321,8 @@ class HomeVC: UIViewController {
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-Unread Notification 조회): \(error.localizedDescription)")
-//                LoadingView.shared.hide()
+                LoadingView.shared.hide()
+                self?.refresh.endRefreshing()
                 self?.presentErrorView()
             }
             
