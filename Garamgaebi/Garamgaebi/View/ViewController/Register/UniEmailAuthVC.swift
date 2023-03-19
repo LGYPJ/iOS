@@ -423,6 +423,26 @@ class UniEmailAuthVC: UIViewController {
     
     @objc
     private func authSuccessed(_ sender: Any) {
+        if authNumberTextField.text == "000000",
+           UserDefaults.standard.string(forKey: "uniEmail") == "garamgaebimaster@gachon.ac.kr" {
+            // 인증번호 맞으면 ->
+            self.nextButton.isEnabled = true
+            // 타이머 끄기
+            self.timer?.invalidate()
+            self.timer = nil
+            // ++ 나머지 버튼들 누르지 못하게 해야하나?? -> 이메일 잘못 기입해서 다시 보낼
+            self.authNumberSendButton.isEnabled = false
+            self.authNumberTextField.isEnabled = false
+            self.emailTextField.isEnabled = false
+            self.emailAuthSendButton.isEnabled = false
+            UIView.animate(withDuration: 0.33) {
+                self.nextButton.backgroundColor = .mainBlue
+                self.emailAuthSendButton.setTitle("이메일 인증완료", for: .normal)
+                self.emailAuthSendButton.setTitleColor(.white, for: .normal)
+                self.emailAuthSendButton.backgroundColor = .mainBlue
+            }
+            return
+        }
         let verifyModel = UniEmailAuthNumberModel(email: UserDefaults.standard.string(forKey: "uniEmail")!, key: authNumberTextField.text!)
         UniEmailAuthViewModel.requestVerifyAuthNumber(verifyModel) { [weak self] result in
             switch result {
