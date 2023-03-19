@@ -245,6 +245,9 @@ class ProfileInputSNSVC: UIViewController, BottomSheetSelectDelegate {
     
     func configLayouts() {
         
+        typeTextField.delegate = self
+        linkTextField.delegate = self
+        
         //headerView
         headerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
@@ -519,7 +522,13 @@ class ProfileInputSNSVC: UIViewController, BottomSheetSelectDelegate {
 }
 
 // MARK: - Extension
-extension ProfileInputSNSVC {
+extension ProfileInputSNSVC: UITextFieldDelegate {
+    // Return 키
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder() // TextField 비활성화
+        return true
+    }
+    
     private func configureGestureRecognizer() {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
         tapGestureRecognizer.numberOfTapsRequired = 1

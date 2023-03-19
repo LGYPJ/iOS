@@ -209,6 +209,7 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
     private func configureLayouts() {
         
         view.backgroundColor = .white
+        emailTextField.delegate = self
         
         // addSubview - HeaderView
         view.addSubview(headerView)
@@ -668,7 +669,14 @@ extension ProfileServiceVC {
     }
 }
 
-extension ProfileServiceVC {
+extension ProfileServiceVC: UITextFieldDelegate {
+    
+    // Return 키
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder() // TextField 비활성화
+        return true
+    }
+    
     @objc private func keyboardWillShow(_ notification: Notification) {
         
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {

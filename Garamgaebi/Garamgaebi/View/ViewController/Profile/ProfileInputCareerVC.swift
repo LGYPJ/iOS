@@ -413,6 +413,8 @@ class ProfileInputCareerVC: UIViewController {
         
         companyTextCount = companyTextField.text?.count ?? 0
         positionTextCount = positionTextField.text?.count ?? 0
+        companyTextField.delegate = self
+        positionTextField.delegate = self
         
         //headerView
         headerView.snp.makeConstraints { make in
@@ -956,7 +958,14 @@ extension ProfileInputCareerVC {
     }
 }
 
-extension ProfileInputCareerVC {
+extension ProfileInputCareerVC: UITextFieldDelegate {
+    
+    // Return 키
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder() // TextField 비활성화
+        return true
+    }
+    
     @objc private func keyboardWillShow(_ notification: Notification) {
         
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {

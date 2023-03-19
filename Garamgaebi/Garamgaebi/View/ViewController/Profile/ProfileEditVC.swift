@@ -13,7 +13,7 @@ import Alamofire
 import PhotosUI
 
 
-class ProfileEditVC: UIViewController, UITextFieldDelegate {
+class ProfileEditVC: UIViewController {
     
     // MARK: - Properties
     var memberIdx: Int = 0
@@ -246,6 +246,10 @@ class ProfileEditVC: UIViewController, UITextFieldDelegate {
     
     // MARK: - Functions
     func configureLayouts() {
+        
+        nickNameTextField.delegate = self
+        emailTextField.delegate = self
+        introduceTextField.delegate = self
         
         // addSubview
         view.addSubview(headerView)
@@ -687,7 +691,8 @@ extension ProfileEditVC {
         self.view.endEditing(true)
     }
 }
-extension ProfileEditVC {
+extension ProfileEditVC: UITextFieldDelegate {
+    
     @objc private func keyboardWillShow(_ notification: Notification) {
         
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {

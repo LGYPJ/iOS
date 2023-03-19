@@ -416,6 +416,8 @@ class ProfileInputEducationVC: UIViewController {
         
         institutionTextCount = institutionTextField.text?.count ?? 0
         majorTextCount = majorTextField.text?.count ?? 0
+        institutionTextField.delegate = self
+        majorTextField.delegate = self
         
         //headerView
         headerView.snp.makeConstraints { make in
@@ -962,7 +964,14 @@ extension ProfileInputEducationVC {
     }
 }
 
-extension ProfileInputEducationVC {
+extension ProfileInputEducationVC: UITextFieldDelegate {
+    
+    // Return 키
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder() // TextField 비활성화
+        return true
+    }
+    
     @objc private func keyboardWillShow(_ notification: Notification) {
         
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
