@@ -37,14 +37,12 @@ class HomeVC: UIViewController {
     public var homeSeminarInfo: [HomeSeminarInfo] = [] {
         didSet {
             NotificationCenter.default.post(name: Notification.Name("presentHomeSeminarInfo"), object: homeSeminarInfo)
-            self.tableView.reloadData()
         }
     }
     
     public var homeNetworkingInfo: [HomeNetworkingInfo] = [] {
         didSet {
             NotificationCenter.default.post(name: Notification.Name("presentHomeNetworkingInfo"), object: homeNetworkingInfo)
-            self.tableView.reloadData()
         }
     }
     
@@ -58,14 +56,12 @@ class HomeVC: UIViewController {
             }
             // 셔플해서 전달
             NotificationCenter.default.post(name: Notification.Name("presentRecommendUsersInfo"), object: usersInfo.shuffled())
-            self.tableView.reloadData()
         }
     }
     
     public var myEventInfo: [MyEventInfoReady] = [] {
         didSet {
             NotificationCenter.default.post(name: Notification.Name("presentMyEventInfo"), object: myEventInfo)
-            self.tableView.reloadData()
         }
     }
     
@@ -134,18 +130,18 @@ class HomeVC: UIViewController {
         configNotificationCenter()
         initRefresh()
         initSetDatas()
-//        LoadingView.shared.show()
-        fetchData {
-            if self.setSeminarData,
-                self.setNetworkingData,
-                self.setNotificationData,
-                self.setMyEventData,
-                self.setRecommendedUserData {
-//                LoadingView.shared.hide()
+        LoadingView.shared.show()
+        DispatchQueue.main.async {
+            self.fetchData {
+                if self.setSeminarData,
+                    self.setNetworkingData,
+                    self.setNotificationData,
+                    self.setMyEventData,
+                    self.setRecommendedUserData {
+                    LoadingView.shared.hide()
+                }
             }
         }
-		
-		NotificationCenter.default.addObserver(self, selector: #selector(refreshByNotification), name: Notification.Name("ReloadMyEvent"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -207,8 +203,11 @@ class HomeVC: UIViewController {
             switch result {
             case .success(let result):
                 if result.isSuccess {
-                    guard let result = result.result else { return }
-                    self?.homeSeminarInfo = result
+                    if let result = result.result {
+                        self?.homeSeminarInfo = result
+                    } else {
+                        self?.homeSeminarInfo = []
+                    }
                     self?.setSeminarData = true
                     completion()
                 } else {
@@ -219,7 +218,8 @@ class HomeVC: UIViewController {
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-홈 화면 Seminar 조회): \(error.localizedDescription)")
-//                LoadingView.shared.hide()
+                LoadingView.shared.hide()
+                self?.refresh.endRefreshing()
                 self?.presentErrorView()
             }
         }
@@ -229,9 +229,12 @@ class HomeVC: UIViewController {
             switch result {
             case .success(let result):
                 if result.isSuccess {
-                    guard let result = result.result else { return }
+                    if let result = result.result {
+                        self?.homeNetworkingInfo = result
+                    } else {
+                        self?.homeNetworkingInfo = []
+                    }
                     self?.setNetworkingData = true
-                    self?.homeNetworkingInfo = result
                     completion()
                 } else {
                     // TODO: 뭐든 에러가 있을거임
@@ -241,7 +244,8 @@ class HomeVC: UIViewController {
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-홈 화면 Networking 조회): \(error.localizedDescription)")
-//                LoadingView.shared.hide()
+                LoadingView.shared.hide()
+                self?.refresh.endRefreshing()
                 self?.presentErrorView()
             }
         }
@@ -251,9 +255,12 @@ class HomeVC: UIViewController {
             switch result {
             case .success(let result):
                 if result.isSuccess {
-                    guard let result = result.result else { return }
+                    if let result = result.result {
+                        self?.recommendUsersInfo = result
+                    } else {
+                        self?.recommendUsersInfo = []
+                    }
                     self?.setRecommendedUserData = true
-                    self?.recommendUsersInfo = result
                     completion()
                 } else {
                     // TODO: 뭐든 에러가 있을거임
@@ -263,7 +270,8 @@ class HomeVC: UIViewController {
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-홈 화면 RecommedUsers 조회): \(error.localizedDescription)")
-//                LoadingView.shared.hide()
+                LoadingView.shared.hide()
+                self?.refresh.endRefreshing()
                 self?.presentErrorView()
             }
         }
@@ -272,9 +280,12 @@ class HomeVC: UIViewController {
             switch result {
             case .success(let result):
                 if result.isSuccess {
-                    guard let result = result.result else { return }
+                    if let result = result.result {
+                        self?.myEventInfo = result
+                    } else {
+                        self?.myEventInfo = []
+                    }
                     self?.setMyEventData = true
-                    self?.myEventInfo = result
                     completion()
                 } else {
                     // TODO: 뭐든 에러가 있을거임
@@ -284,7 +295,8 @@ class HomeVC: UIViewController {
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-홈 화면 MyEvent 조회): \(error.localizedDescription)")
-//                LoadingView.shared.hide()
+                LoadingView.shared.hide()
+                self?.refresh.endRefreshing()
                 self?.presentErrorView()
             }
         }
@@ -309,7 +321,8 @@ class HomeVC: UIViewController {
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-Unread Notification 조회): \(error.localizedDescription)")
-//                LoadingView.shared.hide()
+                LoadingView.shared.hide()
+                self?.refresh.endRefreshing()
                 self?.presentErrorView()
             }
             
@@ -330,6 +343,7 @@ class HomeVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(postScrollDirection), name: Notification.Name("getScrollDirection"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(postOtherProfileMemberIdx(_:)), name: Notification.Name("postOtherProfileMemberIdx"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(pushEventPopUpView(_:)), name: Notification.Name("pushEventPopUpView"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshByNotification), name: Notification.Name("ReloadMyEvent"), object: nil)
     }
 
     @objc private func pushNextView(_ sender: UIButton) {

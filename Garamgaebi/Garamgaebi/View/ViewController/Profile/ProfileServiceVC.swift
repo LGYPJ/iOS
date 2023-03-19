@@ -415,9 +415,11 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
                         // 호출하는 화면의 크기와 동일한 화면크기로 불려짐. 기존의 뷰들은 아예 삭제
                         nextVC.modalPresentationStyle = .currentContext
                         
-                        // 로그아웃 시 UserDefaults에 저장된 모든 정보 삭제
+                        // 로그아웃 시 UserDefaults에 저장된 모든 정보 삭제 (fcmToken을 제외한)
                         for key in UserDefaults.standard.dictionaryRepresentation().keys {
-                            UserDefaults.standard.removeObject(forKey: key.description)
+                            if key.description != "fcmToken" {
+                                UserDefaults.standard.removeObject(forKey: key.description)
+                            }
                         }
                         present(nextVC, animated: true)
                     }

@@ -24,10 +24,12 @@ class ViewAllViewModel {
                     } else {
                         // 통신은 정상적으로 됐으나(200), error발생
                         print("실패(모아보기 화면 이번 달 Seminar 조회): \(result.message)")
+                        completion(response.result)
                     }
                 case .failure(let error):
                     // 실제 HTTP에러 404
                     print("실패(AF-모아보기 화면 이번 달 Seminar 조회): \(error.localizedDescription)")
+                    completion(response.result)
                 }
             }
     }
@@ -45,9 +47,11 @@ class ViewAllViewModel {
                     } else {
                         // 통신은 정상적으로 됐으나(200), error발생
                         print("실패(모아보기 화면 예정된 Seminar 조회): \(result.message)")
+                        completion(response.result)
                     }
                 case .failure(let error):
                     // 실제 HTTP에러 404
+                    completion(response.result)
                     print("실패(AF-모아보기 화면 예정된 Seminar 조회): \(error.localizedDescription)")
                 }
             }
@@ -66,10 +70,12 @@ class ViewAllViewModel {
                     } else {
                         // 통신은 정상적으로 됐으나(200), error발생
                         print("실패(모아보기 화면 마감된 Seminar 조회): \(result.message)")
+                        completion(response.result)
                     }
                 case .failure(let error):
                     // 실제 HTTP에러 404
                     print("실패(AF-모아보기 화면 마감된 Seminar 조회): \(error.localizedDescription)")
+                    completion(response.result)
                 }
             }
     }
@@ -88,10 +94,12 @@ class ViewAllViewModel {
                     } else {
                         // 통신은 정상적으로 됐으나(200), error발생
                         print("실패(모아보기 화면 이번 달 Networking 조회): \(result.message)")
+                        completion(response.result)
                     }
                 case .failure(let error):
                     // 실제 HTTP에러 404
                     print("실패(AF-모아보기 화면 이번 달 Networking 조회): \(error.localizedDescription)")
+                    completion(response.result)
                 }
             }
     }
@@ -109,10 +117,12 @@ class ViewAllViewModel {
                     } else {
                         // 통신은 정상적으로 됐으나(200), error발생
                         print("실패(모아보기 화면 예정된 Networking 조회): \(result.message)")
+                        completion(response.result)
                     }
                 case .failure(let error):
                     // 실제 HTTP에러 404
                     print("실패(AF-모아보기 화면 예정된 Networking 조회): \(error.localizedDescription)")
+                    completion(response.result)
                 }
             }
     }
@@ -130,10 +140,12 @@ class ViewAllViewModel {
                     } else {
                         // 통신은 정상적으로 됐으나(200), error발생
                         print("실패(모아보기 화면 마감된 Networking 조회): \(result.message)")
+                        completion(response.result)
                     }
                 case .failure(let error):
                     // 실제 HTTP에러 404
                     print("실패(AF-모아보기 화면 마감된 Networking 조회): \(error.localizedDescription)")
+                    completion(response.result)
                 }
             }
     }
@@ -154,10 +166,12 @@ class ViewAllViewModel {
                     } else {
                         // 통신은 정상적으로 됐으나(200), error발생
                         print("실패(모아보기 MyEventReadyInfo 조회): \(result.message)")
+                        completion(response.result)
                     }
                 case .failure(let error):
                     // 실제 HTTP에러 404
                     print("실패(AF-모아보기 MyEventReadyInfo 조회): \(error.localizedDescription)")
+                    completion(response.result)
                 }
             }
     }
@@ -175,10 +189,12 @@ class ViewAllViewModel {
                     } else {
                         // 통신은 정상적으로 됐으나(200), error발생
                         print("실패(모아보기 MyEventCloseInfo 조회): \(result.message)")
+                        completion(response.result)
                     }
                 case .failure(let error):
                     // 실제 HTTP에러 404
                     print("실패(AF-모아보기 MyEventCloseInfo 조회): \(error.localizedDescription)")
+                    completion(response.result)
                 }
             }
     }

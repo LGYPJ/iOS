@@ -53,11 +53,9 @@ class ViewAllMyEventVC: UIViewController {
         configLayouts()
         initRefresh()
         initSetDatas()
-//        LoadingView.shared.show()
         fetchData {
             if self.setMyEventInfoReadyData,
                self.setMyEventInfoCloseData {
-//                LoadingView.shared.hide()
             }
         }
 		
@@ -91,19 +89,21 @@ class ViewAllMyEventVC: UIViewController {
             switch result {
             case .success(let result):
                 if result.isSuccess {
-                    guard let result = result.result else { return }
-                    self?.readyInfoList = result
+                    if let result = result.result {
+                        self?.readyInfoList = result
+                    } else {
+                        self?.readyInfoList = []
+                    }
                     self?.setMyEventInfoReadyData = true
                     completion()
                 } else {
                     // TODO: 뭐든 에러가 있을거임
                     //애니메이션 끄고 에러핸들링
-                    //LoadingView.shared.hide()
                 }
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-모아보기 MyEventReadyInfo 조회): \(error.localizedDescription)")
-//                LoadingView.shared.hide()
+                self?.refresh.endRefreshing()
                 self?.presentErrorView()
             }
         }
@@ -113,19 +113,21 @@ class ViewAllMyEventVC: UIViewController {
             switch result {
             case .success(let result):
                 if result.isSuccess {
-                    guard let result = result.result else { return }
-                    self?.closeInfoList = result
+                    if let result = result.result {
+                        self?.closeInfoList = result
+                    } else {
+                        self?.closeInfoList = []
+                    }
                     self?.setMyEventInfoCloseData = true
                     completion()
                 } else {
                     // TODO: 뭐든 에러가 있을거임
                     //애니메이션 끄고 에러핸들링
-                    //LoadingView.shared.hide()
                 }
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-모아보기 MyEventCloseInfo 조회): \(error.localizedDescription)")
-//                LoadingView.shared.hide()
+                self?.refresh.endRefreshing()
                 self?.presentErrorView()
             }
         }

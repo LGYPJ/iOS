@@ -63,12 +63,10 @@ class ViewAllNetworkingVC: UIViewController {
         configLayouts()
         initRefresh()
         initSetDatas()
-//        LoadingView.shared.show()
         fetchData {
             if self.setThisMonthData,
                self.setNextMonthData,
                self.setCloseData {
-//                LoadingView.shared.hide()
             }
         }
     }
@@ -100,19 +98,21 @@ class ViewAllNetworkingVC: UIViewController {
             switch result {
             case .success(let result):
                 if result.isSuccess {
-                    guard let result = result.result else { return }
-                    self?.thisMonthInfoList = [result]
+                    if let result = result.result {
+                        self?.thisMonthInfoList = [result]
+                    } else {
+                        self?.thisMonthInfoList = []
+                    }
                     self?.setThisMonthData = true
                     completion()
                 } else {
                     // TODO: 뭐든 에러가 있을거임
                     //애니메이션 끄고 에러핸들링
-                    //LoadingView.shared.hide()
                 }
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-모아보기 화면 이번 달 Networking 조회): \(error.localizedDescription)")
-//                LoadingView.shared.hide()
+                self?.refresh.endRefreshing()
                 self?.presentErrorView()
             }
         }
@@ -122,19 +122,21 @@ class ViewAllNetworkingVC: UIViewController {
             switch result {
             case .success(let result):
                 if result.isSuccess {
-                    guard let result = result.result else { return }
-                    self?.nextMonthInfoList = [result]
+                    if let result = result.result {
+                        self?.nextMonthInfoList = [result]
+                    } else {
+                        self?.nextMonthInfoList = []
+                    }
                     self?.setNextMonthData = true
                     completion()
                 } else {
                     // TODO: 뭐든 에러가 있을거임
                     //애니메이션 끄고 에러핸들링
-                    //LoadingView.shared.hide()
                 }
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-모아보기 화면 예정된 Networking 조회): \(error.localizedDescription)")
-//                LoadingView.shared.hide()
+                self?.refresh.endRefreshing()
                 self?.presentErrorView()
             }
         }
@@ -144,19 +146,21 @@ class ViewAllNetworkingVC: UIViewController {
             switch result {
             case .success(let result):
                 if result.isSuccess {
-                    guard let result = result.result else { return }
-                    self?.closeInfoList = result
+                    if let result = result.result {
+                        self?.closeInfoList = result
+                    } else {
+                        self?.closeInfoList = []
+                    }
                     self?.setCloseData = true
                     completion()
                 } else {
                     // TODO: 뭐든 에러가 있을거임
                     //애니메이션 끄고 에러핸들링
-                    //LoadingView.shared.hide()
                 }
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-모아보기 화면 마감된 Networking 조회): \(error.localizedDescription)")
-//                LoadingView.shared.hide()
+                self?.refresh.endRefreshing()
                 self?.presentErrorView()
             }
         }

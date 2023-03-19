@@ -92,6 +92,7 @@ class ViewAllVC: UIViewController {
         configureViews()
         addSubViews()
         configLayouts()
+        addChild(pageViewController)
         
         NotificationCenter.default.addObserver(self, selector: #selector(pushEventDetailVC(_:)), name: Notification.Name("pushEventDetailVC"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(pushApplyCancelVC(_:)), name: Notification.Name("pushEventApplyCancelVC"), object: nil)
@@ -201,6 +202,7 @@ extension ViewAllVC {
 
 
 extension ViewAllVC: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+    // 현재 페이지 뷰의 이전 뷰를 미리 로드
     func pageViewController(
         _ pageViewController: UIPageViewController,
         viewControllerBefore viewController: UIViewController
@@ -211,6 +213,7 @@ extension ViewAllVC: UIPageViewControllerDataSource, UIPageViewControllerDelegat
         else { return nil }
         return self.dataViewControllers[index - 1]
     }
+    // 현재 페이지 뷰의 다음 뷰를 미리 로드
     func pageViewController(
         _ pageViewController: UIPageViewController,
         viewControllerAfter viewController: UIViewController
@@ -221,6 +224,7 @@ extension ViewAllVC: UIPageViewControllerDataSource, UIPageViewControllerDelegat
         else { return nil }
         return self.dataViewControllers[index + 1]
     }
+    // 현재 페이지 로드가 끝났을 때
     func pageViewController(
         _ pageViewController: UIPageViewController,
         didFinishAnimating finished: Bool,
