@@ -77,7 +77,7 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.numberOfLines = 0
         $0.textColor = UIColor.mainBlack
-        $0.text = "휴일을 제외한 평일에는 하루 이내에 답변을 드릴게요.\n혹시 하루가 지나도 답변이 오지 않으면, 스팸 메일함을 확인해주세요."
+        $0.text = "최대한 신속하게 답변해드릴게요.\n답변을 못받으셨다면 스팸 메일함도 확인해주세요."
     }
     
     let emailSubtitleLabel = UILabel().then {

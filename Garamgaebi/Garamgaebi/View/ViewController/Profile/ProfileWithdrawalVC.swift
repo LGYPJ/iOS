@@ -72,7 +72,7 @@ class ProfileWithdrawalVC: UIViewController, BottomSheetSelectDelegate {
     let noticeLabel = UILabel().then {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.numberOfLines = 0
-        $0.text = "탈퇴 시 회원 정보 및 모든 서비스의 이용 내역이 삭제됩니다. 삭제된 데이터는 복구가 불가능합니다."
+        $0.text = "탈퇴 시 가람개비 내 모든 데이터는 삭제됩니다.\n복구가 불가하니 신중하게 선택해주세요."
     }
     
     let emailTitleLabel = UILabel().then {
