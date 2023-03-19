@@ -209,7 +209,7 @@ class CompleteRegisterVC: UIViewController {
                 print("실패(AF-로그인(카카오)): \(error.localizedDescription)")
                 let errorView = ErrorPageView()
                 errorView.modalPresentationStyle = .fullScreen
-                self?.present(errorView, animated: false)
+                self?.navigationController?.pushViewController(errorView, animated: false)
             }
         })
 	}
@@ -284,7 +284,7 @@ class CompleteRegisterVC: UIViewController {
                 print("실패(AF-로그인(애플)): \(error.localizedDescription)")
                 let errorView = ErrorPageView()
                 errorView.modalPresentationStyle = .fullScreen
-                self?.present(errorView, animated: false)
+                self?.navigationController?.pushViewController(errorView, animated: false)
             }
         })
     }

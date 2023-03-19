@@ -101,7 +101,7 @@ class SplashVC: UIViewController {
                 print("실패(AF-자동로그인): \(error.localizedDescription)")
                 let errorView = ErrorPageView()
                 errorView.modalPresentationStyle = .fullScreen
-                self?.present(errorView, animated: false)
+                self?.navigationController?.pushViewController(errorView, animated: false)
             }
         })
     }

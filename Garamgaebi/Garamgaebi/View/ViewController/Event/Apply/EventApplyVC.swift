@@ -394,15 +394,14 @@ class EventApplyVC: UIViewController {
 		configureViews()
 		configureTextField()
 		configureGestureRecognizer()
-		fetchProgramData()
+        
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		self.tabBarController?.tabBar.isHidden = true
-        
+        fetchProgramData()
         setKeyboardObserver()
-        
 	}
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -448,7 +447,7 @@ extension EventApplyVC {
 	private func presentErrorView() {
 		let errorView = ErrorPageView()
 		errorView.modalPresentationStyle = .fullScreen
-		self.present(errorView, animated: false)
+        self.navigationController?.pushViewController(errorView, animated: false)
 	}
 	
 	private func configureWithSeminarData() {

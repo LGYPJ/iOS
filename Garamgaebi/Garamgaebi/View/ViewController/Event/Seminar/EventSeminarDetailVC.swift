@@ -85,7 +85,6 @@ class EventSeminarDetailVC: UIViewController {
         super.viewDidLoad()
 		configureTableView()
 		configureViews()
-		fetchSeminarInfo()
 		configureRefreshControl()
 		
 		self.navigationController?.interactivePopGestureRecognizer?.delegate = self
@@ -223,12 +222,9 @@ extension EventSeminarDetailVC {
 	private func presentErrorView() {
 		let errorView = ErrorPageView()
 		errorView.modalPresentationStyle = .fullScreen
-		self.present(errorView, animated: false)
+        self.navigationController?.pushViewController(errorView, animated: false)
 	}
-	
-	
-	
-	
+
 }
 
 extension EventSeminarDetailVC: UITableViewDelegate, UITableViewDataSource {

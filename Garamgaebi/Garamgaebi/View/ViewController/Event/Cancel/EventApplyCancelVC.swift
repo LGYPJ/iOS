@@ -332,19 +332,18 @@ class EventApplyCancelVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		print("\(self.memberId) 123123")
 		configureViews()
 		configureAddTarget()
 		configureTextField()
 		configureGestureRecognizer()
-		fetchProgramData()
-		fetchUserData()
         
     }
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		self.tabBarController?.tabBar.isHidden = true
 		
+        fetchProgramData()
+        fetchUserData()
 		cancelButton.isEnabled = false
 		cancelButton.backgroundColor = .mainGray
         setKeyboardObserver()
@@ -533,7 +532,7 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 	private func presentErrorView() {
 		let errorView = ErrorPageView()
 		errorView.modalPresentationStyle = .fullScreen
-		self.present(errorView, animated: false)
+        self.navigationController?.pushViewController(errorView, animated: false)
 	}
 	
 	private func configureSeminarData() {

@@ -333,7 +333,7 @@ class HomeVC: UIViewController {
     func presentErrorView(){
         let errorView = ErrorPageView()
         errorView.modalPresentationStyle = .fullScreen
-        self.present(errorView, animated: false)
+        self.navigationController?.pushViewController(errorView, animated: false)
     }
     
     func configNotificationCenter() {

@@ -88,7 +88,7 @@ class ErrorPageView: UIViewController {
                     UserDefaults.standard.set(result.result?.tokenInfo?.memberIdx, forKey: "memberIdx")
                     UserDefaults.standard.set(result.result?.uniEmail, forKey: "uniEmail")
                     UserDefaults.standard.set(result.result?.nickname, forKey: "nickname")
-                    self?.dismiss(animated: false)
+                    self?.navigationController?.popViewController(animated: false)
                 } else if result.code == 2006 || result.code == 2027 {
                     // 유효하지 않은 토큰의 경우 소셜로그인으로 이동 2006
                     // 리프레시토큰도 만료되었거나 -> Onboarding 건너뛰고 카카오로그인으로 2027

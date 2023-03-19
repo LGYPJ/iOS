@@ -92,7 +92,6 @@ class EventNetworkingDetailVC: UIViewController {
 		configureViews()
 		configureTableView()
 		configureNotification()
-		fetchNetworkingInfo()
 		configureRefreshControl()
 		
 		self.navigationController?.interactivePopGestureRecognizer?.delegate = self
@@ -174,7 +173,7 @@ extension EventNetworkingDetailVC {
 	private func presentErrorView() {
 		let errorView = ErrorPageView()
 		errorView.modalPresentationStyle = .fullScreen
-		self.present(errorView, animated: false)
+        self.navigationController?.pushViewController(errorView, animated: false)
 	}
 	
 	// 서버에서 받은 status string을 enum에서 정의한 타입으로 변경
