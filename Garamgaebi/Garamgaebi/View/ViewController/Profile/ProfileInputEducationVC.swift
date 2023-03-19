@@ -211,16 +211,32 @@ class ProfileInputEducationVC: UIViewController {
     lazy var startDateTextField: UITextField = {
         let textField = UITextField()
         
-        textField.dateTextField()
-        textField.placeholder = "시작년월"
+        let calenderImg = UIImageView(image: UIImage(named: "calendarIcon"))
+        textField.addSubview(calenderImg)
+        calenderImg.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview().inset(14)
+            make.right.equalToSuperview().inset(15)
+            make.width.equalTo(18)
+        }
 
+        textField.addLeftPadding()
+        textField.placeholder = "시작년월"
+        textField.setPlaceholderColor(.mainGray)
+        textField.layer.cornerRadius = 12
+        textField.textColor = .mainBlack
+        textField.font = UIFont.NotoSansKR(type: .Regular, size: 16)
+        textField.autocapitalizationType = .none
+        
         textField.inputView = startDatePickerView
         textField.inputAccessoryView = toolbar
+        
+        textField.layer.borderColor = UIColor.mainGray.cgColor
+        textField.layer.borderWidth = 1
         
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
         textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
-
+        
         return textField
     }()
     
@@ -237,16 +253,32 @@ class ProfileInputEducationVC: UIViewController {
     lazy var endDateTextField: UITextField = {
         let textField = UITextField()
         
-        textField.dateTextField()
+        let calenderImg = UIImageView(image: UIImage(named: "calendarIcon"))
+        textField.addSubview(calenderImg)
+        calenderImg.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview().inset(14)
+            make.right.equalToSuperview().inset(15)
+            make.width.equalTo(18)
+        }
+        
+        textField.addLeftPadding()
         textField.placeholder = "종료년월"
+        textField.setPlaceholderColor(.mainGray)
+        textField.layer.cornerRadius = 12
+        textField.textColor = .mainBlack
+        textField.font = UIFont.NotoSansKR(type: .Regular, size: 16)
+        textField.autocapitalizationType = .none
         
         textField.inputView = endDatePickerView
         textField.inputAccessoryView = toolbar
-
+        
+        textField.layer.borderColor = UIColor.mainGray.cgColor
+        textField.layer.borderWidth = 1
+        
         textField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
         textField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
-
+        
         return textField
     }()
     
@@ -384,6 +416,8 @@ class ProfileInputEducationVC: UIViewController {
         
         institutionTextCount = institutionTextField.text?.count ?? 0
         majorTextCount = majorTextField.text?.count ?? 0
+        institutionTextField.delegate = self
+        majorTextField.delegate = self
         
         //headerView
         headerView.snp.makeConstraints { make in
@@ -930,7 +964,14 @@ extension ProfileInputEducationVC {
     }
 }
 
-extension ProfileInputEducationVC {
+extension ProfileInputEducationVC: UITextFieldDelegate {
+    
+    // Return 키
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder() // TextField 비활성화
+        return true
+    }
+    
     @objc private func keyboardWillShow(_ notification: Notification) {
         
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
