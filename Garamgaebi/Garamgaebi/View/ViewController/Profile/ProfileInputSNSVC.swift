@@ -553,7 +553,6 @@ class ProfileInputSNSVC: UIViewController, BottomSheetSelectDelegate {
         : UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
         
         let alertSuccessBtn = UIAlertAction(title: "확인", style: .default) { (action) in
-            print("[SUCCESS] Dialog Success Button Click!")
         }
         
         // Dialog에 버튼 추가

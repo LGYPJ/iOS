@@ -111,7 +111,7 @@ class ProfileHistoryViewModel {
     }
     
     // MARK: - [POST] 경력 추가
-    public static func postCareer(memberIdx: Int, company: String, position: String, isWorking: String, startDate: String, endDate: String, completion: @escaping ((Bool) -> Void)) {
+    public static func postCareer(memberIdx: Int, company: String, position: String, isWorking: String, startDate: String, endDate: String, completion: @escaping ((Result<ProfileDefaultResponse, AFError>) -> Void)) {
         
         let url = "https://garamgaebi.shop/profile/career"
         
@@ -134,20 +134,22 @@ class ProfileHistoryViewModel {
         .validate()
         .responseDecodable(of: ProfileDefaultResponse.self) { response in
             switch response.result {
-            case .success(let response):
-                if response.isSuccess {
-                    print("성공(Career추가): \(response.message)")
+            case .success(let result):
+                if result.isSuccess {
+                    print("성공(Career추가): \(result.message)")
                     completion(response.result)
                 } else {
-                    print("실패(Career추가): \(response.message)")
+                    completion(response.result)
+                    print("실패(Career추가): \(result.message)")
                 }
             case .failure(let error):
+                completion(response.result)
                 print("실패(AF-Career추가): \(error.localizedDescription)")
             }
         }
     }
     // MARK: - [PATCH] 경력 수정
-    public static func patchCareer(careerIdx: Int, company: String, position: String, isWorking: String, startDate: String, endDate: String, completion: @escaping ((Bool) -> Void)) {
+    public static func patchCareer(careerIdx: Int, company: String, position: String, isWorking: String, startDate: String, endDate: String, completion: @escaping ((Result<ProfileDefaultResponse, AFError>) -> Void)) {
         
         let url = "https://garamgaebi.shop/profile/career"
         
@@ -170,20 +172,22 @@ class ProfileHistoryViewModel {
         .validate()
         .responseDecodable(of: ProfileDefaultResponse.self) { response in
             switch response.result {
-            case .success(let response):
-                if response.isSuccess {
-                    print("성공(Career수정): \(response.message)")
+            case .success(let result):
+                if result.isSuccess {
+                    print("성공(Career수정): \(result.message)")
                     completion(response.result)
                 } else {
-                    print("실패(Career수정): \(response.message)")
+                    completion(response.result)
+                    print("실패(Career수정): \(result.message)")
                 }
             case .failure(let error):
+                completion(response.result)
                 print("실패(AF-Career수정): \(error.localizedDescription)")
             }
         }
     }
     // MARK: - [DELETE] 경력 삭제
-    public static func deleteCareer(careerIdx: Int, completion: @escaping ((Bool) -> Void)) {
+    public static func deleteCareer(careerIdx: Int, completion: @escaping ((Result<ProfileDefaultResponse, AFError>) -> Void)) {
         
         let url = "https://garamgaebi.shop/profile/career/\(careerIdx)"
         
@@ -196,14 +200,16 @@ class ProfileHistoryViewModel {
         .validate()
         .responseDecodable(of: ProfileDefaultResponse.self) { response in
             switch response.result {
-            case .success(let response):
-                if response.isSuccess {
-                    print("성공(Career삭제): \(response.message)")
+            case .success(let result):
+                if result.isSuccess {
+                    print("성공(Career삭제): \(result.message)")
                     completion(response.result)
                 } else {
-                    print("실패(Career삭제): \(response.message)")
+                    completion(response.result)
+                    print("실패(Career삭제): \(result.message)")
                 }
             case .failure(let error):
+                completion(response.result)
                 print("실패(AF-Career삭제): \(error.localizedDescription)")
             }
         }
