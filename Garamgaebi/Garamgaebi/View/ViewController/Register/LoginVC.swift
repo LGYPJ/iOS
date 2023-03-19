@@ -180,6 +180,11 @@ class LoginVC: UIViewController {
                             }
                         case .failure(let error):
                             print("실패(AF-간편로그인(카카오)): \(error.localizedDescription)")
+                            // 인터넷 연결 문제 알림창 띄우기
+                            let networkAlert = UIAlertController(title: "연결할 수 없음", message: "Wi-Fi 또는 셀룰러 네트워크에 연결되어\n있는지 확인하십시오.", preferredStyle: .alert)
+                            let checkAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+                            networkAlert.addAction(checkAction)
+                            self?.present(networkAlert, animated: true, completion: nil)
                         }
                     })
                 }
@@ -215,6 +220,11 @@ class LoginVC: UIViewController {
                             }
                         case .failure(let error):
                             print("실패(AF-간편로그인(카카오)): \(error.localizedDescription)")
+                            // 인터넷 연결 문제 알림창 띄우기
+                            let networkAlert = UIAlertController(title: "연결할 수 없음", message: "Wi-Fi 또는 셀룰러 네트워크에 연결되어\n있는지 확인하십시오.", preferredStyle: .alert)
+                            let checkAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+                            networkAlert.addAction(checkAction)
+                            self?.present(networkAlert, animated: true, completion: nil)
                         }
                     })
                 }
