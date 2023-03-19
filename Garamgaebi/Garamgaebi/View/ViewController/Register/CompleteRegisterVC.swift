@@ -153,23 +153,35 @@ class CompleteRegisterVC: UIViewController {
         
          //response 받은 memberIdx로 회원가입 API post
         RegisterUserViewModel.requestRegisterUserKakao(parameter: userInfo) { [weak self] result in
-            UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
-            if self?.myCareer == nil {
-                let passMyEducation = RegisterEducationInfo(memberIdx: result.memberIdx, institution: (self?.myEducation?.institution)!, major: (self?.myEducation?.major)!, isLearning: (self?.myEducation?.isLearning)!, startDate: (self?.myEducation?.startDate)!, endDate: (self?.myEducation?.endDate)!)
-                RegisterEducationViewModel.requestInputEducation(passMyEducation) { result in
-                    if result {
-                        self?.loginKakao()
+            switch result {
+            case .success(let result):
+                if result.isSuccess {
+                    UserDefaults.standard.set(result.result?.memberIdx, forKey: "memberIdx")
+                    if self?.myCareer == nil {
+                        let passMyEducation = RegisterEducationInfo(memberIdx: result.result!.memberIdx, institution: (self?.myEducation?.institution)!, major: (self?.myEducation?.major)!, isLearning: (self?.myEducation?.isLearning)!, startDate: (self?.myEducation?.startDate)!, endDate: (self?.myEducation?.endDate)!)
+                        RegisterEducationViewModel.requestInputEducation(passMyEducation) { result in
+                            if result {
+                                self?.loginKakao()
+                            }
+                        }
+                    } else {
+                        let passMyCareer = RegisterCareerInfo(memberIdx: result.result!.memberIdx, company: (self?.myCareer?.company)!, position: (self?.myCareer?.position)!, isWorking: (self?.myCareer?.isWorking)!, startDate: (self?.myCareer?.startDate)!, endDate: (self?.myCareer?.endDate)!)
+                        RegisterCareerViewModel.requestInputCareer(passMyCareer) { result in
+                            if result {
+                                self?.loginKakao()
+                            }
+                        }
                     }
+                } else {
+                    // TODO: 서버 에러 핸들링
                 }
-            } else {
-                let passMyCareer = RegisterCareerInfo(memberIdx: result.memberIdx, company: (self?.myCareer?.company)!, position: (self?.myCareer?.position)!, isWorking: (self?.myCareer?.isWorking)!, startDate: (self?.myCareer?.startDate)!, endDate: (self?.myCareer?.endDate)!)
-                RegisterCareerViewModel.requestInputCareer(passMyCareer) { result in
-                    if result {
-                        self?.loginKakao()
-                    }
-                }
+            case .failure:
+                // 인터넷 연결 문제 알림창 띄우기
+                let networkAlert = UIAlertController(title: "회원가입 실패", message: "Wi-Fi 또는 셀룰러 네트워크에 연결되어\n있는지 확인하십시오.", preferredStyle: .alert)
+                let checkAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+                networkAlert.addAction(checkAction)
+                self?.present(networkAlert, animated: true, completion: nil)
             }
-                                                            
         }
     }
 
@@ -190,11 +202,14 @@ class CompleteRegisterVC: UIViewController {
                     UserDefaults.standard.set(result.result?.nickname, forKey: "nickname")
                     self?.presentHome()
                 } else {
+                    // TODO: 서버 에러 핸들링
                     print("실패(로그인(카카오)): \(result.message)")
-                    print("버튼 다시 눌러보세요")
                 }
             case .failure(let error):
                 print("실패(AF-로그인(카카오)): \(error.localizedDescription)")
+                let errorView = ErrorPageView()
+                errorView.modalPresentationStyle = .fullScreen
+                self?.present(errorView, animated: false)
             }
         })
 	}
@@ -211,22 +226,37 @@ class CompleteRegisterVC: UIViewController {
         
          //response 받은 memberIdx로 회원가입 API post
         RegisterUserViewModel.requestRegisterUserApple(parameter: userInfo) { [weak self] result in
-            UserDefaults.standard.set(result.memberIdx, forKey: "memberIdx")
-            if self?.myCareer == nil {
-                let passMyEducation = RegisterEducationInfo(memberIdx: result.memberIdx, institution: (self?.myEducation?.institution)!, major: (self?.myEducation?.major)!, isLearning: (self?.myEducation?.isLearning)!, startDate: (self?.myEducation?.startDate)!, endDate: (self?.myEducation?.endDate)!)
-                RegisterEducationViewModel.requestInputEducation(passMyEducation) { result in
-                    if result {
-                        self?.loginApple()
+            switch result {
+            case .success(let result):
+                if result.isSuccess {
+                    UserDefaults.standard.set(result.result!.memberIdx, forKey: "memberIdx")
+                    if self?.myCareer == nil {
+                        let passMyEducation = RegisterEducationInfo(memberIdx: result.result!.memberIdx, institution: (self?.myEducation?.institution)!, major: (self?.myEducation?.major)!, isLearning: (self?.myEducation?.isLearning)!, startDate: (self?.myEducation?.startDate)!, endDate: (self?.myEducation?.endDate)!)
+                        RegisterEducationViewModel.requestInputEducation(passMyEducation) { result in
+                            if result {
+                                self?.loginApple()
+                            }
+                        }
+                    } else {
+                        let passMyCareer = RegisterCareerInfo(memberIdx: result.result!.memberIdx, company: (self?.myCareer?.company)!, position: (self?.myCareer?.position)!, isWorking: (self?.myCareer?.isWorking)!, startDate: (self?.myCareer?.startDate)!, endDate: (self?.myCareer?.endDate)!)
+                        RegisterCareerViewModel.requestInputCareer(passMyCareer) { result in
+                            if result {
+                                self?.loginApple()
+                            }
+                        }
                     }
+                } else {
+                    // TODO: 서버 에러 핸들링
+                    
                 }
-            } else {
-                let passMyCareer = RegisterCareerInfo(memberIdx: result.memberIdx, company: (self?.myCareer?.company)!, position: (self?.myCareer?.position)!, isWorking: (self?.myCareer?.isWorking)!, startDate: (self?.myCareer?.startDate)!, endDate: (self?.myCareer?.endDate)!)
-                RegisterCareerViewModel.requestInputCareer(passMyCareer) { result in
-                    if result {
-                        self?.loginApple()
-                    }
-                }
+            case .failure:
+                // 인터넷 연결 문제 알림창 띄우기
+                let networkAlert = UIAlertController(title: "회원가입 실패", message: "Wi-Fi 또는 셀룰러 네트워크에 연결되어\n있는지 확인하십시오.", preferredStyle: .alert)
+                let checkAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+                networkAlert.addAction(checkAction)
+                self?.present(networkAlert, animated: true, completion: nil)
             }
+            
         }
     }
     
@@ -247,11 +277,14 @@ class CompleteRegisterVC: UIViewController {
                     UserDefaults.standard.set(result.result?.nickname, forKey: "nickname")
                     self?.presentHome()
                 } else {
+                    // TODO: 서버 에러 핸들링
                     print("실패(로그인(애플)): \(result.message)")
-                    print("버튼 다시 눌러보세요")
                 }
             case .failure(let error):
                 print("실패(AF-로그인(애플)): \(error.localizedDescription)")
+                let errorView = ErrorPageView()
+                errorView.modalPresentationStyle = .fullScreen
+                self?.present(errorView, animated: false)
             }
         })
     }

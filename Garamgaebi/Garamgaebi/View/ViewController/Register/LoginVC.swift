@@ -53,9 +53,7 @@ class LoginVC: UIViewController {
     
     lazy var kakaoLoginButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "KakaoLoginButton"), for: .normal)
-        //button.adjustsImageWhenHighlighted = false
-        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        button.setImage(UIImage(named: "KakaoLogin"), for: .normal)
         button.layer.cornerRadius = 12
         button.addTarget(self, action: #selector(loginSuccessed), for: .touchUpInside)
         return button
@@ -64,9 +62,7 @@ class LoginVC: UIViewController {
     lazy var appleLoginButton: UIButton = {
         let button = UIButton()
         //button.adjustsImageWhenHighlighted = false
-        button.setTitle("APPLE", for: .normal)
-        button.backgroundColor = UIColor.init(hex: 0x1C1C1C)
-        button.setTitleColor(UIColor.white, for: .normal)
+        button.setImage(UIImage(named: "AppleLogin"), for: .normal)
         button.layer.cornerRadius = 12
         button.addTarget(self, action: #selector(appleLogin), for: .touchUpInside)
         return button
@@ -114,7 +110,6 @@ class LoginVC: UIViewController {
         
         //appleLoginButton
         appleLoginButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
             make.height.equalTo(48)
             make.left.right.equalToSuperview().inset(16)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(32)
@@ -122,8 +117,7 @@ class LoginVC: UIViewController {
         
         //kakaoLoginButton
         kakaoLoginButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.height.equalTo(53.7)
+            make.height.equalTo(48)
             make.left.right.equalToSuperview().inset(16)
             make.bottom.equalTo(appleLoginButton.snp.top).offset(-13.2)
         }
@@ -180,6 +174,11 @@ class LoginVC: UIViewController {
                             }
                         case .failure(let error):
                             print("실패(AF-간편로그인(카카오)): \(error.localizedDescription)")
+                            // 인터넷 연결 문제 알림창 띄우기
+                            let networkAlert = UIAlertController(title: "연결할 수 없음", message: "Wi-Fi 또는 셀룰러 네트워크에 연결되어\n있는지 확인하십시오.", preferredStyle: .alert)
+                            let checkAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+                            networkAlert.addAction(checkAction)
+                            self?.present(networkAlert, animated: true, completion: nil)
                         }
                     })
                 }
@@ -215,6 +214,11 @@ class LoginVC: UIViewController {
                             }
                         case .failure(let error):
                             print("실패(AF-간편로그인(카카오)): \(error.localizedDescription)")
+                            // 인터넷 연결 문제 알림창 띄우기
+                            let networkAlert = UIAlertController(title: "연결할 수 없음", message: "Wi-Fi 또는 셀룰러 네트워크에 연결되어\n있는지 확인하십시오.", preferredStyle: .alert)
+                            let checkAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+                            networkAlert.addAction(checkAction)
+                            self?.present(networkAlert, animated: true, completion: nil)
                         }
                     })
                 }

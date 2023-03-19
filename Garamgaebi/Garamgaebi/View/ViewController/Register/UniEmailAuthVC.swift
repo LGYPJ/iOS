@@ -358,58 +358,64 @@ class UniEmailAuthVC: UIViewController {
         let uniEmail = UniEmailAuthModel(email: "\(userId)@gachon.ac.kr")
         UniEmailAuthViewModel.requestSendEmail(uniEmail) { [weak self] result in
             switch result {
-            case true:
-                guard let userId = self?.userId else {return}
-                UserDefaults.standard.set("\(userId)@gachon.ac.kr", forKey: "uniEmail")
+            case .success(let result):
+                if result.isSuccess == true {
+                    guard let userId = self?.userId else {return}
+                    UserDefaults.standard.set("\(userId)@gachon.ac.kr", forKey: "uniEmail")
 
-                self?.emailNotificationLabel.text = "메일을 받지 못하신 경우, 스팸 메일함을 확인해주세요."
-                self?.emailNotificationLabel.textColor = .mainBlack
-                
-                sender.setTitleColor(UIColor.mainBlue, for: .normal)
-                sender.backgroundColor = .white
-                sender.layer.borderColor = UIColor.mainBlue.cgColor
-                sender.layer.borderWidth = 0.5
-                self?.authNumberTextField.isEnabled = true
-                self?.authNumberSendButton.isEnabled = true
-                var count = 180
-                
-                if self?.timer != nil && ((self?.timer!.isValid) != nil) {
-                    self?.timer?.invalidate()
-                    self?.timer = nil
-                }
-                
-                self?.timer = Timer.scheduledTimer(withTimeInterval: self!.interval, repeats: true, block: { [self]_ in
-                    UIView.transition(with: self!.authNumTitleLabel, duration: 0.33,
-                                      options: .transitionCrossDissolve,
-                                      animations: {
-                        self?.authNumTitleLabel.isHidden = false
-                        self?.authNumberTextField.isHidden = false
-                        self?.authNumberSendButton.isHidden = false
-                        self?.nextButton.isHidden = false
-                    })
+                    self?.emailNotificationLabel.text = "메일을 받지 못하신 경우, 스팸 메일함을 확인해주세요."
+                    self?.emailNotificationLabel.textColor = .mainBlack
                     
-                    let minutes = count / 60
-                    let seconds = count % 60
-                    count -= 1
+                    sender.setTitleColor(UIColor.mainBlue, for: .normal)
+                    sender.backgroundColor = .white
+                    sender.layer.borderColor = UIColor.mainBlue.cgColor
+                    sender.layer.borderWidth = 0.5
+                    self?.authNumberTextField.isEnabled = true
+                    self?.authNumberSendButton.isEnabled = true
+                    var count = 180
                     
-                    //남은 시간(초)가 0보다 크면
-                    if count > 0 {
-                        sender.setTitle("이메일 재발송하기 (\(minutes)분 \(seconds)초)", for: .normal)
-                    } else {
-                        sender.setTitle("이메일 재발송하기", for: .normal)
-                        sender.setTitleColor(.white, for: .normal)
-                        sender.backgroundColor = .mainBlue
-                        self?.initAuthNumberUI()
+                    if self?.timer != nil && ((self?.timer!.isValid) != nil) {
+                        self?.timer?.invalidate()
+                        self?.timer = nil
                     }
                     
-                })
+                    self?.timer = Timer.scheduledTimer(withTimeInterval: self!.interval, repeats: true, block: { [self]_ in
+                        UIView.transition(with: self!.authNumTitleLabel, duration: 0.33,
+                                          options: .transitionCrossDissolve,
+                                          animations: {
+                            self?.authNumTitleLabel.isHidden = false
+                            self?.authNumberTextField.isHidden = false
+                            self?.authNumberSendButton.isHidden = false
+                            self?.nextButton.isHidden = false
+                        })
+                        
+                        let minutes = count / 60
+                        let seconds = count % 60
+                        count -= 1
+                        
+                        //남은 시간(초)가 0보다 크면
+                        if count > 0 {
+                            sender.setTitle("이메일 재발송하기 (\(minutes)분 \(seconds)초)", for: .normal)
+                        } else {
+                            sender.setTitle("이메일 재발송하기", for: .normal)
+                            sender.setTitleColor(.white, for: .normal)
+                            sender.backgroundColor = .mainBlue
+                            self?.initAuthNumberUI()
+                        }
+                        
+                    })
+                } else {
+                    self?.emailTextField.shake()
+                    self?.emailNotificationLabel.text = "이미 가입한 이메일 입니다"
+                    self?.emailNotificationLabel.textColor = UIColor(hex: 0xFF0000)
+                }
                 
-            case false:
-                self?.emailTextField.shake()
-                self?.emailNotificationLabel.text = "이미 가입한 이메일 입니다"
-                self?.emailNotificationLabel.textColor = UIColor(hex: 0xFF0000)
-            default:
-                print(">>>ERROR sendEmail")
+            case .failure:
+                // 인터넷 연결 문제 알림창 띄우기
+                let networkAlert = UIAlertController(title: "이메일 발송 실패", message: "Wi-Fi 또는 셀룰러 네트워크에 연결되어\n있는지 확인하십시오.", preferredStyle: .alert)
+                let checkAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+                networkAlert.addAction(checkAction)
+                self?.present(networkAlert, animated: true, completion: nil)
             }
         }
         
@@ -420,33 +426,41 @@ class UniEmailAuthVC: UIViewController {
         let verifyModel = UniEmailAuthNumberModel(email: UserDefaults.standard.string(forKey: "uniEmail")!, key: authNumberTextField.text!)
         UniEmailAuthViewModel.requestVerifyAuthNumber(verifyModel) { [weak self] result in
             switch result {
-            case true:
-                // 인증번호 맞으면 ->
-                self?.nextButton.isEnabled = true
-                // 타이머 끄기
-                self?.timer?.invalidate()
-                self?.timer = nil
-                // ++ 나머지 버튼들 누르지 못하게 해야하나?? -> 이메일 잘못 기입해서 다시 보낼
-                self?.authNumberSendButton.isEnabled = false
-                self?.authNumberTextField.isEnabled = false
-                self?.emailTextField.isEnabled = false
-                self?.emailAuthSendButton.isEnabled = false
-                UIView.animate(withDuration: 0.33) {
-                    self?.nextButton.backgroundColor = .mainBlue
-                    self?.emailAuthSendButton.setTitle("이메일 인증완료", for: .normal)
-                    self?.emailAuthSendButton.setTitleColor(.white, for: .normal)
-                    self?.emailAuthSendButton.backgroundColor = .mainBlue
+            case .success(let result):
+                if result.isSuccess {
+                    // 인증번호 맞으면 ->
+                    self?.nextButton.isEnabled = true
+                    // 타이머 끄기
+                    self?.timer?.invalidate()
+                    self?.timer = nil
+                    // ++ 나머지 버튼들 누르지 못하게 해야하나?? -> 이메일 잘못 기입해서 다시 보낼
+                    self?.authNumberSendButton.isEnabled = false
+                    self?.authNumberTextField.isEnabled = false
+                    self?.emailTextField.isEnabled = false
+                    self?.emailAuthSendButton.isEnabled = false
+                    UIView.animate(withDuration: 0.33) {
+                        self?.nextButton.backgroundColor = .mainBlue
+                        self?.emailAuthSendButton.setTitle("이메일 인증완료", for: .normal)
+                        self?.emailAuthSendButton.setTitleColor(.white, for: .normal)
+                        self?.emailAuthSendButton.backgroundColor = .mainBlue
+                    }
+                } else {
+                    // 인증번호 틀리면
+                    // 빨갛게, shake
+                    
+                    self?.authNumberTextField.shake()
+                    //"인증번호가 올바르지 않습니다"
+                    UIView.transition(with: self!.authNumNotificationLabel, duration: 0.33, options: .transitionCrossDissolve, animations: {
+                        self?.authNumNotificationLabel.isHidden = false
+                    })
+                    print(">>>Front: 인증번호가 일치하지 않습니다")
                 }
-            default:
-                // 인증번호 틀리면
-                // 빨갛게, shake
-                
-                self?.authNumberTextField.shake()
-                //"인증번호가 올바르지 않습니다"
-                UIView.transition(with: self!.authNumNotificationLabel, duration: 0.33, options: .transitionCrossDissolve, animations: {
-                    self?.authNumNotificationLabel.isHidden = false
-                })
-                print(">>>Front: 인증번호가 일치하지 않습니다")
+            case .failure:
+                // 인터넷 연결 문제 알림창 띄우기
+                let networkAlert = UIAlertController(title: "인증 실패", message: "Wi-Fi 또는 셀룰러 네트워크에 연결되어\n있는지 확인하십시오.", preferredStyle: .alert)
+                let checkAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+                networkAlert.addAction(checkAction)
+                self?.present(networkAlert, animated: true, completion: nil)
             }
         }
     }

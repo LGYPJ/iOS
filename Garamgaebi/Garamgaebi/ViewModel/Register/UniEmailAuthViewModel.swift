@@ -11,7 +11,7 @@ import Alamofire
 // 이메일로 인증번호 전송하는 API 연동
 class UniEmailAuthViewModel {
     
-    public static func requestSendEmail(_ parameter : UniEmailAuthModel, completion: @escaping (Bool) -> ()) {
+    public static func requestSendEmail(_ parameter : UniEmailAuthModel, completion: @escaping ((Result<UniEmailAuthModelResponse, AFError>) -> Void)) {
         let url = "https://garamgaebi.shop/email/sendEmail"
         let body: [String: String] = [
             "email": parameter.email
@@ -24,19 +24,19 @@ class UniEmailAuthViewModel {
             case .success(let result):
                 if result.isSuccess {
                     print("DEBUG: 이메일 전송 성공", result.message)
-                    completion(true)
+                    completion(response.result)
                 } else {
                     print("DEBUG: 이메일 전송 실패", result.message)
-                    completion(false)
+                    completion(response.result)
                 }
-                
             case .failure(let error):
                 print("AF-DEBUG: 이메일 전송 실패", error.localizedDescription)
+                completion(response.result)
             }
         }
     }
     
-    public static func requestVerifyAuthNumber(_ parameter : UniEmailAuthNumberModel, completion: @escaping (Bool) -> ()) {
+    public static func requestVerifyAuthNumber(_ parameter : UniEmailAuthNumberModel, completion: @escaping ((Result<UniEmailAuthNumberModelResponse, AFError>) -> Void)) {
         let url = "https://garamgaebi.shop/email/verify"
         let body: [String: String] = [
             "email": parameter.email,
@@ -50,13 +50,14 @@ class UniEmailAuthViewModel {
             case .success(let result):
                 if result.isSuccess {
                     print("DEBUG: 이메일 전송 성공", result.message)
-                    completion(true)
+                    completion(response.result)
                 } else {
                     print("DEBUG: 이메일 전송 실패", result.message)
-                    completion(false)
+                    completion(response.result)
                 }
             case .failure(let error):
                 print("AF-DEBUG: 이메일 전송 실패", error.localizedDescription)
+                completion(response.result)
             }
         }
     }
