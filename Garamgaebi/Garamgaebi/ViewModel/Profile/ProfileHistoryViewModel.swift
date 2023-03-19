@@ -12,7 +12,7 @@ class ProfileHistoryViewModel {
     
     // SNS
     // MARK: - [POST] SNS 추가
-    public static func postSNS(memberIdx: Int, type: String, address: String, completion: @escaping ((Bool) -> Void)) {
+    public static func postSNS(memberIdx: Int, type: String, address: String, completion: @escaping ((Result<ProfilePostResponse, AFError>) -> Void)) {
         
         let url = "https://garamgaebi.shop/profile/sns"
 
@@ -32,20 +32,22 @@ class ProfileHistoryViewModel {
         .validate()
         .responseDecodable(of: ProfilePostResponse.self) { response in
             switch response.result {
-            case .success(let response):
-                if response.isSuccess {
-                    print("성공(SNS추가): \(response.message)")
+            case .success(let result):
+                if result.isSuccess {
+                    print("성공(SNS추가): \(result.message)")
                     completion(response.result)
                 } else {
-                    print("실패(SNS추가): \(response.message)")
+                    completion(response.result)
+                    print("실패(SNS추가): \(result.message)")
                 }
             case .failure(let error):
+                completion(response.result)
                 print("실패(AF-SNS추가): \(error.localizedDescription)")
             }
         }
     }
     // MARK: - [PATCH] SNS 수정
-    public static func patchSNS(snsIdx: Int, type: String, address: String, completion: @escaping ((Bool) -> Void)) {
+    public static func patchSNS(snsIdx: Int, type: String, address: String, completion: @escaping ((Result<ProfilePostResponse, AFError>) -> Void)) {
         
         let url = "https://garamgaebi.shop/profile/sns"
         
@@ -65,20 +67,22 @@ class ProfileHistoryViewModel {
         .validate()
         .responseDecodable(of: ProfilePostResponse.self) { response in
             switch response.result {
-            case .success(let response):
-                if response.isSuccess {
-                    print("성공(SNS수정): \(response.message)")
+            case .success(let result):
+                if result.isSuccess {
+                    print("성공(SNS수정): \(result.message)")
                     completion(response.result)
                 } else {
-                    print("실패(SNS수정): \(response.message)")
+                    completion(response.result)
+                    print("실패(SNS수정): \(result.message)")
                 }
             case .failure(let error):
+                completion(response.result)
                 print("실패(AF-SNS수정): \(error.localizedDescription)")
             }
         }
     }
     // MARK: - [DELETE] SNS 삭제
-    public static func deleteSNS(snsIdx: Int, completion: @escaping ((Bool) -> Void)) {
+    public static func deleteSNS(snsIdx: Int, completion: @escaping ((Result<ProfilePostResponse, AFError>) -> Void)) {
         
         let url = "https://garamgaebi.shop/profile/sns/\(snsIdx)"
         
@@ -91,14 +95,16 @@ class ProfileHistoryViewModel {
         .validate()
         .responseDecodable(of: ProfilePostResponse.self) { response in
             switch response.result {
-            case .success(let response):
-                if response.isSuccess {
-                    print("성공(SNS삭제): \(response.message)")
+            case .success(let result):
+                if result.isSuccess {
+                    print("성공(SNS삭제): \(result.message)")
                     completion(response.result)
                 } else {
-                    print("실패(SNS삭제): \(response.message)")
+                    completion(response.result)
+                    print("실패(SNS삭제): \(result.message)")
                 }
             case .failure(let error):
+                completion(response.result)
                 print("실패(AF-SNS삭제): \(error.localizedDescription)")
             }
         }
