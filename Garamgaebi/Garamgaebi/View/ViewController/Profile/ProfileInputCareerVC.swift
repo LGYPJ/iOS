@@ -821,7 +821,6 @@ class ProfileInputCareerVC: UIViewController {
         
     // 뒤로가기 버튼 did tap
     @objc private func didTapBackBarButton() {
-        //        print("뒤로가기 버튼 클릭")
         self.navigationController?.popViewController(animated: true)
     }
     

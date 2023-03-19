@@ -216,7 +216,7 @@ class ProfileHistoryViewModel {
     }
     
     // MARK: - [POST] 교육 추가
-    public static func postEducation(memberIdx: Int, institution: String, major: String, isLearning: String, startDate: String, endDate: String, completion: @escaping ((Bool) -> Void)) {
+    public static func postEducation(memberIdx: Int, institution: String, major: String, isLearning: String, startDate: String, endDate: String, completion: @escaping ((Result<ProfileDefaultResponse, AFError>) -> Void)) {
         
         let url = "https://garamgaebi.shop/profile/education"
 
@@ -239,20 +239,22 @@ class ProfileHistoryViewModel {
         .validate()
         .responseDecodable(of: ProfileDefaultResponse.self) { response in
             switch response.result {
-            case .success(let response):
-                if response.isSuccess {
-                    print("성공(Education추가): \(response.message)")
+            case .success(let result):
+                if result.isSuccess {
+                    print("성공(Education추가): \(result.message)")
                     completion(response.result)
                 } else {
-                    print("실패(Education추가): \(response.message)")
+                    completion(response.result)
+                    print("실패(Education추가): \(result.message)")
                 }
             case .failure(let error):
+                completion(response.result)
                 print("실패(AF-Education추가): \(error.localizedDescription)")
             }
         }
     }
     // MARK: - [PATCH] 교육 수정
-    public static func patchEducation(educationIdx: Int, institution: String, major: String, isLearning: String, startDate: String, endDate: String, completion: @escaping ((Bool) -> Void)) {
+    public static func patchEducation(educationIdx: Int, institution: String, major: String, isLearning: String, startDate: String, endDate: String, completion: @escaping ((Result<ProfileDefaultResponse, AFError>) -> Void)) {
         
         let url = "https://garamgaebi.shop/profile/education"
 
@@ -275,20 +277,22 @@ class ProfileHistoryViewModel {
         .validate()
         .responseDecodable(of: ProfileDefaultResponse.self) { response in
             switch response.result {
-            case .success(let response):
-                if response.isSuccess {
-                    print("성공(Education수정): \(response.message)")
+            case .success(let result):
+                if result.isSuccess {
+                    print("성공(Education수정): \(result.message)")
                     completion(response.result)
                 } else {
-                    print("실패(Education수정): \(response.message)")
+                    completion(response.result)
+                    print("실패(Education수정): \(result.message)")
                 }
             case .failure(let error):
+                completion(response.result)
                 print("실패(AF-Education수정): \(error.localizedDescription)")
             }
         }
     }
     // MARK: - [DELETE] 교육 삭제
-    public static func deleteEducation(educationIdx: Int, completion: @escaping ((Bool) -> Void)) {
+    public static func deleteEducation(educationIdx: Int, completion: @escaping ((Result<ProfileDefaultResponse, AFError>) -> Void)) {
         
         let url = "https://garamgaebi.shop/profile/education/\(educationIdx)"
         
@@ -301,14 +305,16 @@ class ProfileHistoryViewModel {
         .validate()
         .responseDecodable(of: ProfileDefaultResponse.self) { response in
             switch response.result {
-            case .success(let response):
-                if response.isSuccess {
-                    print("성공(Education삭제): \(response.message)")
+            case .success(let result):
+                if result.isSuccess {
+                    print("성공(Education삭제): \(result.message)")
                     completion(response.result)
                 } else {
-                    print("실패(Education삭제): \(response.message)")
+                    completion(response.result)
+                    print("실패(Education삭제): \(result.message)")
                 }
             case .failure(let error):
+                completion(response.result)
                 print("실패(AF-Education삭제): \(error.localizedDescription)")
             }
         }
