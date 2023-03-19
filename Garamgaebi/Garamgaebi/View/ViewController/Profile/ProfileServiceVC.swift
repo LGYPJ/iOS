@@ -433,12 +433,11 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
                     }
                     else {
                         print("실패(로그아웃): \(result.message)")
+                        self?.makeNetworkAlertDialog(title: "네트워크 연결 실패")
                     }
                 case .failure(let error):
                     print("실패(AF-로그아웃): \(error.localizedDescription)")
-                    let errorView = ErrorPageView()
-                    errorView.modalPresentationStyle = .fullScreen
-                    self?.present(errorView, animated: false)
+                    self?.makeNetworkAlertDialog(title: "네트워크 연결 실패")
                 }
             }
         }
