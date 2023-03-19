@@ -373,22 +373,30 @@ class ProfileWithdrawalVC: UIViewController, BottomSheetSelectDelegate {
         let withdrawalNoAction = UIAlertAction(title: "아니오", style: .default, handler: nil)
         let withdrawalYesAction = UIAlertAction(title: "예", style: .default) { [self] (_) in
             ProfileServiceViewModel.postWithdrawl(memberIdx: memberIdx, content: content, category: category) { result in
-                if result {
-                    // 회원 탈퇴가 끝나면 간편 로그인 화면으로 이동
-                    let nextVC = LoginVC(pushProgramIdx: nil, pushProgramtype: nil)
-                    
-                    // kakao unlink
-                    UserApi.shared.unlink {(error) in
-                        if let error = error {
-                            print(error)
+                switch result {
+                case .success(let result):
+                    if result.isSuccess {
+                        // 회원 탈퇴가 끝나면 간편 로그인 화면으로 이동
+                        let nextVC = LoginVC(pushProgramIdx: nil, pushProgramtype: nil)
+                        
+                        // kakao unlink
+                        UserApi.shared.unlink {(error) in
+                            if let error = error {
+                                print(error)
+                            }
+                            else {
+                                print("unlink() success.")
+                            }
                         }
-                        else {
-                            print("unlink() success.")
-                        }
+                        
+                        nextVC.modalPresentationStyle = .currentContext
+                        self.present(nextVC, animated: true)
+                        
+                    } else {
+                        self.makeNetworkAlertDialog(title: "네트워크 연결 실패")
                     }
-                    
-                    nextVC.modalPresentationStyle = .currentContext
-                    self.present(nextVC, animated: true)
+                case .failure(_):
+                    self.makeNetworkAlertDialog(title: "네트워크 연결 실패")
                 }
             }
         }
@@ -414,6 +422,26 @@ class ProfileWithdrawalVC: UIViewController, BottomSheetSelectDelegate {
             sender.setTitleColor(UIColor(hex: 0x8A8A8A), for: .normal)
             agreemsgLabel.textColor = UIColor(hex: 0x8A8A8A)
         }
+    }
+    
+    // Alert Dialog 생성
+    func makeNetworkAlertDialog(title: String, _ isAlert : Bool = true) {
+        
+        let message = title.networkFailureString()
+        let alert = isAlert ? UIAlertController(title: title, message: message, preferredStyle: .alert)
+        : UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        
+        let alertSuccessBtn = UIAlertAction(title: "확인", style: .default) { (action) in
+        }
+        
+        // Dialog에 버튼 추가
+        if(isAlert) {
+            alert.addAction(alertSuccessBtn)
+        } else {
+            alert.addAction(alertSuccessBtn)
+        }
+        // 화면에 출력
+        self.present(alert, animated: true, completion: nil)
     }
     
     private func buttonActivated() {
