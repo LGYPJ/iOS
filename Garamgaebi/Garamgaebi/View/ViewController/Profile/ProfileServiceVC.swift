@@ -389,9 +389,16 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
         guard let content = contentTextField.text else { return }
         
         ProfileServiceViewModel.postQna(memberIdx: memberIdx, email: email, category: category, content: content) { result in
-                if result {
+            switch result {
+            case .success(let result):
+                if result.isSuccess { // POST 성공시 이전 화면으로
                     self.navigationController?.popViewController(animated: true)
+                } else {
+                    self.makeNetworkAlertDialog(title: "네트워크 연결 실패")
                 }
+            case .failure(_):
+                self.makeNetworkAlertDialog(title: "네트워크 연결 실패")
+            }
         }
     }
     
@@ -470,6 +477,26 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
     // 뒤로가기 버튼 did tap
     @objc private func didTapBackBarButton() {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    // Alert Dialog 생성
+    func makeNetworkAlertDialog(title: String, _ isAlert : Bool = true) {
+        
+        let message = title.networkFailureString()
+        let alert = isAlert ? UIAlertController(title: title, message: message, preferredStyle: .alert)
+        : UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        
+        let alertSuccessBtn = UIAlertAction(title: "확인", style: .default) { (action) in
+        }
+        
+        // Dialog에 버튼 추가
+        if(isAlert) {
+            alert.addAction(alertSuccessBtn)
+        } else {
+            alert.addAction(alertSuccessBtn)
+        }
+        // 화면에 출력
+        self.present(alert, animated: true, completion: nil)
     }
     
     // textField delegate 등록

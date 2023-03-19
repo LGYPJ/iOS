@@ -9,7 +9,7 @@ import Alamofire
 
 class ProfileServiceViewModel {
     // MARK: - [POST] 고객센터 추가
-    public static func postQna(memberIdx: Int, email: String, category: String, content: String, completion: @escaping ((Bool) -> Void)) {
+    public static func postQna(memberIdx: Int, email: String, category: String, content: String, completion: @escaping ((Result<ProfileDefaultResponse, AFError>) -> Void)) {
         
         let url = "https://garamgaebi.shop/profile/qna"
 
@@ -30,15 +30,17 @@ class ProfileServiceViewModel {
         .validate()
         .responseDecodable(of: ProfileDefaultResponse.self) { response in
             switch response.result {
-            case .success(let response):
-                if response.isSuccess {
-                    print("성공(고객센터): \(response.message)")
+            case .success(let result):
+                if result.isSuccess {
+                    print("성공(고객센터): \(result.message)")
                     completion(response.result)
                 } else {
-                    print("실패(고객센터): \(response.message)")
+                    print("실패(고객센터): \(result.message)")
+                    completion(response.result)
                 }
             case .failure(let error):
                 print("실패(AF-고객센터): \(error.localizedDescription)")
+                completion(response.result)
             }
         }
     }
