@@ -28,7 +28,7 @@ class ProfileServiceViewModel {
             interceptor: MyRequestInterceptor()
         )
         .validate()
-        .responseDecodable(of: ProfilePostResponse.self) { response in
+        .responseDecodable(of: ProfileDefaultResponse.self) { response in
             switch response.result {
             case .success(let response):
                 if response.isSuccess {

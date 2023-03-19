@@ -12,7 +12,7 @@ class ProfileHistoryViewModel {
     
     // SNS
     // MARK: - [POST] SNS 추가
-    public static func postSNS(memberIdx: Int, type: String, address: String, completion: @escaping ((Result<ProfilePostResponse, AFError>) -> Void)) {
+    public static func postSNS(memberIdx: Int, type: String, address: String, completion: @escaping ((Result<ProfileDefaultResponse, AFError>) -> Void)) {
         
         let url = "https://garamgaebi.shop/profile/sns"
 
@@ -30,7 +30,7 @@ class ProfileHistoryViewModel {
             interceptor: MyRequestInterceptor()
         )
         .validate()
-        .responseDecodable(of: ProfilePostResponse.self) { response in
+        .responseDecodable(of: ProfileDefaultResponse.self) { response in
             switch response.result {
             case .success(let result):
                 if result.isSuccess {
@@ -47,7 +47,7 @@ class ProfileHistoryViewModel {
         }
     }
     // MARK: - [PATCH] SNS 수정
-    public static func patchSNS(snsIdx: Int, type: String, address: String, completion: @escaping ((Result<ProfilePostResponse, AFError>) -> Void)) {
+    public static func patchSNS(snsIdx: Int, type: String, address: String, completion: @escaping ((Result<ProfileDefaultResponse, AFError>) -> Void)) {
         
         let url = "https://garamgaebi.shop/profile/sns"
         
@@ -65,7 +65,7 @@ class ProfileHistoryViewModel {
             interceptor: MyRequestInterceptor()
         )
         .validate()
-        .responseDecodable(of: ProfilePostResponse.self) { response in
+        .responseDecodable(of: ProfileDefaultResponse.self) { response in
             switch response.result {
             case .success(let result):
                 if result.isSuccess {
@@ -82,7 +82,7 @@ class ProfileHistoryViewModel {
         }
     }
     // MARK: - [DELETE] SNS 삭제
-    public static func deleteSNS(snsIdx: Int, completion: @escaping ((Result<ProfilePostResponse, AFError>) -> Void)) {
+    public static func deleteSNS(snsIdx: Int, completion: @escaping ((Result<ProfileDefaultResponse, AFError>) -> Void)) {
         
         let url = "https://garamgaebi.shop/profile/sns/\(snsIdx)"
         
@@ -93,7 +93,7 @@ class ProfileHistoryViewModel {
             interceptor: MyRequestInterceptor()
         )
         .validate()
-        .responseDecodable(of: ProfilePostResponse.self) { response in
+        .responseDecodable(of: ProfileDefaultResponse.self) { response in
             switch response.result {
             case .success(let result):
                 if result.isSuccess {
@@ -132,7 +132,7 @@ class ProfileHistoryViewModel {
             interceptor: MyRequestInterceptor()
         )
         .validate()
-        .responseDecodable(of: ProfilePostResponse.self) { response in
+        .responseDecodable(of: ProfileDefaultResponse.self) { response in
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
@@ -168,7 +168,7 @@ class ProfileHistoryViewModel {
             interceptor: MyRequestInterceptor()
         )
         .validate()
-        .responseDecodable(of: ProfilePostResponse.self) { response in
+        .responseDecodable(of: ProfileDefaultResponse.self) { response in
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
@@ -194,7 +194,7 @@ class ProfileHistoryViewModel {
             interceptor: MyRequestInterceptor()
         )
         .validate()
-        .responseDecodable(of: ProfilePostResponse.self) { response in
+        .responseDecodable(of: ProfileDefaultResponse.self) { response in
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
@@ -231,7 +231,7 @@ class ProfileHistoryViewModel {
             interceptor: MyRequestInterceptor()
         )
         .validate()
-        .responseDecodable(of: ProfilePostResponse.self) { response in
+        .responseDecodable(of: ProfileDefaultResponse.self) { response in
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
@@ -267,7 +267,7 @@ class ProfileHistoryViewModel {
             interceptor: MyRequestInterceptor()
         )
         .validate()
-        .responseDecodable(of: ProfilePostResponse.self) { response in
+        .responseDecodable(of: ProfileDefaultResponse.self) { response in
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
@@ -293,7 +293,7 @@ class ProfileHistoryViewModel {
             interceptor: MyRequestInterceptor()
         )
         .validate()
-        .responseDecodable(of: ProfilePostResponse.self) { response in
+        .responseDecodable(of: ProfileDefaultResponse.self) { response in
             switch response.result {
             case .success(let response):
                 if response.isSuccess {

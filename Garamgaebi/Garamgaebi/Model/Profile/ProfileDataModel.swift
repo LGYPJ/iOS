@@ -35,7 +35,7 @@ struct ProfileEditResult: Decodable {
     let memberIdx: Int
 }
 
-struct ProfilePostResponse: Decodable {
+struct ProfileDefaultResponse: Decodable {
     let isSuccess: Bool
     let code: Int
     let message: String
