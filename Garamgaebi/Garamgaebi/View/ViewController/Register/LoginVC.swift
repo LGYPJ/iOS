@@ -53,9 +53,7 @@ class LoginVC: UIViewController {
     
     lazy var kakaoLoginButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "KakaoLoginButton"), for: .normal)
-        //button.adjustsImageWhenHighlighted = false
-        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        button.setImage(UIImage(named: "KakaoLogin"), for: .normal)
         button.layer.cornerRadius = 12
         button.addTarget(self, action: #selector(loginSuccessed), for: .touchUpInside)
         return button
@@ -64,9 +62,7 @@ class LoginVC: UIViewController {
     lazy var appleLoginButton: UIButton = {
         let button = UIButton()
         //button.adjustsImageWhenHighlighted = false
-        button.setTitle("APPLE", for: .normal)
-        button.backgroundColor = UIColor.init(hex: 0x1C1C1C)
-        button.setTitleColor(UIColor.white, for: .normal)
+        button.setImage(UIImage(named: "AppleLogin"), for: .normal)
         button.layer.cornerRadius = 12
         button.addTarget(self, action: #selector(appleLogin), for: .touchUpInside)
         return button
@@ -114,7 +110,6 @@ class LoginVC: UIViewController {
         
         //appleLoginButton
         appleLoginButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
             make.height.equalTo(48)
             make.left.right.equalToSuperview().inset(16)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(32)
@@ -122,8 +117,7 @@ class LoginVC: UIViewController {
         
         //kakaoLoginButton
         kakaoLoginButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.height.equalTo(53.7)
+            make.height.equalTo(48)
             make.left.right.equalToSuperview().inset(16)
             make.bottom.equalTo(appleLoginButton.snp.top).offset(-13.2)
         }
