@@ -112,6 +112,7 @@ class ViewAllSeminarVC: UIViewController {
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-모아보기 화면 이번 달 Seminar 조회): \(error.localizedDescription)")
+                self?.refresh.endRefreshing()
                 self?.presentErrorView()
             }
         }
@@ -135,6 +136,7 @@ class ViewAllSeminarVC: UIViewController {
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-모아보기 화면 예정된 Seminar 조회): \(error.localizedDescription)")
+                self?.refresh.endRefreshing()
                 self?.presentErrorView()
             }
         }
@@ -158,6 +160,7 @@ class ViewAllSeminarVC: UIViewController {
             case .failure(let error):
                 // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
                 print("실패(AF-모아보기 화면 마감된 Seminar 조회): \(error.localizedDescription)")
+                self?.refresh.endRefreshing()
                 self?.presentErrorView()
             }
         }
