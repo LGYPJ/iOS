@@ -163,10 +163,10 @@ class ProfileWithdrawalVC: UIViewController, BottomSheetSelectDelegate {
         
         $0.addTarget(self, action: #selector(withdrawalButtonDidTap), for: .touchUpInside)
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         configureLayouts()
         configureGestureRecognizer()
     }
@@ -376,21 +376,35 @@ class ProfileWithdrawalVC: UIViewController, BottomSheetSelectDelegate {
                 switch result {
                 case .success(let result):
                     if result.isSuccess {
-                        // 회원 탈퇴가 끝나면 간편 로그인 화면으로 이동
-                        let nextVC = LoginVC(pushProgramIdx: nil, pushProgramtype: nil)
                         
-                        // kakao unlink
-                        UserApi.shared.unlink {(error) in
-                            if let error = error {
-                                print(error)
-                            }
-                            else {
-                                print("unlink() success.")
+                        let accessToken = UserDefaults.standard.string(forKey: "BearerToken") ?? ""
+                        let fcmToken = UserDefaults.standard.string(forKey: "fcmToken") ?? ""
+                        let refreshToken = UserDefaults.standard.string(forKey: "refreshToken") ?? ""
+                        LogoutViewModel.postLogout(accessToken: accessToken, refreshToken: refreshToken, fcmToken: fcmToken) { [weak self] result in
+                            switch result {
+                            case .success(let result):
+                                if result.isSuccess {
+                                    print("성공(로그아웃): \(result.message)")
+                                    // 로그아웃 시 UserDefaults에 저장된 모든 정보 삭제 (fcmToken을 제외한)
+                                    for key in UserDefaults.standard.dictionaryRepresentation().keys {
+                                        if key.description != "fcmToken" {
+                                            UserDefaults.standard.removeObject(forKey: key.description)
+                                        }
+                                    }
+                                    // 로그아웃, 회원 탈퇴가 끝나면 간편 로그인 화면으로 이동
+                                    let nextVC = LoginVC(pushProgramIdx: nil, pushProgramtype: nil)
+                                    nextVC.modalPresentationStyle = .currentContext
+                                    self?.present(nextVC, animated: true)
+                                }
+                                else {
+                                    print("실패(로그아웃): \(result.message)")
+                                    self?.makeNetworkAlertDialog(title: "네트워크 연결 실패")
+                                }
+                            case .failure(let error):
+                                print("실패(AF-로그아웃): \(error.localizedDescription)")
+                                self?.makeNetworkAlertDialog(title: "네트워크 연결 실패")
                             }
                         }
-                        
-                        nextVC.modalPresentationStyle = .currentContext
-                        self.present(nextVC, animated: true)
                         
                     } else {
                         self.makeNetworkAlertDialog(title: "네트워크 연결 실패")
@@ -489,7 +503,7 @@ extension ProfileWithdrawalVC: UITextViewDelegate {
         }
         textView.layer.borderColor = UIColor.mainBlack.cgColor
     }
-
+    
     // TextView Place Holder
     func textViewDidEndEditing(_ textView: UITextView) {
         if contentTextField.text.isEmpty {
@@ -499,7 +513,7 @@ extension ProfileWithdrawalVC: UITextViewDelegate {
         }
         contentTextField.layer.borderColor = UIColor.mainGray.cgColor
     }
-
+    
     // TextView 글자수 제한
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if contentTextField.text.isEmpty {
@@ -529,7 +543,7 @@ extension ProfileWithdrawalVC {
             if let text = textView.text {
                 if text.count > maxTextCount {
                     // 100글자 넘어가면 자동으로 키보드 내려감
-//                    textView.resignFirstResponder()
+                    //                    textView.resignFirstResponder()
                 }
                 // 초과되는 텍스트 제거
                 if text.count >= maxTextCount {
@@ -604,8 +618,6 @@ extension ProfileWithdrawalVC {
         if distance == 0 {
             return
         }
-        // return to origin scrollOffset
-//        self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollOffset), animated: true)
         self.scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
         scrollOffset = 0
         distance = 0
