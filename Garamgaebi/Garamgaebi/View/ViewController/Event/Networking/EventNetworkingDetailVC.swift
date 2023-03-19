@@ -186,7 +186,7 @@ extension EventNetworkingDetailVC {
 			print("세미나 상세보기 Button Error")
 		}
 	}
-	
+	// 시작시간이 지나면 true, 시작 전이면 false
 	private func isAvailableNetworking(fromDate: String) -> Bool {
 		guard let eventDate = fromDate.toDate() else {return false}
 		
@@ -257,10 +257,8 @@ extension EventNetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 //			cell.dateInfoLabel.text = self.networkingInfo.date
 			cell.locationInfoLabel.text = self.networkingInfo.location
 			if self.networkingInfo.fee == 0 {
-//				cell.costStackView.isHidden = true
 				cell.costInfoLabel.text = "무료"
 			} else {
-//				cell.costStackView.isHidden = false
 				cell.costInfoLabel.text = "\(self.networkingInfo.fee)원"
 			}
 //			cell.deadlineInfoLabel.text = self.networkingInfo.endDate
@@ -320,7 +318,6 @@ extension EventNetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 			return cell
 		case 2:
 			guard let cell = tableView.dequeueReusableCell(withIdentifier: EventIceBreakingTableViewCell.identifier, for: indexPath) as? EventIceBreakingTableViewCell else {return UITableViewCell()}
-//			cell.entranceButton.addTarget(self, action: #selector(didTapEntranceButton), for: .touchUpInside)
 			
 			let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapEntranceButton))
 			tapGestureRecognizer.numberOfTapsRequired = 1
@@ -328,16 +325,16 @@ extension EventNetworkingDetailVC: UITableViewDelegate, UITableViewDataSource {
 			
 			cell.entranceContainerView.addGestureRecognizer(tapGestureRecognizer)
 			
-			let testDate = "2023-02-10T18:29:00"
-			if isAvailableNetworking(fromDate: testDate) && isUserApplyProgram {
-//			if isAvailableNetworking(fromDate: self.networkingInfo.date) && UserDefaults.standard.bool(forKey: "programId:\(networkingId)") {
+//			let testDate = "2023-03-19T15:22:00"
+//			if isAvailableNetworking(fromDate: testDate) && isUserApplyProgram {
+			if isAvailableNetworking(fromDate: self.networkingInfo.date) && isUserApplyProgram {
 				cell.entranceContainerView.backgroundColor = .mainBlue
 				cell.entranceContainerView.isUserInteractionEnabled = true
 				cell.entranceLabel.textColor = .white
 				cell.entranceImageView.image = UIImage(systemName: "chevron.right.circle")?.withTintColor(.white, renderingMode: .alwaysOriginal)
 			} else {
 				cell.entranceContainerView.backgroundColor = .mainGray
-//				cell.entranceContainerView.isUserInteractionEnabled = false
+				cell.entranceContainerView.isUserInteractionEnabled = false
 				cell.entranceLabel.textColor = UIColor(hex: 0x8A8A8A)
 				cell.entranceImageView.image = UIImage(systemName: "chevron.right.circle")?.withTintColor(UIColor(hex: 0x8A8A8A), renderingMode: .alwaysOriginal)
 			}

@@ -15,7 +15,6 @@ class EventInfoTableViewCell: UITableViewCell {
 	// n차 세미나, 네트워킹과 같은 제목 label
 	lazy var eventNameLabel: UILabel = {
 		let label = UILabel()
-		label.text = " "
 		label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
 		label.textColor = .mainBlack
 		
@@ -185,6 +184,7 @@ extension EventInfoTableViewCell {
 		eventNameLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(12)
 			$0.leading.equalToSuperview().inset(16)
+			$0.height.equalTo(29)
 		}
 		
 //		shareImageView.snp.makeConstraints {
