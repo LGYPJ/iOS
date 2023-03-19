@@ -384,10 +384,17 @@ class ProfileInputSNSVC: UIViewController, BottomSheetSelectDelegate {
         if type == "인스타그램" {
             address = "@" + address
         }
-        
+        // SNS 추가 API
         ProfileHistoryViewModel.postSNS(memberIdx: memberIdx, type: type, address: address ) { result in
-            if result {
-                self.navigationController?.popViewController(animated: true)
+            switch result {
+            case .success(let result):
+                if result.isSuccess {
+                    self.navigationController?.popViewController(animated: true)
+                } else {
+                    self.makeNetworkAlertDialog(title: "저장 실패")
+                }
+            case .failure(_):
+                self.makeNetworkAlertDialog(title: "저장 실패")
             }
         }
     }
@@ -398,10 +405,17 @@ class ProfileInputSNSVC: UIViewController, BottomSheetSelectDelegate {
         if type == "인스타그램" {
             address = "@" + address
         }
-        
+        // SNS 추가 API
         ProfileHistoryViewModel.patchSNS(snsIdx: snsIdx, type: type, address: address ) { result in
-            if result {
-                self.navigationController?.popViewController(animated: true)
+            switch result {
+            case .success(let result):
+                if result.isSuccess {
+                    self.navigationController?.popViewController(animated: true)
+                } else {
+                    self.makeNetworkAlertDialog(title: "저장 실패")
+                }
+            case .failure(_):
+                self.makeNetworkAlertDialog(title: "저장 실패")
             }
         }
     }
@@ -419,12 +433,20 @@ class ProfileInputSNSVC: UIViewController, BottomSheetSelectDelegate {
         // 삭제 동의 선택지
         let deleteNoAction = UIAlertAction(title: "아니오", style: .default, handler: nil)
         let deleteYesAlertAction = UIAlertAction(title: "예", style: .default) { [self] (_) in
-            // 삭제 진행
+            // SNS 삭제 API
             ProfileHistoryViewModel.deleteSNS(snsIdx: self.snsIdx) { [self] result in
-                if result {
-                    // 삭제 확인 다이얼로그 띄우기
-                    alert.addAction(alertAction)
-                    self.present(alert, animated: true, completion: nil)
+                switch result {
+                case .success(let result):
+                    if result.isSuccess {
+                        // 삭제 성공 다이얼로그 띄우기
+                        alert.addAction(alertAction)
+                        self.present(alert, animated: true, completion: nil)
+                    } else {
+                        // 삭제 실패 다이얼로그 띄우기
+                        self.makeNetworkAlertDialog(title: "삭제 실패")
+                    }
+                case .failure(_):
+                    self.makeNetworkAlertDialog(title: "삭제 실패")
                 }
             }
         }
@@ -518,6 +540,32 @@ class ProfileInputSNSVC: UIViewController, BottomSheetSelectDelegate {
     // 뒤로가기 버튼 did tap
     @objc private func didTapBackBarButton() {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    // Alert Dialog 생성
+    func makeNetworkAlertDialog(title: String, _ isAlert : Bool = true) {
+        
+        let message = title.networkFailureString()
+        
+        // alert : 가운데에서 출력되는 Dialog. 취소/동의 같이 2개 이하를 선택할 경우 사용. 간단명료 해야함.
+        let alert = isAlert ? UIAlertController(title: title, message: message, preferredStyle: .alert)
+        // actionSheet : 밑에서 올라오는 Dialog. 3개 이상을 선택할 경우 사용
+        : UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        
+        let alertSuccessBtn = UIAlertAction(title: "확인", style: .default) { (action) in
+        }
+        
+        // Dialog에 버튼 추가
+        if(isAlert) {
+            alert.addAction(alertSuccessBtn)
+        }
+        else {
+            alert.addAction(alertSuccessBtn)
+
+        }
+        
+        // 화면에 출력
+        self.present(alert, animated: true, completion: nil)
     }
 }
 

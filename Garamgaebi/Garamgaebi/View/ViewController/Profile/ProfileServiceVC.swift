@@ -77,7 +77,7 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.numberOfLines = 0
         $0.textColor = UIColor.mainBlack
-        $0.text = "휴일을 제외한 평일에는 하루 이내에 답변을 드릴게요.\n혹시 하루가 지나도 답변이 오지 않으면, 스팸 메일함을 확인해주세요."
+        $0.text = "최대한 신속하게 답변해드릴게요.\n답변을 못받으셨다면 스팸 메일함도 확인해주세요."
     }
     
     let emailSubtitleLabel = UILabel().then {
@@ -389,9 +389,16 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
         guard let content = contentTextField.text else { return }
         
         ProfileServiceViewModel.postQna(memberIdx: memberIdx, email: email, category: category, content: content) { result in
-                if result {
+            switch result {
+            case .success(let result):
+                if result.isSuccess { // POST 성공시 이전 화면으로
                     self.navigationController?.popViewController(animated: true)
+                } else {
+                    self.makeNetworkAlertDialog(title: "네트워크 연결 실패")
                 }
+            case .failure(_):
+                self.makeNetworkAlertDialog(title: "네트워크 연결 실패")
+            }
         }
     }
     
@@ -426,12 +433,11 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
                     }
                     else {
                         print("실패(로그아웃): \(result.message)")
+                        self?.makeNetworkAlertDialog(title: "네트워크 연결 실패")
                     }
                 case .failure(let error):
                     print("실패(AF-로그아웃): \(error.localizedDescription)")
-                    let errorView = ErrorPageView()
-                    errorView.modalPresentationStyle = .fullScreen
-                    self?.present(errorView, animated: false)
+                    self?.makeNetworkAlertDialog(title: "네트워크 연결 실패")
                 }
             }
         }
@@ -470,6 +476,26 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
     // 뒤로가기 버튼 did tap
     @objc private func didTapBackBarButton() {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    // Alert Dialog 생성
+    func makeNetworkAlertDialog(title: String, _ isAlert : Bool = true) {
+        
+        let message = title.networkFailureString()
+        let alert = isAlert ? UIAlertController(title: title, message: message, preferredStyle: .alert)
+        : UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        
+        let alertSuccessBtn = UIAlertAction(title: "확인", style: .default) { (action) in
+        }
+        
+        // Dialog에 버튼 추가
+        if(isAlert) {
+            alert.addAction(alertSuccessBtn)
+        } else {
+            alert.addAction(alertSuccessBtn)
+        }
+        // 화면에 출력
+        self.present(alert, animated: true, completion: nil)
     }
     
     // textField delegate 등록

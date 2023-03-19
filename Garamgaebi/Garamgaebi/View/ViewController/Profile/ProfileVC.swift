@@ -564,6 +564,9 @@ class ProfileVC: UIViewController {
                 }
             case .failure(let error):
                 print("실패(AF-내프로필): \(error.localizedDescription)")
+                let errorView = ErrorPageView()
+                errorView.modalPresentationStyle = .fullScreen
+                self.present(errorView, animated: false)
             }
         }
     }

@@ -543,7 +543,6 @@ class ProfileInputEducationVC: UIViewController {
     }
 
     @objc private func saveButtonDidTap(_ sender: UIButton) {
-//        print("저장하기 버튼 클릭")
         // 값 저장
         guard let institution = institutionTextField.text else { return }
         guard let major = majorTextField.text else { return }
@@ -556,13 +555,19 @@ class ProfileInputEducationVC: UIViewController {
         } else {
             checkValue = "FALSE"
         }
-        
-        // 서버 연동
+        // 교육 추가 API
         ProfileHistoryViewModel.postEducation(memberIdx: memberIdx, institution: institution, major: major, isLearning: checkValue, startDate: startDate, endDate: endDate) { result in
-            if result {
+            switch result {
                 // 서버 통신 후 profileVC reload 요청 notification 예시
                 // NotificationCenter.default.post(name: Notification.Name("profileVCRefresh"), object: nil)
-                self.navigationController?.popViewController(animated: true)
+            case .success(let result):
+                if result.isSuccess {
+                    self.navigationController?.popViewController(animated: true)
+                } else {
+                    self.makeNetworkAlertDialog(title: "저장 실패")
+                }
+            case .failure(_):
+                self.makeNetworkAlertDialog(title: "저장 실패")
             }
         }
     }
@@ -580,10 +585,17 @@ class ProfileInputEducationVC: UIViewController {
         } else {
             checkValue = "FALSE"
         }
-
+        // 교육 수정 API
         ProfileHistoryViewModel.patchEducation(educationIdx: educationIdx, institution:  institution, major: major, isLearning: checkValue, startDate: startDate, endDate: endDate) { result in
-            if result {
-                self.navigationController?.popViewController(animated: true)
+            switch result {
+            case .success(let result):
+                if result.isSuccess {
+                    self.navigationController?.popViewController(animated: true)
+                } else {
+                    self.makeNetworkAlertDialog(title: "저장 실패")
+                }
+            case .failure(_):
+                self.makeNetworkAlertDialog(title: "저장 실패")
             }
         }
     }
@@ -601,12 +613,20 @@ class ProfileInputEducationVC: UIViewController {
         // 삭제 동의 선택지
         let deleteNoAction = UIAlertAction(title: "아니오", style: .default, handler: nil)
         let deleteYesAlertAction = UIAlertAction(title: "예", style: .default) { [self] (_) in
-            // 삭제 진행
+            // 교육 삭제 API
             ProfileHistoryViewModel.deleteEducation(educationIdx: self.educationIdx) { [self] result in
-                if result {
-                    // 삭제 확인 다이얼로그 띄우기
-                    alert.addAction(alertAction)
-                    self.present(alert, animated: true, completion: nil)
+                switch result {
+                case .success(let result):
+                    if result.isSuccess {
+                        // 삭제 성공 다이얼로그 띄우기
+                        alert.addAction(alertAction)
+                        self.present(alert, animated: true, completion: nil)
+                    } else {
+                        // 삭제 실패 다이얼로그 띄우기
+                        self.makeNetworkAlertDialog(title: "삭제 실패")
+                    }
+                case .failure(_):
+                    self.makeNetworkAlertDialog(title: "삭제 실패")
                 }
             }
         }
@@ -807,8 +827,31 @@ class ProfileInputEducationVC: UIViewController {
     
     // 뒤로가기 버튼 did tap
     @objc private func didTapBackBarButton() {
-//        print("뒤로가기 버튼 클릭")
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    // Alert Dialog 생성
+    func makeNetworkAlertDialog(title: String, _ isAlert : Bool = true) {
+        
+        let message = title.networkFailureString()
+
+        let alert = isAlert ? UIAlertController(title: title, message: message, preferredStyle: .alert)
+
+        : UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        
+        let alertSuccessBtn = UIAlertAction(title: "확인", style: .default) { (action) in
+        }
+        
+        // Dialog에 버튼 추가
+        if(isAlert) {
+            alert.addAction(alertSuccessBtn)
+        }
+        else {
+            alert.addAction(alertSuccessBtn)
+        }
+        
+        // 화면에 출력
+        self.present(alert, animated: true, completion: nil)
     }
     
     @objc
