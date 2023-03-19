@@ -827,7 +827,7 @@ class ProfileInputCareerVC: UIViewController {
     // Alert Dialog 생성
     func makeNetworkAlertDialog(title: String, _ isAlert : Bool = true) {
         
-        let message = "Wi-Fi 또는 셀룰러 네트워크에 연결되어 있는지 확인하십시오."
+        let message = title.networkFailureString()
 
         let alert = isAlert ? UIAlertController(title: title, message: message, preferredStyle: .alert)
 

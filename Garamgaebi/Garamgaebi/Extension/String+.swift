@@ -91,4 +91,9 @@ extension String {
     func removeString(target string: String) -> String {
         return components(separatedBy: string).joined()
     }
+    
+    func networkFailureString() -> String {
+        let message = "Wi-Fi 또는 셀룰러 네트워크에 연결되어 있는지 확인하십시오."
+        return message
+    }
 }

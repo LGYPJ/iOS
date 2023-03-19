@@ -545,7 +545,7 @@ class ProfileInputSNSVC: UIViewController, BottomSheetSelectDelegate {
     // Alert Dialog 생성
     func makeNetworkAlertDialog(title: String, _ isAlert : Bool = true) {
         
-        let message = "Wi-Fi 또는 셀룰러 네트워크에 연결되어 있는지 확인하십시오."
+        let message = title.networkFailureString()
         
         // alert : 가운데에서 출력되는 Dialog. 취소/동의 같이 2개 이하를 선택할 경우 사용. 간단명료 해야함.
         let alert = isAlert ? UIAlertController(title: title, message: message, preferredStyle: .alert)
