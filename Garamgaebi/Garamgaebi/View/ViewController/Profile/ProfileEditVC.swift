@@ -443,14 +443,22 @@ class ProfileEditVC: UIViewController {
             editIntroduce = nil
         }
         postMyInfo(memberIdx: memberIdx, nickName: editName, belong: editOrg, profileEmail: editEmail, content: editIntroduce ?? nil, profileImage: profileImage) { result in
-            if result {
-                self.navigationController?.popViewController(animated: true)
+            switch result {
+            case .success(let result):
+                if result.isSuccess { // 성공했으면 이전 화면으로
+                    self.navigationController?.popViewController(animated: true)
+                } else {
+                    // 수정 실패 다이얼로그 띄우기
+                    self.makeNetworkAlertDialog(title: "프로필 수정 실패")
+                }
+            case .failure(_):
+                self.makeNetworkAlertDialog(title: "프로필 수정 실패")
             }
         }
     }
     
     // MARK: - [POST] 유저 정보 수정
-    func postMyInfo(memberIdx: Int, nickName: String, belong: String, profileEmail: String, content: String?, profileImage: UIImage?, completion: @escaping ((Bool) -> Void)) {
+    func postMyInfo(memberIdx: Int, nickName: String, belong: String, profileEmail: String, content: String?, profileImage: UIImage?, completion: @escaping ((Result<ProfileEditResponse, AFError>) -> Void)) {
         
         // http 요청 주소 지정
         let url = "https://garamgaebi.shop/profile/edit"
@@ -483,16 +491,17 @@ class ProfileEditVC: UIViewController {
         .validate()
         .responseDecodable(of: ProfileEditResponse.self) { response in
             switch response.result {
-            case .success(let response):
-                if response.isSuccess {
-                    print("성공(프로필수정): \(response.message)")
+            case .success(let result):
+                if result.isSuccess {
+                    print("성공(프로필수정): \(result.message)")
                     UserDefaults.standard.set(nickName, forKey: "nickname")
-                    completion(response.isSuccess)
+                    completion(response.result)
                 } else {
-                    print("실패(프로필수정): \(response.message)")
-                    completion(response.isSuccess)
+                    print("실패(프로필수정): \(result.message)")
+                    completion(response.result)
                 }
             case .failure(let error):
+                completion(response.result)
                 print("실패(AF-프로필수정): \(error)")
             }
         }
@@ -523,6 +532,29 @@ class ProfileEditVC: UIViewController {
     // 뒤로가기 버튼 did tap
     @objc private func didTapBackBarButton() {
         self.navigationController?.popViewController(animated: true)
+    }
+    // Alert Dialog 생성
+    func makeNetworkAlertDialog(title: String, _ isAlert : Bool = true) {
+        
+        let message = title.networkFailureString()
+
+        let alert = isAlert ? UIAlertController(title: title, message: message, preferredStyle: .alert)
+
+        : UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        
+        let alertSuccessBtn = UIAlertAction(title: "확인", style: .default) { (action) in
+        }
+        
+        // Dialog에 버튼 추가
+        if(isAlert) {
+            alert.addAction(alertSuccessBtn)
+        }
+        else {
+            alert.addAction(alertSuccessBtn)
+        }
+        
+        // 화면에 출력
+        self.present(alert, animated: true, completion: nil)
     }
     
     private func buttonActivated() {
