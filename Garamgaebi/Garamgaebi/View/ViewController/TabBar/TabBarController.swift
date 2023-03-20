@@ -25,6 +25,7 @@ class TabBarController: UITabBarController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         tabBar.backgroundColor = .white
+		tabBar.isTranslucent = false
         tabBar.layer.borderWidth = 1
         tabBar.layer.borderColor = UIColor(hex: 0xF2F2F2).cgColor
         self.delegate = self

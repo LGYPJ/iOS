@@ -340,7 +340,7 @@ class EventApplyCancelVC: UIViewController {
     }
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		self.tabBarController?.tabBar.isHidden = true
+		self.tabBarController?.setTabBarVisible(visible: false, duration: 0.0)
 		
         fetchProgramData()
         fetchUserData()

@@ -210,7 +210,7 @@ class ProfileInputSNSVC: UIViewController, BottomSheetSelectDelegate {
         
         print("편집할 snsIdx: \(snsIdx)")
         view.backgroundColor = .white
-        tabBarController?.tabBar.isHidden = true
+		self.tabBarController?.setTabBarVisible(visible: false, duration: 0.0)
         
         addSubViews()
         configLayouts()

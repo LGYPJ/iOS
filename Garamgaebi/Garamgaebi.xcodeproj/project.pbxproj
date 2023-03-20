@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		07387C389AB3203B5F1B6292 /* Pods_Garamgaebi_GaramgaebiUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */; };
 		2A5DAD14EE12541BAE988EB7 /* Pods_Garamgaebi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8CB1AB7E398B75581977FAF /* Pods_Garamgaebi.framework */; };
+		2C02E5EE29C87D1800D2435F /* UITabBarController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C02E5ED29C87D1800D2435F /* UITabBarController+.swift */; };
 		2C0495D729AB31CA002E2B92 /* IceBreakingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0495D629AB31CA002E2B92 /* IceBreakingModel.swift */; };
 		2C0538F4296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0538F3296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift */; };
 		2C4083112997CE67000747DF /* WebSocketTestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4083102997CE67000747DF /* WebSocketTestVC.swift */; };
@@ -172,6 +173,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2C02E5ED29C87D1800D2435F /* UITabBarController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBarController+.swift"; sourceTree = "<group>"; };
 		2C0495D629AB31CA002E2B92 /* IceBreakingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IceBreakingModel.swift; sourceTree = "<group>"; };
 		2C0538F3296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPreviewCollectionViewCell.swift; sourceTree = "<group>"; };
 		2C4083102997CE67000747DF /* WebSocketTestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketTestVC.swift; sourceTree = "<group>"; };
@@ -905,6 +907,7 @@
 				60D0CFBF298FC443008C24F3 /* UIView+.swift */,
 				4668726B299633EA00469D0E /* UILabel+.swift */,
 				60A128B329975412000E5752 /* UIImage+.swift */,
+				2C02E5ED29C87D1800D2435F /* UITabBarController+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -1259,6 +1262,7 @@
 				2CDD94E529712E8E004B8D56 /* IceBreakingCardCollectionViewCell.swift in Sources */,
 				2CDD9502297551C4004B8D56 /* IceBreakingStartCardCollectionViewCell.swift in Sources */,
 				2CDD94FE2973BAB9004B8D56 /* CustomFlowLayout.swift in Sources */,
+				2C02E5EE29C87D1800D2435F /* UITabBarController+.swift in Sources */,
 				462C4D65297D34BD00F2E0C6 /* UIButton+.swift in Sources */,
 				2CDD94F82971A389004B8D56 /* IceBreakingRoomListVC.swift in Sources */,
 				60159A2D29AB86D300CD4202 /* LoadingView.swift in Sources */,

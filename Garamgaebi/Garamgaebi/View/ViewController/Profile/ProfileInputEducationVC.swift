@@ -361,7 +361,7 @@ class ProfileInputEducationVC: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .white
-        tabBarController?.tabBar.isHidden = true
+		self.tabBarController?.setTabBarVisible(visible: false, duration: 0.0)
         
         addSubViews()
         configLayouts()

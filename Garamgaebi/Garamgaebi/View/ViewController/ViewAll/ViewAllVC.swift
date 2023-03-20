@@ -88,7 +88,7 @@ class ViewAllVC: UIViewController {
     
     // MARK: Life Cycle
     override func viewDidLoad() {
-        super.viewDidLoad()     
+        super.viewDidLoad()
         configureViews()
         addSubViews()
         configLayouts()
@@ -103,7 +103,7 @@ class ViewAllVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tabBarController?.tabBar.isHidden = false
+		self.tabBarController?.setTabBarVisible(visible: true, duration: 0.0)
     }
     
 

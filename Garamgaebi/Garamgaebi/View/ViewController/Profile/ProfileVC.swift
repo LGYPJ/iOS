@@ -238,7 +238,7 @@ class ProfileVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
-        tabBarController?.tabBar.isHidden = false
+		self.tabBarController?.setTabBarVisible(visible: true, duration: 0.0)
         
         // 서버 통신
         getMyInfo()
