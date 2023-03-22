@@ -11,7 +11,7 @@ import Alamofire
 // 가입화면에서 UserInfo post API
 class RegisterUserViewModel {
     public static func requestRegisterUserKakao(parameter : RegisterUserInfo, completion: @escaping ((Result<RegisterUserInfoResponse, AFError>) -> Void)) {
-        let url = "https://garamgaebi.shop/member/post/kakao"
+        let url = "\(Constants.apiUrl)/member/post/kakao"
         let body: [String: Any] = [
             "nickname": parameter.nickname,
             "profileEmail": parameter.profileEmail,
@@ -40,7 +40,7 @@ class RegisterUserViewModel {
     }
     
     public static func requestRegisterUserApple(parameter : RegisterUserInfo, completion: @escaping ((Result<RegisterUserInfoResponse, AFError>) -> Void)) {
-        let url = "https://garamgaebi.shop/member/post/apple"
+        let url = "\(Constants.apiUrl)/member/post/apple"
         let body: [String: Any] = [
             "nickname": parameter.nickname,
             "profileEmail": parameter.profileEmail,

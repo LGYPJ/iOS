@@ -461,7 +461,7 @@ class ProfileEditVC: UIViewController {
     func postMyInfo(memberIdx: Int, nickName: String, belong: String, profileEmail: String, content: String?, profileImage: UIImage?, completion: @escaping ((Result<ProfileEditResponse, AFError>) -> Void)) {
         
         // http 요청 주소 지정
-        let url = "https://garamgaebi.shop/profile/edit"
+        let url = "\(Constants.apiUrl)/profile/edit"
         
         let subParam: [String: Any] = [
             "memberIdx": String(memberIdx),

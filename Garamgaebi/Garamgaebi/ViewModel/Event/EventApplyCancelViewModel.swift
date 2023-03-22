@@ -11,7 +11,7 @@ class EventApplyCancelViewModel {
 	// MARK: requestData
 	// get 유저 데이터
 	public static func getUserApplyData(memberId: Int, programId: Int, completion: @escaping ((EventUserApplyModel) -> Void)) {
-		let url = "https://garamgaebi.shop/applies/\(memberId)/\(programId)/info"
+		let url = "\(Constants.apiUrl)/applies/\(memberId)/\(programId)/info"
 		AF.request(url, method: .get, interceptor: MyRequestInterceptor())
 			.validate()
 			.responseDecodable(of: EventUserApplyModelResponse.self) { response in
@@ -30,7 +30,7 @@ class EventApplyCancelViewModel {
 	
 	// post 은행 계좌
 	public static func postBankAccount(memberId: Int, programId: Int, bank: String, account: String, completion: @escaping ((EventApplyModel) -> Void)) {
-		let url = "https://garamgaebi.shop/applies/programs/leave"
+		let url = "\(Constants.apiUrl)/applies/programs/leave"
 		let body: [String: Any] = [
 			"memberIdx": memberId,
 			"programIdx": programId,

@@ -12,7 +12,7 @@ import Alamofire
 class UniEmailAuthViewModel {
     
     public static func requestSendEmail(_ parameter : UniEmailAuthModel, completion: @escaping ((Result<UniEmailAuthModelResponse, AFError>) -> Void)) {
-        let url = "https://garamgaebi.shop/email/sendEmail"
+        let url = "\(Constants.apiUrl)/email/sendEmail"
         let body: [String: String] = [
             "email": parameter.email
         ]
@@ -37,7 +37,7 @@ class UniEmailAuthViewModel {
     }
     
     public static func requestVerifyAuthNumber(_ parameter : UniEmailAuthNumberModel, completion: @escaping ((Result<UniEmailAuthNumberModelResponse, AFError>) -> Void)) {
-        let url = "https://garamgaebi.shop/email/verify"
+        let url = "\(Constants.apiUrl)/email/verify"
         let body: [String: String] = [
             "email": parameter.email,
             "key": parameter.key

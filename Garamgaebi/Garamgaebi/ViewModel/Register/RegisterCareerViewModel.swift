@@ -12,7 +12,7 @@ import Alamofire
 class RegisterCareerViewModel {
     
     public static func requestInputCareer(_ parameter : RegisterCareerInfo, completion: @escaping (Bool) -> ()) {
-        let url = "https://garamgaebi.shop/profile/career"
+        let url = "\(Constants.apiUrl)/profile/career"
         let body: [String: Any] = [
             "memberIdx": parameter.memberIdx,
             "company": parameter.company,
