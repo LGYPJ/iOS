@@ -200,7 +200,7 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 			} else {
 				
 				cell.profileImageView.kf.indicatorType = .none
-				cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg ?? ""), placeholder: UIImage(named: "DefaultProfileImage"), options: [.forceRefresh])
+				cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg ?? ""), placeholder: UIImage(named: "DefaultProfileImage"), options: [.fromMemoryCacheOrRefresh])
 				cell.userNameLabel.text = cellData.nickname.maxLength(length: 5)
 				cell.userNameLabel.textColor = .mainBlack
 				cell.isUserInteractionEnabled = true
@@ -233,7 +233,7 @@ extension EventAttendantTableViewCell: UICollectionViewDelegate, UICollectionVie
 				let cellData = self.networkingAttendants[indexPath.row]
 				
 				cell.profileImageView.kf.indicatorType = .none
-				cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg ?? ""), placeholder: UIImage(named: "DefaultProfileImage"), options: [.forceRefresh])
+				cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImg ?? ""), placeholder: UIImage(named: "DefaultProfileImage"), options: [.fromMemoryCacheOrRefresh])
 				cell.userNameLabel.text = cellData.nickname.maxLength(length: 5)
 				cell.userNameLabel.textColor = .mainBlack
 				cell.isUserInteractionEnabled = true

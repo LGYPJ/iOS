@@ -399,7 +399,7 @@ class OtherProfileVC: UIViewController {
                             .processor(processor),
                             .scaleFactor(UIScreen.main.scale),
                             //.transition(.fade(0.5)),
-                            .forceRefresh
+                            .fromMemoryCacheOrRefresh
                         ])
                     } else {
                         self.profileImageView.image = UIImage(named: "DefaultProfileImage")

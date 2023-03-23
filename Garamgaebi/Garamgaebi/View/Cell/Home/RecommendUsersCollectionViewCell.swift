@@ -132,7 +132,7 @@ class RecommendUsersCollectionViewCell: UICollectionViewCell {
                 .processor(processor),
                 .scaleFactor(UIScreen.main.scale),
 //                .transition(.fade(0.5)),
-                .forceRefresh
+                .fromMemoryCacheOrRefresh
             ])
             self.imageDefault.isHidden = true
             

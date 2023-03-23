@@ -212,7 +212,7 @@ extension SeminarPreviewPopUpVC {
 		descriptionTextView.text = previewInfo.content
 		
 		profileImageView.kf.indicatorType = .activity
-		profileImageView.kf.setImage(with: URL(string:previewInfo.profileImgUrl), placeholder: UIImage(named: "DefaultProfileImage"), options: [.forceRefresh])
+		profileImageView.kf.setImage(with: URL(string:previewInfo.profileImgUrl), placeholder: UIImage(named: "DefaultProfileImage"), options: [.fromMemoryCacheOrRefresh])
 		
 		let text = previewInfo.presentationUrl ?? ""
 //		let text = "https://github.com/LGYPJ"

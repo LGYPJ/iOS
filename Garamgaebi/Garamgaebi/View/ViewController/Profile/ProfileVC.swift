@@ -553,8 +553,7 @@ class ProfileVC: UIViewController {
                         self.profileImageView.kf.setImage(with: url, options: [
                             .processor(processor),
                             .scaleFactor(UIScreen.main.scale),
-//                            .transition(.fade(0.3)),
-                            .forceRefresh
+                            .fromMemoryCacheOrRefresh
                         ])
                     } else {
                         self.profileImageView.image = UIImage(named: "DefaultProfileImage")

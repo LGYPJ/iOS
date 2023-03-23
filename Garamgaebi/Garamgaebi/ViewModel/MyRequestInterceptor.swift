@@ -46,6 +46,8 @@ final class MyRequestInterceptor: RequestInterceptor {
                             UserDefaults.standard.set(passData.tokenInfo?.accessToken, forKey: "BearerToken")
                             UserDefaults.standard.set(passData.tokenInfo?.refreshToken, forKey: "refreshToken")
                             UserDefaults.standard.set(passData.tokenInfo?.memberIdx, forKey: "memberIdx")
+                            UserDefaults.standard.set(result.result?.uniEmail, forKey: "uniEmail")
+                            UserDefaults.standard.set(result.result?.nickname, forKey: "nickname")
                             completion(.retryWithDelay(1))
                         } else {
                             print("실패 : Token Refresh Fail : \(error)")
