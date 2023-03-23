@@ -103,7 +103,7 @@ extension EventPreviewTableViewCell: UICollectionViewDelegate, UICollectionViewD
 		
 		let cellData = self.previews[indexPath.row]
 		cell.profileImageView.kf.indicatorType = .activity
-		cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImgUrl), placeholder: UIImage(named: "DefaultProfileImage"), options: [.forceRefresh])
+		cell.profileImageView.kf.setImage(with: URL(string:cellData.profileImgUrl), placeholder: UIImage(named: "DefaultProfileImage"), options: [.fromMemoryCacheOrRefresh])
 		cell.titleLabel.text = cellData.title
 		cell.userLabel.text = cellData.nickname
 		cell.belongLabel.text = cellData.organization
