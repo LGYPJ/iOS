@@ -102,7 +102,7 @@ class IceBreakingRoomVC: UIViewController {
 	}()
 	
 	// MARK: Properties
-	private var isStart = false {
+	private var isStart: Bool {
 		didSet {
 			userCollectionview.reloadData()
 		}
@@ -131,12 +131,13 @@ class IceBreakingRoomVC: UIViewController {
 	private let cache = ImageCache.default
 	
     // MARK: - Life Cycle
-	init(programId: Int ,roomId: String, roomName: String) {
+	init(programId: Int ,roomId: String, roomName: String, isStart: Bool) {
 		self.memberId = UserDefaults.standard.integer(forKey: "memberIdx")
 		self.nickname = UserDefaults.standard.string(forKey: "nickname")!
 		self.programId = programId
 		self.roomId = roomId
 		self.roomName = roomName
+		self.isStart = isStart
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -586,7 +587,10 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 		IcebreakingViewModel.postGameUser(roomId: self.roomId, memberId: self.memberId, completion: { result in
 			self.currentIndex = result.currentImgIdx
 			self.currentUserId = result.currentMemberIdx
-			
+			// 이미 시작한 게임이라면 시작하기 카드를 보여주지 않고 해당 카드로 스크롤
+			if self.isStart {
+				self.cardCollectionView.scrollToItem(at: IndexPath(row: result.currentImgIdx, section: 1), at: .centeredHorizontally, animated: true)
+			}
 			// enter 메세지 전송
 			self.sendMessageWithSocket(type: "ENTER", message: "", profileUrl: "")
 		})
