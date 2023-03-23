@@ -194,6 +194,10 @@ class UniEmailAuthVC: UIViewController {
         button.isHidden = true
         return button
     }()
+	// bg 진입시 현재 시간을 저장하는 변수
+	private var time = Date()
+	private var isTimerRun: Bool = false
+	private var count: Int = 0
     
     
     // MARK: Life Cycle
@@ -205,6 +209,11 @@ class UniEmailAuthVC: UIViewController {
         addSubViews()
         configLayouts()
         configureGestureRecognizer()
+		
+		NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+		
+		isTimerRun = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -350,6 +359,49 @@ class UniEmailAuthVC: UIViewController {
             make.height.equalTo(48)
         }
     }
+	
+	@objc private func didEnterBackground() {
+		self.time = Date()
+	}
+	
+	@objc private func willEnterForeground() {
+		guard isTimerRun else {return}
+		var elapsedTime = Int(Date().timeIntervalSince(self.time))
+		self.count -= elapsedTime
+		self.timer?.invalidate()
+		self.timer = nil
+		
+		
+		self.isTimerRun = true
+		
+		self.timer = Timer.scheduledTimer(withTimeInterval: self.interval, repeats: true, block: { [self]_ in
+			UIView.transition(with: self.authNumTitleLabel, duration: 0.33,
+							  options: .transitionCrossDissolve,
+							  animations: {
+				self.authNumTitleLabel.isHidden = false
+				self.authNumberTextField.isHidden = false
+				self.authNumberSendButton.isHidden = false
+				self.nextButton.isHidden = false
+			})
+			
+			let minutes = self.count / 60
+			let seconds = self.count % 60
+			self.count -= 1
+			
+			//남은 시간(초)가 0보다 크면
+			if self.count > 0 {
+				emailAuthSendButton.setTitle("이메일 재발송하기 (\(minutes)분 \(seconds)초)", for: .normal)
+			} else {
+				emailAuthSendButton.setTitle("이메일 재발송하기", for: .normal)
+				emailAuthSendButton.setTitleColor(.white, for: .normal)
+				emailAuthSendButton.backgroundColor = .mainBlue
+				self.initAuthNumberUI()
+				self.isTimerRun = false
+			}
+			
+		})
+		
+	}
     
     @objc
     func sendEmail(_ sender: UIButton) {
@@ -372,12 +424,14 @@ class UniEmailAuthVC: UIViewController {
                     sender.layer.borderWidth = 0.5
                     self?.authNumberTextField.isEnabled = true
                     self?.authNumberSendButton.isEnabled = true
-                    var count = 180
+					self?.count = 180
                     
                     if self?.timer != nil && ((self?.timer!.isValid) != nil) {
                         self?.timer?.invalidate()
                         self?.timer = nil
                     }
+					
+					self?.isTimerRun = true
                     
                     self?.timer = Timer.scheduledTimer(withTimeInterval: self!.interval, repeats: true, block: { [self]_ in
                         UIView.transition(with: self!.authNumTitleLabel, duration: 0.33,
@@ -389,18 +443,19 @@ class UniEmailAuthVC: UIViewController {
                             self?.nextButton.isHidden = false
                         })
                         
-                        let minutes = count / 60
-                        let seconds = count % 60
-                        count -= 1
+						let minutes = self!.count / 60
+						let seconds = self!.count % 60
+						self!.count -= 1
                         
                         //남은 시간(초)가 0보다 크면
-                        if count > 0 {
+						if self!.count > 0 {
                             sender.setTitle("이메일 재발송하기 (\(minutes)분 \(seconds)초)", for: .normal)
                         } else {
                             sender.setTitle("이메일 재발송하기", for: .normal)
                             sender.setTitleColor(.white, for: .normal)
                             sender.backgroundColor = .mainBlue
                             self?.initAuthNumberUI()
+							self?.isTimerRun = false
                         }
                         
                     })

@@ -15,7 +15,7 @@ class NotificationViewModel {
         if lastNotificationIdx == nil {
             lastNotiIdx = ""
         } else { lastNotiIdx = String(describing: lastNotificationIdx!) }
-        let url = "https://garamgaebi.shop/notification/\(memberIdx)?lastNotificationIdx=\(lastNotiIdx)"
+        let url = "\(Constants.apiUrl)/notification/\(memberIdx)?lastNotificationIdx=\(lastNotiIdx)"
         AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
             .responseDecodable(of: NotificationInfoResponse.self) { response in
@@ -38,7 +38,7 @@ class NotificationViewModel {
    
     
     public static func getIsUnreadNotifications(memberIdx: Int, completion: @escaping ((Result<NotificationUnreadInfoResponse, AFError>) -> Void)) {
-        let url = "https://garamgaebi.shop/notification/unread/\(memberIdx)"
+        let url = "\(Constants.apiUrl)/notification/unread/\(memberIdx)"
         AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
             .responseDecodable(of: NotificationUnreadInfoResponse.self) { response in

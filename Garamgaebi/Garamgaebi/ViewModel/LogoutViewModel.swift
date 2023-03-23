@@ -13,7 +13,7 @@ class LogoutViewModel {
     var fcmToken = String()
     
     public static func postLogout(accessToken: String, refreshToken: String, fcmToken: String, completion: @escaping ((Result<LogoutModelResponse, AFError>) -> Void)) {
-        let url = "https://garamgaebi.shop/member/logout"
+        let url = "\(Constants.apiUrl)/member/logout"
 
         let body: [String: Any] = [
             "accessToken": accessToken,

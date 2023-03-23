@@ -12,7 +12,7 @@ let retryLimit = 3
 
 final class MyRequestInterceptor: RequestInterceptor {
     func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
-        guard urlRequest.url?.absoluteString.hasPrefix("https://garamgaebi.shop/") == true,
+        guard urlRequest.url?.absoluteString.hasPrefix("\(Constants.apiUrl)/") == true,
               let accessToken = UserDefaults.standard.string(forKey: "BearerToken") else {
             completion(.success(urlRequest))
             return
@@ -30,7 +30,7 @@ final class MyRequestInterceptor: RequestInterceptor {
         // retry 최대 개수 정해줄수있음
         switch response.statusCode {
         case 401:
-            let url = "https://garamgaebi.shop/member/login/auto"
+            let url = "\(Constants.apiUrl)/member/login/auto"
             let body: [String: Any] = [
                 "refreshToken": UserDefaults.standard.string(forKey: "refreshToken")!,
             ]

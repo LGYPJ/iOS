@@ -64,6 +64,14 @@ class RecommendUsersCollectionViewCell: UICollectionViewCell {
         configAddSubView()
         configSubViewLayouts()
     }
+	
+	override func prepareForReuse() {
+		super.prepareForReuse()
+		
+		imageInfoView.kf.cancelDownloadTask()
+		imageInfoView.kf.setImage(with: URL(string: ""))
+		imageInfoView.image = nil
+	}
     
     func configAddSubView(){
         contentView.addSubview(imageInfoView)

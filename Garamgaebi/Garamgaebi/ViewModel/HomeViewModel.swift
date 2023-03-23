@@ -11,7 +11,7 @@ import Alamofire
 class HomeViewModel {
     // MARK: Request [Seminar]
     public static func getHomeSeminarInfo(completion: @escaping ((Result<HomeSeminarInfoResponse, AFError>) -> Void)) {
-        let url = "https://garamgaebi.shop/seminars/main"
+        let url = "\(Constants.apiUrl)/seminars/main"
 		AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
             .responseDecodable(of: HomeSeminarInfoResponse.self) { response in
@@ -34,7 +34,7 @@ class HomeViewModel {
     
     // MARK: Request [Networking]
     public static func getHomeNetworkingInfo(completion: @escaping ((Result<HomeNetworkingInfoResponse, AFError>) -> Void)) {
-        let url = "https://garamgaebi.shop/networkings/main"
+        let url = "\(Constants.apiUrl)/networkings/main"
         AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
             .responseDecodable(of: HomeNetworkingInfoResponse.self) { response in
@@ -55,7 +55,7 @@ class HomeViewModel {
     
     // MARK: Request [가람개비 유저]
     public static func getRecommendUsersInfo(completion: @escaping ((Result<RecommendUsersInfoResponse, AFError>) -> Void)) {
-        let url = "https://garamgaebi.shop/profile/profiles"
+        let url = "\(Constants.apiUrl)/profile/profiles"
         AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
             .responseDecodable(of: RecommendUsersInfoResponse.self) { response in
@@ -76,7 +76,7 @@ class HomeViewModel {
     
     // MARK: Request [내 모임]
     public static func getHomeMyEventInfo(memberId: Int, completion: @escaping ((Result<MyEventInfoReadyResponse, AFError>) -> Void)) {
-        let url = "https://garamgaebi.shop/programs/\(memberId)/ready"
+        let url = "\(Constants.apiUrl)/programs/\(memberId)/ready"
         AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
             .responseDecodable(of: MyEventInfoReadyResponse.self) { response in

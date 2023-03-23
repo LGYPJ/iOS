@@ -153,9 +153,10 @@ extension IceBreakingRoomListVC: UICollectionViewDelegate, UICollectionViewDataS
 	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		let roomId = roomList[indexPath.row].roomId
-		let vc = IceBreakingRoomVC(programId: self.programId, roomId: roomId, roomName: roomNameList[indexPath.row])
+		
 		
 		IcebreakingViewModel.getGameIsStartedWithPost(roomId: roomId, completion: { result in
+			let vc = IceBreakingRoomVC(programId: self.programId, roomId: roomId, roomName: self.roomNameList[indexPath.row], isStart: result)
 			if result {
 				// 진행중인 게임이라 alert
 				let alert = UIAlertController(title: "이미 진행중인 게임입니다.", message: "참가하시겠습니까?", preferredStyle: .alert)

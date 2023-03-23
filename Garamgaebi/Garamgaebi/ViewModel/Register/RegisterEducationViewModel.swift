@@ -12,7 +12,7 @@ import Alamofire
 class RegisterEducationViewModel {
     
     public static func requestInputEducation(_ parameter : RegisterEducationInfo, completion: @escaping (Bool) -> ()) {
-        let url = "https://garamgaebi.shop/profile/education"
+        let url = "\(Constants.apiUrl)/profile/education"
         let body: [String: Any] = [
             "memberIdx": parameter.memberIdx,
             "institution": parameter.institution,

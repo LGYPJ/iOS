@@ -238,7 +238,7 @@ class ProfileVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
-        tabBarController?.tabBar.isHidden = false
+		self.tabBarController?.setTabBarVisible(visible: true, duration: 0.0)
         
         // 서버 통신
         getMyInfo()
@@ -505,7 +505,7 @@ class ProfileVC: UIViewController {
     func getMyInfo() {
         
         // http 요청 주소 지정
-        let url = "https://garamgaebi.shop/profile/\(memberIdx)"
+        let url = "\(Constants.apiUrl)/profile/\(memberIdx)"
         
         // httpBody에 parameters 추가
         AF.request(
@@ -575,7 +575,7 @@ class ProfileVC: UIViewController {
     func getSnsData(completion: @escaping (([SnsResult])) -> Void) {
         
         // http 요청 주소 지정
-        let url = "https://garamgaebi.shop/profile/sns/\(memberIdx)"
+        let url = "\(Constants.apiUrl)/profile/sns/\(memberIdx)"
         
         // httpBody에 parameters 추가
         AF.request(
@@ -605,7 +605,7 @@ class ProfileVC: UIViewController {
     func getCareerData(completion: @escaping (([CareerResult]) -> Void)) {
         
         // http 요청 주소 지정
-        let url = "https://garamgaebi.shop/profile/career/\(memberIdx)"
+        let url = "\(Constants.apiUrl)/profile/career/\(memberIdx)"
         
         // httpBody에 parameters 추가
         AF.request(
@@ -636,7 +636,7 @@ class ProfileVC: UIViewController {
     func getEducationData(completion: @escaping (([EducationResult]) -> Void)) {
         
         // http 요청 주소 지정
-        let url = "https://garamgaebi.shop/profile/education/\(memberIdx)"
+        let url = "\(Constants.apiUrl)/profile/education/\(memberIdx)"
         
         // httpBody에 parameters 추가
         AF.request(

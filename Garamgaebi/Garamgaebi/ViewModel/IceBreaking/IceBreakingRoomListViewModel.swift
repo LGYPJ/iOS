@@ -9,7 +9,7 @@ import Alamofire
 
 struct IceBreakingRoomListViewModel {
 	public static func getGameRoomList(programId: Int, completion: @escaping (([GameRoomListModel]) -> Void)) {
-		let url = "https://garamgaebi.shop/game/\(programId)/rooms"
+		let url = "\(Constants.apiUrl)/game/\(programId)/rooms"
 		
 		AF.request(url, method: .get, interceptor: MyRequestInterceptor())
 			.validate()

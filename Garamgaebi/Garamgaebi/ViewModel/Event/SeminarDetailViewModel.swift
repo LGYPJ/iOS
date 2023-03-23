@@ -14,7 +14,7 @@ class SeminarDetailViewModel {
 	public static func requestSeminarDetailInfo(memberId: Int, seminarId: Int, completion: @escaping ((Result<SeminarDetailInfoResponse, AFError>) -> Void)) {
 //		let dummyData = SeminarDetailInfo(programIdx: seminarId	,title: "무료 세미나1", date: "2023-01-15T18:00:00", location: "가천관", fee: 0, endDate: "2023-01-08T18:00:00", programStatus: "CLOSED_CONFIRM", userButtonStatus: "APPLY")
 //		completion(dummyData)
-		let url = "https://garamgaebi.shop/seminars/\(seminarId)/info"
+		let url = "\(Constants.apiUrl)/seminars/\(seminarId)/info"
 		let params: Parameters = [
 			"member-idx": memberId
 		]
@@ -48,7 +48,7 @@ class SeminarDetailViewModel {
 //
 //		]
 //		completion(dummyData)
-		let url = "https://garamgaebi.shop/seminars/\(seminarId)/participants"
+		let url = "\(Constants.apiUrl)/seminars/\(seminarId)/participants"
 		let params: Parameters = [
 			"member-idx": UserDefaults.standard.integer(forKey: "memberIdx")
 		]
@@ -76,7 +76,7 @@ class SeminarDetailViewModel {
 //						  SeminarDetailPreview(presentationIdx: 0, title: "가천대학교에 대해 알아보자", nickname: "이길여", profileImgUrl: "ExProfileImage", organization: "가천대학교", content: "가천대학교는 경기도 성남시에 위치한 명문대입니다.", presentationUrl: nil)
 //		]
 //		completion(dummyData)
-		let url = "https://garamgaebi.shop/seminars/\(seminarId)/presentations"
+		let url = "\(Constants.apiUrl)/seminars/\(seminarId)/presentations"
 		AF.request(url, method: .get , interceptor: MyRequestInterceptor())
 			.validate()
 			.responseDecodable(of: SeminarDetailPreviewResponse.self) { response in

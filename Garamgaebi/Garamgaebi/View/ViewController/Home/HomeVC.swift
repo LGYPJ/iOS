@@ -146,8 +146,7 @@ class HomeVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tabBarController?.tabBar.isHidden = false
-        
+		self.tabBarController?.setTabBarVisible(visible: true, duration: 0.0)
         
 
     }

@@ -11,7 +11,7 @@ class ProfileServiceViewModel {
     // MARK: - [POST] 고객센터 추가
     public static func postQna(memberIdx: Int, email: String, category: String, content: String, completion: @escaping ((Result<ProfileDefaultResponse, AFError>) -> Void)) {
         
-        let url = "https://garamgaebi.shop/profile/qna"
+        let url = "\(Constants.apiUrl)/profile/qna"
 
         let bodyData: Parameters = [
             "memberIdx": memberIdx,
@@ -48,7 +48,7 @@ class ProfileServiceViewModel {
     // MARK: - [POST] 회원탈퇴 추가
     public static func postWithdrawl(memberIdx: Int, content: String?, category: String, completion: @escaping ((Result<WithdrawalResponse, AFError>) -> Void)) {
         
-        let url = "https://garamgaebi.shop/member/member-inactived"
+        let url = "\(Constants.apiUrl)/member/member-inactived"
 
         let bodyData: Parameters = [
             "memberIdx": memberIdx,

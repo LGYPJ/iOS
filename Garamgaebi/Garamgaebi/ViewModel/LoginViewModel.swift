@@ -12,7 +12,7 @@ class LoginViewModel {
     var fcmToken = String()
     
     public static func postLoginKakao(accessToken: String, fcmToken: String, completion: @escaping ((Result<LoginModelResponse, AFError>) -> Void)) {
-        let url = "https://garamgaebi.shop/member/login/kakao"
+        let url = "\(Constants.apiUrl)/member/login/kakao"
 
         let body: [String: Any] = [
             "accessToken": accessToken,
@@ -39,7 +39,7 @@ class LoginViewModel {
     }
     
     public static func postLoginApple(idToken: String, fcmToken: String, completion: @escaping ((Result<LoginModelResponse, AFError>) -> Void)) {
-        let url = "https://garamgaebi.shop/member/login/apple"
+        let url = "\(Constants.apiUrl)/member/login/apple"
 
         let body: [String: Any] = [
             "idToken": idToken,
@@ -66,7 +66,7 @@ class LoginViewModel {
     }
     
     public static func postLoginAuto(refreshToken: String, completion: @escaping ((Result<LoginModelResponse, AFError>) -> Void)) {
-        let url = "https://garamgaebi.shop/member/login/auto"
+        let url = "\(Constants.apiUrl)/member/login/auto"
         
         let body: [String: Any] = [
             "refreshToken": refreshToken,

@@ -14,7 +14,7 @@ class ProfileHistoryViewModel {
     // MARK: - [POST] SNS 추가
     public static func postSNS(memberIdx: Int, type: String, address: String, completion: @escaping ((Result<ProfileDefaultResponse, AFError>) -> Void)) {
         
-        let url = "https://garamgaebi.shop/profile/sns"
+        let url = "\(Constants.apiUrl)/profile/sns"
 
         let bodyData: Parameters = [
             "memberIdx": memberIdx,
@@ -49,7 +49,7 @@ class ProfileHistoryViewModel {
     // MARK: - [PATCH] SNS 수정
     public static func patchSNS(snsIdx: Int, type: String, address: String, completion: @escaping ((Result<ProfileDefaultResponse, AFError>) -> Void)) {
         
-        let url = "https://garamgaebi.shop/profile/sns"
+        let url = "\(Constants.apiUrl)/profile/sns"
         
         let bodyData: Parameters = [
             "snsIdx": snsIdx,
@@ -84,7 +84,7 @@ class ProfileHistoryViewModel {
     // MARK: - [DELETE] SNS 삭제
     public static func deleteSNS(snsIdx: Int, completion: @escaping ((Result<ProfileDefaultResponse, AFError>) -> Void)) {
         
-        let url = "https://garamgaebi.shop/profile/sns/\(snsIdx)"
+        let url = "\(Constants.apiUrl)/profile/sns/\(snsIdx)"
         
         AF.request(
             url,
@@ -113,7 +113,7 @@ class ProfileHistoryViewModel {
     // MARK: - [POST] 경력 추가
     public static func postCareer(memberIdx: Int, company: String, position: String, isWorking: String, startDate: String, endDate: String, completion: @escaping ((Result<ProfileDefaultResponse, AFError>) -> Void)) {
         
-        let url = "https://garamgaebi.shop/profile/career"
+        let url = "\(Constants.apiUrl)/profile/career"
         
         let bodyData: Parameters = [
             "memberIdx": memberIdx,
@@ -151,7 +151,7 @@ class ProfileHistoryViewModel {
     // MARK: - [PATCH] 경력 수정
     public static func patchCareer(careerIdx: Int, company: String, position: String, isWorking: String, startDate: String, endDate: String, completion: @escaping ((Result<ProfileDefaultResponse, AFError>) -> Void)) {
         
-        let url = "https://garamgaebi.shop/profile/career"
+        let url = "\(Constants.apiUrl)/profile/career"
         
         let bodyData: Parameters = [
             "careerIdx": careerIdx,
@@ -189,7 +189,7 @@ class ProfileHistoryViewModel {
     // MARK: - [DELETE] 경력 삭제
     public static func deleteCareer(careerIdx: Int, completion: @escaping ((Result<ProfileDefaultResponse, AFError>) -> Void)) {
         
-        let url = "https://garamgaebi.shop/profile/career/\(careerIdx)"
+        let url = "\(Constants.apiUrl)/profile/career/\(careerIdx)"
         
         AF.request(
             url,
@@ -218,7 +218,7 @@ class ProfileHistoryViewModel {
     // MARK: - [POST] 교육 추가
     public static func postEducation(memberIdx: Int, institution: String, major: String, isLearning: String, startDate: String, endDate: String, completion: @escaping ((Result<ProfileDefaultResponse, AFError>) -> Void)) {
         
-        let url = "https://garamgaebi.shop/profile/education"
+        let url = "\(Constants.apiUrl)/profile/education"
 
         let bodyData: Parameters = [
             "memberIdx": memberIdx,
@@ -256,7 +256,7 @@ class ProfileHistoryViewModel {
     // MARK: - [PATCH] 교육 수정
     public static func patchEducation(educationIdx: Int, institution: String, major: String, isLearning: String, startDate: String, endDate: String, completion: @escaping ((Result<ProfileDefaultResponse, AFError>) -> Void)) {
         
-        let url = "https://garamgaebi.shop/profile/education"
+        let url = "\(Constants.apiUrl)/profile/education"
 
         let bodyData: Parameters = [
             "educationIdx": educationIdx,
@@ -294,7 +294,7 @@ class ProfileHistoryViewModel {
     // MARK: - [DELETE] 교육 삭제
     public static func deleteEducation(educationIdx: Int, completion: @escaping ((Result<ProfileDefaultResponse, AFError>) -> Void)) {
         
-        let url = "https://garamgaebi.shop/profile/education/\(educationIdx)"
+        let url = "\(Constants.apiUrl)/profile/education/\(educationIdx)"
         
         AF.request(
             url,

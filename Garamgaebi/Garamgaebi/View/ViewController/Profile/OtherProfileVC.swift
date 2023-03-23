@@ -218,7 +218,7 @@ class OtherProfileVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
-        tabBarController?.tabBar.isHidden = true
+		self.tabBarController?.setTabBarVisible(visible: false, duration: 0.0)
         view.backgroundColor = .white
         
         // 서버 통신
@@ -352,7 +352,7 @@ class OtherProfileVC: UIViewController {
     // MARK: - [GET] 가람개비 유저 프로필 정보
     func getOtherInfo() {
 
-        let url = "https://garamgaebi.shop/profile/\(memberIdx)"
+        let url = "\(Constants.apiUrl)/profile/\(memberIdx)"
         
         AF.request(
             url,
@@ -423,7 +423,7 @@ class OtherProfileVC: UIViewController {
     func getSnsData(completion: @escaping (([SnsResult])) -> Void) {
         
         // http 요청 주소 지정
-        let url = "https://garamgaebi.shop/profile/sns/\(memberIdx)"
+        let url = "\(Constants.apiUrl)/profile/sns/\(memberIdx)"
         
         AF.request(
             url,
@@ -456,7 +456,7 @@ class OtherProfileVC: UIViewController {
     func getCareerData(completion: @escaping (([CareerResult])) -> Void) {
         
         // http 요청 주소 지정
-        let url = "https://garamgaebi.shop/profile/career/\(memberIdx)"
+        let url = "\(Constants.apiUrl)/profile/career/\(memberIdx)"
 
         AF.request(
             url,
@@ -489,7 +489,7 @@ class OtherProfileVC: UIViewController {
     // MARK: - [GET] Education 조회
     func getEducationData(completion: @escaping (([EducationResult])) -> Void) {
         
-        let url = "https://garamgaebi.shop/profile/education/\(memberIdx)"
+        let url = "\(Constants.apiUrl)/profile/education/\(memberIdx)"
         
         AF.request(
             url,

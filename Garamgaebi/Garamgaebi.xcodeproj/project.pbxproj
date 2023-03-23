@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		07387C389AB3203B5F1B6292 /* Pods_Garamgaebi_GaramgaebiUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */; };
 		2A5DAD14EE12541BAE988EB7 /* Pods_Garamgaebi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8CB1AB7E398B75581977FAF /* Pods_Garamgaebi.framework */; };
+		2C02E5EE29C87D1800D2435F /* UITabBarController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C02E5ED29C87D1800D2435F /* UITabBarController+.swift */; };
+		2C02E5FE29C9E40D00D2435F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C02E5FD29C9E40D00D2435F /* Constants.swift */; };
 		2C0495D729AB31CA002E2B92 /* IceBreakingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0495D629AB31CA002E2B92 /* IceBreakingModel.swift */; };
 		2C0538F4296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0538F3296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift */; };
 		2C4083112997CE67000747DF /* WebSocketTestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4083102997CE67000747DF /* WebSocketTestVC.swift */; };
@@ -172,6 +174,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2C02E5ED29C87D1800D2435F /* UITabBarController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBarController+.swift"; sourceTree = "<group>"; };
+		2C02E5FD29C9E40D00D2435F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		2C0495D629AB31CA002E2B92 /* IceBreakingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IceBreakingModel.swift; sourceTree = "<group>"; };
 		2C0538F3296DB1FF005AACA9 /* EventPreviewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPreviewCollectionViewCell.swift; sourceTree = "<group>"; };
 		2C4083102997CE67000747DF /* WebSocketTestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketTestVC.swift; sourceTree = "<group>"; };
@@ -801,6 +805,7 @@
 				609A53D3296AB47300BBD338 /* SceneDelegate.swift */,
 				2CED690E298CBD2800C838BD /* Status.swift */,
 				2C8A4EF029A098A4004E1FCB /* WebSocketManager.swift */,
+				2C02E5FD29C9E40D00D2435F /* Constants.swift */,
 				60F9140A296D465E00626C40 /* Fonts */,
 				60F91405296D440F00626C40 /* Extension */,
 				603215FD297A738400ACBB04 /* Model */,
@@ -905,6 +910,7 @@
 				60D0CFBF298FC443008C24F3 /* UIView+.swift */,
 				4668726B299633EA00469D0E /* UILabel+.swift */,
 				60A128B329975412000E5752 /* UIImage+.swift */,
+				2C02E5ED29C87D1800D2435F /* UITabBarController+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -1251,6 +1257,7 @@
 				2C4083112997CE67000747DF /* WebSocketTestVC.swift in Sources */,
 				60F91401296D2F3D00626C40 /* ViewAllVC.swift in Sources */,
 				2CED690529867F3300C838BD /* NetworkingDetailModel.swift in Sources */,
+				2C02E5FE29C9E40D00D2435F /* Constants.swift in Sources */,
 				2CED690729878AB200C838BD /* EventApplyCancelViewModel.swift in Sources */,
 				2CDD9509297657FE004B8D56 /* BankListCollectionViewCell.swift in Sources */,
 				60F4C1562987E330004D9FCD /* NetworkingModel.swift in Sources */,
@@ -1259,6 +1266,7 @@
 				2CDD94E529712E8E004B8D56 /* IceBreakingCardCollectionViewCell.swift in Sources */,
 				2CDD9502297551C4004B8D56 /* IceBreakingStartCardCollectionViewCell.swift in Sources */,
 				2CDD94FE2973BAB9004B8D56 /* CustomFlowLayout.swift in Sources */,
+				2C02E5EE29C87D1800D2435F /* UITabBarController+.swift in Sources */,
 				462C4D65297D34BD00F2E0C6 /* UIButton+.swift in Sources */,
 				2CDD94F82971A389004B8D56 /* IceBreakingRoomListVC.swift in Sources */,
 				60159A2D29AB86D300CD4202 /* LoadingView.swift in Sources */,

@@ -13,7 +13,7 @@ class NetworkingDetailViewModel {
 	public static func requestNetworkingDetailInfo(memberId: Int, networkingId: Int, completion: @escaping ((Result<NetworkingDetailInfoResponse, AFError>) -> Void)) {
 //		let dummyData = NetworkingDetailInfo(programIdx: networkingId,title: "유료 네트워킹1", date: "2023-04-15T18:00:00", location: "가천관", fee: 10000, endDate: "2023-04-08T18:00:00", programStatus: "OPEN", userButtonStatus: "CANCEL")
 //		completion(dummyData)
-		let url = "https://garamgaebi.shop/networkings/\(networkingId)/info"
+		let url = "\(Constants.apiUrl)/networkings/\(networkingId)/info"
 		let params: Parameters = [
 			"member-idx": memberId
 		]
@@ -47,7 +47,7 @@ class NetworkingDetailViewModel {
 //
 //		]
 //		completion(dummyData)
-		let url = "https://garamgaebi.shop/networkings/\(networkingId)/participants"
+		let url = "\(Constants.apiUrl)/networkings/\(networkingId)/participants"
 		let params: Parameters = [
 			"member-idx": UserDefaults.standard.integer(forKey: "memberIdx")
 		]

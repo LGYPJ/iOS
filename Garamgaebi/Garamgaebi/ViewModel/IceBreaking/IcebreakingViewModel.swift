@@ -10,7 +10,7 @@ import Alamofire
 struct IcebreakingViewModel {
 	// 게임방 입장
 	public static func postGameUser(roomId: String, memberId: Int, completion: @escaping ((IceBreakingChangeUserModel) -> Void)) {
-		let url = "https://garamgaebi.shop/game/member"
+		let url = "\(Constants.apiUrl)/game/member"
 		let body: [String: Any] = [
 			"roomId": roomId
 		]
@@ -35,7 +35,7 @@ struct IcebreakingViewModel {
 	
 	// 게임방 유저 불러오기
 	public static func getCurrentGameUserWithPost(roomId: String, completion: @escaping (([IceBrakingCurrentUserModel]) -> Void)) {
-		let url = "https://garamgaebi.shop/game/members"
+		let url = "\(Constants.apiUrl)/game/members"
 		let body: [String: String] = [
 			"roomId": roomId
 		]
@@ -57,7 +57,7 @@ struct IcebreakingViewModel {
 	
 	// 게임방 유저 삭제
 	public static func deleteGameUser(roomId: String, nextMemberIdx: Int, completion: @escaping (() -> Void)) {
-		let url = "https://garamgaebi.shop/game/member"
+		let url = "\(Constants.apiUrl)/game/member"
 		let body: [String: Any] = [
 			"roomId": roomId,
 			"nextMemberIdx": nextMemberIdx
@@ -83,7 +83,7 @@ struct IcebreakingViewModel {
 	
 	// 게임 이미지 불러오기
 	public static func getGameImage(programId: Int, completion: @escaping (([String]) -> Void)) {
-		let url = "https://garamgaebi.shop/game/\(programId)/images"
+		let url = "\(Constants.apiUrl)/game/\(programId)/images"
 		AF.request(url, method: .get, interceptor: MyRequestInterceptor())
 			.validate()
 			.responseDecodable(of: IceBreakingImageModelResponse.self) { response in
@@ -102,7 +102,7 @@ struct IcebreakingViewModel {
 	
 	// 인덱스 플러스
 	public static func patchCurrentIndex(roomId: String, nextMemberIdx: Int, completion: @escaping (() -> Void)) {
-		let url = "https://garamgaebi.shop/game/current-idx"
+		let url = "\(Constants.apiUrl)/game/current-idx"
 		let body: [String: Any] = [
 			"roomId": roomId,
 			"nextMemberIdx": nextMemberIdx
@@ -125,7 +125,7 @@ struct IcebreakingViewModel {
 	
 	// 진행중인 게임인지 확인
 	public static func getGameIsStartedWithPost(roomId: String, completion: @escaping ((Bool) -> Void)) {
-		let url = "https://garamgaebi.shop/game/isStarted"
+		let url = "\(Constants.apiUrl)/game/isStarted"
 		let body: [String: String] = [
 			"roomId": roomId
 		]
@@ -148,7 +148,7 @@ struct IcebreakingViewModel {
 	
 	// 게임 시작 시 진행중인 게임으로 변경
 	public static func patchGameStart(roomId: String, completion: @escaping (() -> Void)) {
-		let url = "https://garamgaebi.shop/game/startGame"
+		let url = "\(Constants.apiUrl)/game/startGame"
 		let body: [String: String] = [
 			"roomId": roomId
 		]
