@@ -148,13 +148,6 @@ class HomeVC: UIViewController {
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-		self.tabBarController?.setTabBarVisible(visible: true, duration: 0.0)
-        
-
-    }
-    
     
     // MARK: - Functions
     

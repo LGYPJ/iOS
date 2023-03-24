@@ -101,11 +101,6 @@ class ViewAllVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(pushViewAllNetworking), name: Notification.Name("pushViewAllNetworking"), object: nil)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-		self.tabBarController?.setTabBarVisible(visible: true, duration: 0.0)
-    }
-    
 
     @objc func pushEventDetailVC(_ notification: NSNotification) {
         let detailInfo: MyEventToDetailInfo = notification.object as! MyEventToDetailInfo
