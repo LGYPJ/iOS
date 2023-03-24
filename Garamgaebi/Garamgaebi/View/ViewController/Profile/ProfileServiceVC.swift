@@ -185,7 +185,7 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-		self.tabBarController?.setTabBarVisible(visible: false, duration: 0.0)
+		
         
         configureLayouts()
         configureTextField()

@@ -210,7 +210,7 @@ class ProfileInputSNSVC: UIViewController, BottomSheetSelectDelegate {
         
         print("편집할 snsIdx: \(snsIdx)")
         view.backgroundColor = .white
-		self.tabBarController?.setTabBarVisible(visible: false, duration: 0.0)
+		
         
         addSubViews()
         configLayouts()
@@ -310,7 +310,8 @@ class ProfileInputSNSVC: UIViewController, BottomSheetSelectDelegate {
         saveUserProfileButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
-            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
+//            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
+			make.bottom.equalToSuperview().inset(48)
         }
         
         // editButtonStackView

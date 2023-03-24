@@ -85,7 +85,6 @@ class HomeNotificationVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-		self.tabBarController?.setTabBarVisible(visible: false, duration: 0.0)
         fetchData(lastNotiIdx: self.lastNotificationIdx, hasNext: self.hasNext)
     }
 

@@ -95,7 +95,6 @@ class EventSeminarDetailVC: UIViewController {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		self.tabBarController?.setTabBarVisible(visible: false, duration: 0.0)
 		fetchSeminarInfo()
 	}
 }

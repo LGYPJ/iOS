@@ -340,13 +340,13 @@ class EventApplyCancelVC: UIViewController {
     }
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		self.tabBarController?.setTabBarVisible(visible: false, duration: 0.0)
 		
         fetchProgramData()
         fetchUserData()
 		cancelButton.isEnabled = false
 		cancelButton.backgroundColor = .mainGray
         setKeyboardObserver()
+		self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         
 	}
     
@@ -718,4 +718,10 @@ extension EventApplyCancelVC {
         NotificationCenter.default.removeObserver(self)
     }
     
+}
+
+extension EventApplyCancelVC: UIGestureRecognizerDelegate {
+	func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+		return true
+	}
 }

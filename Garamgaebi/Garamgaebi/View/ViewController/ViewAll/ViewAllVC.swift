@@ -112,10 +112,14 @@ class ViewAllVC: UIViewController {
         
         switch(detailInfo.type){
         case "SEMINAR":
-            self.navigationController?.pushViewController(EventSeminarDetailVC(seminarId: detailInfo.programIdx), animated: true)
+			let vc = EventSeminarDetailVC(seminarId: detailInfo.programIdx)
+			vc.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(vc, animated: true)
             print("seminarId: \(detailInfo.programIdx)")
         case "NETWORKING":
-            self.navigationController?.pushViewController(EventNetworkingDetailVC(networkingId: detailInfo.programIdx), animated: true)
+			let vc = EventNetworkingDetailVC(networkingId: detailInfo.programIdx)
+			vc.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(vc, animated: true)
             print("networkingId: \(detailInfo.programIdx)")
         default:
             fatalError(">>> ERROR: ViewAllVC pushEventDetailVC detailInfo")
@@ -124,8 +128,9 @@ class ViewAllVC: UIViewController {
     
     @objc func pushApplyCancelVC(_ notification: NSNotification) {
         let detailInfo: MyEventToDetailInfo = notification.object as! MyEventToDetailInfo
-
-        self.navigationController?.pushViewController(EventApplyCancelVC(type: detailInfo.type, programId: detailInfo.programIdx), animated: true)
+		let vc = EventApplyCancelVC(type: detailInfo.type, programId: detailInfo.programIdx)
+		vc.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(vc, animated: true)
         print("ApplyCancel// \(detailInfo.type) id -> \(detailInfo.programIdx)")
     }
     

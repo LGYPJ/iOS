@@ -238,7 +238,6 @@ class ProfileVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
-		self.tabBarController?.setTabBarVisible(visible: true, duration: 0.0)
         
         // 서버 통신
         getMyInfo()
@@ -431,6 +430,7 @@ class ProfileVC: UIViewController {
     @objc private func serviceButtonDidTap(_ sender : UIButton) {
         // 화면 전환
         let nextVC = ProfileServiceVC()
+		nextVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
@@ -459,6 +459,7 @@ class ProfileVC: UIViewController {
         }
         // 사용자
         nextVC.memberIdx = self.memberIdx
+		nextVC.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
     
@@ -466,6 +467,7 @@ class ProfileVC: UIViewController {
         // 화면 전환
         let nextVC = ProfileInputSNSVC()
         nextVC.memberIdx = memberIdx
+		nextVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
@@ -473,6 +475,7 @@ class ProfileVC: UIViewController {
         // 화면 전환
         let nextVC = ProfileInputCareerVC()
         nextVC.memberIdx = memberIdx
+		nextVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
@@ -480,6 +483,7 @@ class ProfileVC: UIViewController {
         // 화면 전환
         let nextVC = ProfileInputEducationVC()
         nextVC.memberIdx = memberIdx
+		nextVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
@@ -565,6 +569,7 @@ class ProfileVC: UIViewController {
                 print("실패(AF-내프로필): \(error.localizedDescription)")
                 let errorView = ErrorPageView()
                 errorView.modalPresentationStyle = .fullScreen
+				errorView.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(errorView, animated: false)
             }
         }
@@ -879,7 +884,7 @@ extension ProfileVC: SnsButtonTappedDelegate {
         nextVC.typeTextField.text = type
         nextVC.linkTextField.text = newAddress
         nextVC.autoInputTextCount = type.count
-
+		nextVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
@@ -933,7 +938,7 @@ extension ProfileVC: HistoryButtonTappedDelegate {
             nextVC.checkIsWorkingButton.isSelected = true
             nextVC.isWorking = true
         }
-
+		nextVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
@@ -981,7 +986,7 @@ extension ProfileVC: HistoryButtonTappedDelegate {
             nextVC.checkIsLearningButton.isSelected = true
             nextVC.isLearning = true
         }
-
+		nextVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(nextVC, animated: true)
     }
     

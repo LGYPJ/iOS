@@ -118,9 +118,13 @@ class HomeVC: UIViewController {
         if self.pushProgramtype != nil,
            self.pushProgramIdx != nil {
             if pushProgramtype == "SEMINAR" {
-                self.navigationController?.pushViewController(EventSeminarDetailVC(seminarId: pushProgramIdx!), animated: true)
+				let vc = EventSeminarDetailVC(seminarId: pushProgramIdx!)
+				vc.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(vc, animated: true)
             } else if pushProgramtype == "NETWORKING" {
-                self.navigationController?.pushViewController(EventNetworkingDetailVC(networkingId: pushProgramIdx!), animated: true)
+				let vc = EventNetworkingDetailVC(networkingId: pushProgramIdx!)
+				vc.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(vc, animated: true)
             }
         }
         configureViews()
@@ -332,6 +336,7 @@ class HomeVC: UIViewController {
     func presentErrorView(){
         let errorView = ErrorPageView()
         errorView.modalPresentationStyle = .fullScreen
+		errorView.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(errorView, animated: false)
     }
     
@@ -348,7 +353,9 @@ class HomeVC: UIViewController {
     @objc private func pushNextView(_ sender: UIButton) {
         switch sender {
         case notificationViewButton:
-            self.navigationController?.pushViewController(HomeNotificationVC(), animated: true)
+			let vc = HomeNotificationVC()
+			vc.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(vc, animated: true)
         default:
             print("error")
         }
@@ -356,18 +363,24 @@ class HomeVC: UIViewController {
     
     @objc func pushSeminarDetail(_ notification: NSNotification) {
         let detailInfo: MyEventToDetailInfo = notification.object as! MyEventToDetailInfo
-        self.navigationController?.pushViewController(EventSeminarDetailVC(seminarId: detailInfo.programIdx), animated: true)
+		let vc = EventSeminarDetailVC(seminarId: detailInfo.programIdx)
+		vc.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(vc, animated: true)
         print("seminarId: \(detailInfo.programIdx)")
     }
     
     @objc func pushNetworkingDetail(_ notification: NSNotification) {
         let detailInfo: MyEventToDetailInfo = notification.object as! MyEventToDetailInfo
-        self.navigationController?.pushViewController(EventNetworkingDetailVC(networkingId: detailInfo.programIdx), animated: true)
+		let vc = EventNetworkingDetailVC(networkingId: detailInfo.programIdx)
+		vc.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func postOtherProfileMemberIdx(_ notification: NSNotification) {
         let otherMemberIdx: Int = notification.object as! Int
-        self.navigationController?.pushViewController(OtherProfileVC(memberIdx: otherMemberIdx), animated: true)
+		let vc = OtherProfileVC(memberIdx: otherMemberIdx)
+		vc.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func reloadDatas() {

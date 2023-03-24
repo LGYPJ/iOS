@@ -358,7 +358,6 @@ class ProfileInputCareerVC: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .white
-		self.tabBarController?.setTabBarVisible(visible: false, duration: 0.0)
         
         addSubViews()
         configLayouts()
@@ -371,6 +370,7 @@ class ProfileInputCareerVC: UIViewController {
         setCurrentYear()
         setKeyboardObserver()
         setObserver()
+		
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -529,7 +529,8 @@ class ProfileInputCareerVC: UIViewController {
         saveUserProfileButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(14)
+//            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(14)
+			make.bottom.equalToSuperview().inset(48)
         }
         // editButtonStackView
         editButtonStackView.snp.makeConstraints { make in
