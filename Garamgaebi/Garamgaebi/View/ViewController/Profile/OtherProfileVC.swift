@@ -218,7 +218,6 @@ class OtherProfileVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
-		self.tabBarController?.setTabBarVisible(visible: false, duration: 0.0)
         view.backgroundColor = .white
         
         // 서버 통신
