@@ -101,7 +101,7 @@ class RecommendUsersInfoTableViewCell: UITableViewCell {
         
         configSubViewLayouts()
         configNotificationCenter()
-        
+        NotificationCenter.default.post(name: NSNotification.Name("ReloadMyEvent"), object: nil)
     }
 
     func configSubViewLayouts() {

@@ -89,6 +89,7 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
         zeroDataBackgroundView.addSubview(zeroDataDescriptionLabel)
         configSubViewLayouts()
         configNotificationCenter()
+        NotificationCenter.default.post(name: NSNotification.Name("ReloadMyEvent"), object: nil)
     }
     
     override func layoutIfNeeded() {

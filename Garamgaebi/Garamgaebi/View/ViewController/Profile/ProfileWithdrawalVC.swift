@@ -376,36 +376,19 @@ class ProfileWithdrawalVC: UIViewController, BottomSheetSelectDelegate {
                 switch result {
                 case .success(let result):
                     if result.isSuccess {
-                        
-                        let accessToken = UserDefaults.standard.string(forKey: "BearerToken") ?? ""
-                        let fcmToken = UserDefaults.standard.string(forKey: "fcmToken") ?? ""
-                        let refreshToken = UserDefaults.standard.string(forKey: "refreshToken") ?? ""
-                        LogoutViewModel.postLogout(accessToken: accessToken, refreshToken: refreshToken, fcmToken: fcmToken) { [weak self] result in
-                            switch result {
-                            case .success(let result):
-                                if result.isSuccess {
-                                    print("성공(로그아웃): \(result.message)")
-                                    // 로그아웃 시 UserDefaults에 저장된 모든 정보 삭제 (fcmToken을 제외한)
-                                    for key in UserDefaults.standard.dictionaryRepresentation().keys {
-                                        if key.description != "fcmToken" {
-                                            UserDefaults.standard.removeObject(forKey: key.description)
-                                        }
-                                    }
-                                    // 로그아웃, 회원 탈퇴가 끝나면 간편 로그인 화면으로 이동
-                                    let nextVC = LoginVC(pushProgramIdx: nil, pushProgramtype: nil)
-                                    nextVC.modalPresentationStyle = .currentContext
-                                    self?.present(nextVC, animated: true)
-                                }
-                                else {
-                                    print("실패(로그아웃): \(result.message)")
-                                    self?.makeNetworkAlertDialog(title: "네트워크 연결 실패")
-                                }
-                            case .failure(let error):
-                                print("실패(AF-로그아웃): \(error.localizedDescription)")
-                                self?.makeNetworkAlertDialog(title: "네트워크 연결 실패")
+                        // 회원탈퇴 시 UserDefaults에 저장된 모든 정보 삭제 (fcmToken을 제외한)
+                        print(">>> fcmToken과 refreshToken을 제외한 모든 정보 삭제")
+                        UserDefaults.standard.set("LOGOUT", forKey: "refreshToken")
+                        for key in UserDefaults.standard.dictionaryRepresentation().keys {
+                            if key.description != "fcmToken" && key.description != "refreshToken" {
+                                UserDefaults.standard.removeObject(forKey: key.description)
                             }
                         }
-                        
+                        print(">>> 간편로그인으로 이동")
+                        // 회원 탈퇴가 끝나면 간편 로그인 화면으로 이동
+                        let nextVC = LoginVC(pushProgramIdx: nil, pushProgramtype: nil)
+                        nextVC.modalPresentationStyle = .currentContext
+                        self.present(nextVC, animated: true)
                     } else {
                         self.makeNetworkAlertDialog(title: "네트워크 연결 실패")
                     }
