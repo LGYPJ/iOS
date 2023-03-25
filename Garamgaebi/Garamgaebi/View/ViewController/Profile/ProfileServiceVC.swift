@@ -424,6 +424,7 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
                         nextVC.modalPresentationStyle = .currentContext
                         // 로그아웃 시 UserDefaults에 저장된 모든 정보 삭제 (fcmToken을 제외한)
                         for key in UserDefaults.standard.dictionaryRepresentation().keys {
+                            UserDefaults.standard.set("LOGOUT", forKey: "refreshToken")
                             if key.description != "fcmToken" && key.description != "refreshToken" {
                                 UserDefaults.standard.removeObject(forKey: key.description)
                             }

@@ -378,6 +378,7 @@ class ProfileWithdrawalVC: UIViewController, BottomSheetSelectDelegate {
                     if result.isSuccess {
                         // 회원탈퇴 시 UserDefaults에 저장된 모든 정보 삭제 (fcmToken을 제외한)
                         print(">>> fcmToken과 refreshToken을 제외한 모든 정보 삭제")
+                        UserDefaults.standard.set("LOGOUT", forKey: "refreshToken")
                         for key in UserDefaults.standard.dictionaryRepresentation().keys {
                             if key.description != "fcmToken" && key.description != "refreshToken" {
                                 UserDefaults.standard.removeObject(forKey: key.description)
