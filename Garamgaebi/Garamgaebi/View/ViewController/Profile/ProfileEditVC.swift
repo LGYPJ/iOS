@@ -261,6 +261,7 @@ class ProfileEditVC: UIViewController {
         
         [profileImageView,profilePlusImageView, nickNameLabel, nickNameTextField, belongLabel, belongTextField, emailLabel, emailTextField,introduceLabel, introduceTextField, editDoneBtn]
             .forEach {contentView.addSubview($0)}
+        view.addSubview(editDoneBtn)
         
         // 오류 메시지 관련
         [nickNameAlertLabel, emailAlertLabel, belongTextCountLabel, introduceTextCountLabel].forEach {contentView.addSubview($0)}
@@ -289,7 +290,7 @@ class ProfileEditVC: UIViewController {
         scrollView.snp.makeConstraints {
             $0.top.equalTo(headerView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+            $0.bottom.equalTo(editDoneBtn.snp.top)
         }
         
         // contentView
@@ -368,6 +369,7 @@ class ProfileEditVC: UIViewController {
             $0.top.equalTo(introduceLabel.snp.bottom).offset(8)
             $0.left.right.equalTo(nickNameTextField)
             $0.height.equalTo(100)
+            $0.bottom.equalTo(scrollView).inset(54)
         }
         introduceTextCountLabel.snp.makeConstraints { /// 글자수 계산
             $0.centerY.equalTo(introduceLabel)
@@ -376,9 +378,9 @@ class ProfileEditVC: UIViewController {
         
         // 저장 버튼
         editDoneBtn.snp.makeConstraints {
-            $0.top.equalTo(introduceTextField.snp.bottom).offset(54)
-            $0.bottom.equalTo(contentView).inset(16)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(14)
             $0.leading.trailing.equalTo(emailTextField)
+            $0.height.equalTo(48)
         }
     }
     
