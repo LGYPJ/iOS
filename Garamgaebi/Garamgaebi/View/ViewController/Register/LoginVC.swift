@@ -159,6 +159,7 @@ class LoginVC: UIViewController {
                     LoginViewModel.postLoginKakao(accessToken: accessToken, fcmToken: self.fcmToken, completion: { [weak self] result in
                         switch result {
                         case .success(let result):
+                            print(result)
                             if result.isSuccess {
                                 print("성공(간편로그인(카카오)): \(result.message)")
                                 UserDefaults.standard.set(result.result?.tokenInfo?.accessToken, forKey: "BearerToken")
@@ -168,9 +169,19 @@ class LoginVC: UIViewController {
                                 UserDefaults.standard.set(result.result?.nickname, forKey: "nickname")
                                 self?.showHome()
                             } else {
-                                print("실패(간편로그인(카카오)): \(result.message)")
-                                print(">>> 교육, 경력 기입 화면으로 이동")
-                                self?.presentNextView()
+                                switch result.code {
+                                // 존재하지 않는 회원 (code: 2001)
+                                case 2001:
+                                    print("실패(간편로그인(카카오)): \(result.message)")
+                                    print(">>> 교육, 경력 기입 화면으로 이동, Code: \(result.code)")
+                                    self?.presentNextView()
+                                default :
+                                    // 서버에러 문제 알림창 띄우기
+                                    let errorAlert = UIAlertController(title: "연결할 수 없음", message: "서버 에러", preferredStyle: .alert)
+                                    let checkAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+                                    errorAlert.addAction(checkAction)
+                                    self?.present(errorAlert, animated: true, completion: nil)
+                                }
                             }
                         case .failure(let error):
                             print("실패(AF-간편로그인(카카오)): \(error.localizedDescription)")
@@ -208,9 +219,19 @@ class LoginVC: UIViewController {
                                 UserDefaults.standard.set(result.result?.nickname, forKey: "nickname")
                                 self?.showHome()
                             } else {
-                                print("실패(간편로그인(카카오)): \(result.message)")
-                                print(">>> 교육, 경력 기입 화면으로 이동")
-                                self?.presentNextView()
+                                switch result.code {
+                                // 존재하지 않는 회원 (code: 2001)
+                                case 2001:
+                                    print("실패(간편로그인(카카오)): \(result.message)")
+                                    print(">>> 교육, 경력 기입 화면으로 이동, Code: \(result.code)")
+                                    self?.presentNextView()
+                                default :
+                                    // 서버에러 문제 알림창 띄우기
+                                    let errorAlert = UIAlertController(title: "연결할 수 없음", message: "서버 에러", preferredStyle: .alert)
+                                    let checkAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+                                    errorAlert.addAction(checkAction)
+                                    self?.present(errorAlert, animated: true, completion: nil)
+                                }
                             }
                         case .failure(let error):
                             print("실패(AF-간편로그인(카카오)): \(error.localizedDescription)")
@@ -295,9 +316,19 @@ extension LoginVC: ASAuthorizationControllerPresentationContextProviding, ASAuth
                         UserDefaults.standard.set(result.result?.nickname, forKey: "nickname")
                         self?.showHome()
                     } else {
-                        print("실패(간편로그인(애플)): \(result.message)")
-                        print(">>> 교육, 경력 기입 화면으로 이동")
-                        self?.presentNextView()
+                        switch result.code {
+                        // 존재하지 않는 회원 (code: 2001)
+                        case 2001:
+                            print("실패(간편로그인(애플)): \(result.message)")
+                            print(">>> 교육, 경력 기입 화면으로 이동, Code: \(result.code)")
+                            self?.presentNextView()
+                        default :
+                            // 서버에러 문제 알림창 띄우기
+                            let errorAlert = UIAlertController(title: "연결할 수 없음", message: "서버 에러", preferredStyle: .alert)
+                            let checkAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+                            errorAlert.addAction(checkAction)
+                            self?.present(errorAlert, animated: true, completion: nil)
+                        }
                     }
                 case .failure(let error):
                     print("실패(AF-간편로그인(애플)): \(error.localizedDescription)")
