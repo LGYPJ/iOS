@@ -474,7 +474,8 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 		
         // cancelButton
 		cancelButton.snp.makeConstraints {
-			$0.bottom.equalToSuperview().inset(48)
+//			$0.bottom.equalToSuperview().inset(48)
+			$0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(14)
 			$0.leading.trailing.equalToSuperview().inset(12)
 			$0.height.equalTo(48)
 
