@@ -149,7 +149,7 @@ class ProfileInputEducationVC: UIViewController {
     lazy var institutionTextCountLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(hex: 0xAEAEAE)
-        label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
         label.text = "\(institutionTextCount)/\(maxTextCount)"
         return label
     }()
@@ -180,7 +180,7 @@ class ProfileInputEducationVC: UIViewController {
     lazy var majorTextCountLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(hex: 0xAEAEAE)
-        label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
         label.text = "\(majorTextCount)/\(maxTextCount)"
         return label
     }()

@@ -131,7 +131,7 @@ class InputCareerVC: UIViewController {
     lazy var companyTextCountLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(hex: 0xAEAEAE)
-        label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
         label.text = "\(companyTextCount)/\(maxTextCount)"
         return label
     }()
@@ -170,7 +170,7 @@ class InputCareerVC: UIViewController {
     lazy var positionTextCountLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(hex: 0xAEAEAE)
-        label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
+        label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
         label.text = "\(positionTextCount)/\(maxTextCount)"
         return label
     }()
