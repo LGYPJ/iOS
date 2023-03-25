@@ -163,9 +163,6 @@ class IceBreakingRoomVC: UIViewController {
 		configureViews()
 		configureButtonTarget()
 		fetchGameImage()
-		
-		// 이미지 캐싱 600초(10분)지나면 파기
-		cache.memoryStorage.config.expiration = .seconds(600)
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -443,7 +440,7 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 			}
 		} else if collectionView == cardCollectionView {
 			switch section {
-			case 0: return 1
+			case 0: return isStart ? 0: 1  // 시작한 상태라면 시작하기 카드 0
 			case 1: return imageList.count
 			default: return 0
 			}
@@ -458,7 +455,7 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 			let cellData = userList[indexPath.row]
 			
 			cell.nameLabel.text = cellData.nickname.maxLength(length: 5)  // 5글자 이후 ...으로
-			cell.profileImageView.kf.setImage(with: URL(string: cellData.profileUrl ?? ""), placeholder: UIImage(named: "DefaultProfileImage"), options: [.forceRefresh])
+			cell.profileImageView.kf.setImage(with: URL(string: cellData.profileUrl ?? ""), placeholder: UIImage(named: "DefaultProfileImage"), options: [.fromMemoryCacheOrRefresh])
 			
 			// userCollectionView에서 차례인 유저 파란 테두리로 표시
 			if userList[indexPath.row].memberIdx == currentUserId && isStart {
@@ -471,6 +468,7 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 				guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IceBreakingStartCardCollectionViewCell.identifier, for: indexPath) as? IceBreakingStartCardCollectionViewCell else {return UICollectionViewCell()}
 				
 				return cell
+				
 			case 1:
 				guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IceBreakingCardCollectionViewCell.identifier, for: indexPath) as? IceBreakingCardCollectionViewCell else {return UICollectionViewCell()}
 				
@@ -589,7 +587,7 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 			self.currentUserId = result.currentMemberIdx
 			// 이미 시작한 게임이라면 시작하기 카드를 보여주지 않고 해당 카드로 스크롤
 			if self.isStart {
-				self.cardCollectionView.scrollToItem(at: IndexPath(row: result.currentImgIdx, section: 1), at: .centeredHorizontally, animated: true)
+				self.cardCollectionView.scrollToItem(at: IndexPath(row: result.currentImgIdx, section: 1), at: .centeredHorizontally, animated: false)
 			}
 			// enter 메세지 전송
 			self.sendMessageWithSocket(type: "ENTER", message: "", profileUrl: "")
