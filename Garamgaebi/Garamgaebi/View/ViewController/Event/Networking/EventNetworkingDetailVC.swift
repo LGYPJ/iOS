@@ -94,12 +94,13 @@ class EventNetworkingDetailVC: UIViewController {
 		configureNotification()
 		configureRefreshControl()
 		
-		self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+		
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		fetchNetworkingInfo()
+		self.navigationController?.interactivePopGestureRecognizer?.delegate = self
 	}
     
 
