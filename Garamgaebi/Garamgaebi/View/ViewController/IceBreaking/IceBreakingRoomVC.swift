@@ -66,7 +66,6 @@ class IceBreakingRoomVC: UIViewController {
 		let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
 		collectionView.showsHorizontalScrollIndicator = false
 		collectionView.isScrollEnabled = false
-		collectionView.decelerationRate = .fast
 		
 		
 		return collectionView
@@ -126,9 +125,6 @@ class IceBreakingRoomVC: UIViewController {
 	}
 	private var currentUserId: Int = 0
 	private var currentUserIndex: Int = 0
-	
-	// 유저 프로필 이미지 캐싱을 위한 캐싱 인스턴스
-	private let cache = ImageCache.default
 	
     // MARK: - Life Cycle
 	init(programId: Int ,roomId: String, roomName: String, isStart: Bool) {
@@ -285,7 +281,8 @@ extension IceBreakingRoomVC {
 		let url = URL(string: "ws://garamgaebi.shop:8080/ws/game/websocket")!
 		WebSocketManager.shared.socketClient.openSocketWithURLRequest(
 			request: NSURLRequest(url: url),
-			delegate: self)
+			delegate: self,
+			connectionHeaders: ["userIdx": "\(self.memberId)"])
 	}
 	// socket 구독
 	private func subscribeSocket() {
@@ -316,9 +313,10 @@ extension IceBreakingRoomVC {
 		if currentIndex == imageList.count {
 			currentIndex -= imageList.count
 		}
+
+		self.cardCollectionView.scrollToItem(at: IndexPath(row: self.currentIndex, section: 1), at: .centeredHorizontally, animated: true)
+		self.cardCollectionView.reloadData()
 		
-		cardCollectionView.scrollToItem(at: IndexPath(row: currentIndex, section: 1), at: .centeredHorizontally, animated: true)
-		cardCollectionView.reloadData()
 		
 		let index = findCurrentUserIndex()
 		scrollUserTo(index: index)
@@ -370,7 +368,6 @@ extension IceBreakingRoomVC {
 	
 	private func flipStartCard() {
 		guard let cell = cardCollectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? IceBreakingStartCardCollectionViewCell else {return}
-		
 		UIView.transition(with: cell.contentView, duration: 0.3, options: .transitionFlipFromLeft, animations: {
 			cell.contentView.alpha = 0
 			cell.titleLabel.alpha = 0
@@ -423,6 +420,7 @@ extension IceBreakingRoomVC {
 		
 		IcebreakingViewModel.patchCurrentIndex(roomId: self.roomId, nextMemberIdx: nextMemberIdx, completion: {
 			self.sendMessageWithSocket(type: "NEXT", message: "\(nextMemberIdx)", profileUrl: "")
+			print("nextMemberIdx:\(nextMemberIdx)")
 		})
 	}
 }
@@ -440,7 +438,7 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 			}
 		} else if collectionView == cardCollectionView {
 			switch section {
-			case 0: return isStart ? 0: 1  // 시작한 상태라면 시작하기 카드 0
+			case 0: return 1  // 시작한 상태라면 시작하기 카드 0
 			case 1: return imageList.count
 			default: return 0
 			}
@@ -466,6 +464,9 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 			switch indexPath.section {
 			case 0:
 				guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IceBreakingStartCardCollectionViewCell.identifier, for: indexPath) as? IceBreakingStartCardCollectionViewCell else {return UICollectionViewCell()}
+				if isStart {
+					cell.contentView.isHidden = true
+				}
 				
 				return cell
 				
@@ -473,7 +474,7 @@ extension IceBreakingRoomVC: UICollectionViewDelegate, UICollectionViewDataSourc
 				guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IceBreakingCardCollectionViewCell.identifier, for: indexPath) as? IceBreakingCardCollectionViewCell else {return UICollectionViewCell()}
 				
 				let url = URL(string: imageList[indexPath.row])
-				cell.contentImageView.kf.setImage(with: url)
+				cell.contentImageView.kf.setImage(with: url, options: [.forceRefresh])
 				
 				// 현재 셀, 앞 뒤 셀들만 보여지고 나머지는 숨김
 				if (currentIndex-1)...(currentIndex+1) ~= (indexPath.row) {
@@ -535,6 +536,7 @@ extension IceBreakingRoomVC: StompClientLibDelegate {
 			// 서버에서 유저 목록을 받아옴
 			IcebreakingViewModel.getCurrentGameUserWithPost(roomId: self.roomId, completion: { result in
 				self.userList = result
+				self.currentUserId = result.first?.currentMemberIdx ?? 0
 				
 				let index = self.findCurrentUserIndex()
 				self.scrollUserTo(index: index)
