@@ -39,14 +39,32 @@ class SplashVC: UIViewController {
         //        login()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        login()
-        
-    }
-    
-    // MARK: - Functions
-    
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		guard checkAppVersion() else {return}
+		login()
+	}
+	
+	// MARK: - Functions
+	private func checkAppVersion() -> Bool {
+		let storeVersion = VersionManager().latestVersion()!
+//		let storeVersion = "2.1.0"
+		let currentVersion = VersionManager.appVersion!
+		let splitStoreVersion = storeVersion.split(separator: ".").map {$0}
+		let splitCurrentVersion = currentVersion.split(separator: ".").map {$0}
+		
+		if splitCurrentVersion[0] < splitStoreVersion[0] || splitCurrentVersion[1] < splitStoreVersion[1] {
+			let alert = UIAlertController(title: "업데이트 알림", message: "새로운 버전으로 업데이트 해주세요.", preferredStyle: UIAlertController.Style.alert)
+			let destructiveAction = UIAlertAction(title: "업데이트", style: UIAlertAction.Style.default){(_) in
+				VersionManager().openAppStore()
+			}
+			alert.addAction(destructiveAction)
+			self.present(alert, animated: false)
+			return false
+		}
+		
+		return true
+	}
     private func showHome() {
         let vc = TabBarController(pushProgramIdx: self.pushProgramIdx, pushProgramtype: self.pushProgramtype)
         vc.modalPresentationStyle = .fullScreen
