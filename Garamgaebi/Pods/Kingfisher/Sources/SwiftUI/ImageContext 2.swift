@@ -38,7 +38,6 @@ extension KFImage {
 
         var configurations: [(HoldingView) -> HoldingView] = []
         var renderConfigurations: [(HoldingView.RenderingView) -> Void] = []
-        var contentConfiguration: ((HoldingView) -> AnyView)? = nil
         
         var cancelOnDisappear: Bool = false
         var placeholder: ((Progress) -> AnyView)? = nil
@@ -46,8 +45,6 @@ extension KFImage {
         let onFailureDelegate = Delegate<KingfisherError, Void>()
         let onSuccessDelegate = Delegate<RetrieveImageResult, Void>()
         let onProgressDelegate = Delegate<(Int64, Int64), Void>()
-        
-        var startLoadingBeforeViewAppear: Bool = false
         
         init(source: Source?) {
             self.source = source
