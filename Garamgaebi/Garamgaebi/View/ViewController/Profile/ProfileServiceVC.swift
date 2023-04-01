@@ -429,7 +429,7 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
                                 UserDefaults.standard.removeObject(forKey: key.description)
                             }
                         }
-                        present(nextVC, animated: true)
+						self?.present(nextVC, animated: true)
                     }
                     else {
                         print("실패(로그아웃): \(result.message)")
