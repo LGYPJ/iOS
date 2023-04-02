@@ -100,7 +100,7 @@ PODS:
     - KakaoSDKCommon/Common (= 2.13.1)
   - KakaoSDKUser (2.13.1):
     - KakaoSDKAuth (= 2.13.1)
-  - Kingfisher (7.3.2)
+  - Kingfisher (7.6.2)
   - nanopb (2.30909.0):
     - nanopb/decode (= 2.30909.0)
     - nanopb/encode (= 2.30909.0)
@@ -131,7 +131,7 @@ DEPENDENCIES:
   - KakaoSDKAuth
   - KakaoSDKCommon
   - KakaoSDKUser
-  - Kingfisher (~> 7.0)
+  - Kingfisher (~> 7.6.1)
   - ReactorKit
   - RxCocoa
   - RxSwift
@@ -183,7 +183,7 @@ SPEC CHECKSUMS:
   KakaoSDKAuth: d9de0cb0c723441ced3616d481952bde34438dcb
   KakaoSDKCommon: a16807e19984a0a208c3117c7ef117f101a9a128
   KakaoSDKUser: 92d34cf6af7b123c22a7ee44424332123e356901
-  Kingfisher: 0086ad83719761ba9b2cdaf6ef4d5b4878cbae23
+  Kingfisher: 6c5449c6450c5239166510ba04afe374a98afc4f
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
   ReactorKit: e8b11d6b9c415405f381669b095c154a05b59eca
@@ -197,6 +197,6 @@ SPEC CHECKSUMS:
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
   WeakMapTable: 05c694ce8439a7a9ebabb56187287a63c57673d6
 
-PODFILE CHECKSUM: d194f3e100d7b1b0b9553718f38856416dc89a51
+PODFILE CHECKSUM: 71734ea85b5eeb745fa6f36319ff78053b16b336
 
 COCOAPODS: 1.11.3

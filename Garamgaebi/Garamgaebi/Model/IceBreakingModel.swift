@@ -33,6 +33,7 @@ struct IceBrakingCurrentUserModel: Codable {
 	let memberIdx: Int
 	let nickname: String
 	let profileUrl: String?
+	let currentMemberIdx: Int
 }
 
 // 유저 삭제

@@ -7,7 +7,7 @@ target 'Garamgaebi' do
 
   # Pods for Garamgaebi
   pod 'SnapKit', '~> 5.6.0'
-  pod 'Kingfisher', '~> 7.0'
+  pod 'Kingfisher', '~> 7.6.2'
   pod 'Alamofire'
   pod 'Then'
   pod 'RxSwift'
