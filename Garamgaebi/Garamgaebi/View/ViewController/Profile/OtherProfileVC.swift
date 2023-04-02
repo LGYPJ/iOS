@@ -670,8 +670,8 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
         toastLabel.layer.cornerRadius = 10;
         toastLabel.clipsToBounds  =  true
         self.view.addSubview(toastLabel)
-        UIView.animate(withDuration: 1.5, delay: 0.1, options: .curveEaseIn, animations: {
-            toastLabel.alpha = 0
+        UIView.animate(withDuration: 1.0, delay: 0.5, options: .curveEaseIn, animations: {
+            toastLabel.alpha = 0.0
         }, completion: {(isCompleted) in
             toastLabel.removeFromSuperview()
         })
