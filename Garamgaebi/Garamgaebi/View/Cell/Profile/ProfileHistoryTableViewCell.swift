@@ -62,7 +62,7 @@ class ProfileHistoryTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-//        contentView.backgroundColor = .red
+        
         self.contentView.addSubview(companyLabel)
         self.contentView.addSubview(positionLabel)
         self.contentView.addSubview(periodLabel)
@@ -99,24 +99,10 @@ class ProfileHistoryTableViewCell: UITableViewCell {
     }
     
     @objc private func historyEditButtonDidTap() {
-//        print("id: \(id)")
         if (id == 1) { // 경력
             delegate?.careerButtonDidTap(careerIdx: careerIdx ?? 0, company: company ?? "", position: position ?? "", startDate: startDate ?? "", endDate: endDate ?? "", isWorking: isWorking ?? "")
         } else if (id == 2) { // 교육
             delegate?.educationButtonDidTap(educationIdx: careerIdx ?? 0, institution: company ?? "", major: position ?? "", startDate: startDate ?? "", endDate: endDate ?? "", isLearning: isWorking ?? "")
         }
     }
-    
-    
-//    public func careerConfigure(_ item: ProfileCareerDataModel) {
-//        companyLabel.text = item.company
-//        positionLabel.text = item.position
-//        periodLabel.text = "\(item.startDate) ~ \(item.endDate)"
-//    }
-    
-//    public func educationConfigure(_ item: ProfileEducationDataModel) {
-//        companyLabel.text = item.organization
-//        positionLabel.text = item.position
-//        periodLabel.text = "\(item.startDate) ~ \(item.endDate)"
-//    }
 }

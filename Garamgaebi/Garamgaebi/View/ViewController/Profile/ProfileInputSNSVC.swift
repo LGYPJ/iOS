@@ -28,7 +28,7 @@ class ProfileInputSNSVC: UIViewController, BottomSheetSelectDelegate {
     lazy var token = UserDefaults.standard.string(forKey: "BearerToken")
     var snsIdx: Int = 0
     var isAutoInput: Bool = false
-    lazy var tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(viewDidQuestionTap))
+    lazy var tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(viewDidSnsTypeTap))
     
     private let maxInputCount = 22
     var autoInputTextCount = 0 {
@@ -163,7 +163,7 @@ class ProfileInputSNSVC: UIViewController, BottomSheetSelectDelegate {
         return button
     }()
     
-    // 편집용
+    // 편집 모드용 버튼
     lazy var editDeleteButton: UIButton = {
         let button = UIButton()
         
@@ -597,7 +597,7 @@ extension ProfileInputSNSVC: UITextFieldDelegate {
         self.view.endEditing(true)
     }
     
-    @objc private func viewDidQuestionTap() {
+    @objc private func viewDidSnsTypeTap() {
         typeTextField.layer.borderColor = UIColor.mainBlack.cgColor
         if (isAutoInput == false) {
             typeTextField.addGestureRecognizer(tapGestureRecognizer2)

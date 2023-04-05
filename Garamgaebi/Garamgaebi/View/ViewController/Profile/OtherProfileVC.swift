@@ -102,7 +102,7 @@ class OtherProfileVC: UIViewController {
         $0.layer.cornerRadius = 12
     }
     
-    // 하단 버튼
+    /* 하단 히스토리 박스 */
     // SNS
     lazy var snsHistoryBox = UIView().then {
         $0.profileHistoryBox(title: "SNS")
@@ -324,21 +324,6 @@ class OtherProfileVC: UIViewController {
             $0.leading.trailing.equalTo(profileStackView)
             $0.height.equalTo(introduceLabel.intrinsicContentSize)
         }
-        
-        // 하단
-//        snsHistoryBox.snp.makeConstraints { /// SNS
-//            $0.top.equalTo(introduceLabel.snp.bottom).offset(16)
-//            $0.leading.trailing.equalTo(introduceLabel)
-//        }
-//        careerHistoryBox.snp.makeConstraints { /// 경력
-//            $0.top.equalTo(snsHistoryBox.snp.bottom).offset(16)
-//            $0.leading.trailing.equalTo(snsHistoryBox)
-//        }
-//        eduHistoryBox.snp.makeConstraints { /// 교육
-//            $0.top.equalTo(careerHistoryBox.snp.bottom).offset(16)
-//            $0.leading.trailing.equalTo(careerHistoryBox)
-//            $0.bottom.equalTo(scrollView).inset(16)
-//        }
     }
     
     @objc func emailLabelDidTap() {
@@ -694,7 +679,7 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
 
 extension OtherProfileVC: SnsButtonTappedDelegate {
     func snsEditButtonDidTap(snsIdx: Int, type: String, address: String) {
-        //
+        // ProfileVC(내프로필)에 쓰이는 것이니 무시해도 됨
     }
     
     func copyButtonDidTap() {

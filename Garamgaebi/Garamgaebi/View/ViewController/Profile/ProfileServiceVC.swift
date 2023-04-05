@@ -185,8 +185,6 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-		
-        
         configureLayouts()
         configureTextField()
         configureGestureRecognizer()
@@ -194,15 +192,16 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         setKeyboardObserver()
         setObserver()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
         setKeyboardObserverRemove()
     }
-    
     
     
     // MARK: - Functions
@@ -343,7 +342,6 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
     
     func typeSelect(type: String) {
         self.questionTypeTextField.text = type
-        
     }
     
     func textFieldChanged() {
@@ -429,7 +427,7 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
                                 UserDefaults.standard.removeObject(forKey: key.description)
                             }
                         }
-                        present(nextVC, animated: true)
+                        self?.present(nextVC, animated: true)
                     }
                     else {
                         print("실패(로그아웃): \(result.message)")
@@ -505,9 +503,6 @@ class ProfileServiceVC: UIViewController, BottomSheetSelectDelegate {
         emailTextField.addTarget(self, action: #selector(textFieldActivated(_:)), for: .editingDidBegin)
         emailTextField.addTarget(self, action: #selector(textFieldInactivated(_:)), for: .editingDidEnd)
         emailTextField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingChanged)
-        
-        // questionType
-        //questionTypeTextField.addTarget(self, action: #selector(allTextFieldFilledIn), for: .editingDidEnd)
         
         // toggle
         agreeCheckBtn.addTarget(self, action: #selector(toggleButton), for: .touchUpInside)

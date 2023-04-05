@@ -309,7 +309,7 @@ class ProfileInputEducationVC: UIViewController {
         return button
     }()
     
-    // 편집용
+    // 편집 모드용 버튼
     lazy var editDeleteButton: UIButton = {
         let button = UIButton()
         

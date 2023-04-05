@@ -15,8 +15,6 @@ import Kingfisher
 class ProfileVC: UIViewController {
     
     // MARK: - Properties
-    
-    // 추후 로그인 구현 후 변경
     let memberIdx = UserDefaults.standard.integer(forKey: "memberIdx")
 
     let token = UserDefaults.standard.string(forKey: "BearerToken")
@@ -359,7 +357,7 @@ class ProfileVC: UIViewController {
         profileEditBtn.addTarget(self,action: #selector(self.editButtonDidTap(_:)), for: .touchUpInside)
         
         
-        // 하단
+        /* 하단 히스토리 박스 */
         // SNS
         snsTopRadiusView.snp.makeConstraints {
             $0.top.equalTo(profileEditBtn.snp.bottom).offset(16)
@@ -593,7 +591,6 @@ class ProfileVC: UIViewController {
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
-//                    print("성공(SNS조회): \(response.message)")
                     let result = response.result
                     completion(result)
                 } else {
@@ -623,7 +620,6 @@ class ProfileVC: UIViewController {
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
-//                    print("성공(Career조회): \(response.message)")
                     let result = response.result
                     completion(result)
                     
@@ -654,7 +650,6 @@ class ProfileVC: UIViewController {
             switch response.result {
             case .success(let response):
                 if response.isSuccess {
-//                    print("성공(Education조회): \(response.message)")
                     let result = response.result
                     completion(result)
                     
@@ -778,7 +773,7 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             cell.snsLinkLabel.text = row.address
             cell.copyButton.isHidden = true
             
-            // 편집 데이터 넘기기
+            // 편집 모드로 넘길 SNS 데이터를 셀에 담기
             cell.snsIdx = row.snsIdx
             cell.type = row.type
             cell.address = row.address
@@ -853,7 +848,7 @@ extension ProfileVC: SnsButtonTappedDelegate {
         // 화면 전환
         let nextVC = ProfileInputSNSVC()
         
-        // 편집 모드
+        // 편집 모드 세팅
         nextVC.titleLabel.text = "SNS 편집하기"
         nextVC.editButtonStackView.isHidden = false
         nextVC.saveUserProfileButton.isHidden = true
@@ -863,7 +858,9 @@ extension ProfileVC: SnsButtonTappedDelegate {
         // SNS 유형 처리
         switch (type) {
         case "인스타그램":
+            // 인스타그램의 경우 "@"를 제외한 아이디만 아이디 칸에 넣어줄 수 있도록 문자열을 잘라줌
             newAddress = address.removeString(target: "@")
+            // 대신 "@"를 검정 글씨로 표시. textField 입력 칸과 여유가 있도록 패딩 추가
             nextVC.instagramAtLabel.isHidden = false
             nextVC.linkTextField.placeholder = "인스타그램 아이디를 입력해주세요"
             let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 28, height: (nextVC.linkTextField.frame.height)))
@@ -873,6 +870,7 @@ extension ProfileVC: SnsButtonTappedDelegate {
         case "깃허브":
             print()
         default: // 직접 입력
+            // 텍스트가 위의 세 개가 아닌 다른 경우 직접 입력으로 입력한 텍스트임
             nextVC.typeTextField.placeholder = "SNS 종류를 직접 입력해주세요"
             nextVC.isAutoInput = true
             nextVC.autoInputTextCountLabel.isHidden = false
@@ -889,7 +887,7 @@ extension ProfileVC: SnsButtonTappedDelegate {
     }
     
     func copyButtonDidTap() {
-        //
+        // OtherProfileVC에 쓰이는 것이니 무시해도 됨
     }
 }
 
