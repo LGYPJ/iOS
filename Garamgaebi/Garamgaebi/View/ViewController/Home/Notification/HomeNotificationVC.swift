@@ -86,6 +86,8 @@ class HomeNotificationVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchData(lastNotiIdx: self.lastNotificationIdx, hasNext: self.hasNext)
+		self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+
     }
 
     
@@ -243,5 +245,12 @@ extension HomeNotificationVC: UITableViewDataSource, UITableViewDelegate {
         }
 
     }
+}
+
+extension HomeNotificationVC: UIGestureRecognizerDelegate {
+	func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+			return true
+		}
+
 }
 

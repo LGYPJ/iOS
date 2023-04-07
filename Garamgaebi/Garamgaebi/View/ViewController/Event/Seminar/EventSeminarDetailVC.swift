@@ -87,8 +87,6 @@ class EventSeminarDetailVC: UIViewController {
 		configureViews()
 		configureRefreshControl()
 		
-		self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-		
 		NotificationCenter.default.addObserver(self, selector: #selector(presentPopupVC(_:)), name: Notification.Name("pushSeminarPreviewPopup"), object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(pushOtherProfileInProgramDetail(_:)), name: Notification.Name("pushOtherProfileInProgramDetail"), object: nil)
     }
@@ -96,6 +94,8 @@ class EventSeminarDetailVC: UIViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		fetchSeminarInfo()
+		
+		self.navigationController?.interactivePopGestureRecognizer?.delegate = self
 	}
 }
 
