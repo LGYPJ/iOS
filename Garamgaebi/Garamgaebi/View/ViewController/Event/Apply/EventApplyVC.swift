@@ -685,8 +685,8 @@ extension EventApplyVC {
 		nicknameTextField.delegate = self
 		numberTextField.delegate = self
 		
-		nameTextField.returnKeyType = .done
-		nicknameTextField.returnKeyType = .done
+		nameTextField.returnKeyType = .next
+		nicknameTextField.returnKeyType = .next
 		numberTextField.returnKeyType = .done
 
 	}
@@ -877,7 +877,16 @@ extension EventApplyVC {
 
 extension EventApplyVC: UITextFieldDelegate {
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		textField.resignFirstResponder()
+		switch textField {
+		case nameTextField:
+			nicknameTextField.becomeFirstResponder()
+		case nicknameTextField:
+			numberTextField.becomeFirstResponder()
+		default:
+			textField.resignFirstResponder()
+		}
+		
+		
 		return true
 	}
 	
