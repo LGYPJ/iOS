@@ -48,12 +48,12 @@ class ProfileSNSTableViewCell: UITableViewCell {
         $0.spacing = 4
     }
     
-    lazy var editButton = UIButton().then {
+    lazy var editButton = UIButton().then { // ProfileVC용
         $0.setImage(UIImage(named: "ProfileEdit"), for: .normal)
         
         $0.addTarget(self, action: #selector(editButtonDidTap), for: .touchUpInside)
     }
-    lazy var copyButton = UIButton().then {
+    lazy var copyButton = UIButton().then { // OhterProfileVC용
         $0.setImage(UIImage(named: "ProfileCopy"), for: .normal)
         
         $0.addTarget(self, action: #selector(copyButtonDidTap), for: .touchUpInside)
@@ -62,7 +62,7 @@ class ProfileSNSTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-//        contentView
+        // contentView
         self.contentView.addSubview(snsStackView)
         self.contentView.addSubview(editButton)
         self.contentView.addSubview(copyButton)
@@ -91,13 +91,11 @@ class ProfileSNSTableViewCell: UITableViewCell {
        
     }
     
-    @objc private func editButtonDidTap() {
+    @objc private func editButtonDidTap() { // ProfileVC용
         delegate?.snsEditButtonDidTap(snsIdx: snsIdx ?? 0, type: type ?? "", address: address ?? "")
-        
-//        print("편집 버튼 클릭")
     }
     
-    @objc private func copyButtonDidTap() {
+    @objc private func copyButtonDidTap() { // OtherProfileVC용
         delegate?.copyButtonDidTap()
         
         guard let copyString = snsLinkLabel.text else { return }
@@ -105,9 +103,4 @@ class ProfileSNSTableViewCell: UITableViewCell {
         
         print("클립보드 복사: \(copyString)")
     }
-    
-//    public func snsConfigure(_ item: SnsResult) {
-//        snsLabel.text = item.address
-//    }
-
 }
