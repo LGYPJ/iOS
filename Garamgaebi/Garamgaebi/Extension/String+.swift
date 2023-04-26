@@ -18,7 +18,7 @@ extension String {
     
     // [가천대생 ID 정규표현식 5~20자 특수문자,공백 불가]
     func isValidId() -> Bool {
-        let idRegEx = "[A-Za-z0-9]{5,20}"
+        let idRegEx = "[A-Za-z0-9]{1,20}"
         let idTest = NSPredicate(format: "SELF MATCHES %@", idRegEx)
         
         return idTest.evaluate(with: self)
