@@ -19,8 +19,8 @@ class EventApplyViewModel {
 	enum Output {
 		case getProgramDataDidSucceed(data: ProgramDetailInfoResponse)
 		case getProgramDataDidFail(error: Error)
-		case postSeminarApplyDidSucceed(result: EventApplyModel)
-		case postSeminarApplyDidFail(error: Error)
+		case postProgramApplyDidSucceed(result: EventApplyModel)
+		case postProgramApplyDidFail(error: Error)
 		case popVC
 	}
 	
@@ -76,10 +76,10 @@ class EventApplyViewModel {
 		eventApplyServiceType.postApplyProgram(memberId: self.memberId, programId: self.programId, name: name, nickname: nickname, phone: phone)
 			.sink { [weak self] completion in
 				if case .failure(let error) = completion {
-					self?.output.send(.postSeminarApplyDidFail(error: error))
+					self?.output.send(.postProgramApplyDidFail(error: error))
 				}
 			} receiveValue: {[weak self] result in
-				self?.output.send(.postSeminarApplyDidSucceed(result: result))
+				self?.output.send(.postProgramApplyDidSucceed(result: result))
 			}
 			.store(in: &cancelBag)
 	}

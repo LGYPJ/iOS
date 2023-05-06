@@ -423,18 +423,24 @@ class EventApplyVC: UIViewController {
 			.receive(on: DispatchQueue.main)
 			.sink { [weak self] event in
 			switch event {
+			// 프로그램 데이터 get 성공
 			case .getProgramDataDidSucceed(let data):
 				guard let data = data.result else {return}
 				self?.programInfo = data
-				
+			
+			// 프로그램 데이터 get 실패
 			case .getProgramDataDidFail(let error):
 				print(error.localizedDescription)
+				self?.presentErrorView()
 				
-			case .postSeminarApplyDidSucceed(let result):
+			// 프로그램 신청 성공
+			case .postProgramApplyDidSucceed(let result):
 				self?.presentAlert(isSuccess: result.isSuccess, message: result.message)
 				
-			case .postSeminarApplyDidFail(let error):
+			// 프로그램 신청 실패
+			case .postProgramApplyDidFail(let error):
 				print(error.localizedDescription)
+				self?.presentErrorView()
 				
 			case .popVC:
 				self?.navigationController?.popViewController(animated: true)
@@ -442,25 +448,6 @@ class EventApplyVC: UIViewController {
 		}
 		.store(in: &cancelBag)
 	}
-	
-	private func presentAlert(isSuccess: Bool, message: String) {
-		if isSuccess {
-			let alert = UIAlertController(title: "신청이 완료되었습니다!", message: nil, preferredStyle: .alert)
-			let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
-				self.navigationController?.popViewController(animated: true)
-			}
-			alert.addAction(confirmAction)
-			self.present(alert, animated: true)
-			NotificationCenter.default.post(name: NSNotification.Name("ReloadMyEvent"), object: nil)
-		} else {
-			let alert = UIAlertController(title: message, message: nil, preferredStyle: .alert)
-			let confirmAction = UIAlertAction(title: "확인", style: .default)
-			alert.addAction(confirmAction)
-			self.present(alert, animated: true)
-		}
-	}
-	
-	
 }
 
 extension EventApplyVC {
@@ -664,24 +651,29 @@ extension EventApplyVC {
 			$0.leading.trailing.equalToSuperview().inset(12)
 			$0.bottom.equalToSuperview().inset(12)
 		}
-		
-		
 	}
 	
-	// textField delegate 등록
+	private func presentAlert(isSuccess: Bool, message: String) {
+		if isSuccess {
+			let alert = UIAlertController(title: "신청이 완료되었습니다!", message: nil, preferredStyle: .alert)
+			let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
+				self.navigationController?.popViewController(animated: true)
+			}
+			alert.addAction(confirmAction)
+			self.present(alert, animated: true)
+			NotificationCenter.default.post(name: NSNotification.Name("ReloadMyEvent"), object: nil)
+		} else {
+			let alert = UIAlertController(title: message, message: nil, preferredStyle: .alert)
+			let confirmAction = UIAlertAction(title: "확인", style: .default)
+			alert.addAction(confirmAction)
+			self.present(alert, animated: true)
+		}
+	}
+	
 	private func configureTextField() {
 		nameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
 		nicknameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
 		numberTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-		
-//		nameTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
-//		nameTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
-////
-//		nicknameTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
-//		nicknameTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
-////
-//		numberTextField.addTarget(self, action: #selector(textFieldActivated), for: .editingDidBegin)
-//		numberTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
 		
 		nameTextField.delegate = self
 		nicknameTextField.delegate = self
@@ -690,7 +682,6 @@ extension EventApplyVC {
 		nameTextField.returnKeyType = .next
 		nicknameTextField.returnKeyType = .next
 		numberTextField.returnKeyType = .done
-
 	}
 	
 	// 3개의 textField가 모두 조건을 만족했을때 버튼 활성화
@@ -760,31 +751,6 @@ extension EventApplyVC {
 		
 		clipBoardImageView.addGestureRecognizer(tapClipBoard)
 	}
-	
-//	@objc func textFieldActivated(_ sender: UITextField) {
-//		switch sender {
-//		case nameTextField:
-//			if isValidName {
-//				sender.layer.borderColor = UIColor.mainBlack.cgColor
-//			}
-//		case nicknameTextField:
-//			if isValidNickname {
-//				sender.layer.borderColor = UIColor.mainBlack.cgColor
-//			}
-//		case numberTextField:
-//			if isValidNumber {
-//				sender.layer.borderColor = UIColor.mainBlack.cgColor
-//			}
-//		default:
-//			return
-//		}
-//
-//
-//	}
-//
-//	@objc func textFieldInactivated(_ sender: UITextField) {
-//		sender.layer.borderColor = UIColor.mainGray.cgColor
-//	}
 	
 	@objc private func clipBoardImageViewDidTap() {
 		UIPasteboard.general.string = self.account
@@ -876,46 +842,12 @@ extension EventApplyVC: UITextFieldDelegate {
 	}
 	
 	func textFieldDidBeginEditing(_ textField: UITextField) {
-//		switch textField {
-//		case nameTextField:
-//			if isValidName {
-//				textField.layer.borderColor = UIColor.mainBlack.cgColor
-//			}
-//		case nicknameTextField:
-//			if isValidNickname {
-//				textField.layer.borderColor = UIColor.mainBlack.cgColor
-//			}
-//		case numberTextField:
-//			if isValidNumber {
-//				textField.layer.borderColor = UIColor.mainBlack.cgColor
-//			}
-//		default:
-//			return
-//		}
-		
 		textField.layer.borderColor = UIColor.mainBlack.cgColor
 		
 		
 	}
 	
 	func textFieldDidEndEditing(_ textField: UITextField) {
-//		switch textField {
-//		case nameTextField:
-//			if isValidName {
-//				textField.layer.borderColor = UIColor.mainGray.cgColor
-//			}
-//		case nicknameTextField:
-//			if isValidNickname {
-//				textField.layer.borderColor = UIColor.mainGray.cgColor
-//			}
-//		case numberTextField:
-//			if isValidNumber {
-//				textField.layer.borderColor = UIColor.mainGray.cgColor
-//			}
-//		default:
-//			return
-//		}
-		
 		textField.layer.borderColor = UIColor.mainGray.cgColor
 		
 	}
