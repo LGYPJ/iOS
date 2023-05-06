@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 
 class EventApplyVC: UIViewController {
@@ -358,26 +359,26 @@ class EventApplyVC: UIViewController {
 		}
 	}
 	
-	var type: String
+	var type: ProgramType
 	var memberId: Int
 	var programId: Int
 	private var distance : CGFloat = 0
 	private var scrollOffset : CGFloat = 0
+
 	
-	var seminarInfo: SeminarDetailInfo = .init(programIdx: 0, title: "", date: "", location: "", fee: 0, endDate: "", programStatus: "", userButtonStatus: "") {
+	private var programInfo: ProgramDetailInfo = .init(programIdx: 0, title: "", date: "", location: "", fee: 0, endDate: "", programStatus: "", userButtonStatus: "") {
 		didSet {
-			configureWithSeminarData()
+			configureProgramData()
 		}
 	}
-	var networkingInfo: NetworkingDetailInfo = .init(programIdx: 0, title: "", date: "", location: "", fee: 0, endDate: "", programStatus: "", userButtonStatus: "") {
-		didSet {
-			configureWithNetworkingData()
-		}
-	}
+	
+	private let viewModel = EventApplyViewModel()
+	private let input = PassthroughSubject<EventApplyViewModel.Input, Never>()
+	private var cancelBag = Set<AnyCancellable>()
 	
     // MARK: - Life Cycle
 	
-	init(type: String, programId: Int) {
+	init(type: ProgramType, programId: Int) {
 		self.type = type
 		self.memberId = UserDefaults.standard.integer(forKey: "memberIdx")
 		self.programId = programId
@@ -391,6 +392,9 @@ class EventApplyVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
+		bind()
+		input.send(.viewDidLoad(type: type ,programId: programId))
+		
 		configureViews()
 		configureTextField()
 		configureGestureRecognizer()
@@ -399,7 +403,6 @@ class EventApplyVC: UIViewController {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-        fetchProgramData()
         setKeyboardObserver()
 	}
     
@@ -412,36 +415,55 @@ class EventApplyVC: UIViewController {
 	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 		self.view.endEditing(true)
 	}
+	
+	private func bind() {
+		let output = viewModel.transform(input: input.eraseToAnyPublisher())
+		
+		output
+			.receive(on: DispatchQueue.main)
+			.sink { [weak self] event in
+			switch event {
+			case .getProgramDataDidSucceed(let data):
+				guard let data = data.result else {return}
+				self?.programInfo = data
+				
+			case .getProgramDataDidFail(let error):
+				print(error.localizedDescription)
+				
+			case .postSeminarApplyDidSucceed(let result):
+				self?.presentAlert(isSuccess: result.isSuccess, message: result.message)
+				
+			case .postSeminarApplyDidFail(let error):
+				print(error.localizedDescription)
+				
+			case .popVC:
+				self?.navigationController?.popViewController(animated: true)
+			}
+		}
+		.store(in: &cancelBag)
+	}
+	
+	private func presentAlert(isSuccess: Bool, message: String) {
+		if isSuccess {
+			let alert = UIAlertController(title: "신청이 완료되었습니다!", message: nil, preferredStyle: .alert)
+			let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
+				self.navigationController?.popViewController(animated: true)
+			}
+			alert.addAction(confirmAction)
+			self.present(alert, animated: true)
+			NotificationCenter.default.post(name: NSNotification.Name("ReloadMyEvent"), object: nil)
+		} else {
+			let alert = UIAlertController(title: message, message: nil, preferredStyle: .alert)
+			let confirmAction = UIAlertAction(title: "확인", style: .default)
+			alert.addAction(confirmAction)
+			self.present(alert, animated: true)
+		}
+	}
+	
+	
 }
 
 extension EventApplyVC {
-	
-	private func fetchProgramData() {
-		switch self.type {
-		case "SEMINAR":
-			SeminarDetailViewModel.requestSeminarDetailInfo(memberId: self.memberId, seminarId: self.programId, completion: {[weak self] result in
-				switch result {
-				case .success(let result):
-					guard let result = result.result else {return}
-					self?.seminarInfo = result
-				case .failure(_):
-					self?.presentErrorView()
-				}
-			})
-		case "NETWORKING":
-			NetworkingDetailViewModel.requestNetworkingDetailInfo(memberId: self.memberId, networkingId: self.programId, completion: {[weak self] result in
-				switch result {
-				case .success(let result):
-					guard let result = result.result else {return}
-					self?.networkingInfo = result
-				case .failure(_):
-					self?.presentErrorView()
-				}
-			})
-		default:
-			return
-		}
-	}
 	
 	private func presentErrorView() {
 		let errorView = ErrorPageView()
@@ -449,56 +471,36 @@ extension EventApplyVC {
         self.navigationController?.pushViewController(errorView, animated: false)
 	}
 	
-	private func configureWithSeminarData() {
-		titleLabel.text = "세미나 신청"
-		eventNameLabel.text = seminarInfo.title
-		dateInfoLabel.text = seminarInfo.date.formattingDetailDate()
-		locationInfoLabel.text = seminarInfo.location
-		if seminarInfo.fee == 0 {
-//			costStackView.isHidden = true
+	private func configureProgramData() {
+		switch type {
+		case .SEMINAR:
+			titleLabel.text = "세미나 신청"
+		case .NETWORKING:
+			titleLabel.text = "네트워킹 신청"
+		}
+		
+		eventNameLabel.text = programInfo.title
+		dateInfoLabel.text = programInfo.date.formattingDetailDate()
+		locationInfoLabel.text = programInfo.location
+		
+		if programInfo.fee == 0 {
 			costInfoLabel.text = "무료"
 			accountLabel.isHidden = true
 			clipBoardImageView.isHidden = true
 			descriptionTextView.isHidden = true
 			descriptionContainerView.isHidden = true
 		} else {
-//			costStackView.isHidden = false
 			accountLabel.isHidden = false
 			clipBoardImageView.isHidden = false
 			descriptionTextView.isHidden = false
 			descriptionContainerView.isHidden = false
-			costInfoLabel.text = "\(seminarInfo.fee)원"
+			costInfoLabel.text = "\(programInfo.fee)원"
 			accountLabel.text = "\(account)"
 			descriptionTextView.text = "입금자명을 닉네임/이름(예시: 찹도/민세림)으로 해주셔야 합니다.\n\n신청 확정은 신청 마감 이후에 일괄 처리됩니다.\n신청취소는 일주일 전까지 가능합니다.(이후로는 취소 불가)\n환불은 모임 당일부터 7일 이내에 순차적으로 진행됩니다.\n\n입금이 완료되지 않으면 신청이 자동적으로 취소됩니다."
 		}
 		
-		deadlineInfoLabel.text = seminarInfo.endDate.formattingDetailDate()
-	}
-	
-	private func configureWithNetworkingData() {
-		self.titleLabel.text = "네트워킹 신청"
-		eventNameLabel.text = networkingInfo.title
-		dateInfoLabel.text = networkingInfo.date.formattingDetailDate()
-		locationInfoLabel.text = networkingInfo.location
-		if networkingInfo.fee == 0 {
-//			costStackView.isHidden = true
-			costInfoLabel.text = "무료"
-			accountLabel.isHidden = true
-			clipBoardImageView.isHidden = true
-			descriptionTextView.isHidden = true
-			descriptionContainerView.isHidden = true
-		} else {
-//			costStackView.isHidden = false
-			accountLabel.isHidden = false
-			clipBoardImageView.isHidden = false
-			descriptionTextView.isHidden = false
-			descriptionContainerView.isHidden = false
-			costInfoLabel.text = "\(networkingInfo.fee)원"
-			accountLabel.text = "\(account)"
-			descriptionTextView.text = "입금자명을 닉네임/이름(예시: 찹도/민세림)으로 해주셔야 합니다.\n\n신청 확정은 신청 마감 이후에 일괄 처리됩니다.\n신청취소는 일주일 전까지 가능합니다.(이후로는 취소 불가)\n환불은 모임 당일부터 7일 이내에 순차적으로 진행됩니다.\n\n입금이 완료되지 않으면 신청이 자동적으로 취소됩니다."
-		}
+		deadlineInfoLabel.text = programInfo.endDate.formattingDetailDate()
 		
-		deadlineInfoLabel.text = networkingInfo.endDate.formattingDetailDate()
 	}
 	
 	private func configureViews() {
@@ -811,7 +813,7 @@ extension EventApplyVC {
 	
 	// 뒤로가기 버튼 did tap
 	@objc private func didTapBackBarButton() {
-		self.navigationController?.popViewController(animated: true)
+		input.send(.backButtonDidTap)
 	}
 	
 	@objc private func textFieldDidChange(_ sender: UITextField) {
@@ -853,24 +855,7 @@ extension EventApplyVC {
 		guard let name = nameTextField.text,
 			  let nickname = nicknameTextField.text,
 			  let number = numberTextField.text else {return}
-		
-		EventApplyViewModel.postApplyProgram(memberId: self.memberId, programId: self.programId, name: name, nickname: nickname, phone: number, completion: {[weak self] result in
-			
-			if result.isSuccess {
-				let alert = UIAlertController(title: "신청이 완료되었습니다!", message: nil, preferredStyle: .alert)
-				let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
-					self?.navigationController?.popViewController(animated: true)
-				}
-				alert.addAction(confirmAction)
-				self?.present(alert, animated: true)
-				NotificationCenter.default.post(name: NSNotification.Name("ReloadMyEvent"), object: nil)
-			} else {
-				let alert = UIAlertController(title: result.message, message: nil, preferredStyle: .alert)
-				let confirmAction = UIAlertAction(title: "확인", style: .default)
-				alert.addAction(confirmAction)
-				self?.present(alert, animated: true)
-			}
-		})
+		input.send(.applyButtonDidTap(name: name, nickname: nickname, number: number))
 	}
 
 }

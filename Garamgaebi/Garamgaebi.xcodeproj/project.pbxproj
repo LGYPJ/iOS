@@ -21,6 +21,8 @@
 		2C65943D29975E85007D3619 /* EventUserApplyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C65943C29975E85007D3619 /* EventUserApplyModel.swift */; };
 		2C8A4EF129A098A4004E1FCB /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8A4EF029A098A4004E1FCB /* WebSocketManager.swift */; };
 		2C9E5611297A960900DF9E5A /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9E5610297A960900DF9E5A /* String+.swift */; };
+		2CA85CBB2A01523B00EB8213 /* EventApplyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA85CBA2A01523B00EB8213 /* EventApplyService.swift */; };
+		2CA85CBD2A01FB6400EB8213 /* SeminarDetailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA85CBC2A01FB6400EB8213 /* SeminarDetailService.swift */; };
 		2CBF6C72297A954E00940CBE /* UITextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBF6C71297A954E00940CBE /* UITextField+.swift */; };
 		2CDD94D9296FDB88004B8D56 /* EventApplyCancelVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94D8296FDB88004B8D56 /* EventApplyCancelVC.swift */; };
 		2CDD94DE29700E71004B8D56 /* EventNetworkingDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94DD29700E71004B8D56 /* EventNetworkingDetailVC.swift */; };
@@ -51,6 +53,8 @@
 		2CED690F298CBD2800C838BD /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED690E298CBD2800C838BD /* Status.swift */; };
 		2CED6911298D251500C838BD /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED6910298D251500C838BD /* LoginViewModel.swift */; };
 		2CED6913298D258D00C838BD /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED6912298D258D00C838BD /* LoginModel.swift */; };
+		2CED9B302A066C2700860302 /* ProgramDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED9B2F2A066C2700860302 /* ProgramDataModel.swift */; };
+		2CED9B322A066D0E00860302 /* ProgramDetailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED9B312A066D0E00860302 /* ProgramDetailService.swift */; };
 		460C0C2B296D855800FF5085 /* ProfileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460C0C2A296D855800FF5085 /* ProfileEditVC.swift */; };
 		4614A1732984BA9500D12108 /* ProfileSNSTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4614A1722984BA9500D12108 /* ProfileSNSTableViewCell.swift */; };
 		462183F5297C51B800B9A035 /* BottomSheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462183F4297C51B800B9A035 /* BottomSheetVC.swift */; };
@@ -186,6 +190,8 @@
 		2C65943C29975E85007D3619 /* EventUserApplyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventUserApplyModel.swift; sourceTree = "<group>"; };
 		2C8A4EF029A098A4004E1FCB /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		2C9E5610297A960900DF9E5A /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
+		2CA85CBA2A01523B00EB8213 /* EventApplyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventApplyService.swift; sourceTree = "<group>"; };
+		2CA85CBC2A01FB6400EB8213 /* SeminarDetailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarDetailService.swift; sourceTree = "<group>"; };
 		2CBF6C71297A954E00940CBE /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
 		2CDD94D8296FDB88004B8D56 /* EventApplyCancelVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventApplyCancelVC.swift; sourceTree = "<group>"; };
 		2CDD94DD29700E71004B8D56 /* EventNetworkingDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventNetworkingDetailVC.swift; sourceTree = "<group>"; };
@@ -216,6 +222,8 @@
 		2CED690E298CBD2800C838BD /* Status.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
 		2CED6910298D251500C838BD /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		2CED6912298D258D00C838BD /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
+		2CED9B2F2A066C2700860302 /* ProgramDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramDataModel.swift; sourceTree = "<group>"; };
+		2CED9B312A066D0E00860302 /* ProgramDetailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramDetailService.swift; sourceTree = "<group>"; };
 		4439625ABB3DE99B3073CDA2 /* Pods_Garamgaebi_GaramgaebiUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Garamgaebi_GaramgaebiUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		460C0C2A296D855800FF5085 /* ProfileEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditVC.swift; sourceTree = "<group>"; };
 		4614A1722984BA9500D12108 /* ProfileSNSTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSNSTableViewCell.swift; sourceTree = "<group>"; };
@@ -563,6 +571,7 @@
 				60321600297A745000ACBB04 /* Home */,
 				603215FE297A742100ACBB04 /* ViewAll */,
 				2CED68FE29838B2E00C838BD /* SeminarDetailModel.swift */,
+				2CED9B2F2A066C2700860302 /* ProgramDataModel.swift */,
 				2CED6912298D258D00C838BD /* LoginModel.swift */,
 				6055F2E329C2CE7F00A7A4B2 /* LogoutModel.swift */,
 				2CED690429867F3300C838BD /* NetworkingDetailModel.swift */,
@@ -771,6 +780,9 @@
 			isa = PBXGroup;
 			children = (
 				6082992E297FC20C00240036 /* EventService.swift */,
+				2CA85CBA2A01523B00EB8213 /* EventApplyService.swift */,
+				2CA85CBC2A01FB6400EB8213 /* SeminarDetailService.swift */,
+				2CED9B312A066D0E00860302 /* ProgramDetailService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -1199,6 +1211,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				603F2734299E12750013FAC6 /* ServiceTermVC.swift in Sources */,
+				2CA85CBD2A01FB6400EB8213 /* SeminarDetailService.swift in Sources */,
 				2CED6913298D258D00C838BD /* LoginModel.swift in Sources */,
 				60513F3F298E5FBF0065CD15 /* RegisterEducationViewModel.swift in Sources */,
 				601823352972F04500160EF4 /* HomeEventCollectionViewCell.swift in Sources */,
@@ -1229,6 +1242,7 @@
 				6055D84129700C9500C86D53 /* InputEmailVC.swift in Sources */,
 				60AA6BCB29752422002878B6 /* ViewAllSeminarDataModel.swift in Sources */,
 				2CBF6C72297A954E00940CBE /* UITextField+.swift in Sources */,
+				2CA85CBB2A01523B00EB8213 /* EventApplyService.swift in Sources */,
 				2C8A4EF129A098A4004E1FCB /* WebSocketManager.swift in Sources */,
 				60F91403296D2F4800626C40 /* ProfileVC.swift in Sources */,
 				46876C6729732053000BA1B6 /* ProfileWithdrawalVC.swift in Sources */,
@@ -1312,12 +1326,14 @@
 				2C9E5611297A960900DF9E5A /* String+.swift in Sources */,
 				2CDD94EA29718369004B8D56 /* EventAttendantTableViewCell.swift in Sources */,
 				2CDD94E8297173E8004B8D56 /* EventInfoTableViewCell.swift in Sources */,
+				2CED9B322A066D0E00860302 /* ProgramDetailService.swift in Sources */,
 				2CDD9504297573BF004B8D56 /* BankPopUpVC.swift in Sources */,
 				2CDD950029750BC9004B8D56 /* SeminarPreviewPopUpVC.swift in Sources */,
 				2CDD94DE29700E71004B8D56 /* EventNetworkingDetailVC.swift in Sources */,
 				2CDD94F62971952E004B8D56 /* EventApplyVC.swift in Sources */,
 				2CDD94F4297192E9004B8D56 /* EventPreviewTableViewCell.swift in Sources */,
 				2C0495D729AB31CA002E2B92 /* IceBreakingModel.swift in Sources */,
+				2CED9B302A066C2700860302 /* ProgramDataModel.swift in Sources */,
 				601823332972DDCA00160EF4 /* HomeEventInfoTabelViewCell.swift in Sources */,
 				6055F2E229C2CE0B00A7A4B2 /* LogoutViewModel.swift in Sources */,
 				60C6371C2984E1FC00D2C814 /* HomeSeminarPopUpVC.swift in Sources */,

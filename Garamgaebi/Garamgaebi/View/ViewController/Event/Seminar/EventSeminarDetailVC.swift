@@ -180,7 +180,7 @@ extension EventSeminarDetailVC {
 	}
 	
 	@objc private func didTapRegisterButton() {
-		navigationController?.pushViewController(EventApplyVC(type: "SEMINAR" ,programId: self.seminarId), animated: true)
+		navigationController?.pushViewController(EventApplyVC(type: .SEMINAR ,programId: self.seminarId), animated: true)
 	}
 	
 	@objc private func presentPopupVC(_ notification: NSNotification) {

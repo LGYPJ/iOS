@@ -226,7 +226,7 @@ extension EventNetworkingDetailVC {
 	}
 	// 네트워킹 신청 did tap
 	@objc private func didTapRegisterButton() {
-		navigationController?.pushViewController(EventApplyVC(type: "NETWORKING",programId: self.networkingId), animated: true)
+		navigationController?.pushViewController(EventApplyVC(type: .NETWORKING,programId: self.networkingId), animated: true)
 	}
 	// 게임 참가하기 did tap
 	@objc private func didTapEntranceButton() {
