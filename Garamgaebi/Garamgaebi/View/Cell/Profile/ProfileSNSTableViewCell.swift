@@ -40,6 +40,7 @@ class ProfileSNSTableViewCell: UITableViewCell {
         $0.font = UIFont.NotoSansKR(type: .Regular, size: 14)
         $0.textColor = .mainBlue
         $0.textAlignment = .left
+		$0.isUserInteractionEnabled = true
     }
     
     lazy var snsStackView = UIStackView().then {
