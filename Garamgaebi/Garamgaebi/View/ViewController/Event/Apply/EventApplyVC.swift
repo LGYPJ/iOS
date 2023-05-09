@@ -409,7 +409,18 @@ class EventApplyVC: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         setKeyboardObserverRemove()
+		
+		
     }
+	
+	override func viewDidDisappear(_ animated: Bool) {
+		super.viewDidDisappear(animated)
+		
+		// 뷰가 사라질때 cancelBag의 작업을 취소하고 비움으로 store하는 클로저에서 weak self 안쓰게 하기
+		cancelBag.forEach {$0.cancel()}
+		cancelBag.removeAll()
+		print(cancelBag)
+	}
     
 	// view를 터치했을때 editing 끝나게, 하지만 scrollview touch는 안먹음
 	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -421,29 +432,41 @@ class EventApplyVC: UIViewController {
 		
 		output
 			.receive(on: DispatchQueue.main)
-			.sink { [weak self] event in
+			.sink { event in
 			switch event {
 			// 프로그램 데이터 get 성공
 			case .getProgramDataDidSucceed(let data):
 				guard let data = data.result else {return}
-				self?.programInfo = data
+				self.programInfo = data
 			
 			// 프로그램 데이터 get 실패
 			case .getProgramDataDidFail(let error):
 				print(error.localizedDescription)
-				self?.presentErrorView()
+				self.presentErrorView()
+				
+			case .isValidName(let result):
+				self.isValidName = result
+				self.validateUserInfo()
+				
+			case .isValidNickname(let result):
+				self.isValidNickname = result
+				self.validateUserInfo()
+				
+			case .isValidNumber(let result):
+				self.isValidNumber = result
+				self.validateUserInfo()
 				
 			// 프로그램 신청 성공
 			case .postProgramApplyDidSucceed(let result):
-				self?.presentAlert(isSuccess: result.isSuccess, message: result.message)
+				self.presentAlert(isSuccess: result.isSuccess, message: result.message)
 				
 			// 프로그램 신청 실패
 			case .postProgramApplyDidFail(let error):
 				print(error.localizedDescription)
-				self?.presentErrorView()
+				self.presentErrorView()
 				
 			case .popVC:
-				self?.navigationController?.popViewController(animated: true)
+				self.navigationController?.popViewController(animated: true)
 			}
 		}
 		.store(in: &cancelBag)
@@ -788,31 +811,17 @@ extension EventApplyVC {
 		
 		switch sender {
 		case nameTextField:
-			let nameRegEx =  "[가-힣A-Za-z]{1,20}"
-			let nameTest = NSPredicate(format: "SELF MATCHES %@", nameRegEx)
-			let result = nameTest.evaluate(with: text)
+			input.send(.nameTextFieldEditingChanged(name: text))
 			
-			self.isValidName = result
-			
-			// 이름 받는 property에 저장
 		case nicknameTextField:
-			if text == UserDefaults.standard.string(forKey: "nickname") {
-				self.isValidNickname = true
-			} else {
-				self.isValidNickname = false
-			}
+			input.send(.nicknameTextFieldEditingChanged(nickname: text))
 			
-			//저장
 		case numberTextField:
-			let numberRegEx = "[0-9]{11}"
-			let numberTest = NSPredicate(format: "SELF MATCHES %@", numberRegEx)
+			input.send(.numberTextFieldEditingChanged(number: text))
 			
-			self.isValidNumber = numberTest.evaluate(with: text)
-			//저장
 		default:
 			print("error")
 		}
-		validateUserInfo()
 		
 	}
 	
@@ -843,13 +852,10 @@ extension EventApplyVC: UITextFieldDelegate {
 	
 	func textFieldDidBeginEditing(_ textField: UITextField) {
 		textField.layer.borderColor = UIColor.mainBlack.cgColor
-		
-		
 	}
 	
 	func textFieldDidEndEditing(_ textField: UITextField) {
 		textField.layer.borderColor = UIColor.mainGray.cgColor
-		
 	}
 
 }
