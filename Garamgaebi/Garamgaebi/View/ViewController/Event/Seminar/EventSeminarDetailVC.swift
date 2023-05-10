@@ -11,32 +11,7 @@ import SnapKit
 class EventSeminarDetailVC: UIViewController {
 	
     // MARK: - Subviews
-    
-    lazy var headerView: UIView = {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 71))
-        view.backgroundColor = .systemBackground
-        view.layer.addBorder([.bottom], color: .mainGray, width: 1)
-        return view
-    }()
-    
-    lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "세미나"
-        label.textColor = UIColor(hex: 0x000000,alpha: 0.8)
-        label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
-        return label
-    }()
-    
-    lazy var backButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "arrowBackward"), for: .normal)
-        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        button.clipsToBounds = true
-        button.tintColor = UIColor(hex: 0x000000,alpha: 0.8)
-        button.addTarget(self, action: #selector(didTapBackBarButton), for: .touchUpInside)
-        
-        return button
-    }()
+	let headerView = HeaderView(title: "세미나")
     
 	lazy var tableView: UITableView = {
 		let tableView = UITableView()
@@ -114,8 +89,6 @@ extension EventSeminarDetailVC {
 		view.backgroundColor = .white
         
         view.addSubview(headerView)
-        headerView.addSubview(titleLabel)
-        headerView.addSubview(backButton)
 		view.addSubview(tableView)
 
         //headerView
@@ -123,18 +96,6 @@ extension EventSeminarDetailVC {
             make.left.right.equalToSuperview()
             make.height.equalTo(71)
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-        }
-        
-        // titleLabel
-        titleLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
-        }
-        
-        // backButton
-        backButton.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(16)
-            make.centerY.equalToSuperview()
         }
         
         // tableView
