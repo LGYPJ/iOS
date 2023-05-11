@@ -23,144 +23,9 @@ class EventApplyVC: UIViewController {
 		return scrollView
 	}()
 	// 스크롤 뷰 내의 content를 표시할 view(필수임)
-	lazy var contentView: UIView = {
-		let view = UIView()
-		
-		return view
-	}()
+	lazy var contentView = UIView()
 	
-	lazy var eventInfoBackgroundView: UIView = {
-		let view = UIView()
-		view.backgroundColor = UIColor(hex: 0xEBF0FF)
-		view.layer.cornerRadius = 12
-		
-		return view
-	}()
-	
-	lazy var eventNameLabel: UILabel = {
-		let label = UILabel()
-		label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
-		label.textColor = .mainBlack
-		
-		return label
-	}()
-	
-	lazy var dateTitleLabel: UILabel = {
-		let label = UILabel()
-		label.text = "일시"
-		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .mainBlack
-		
-		return label
-	}()
-	
-	lazy var dateInfoLabel: UILabel = {
-		let label = UILabel()
-		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .mainBlack
-		
-		return label
-	}()
-	
-	lazy var locationTitleLabel: UILabel = {
-		let label = UILabel()
-		label.text = "장소"
-		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .mainBlack
-		
-		return label
-	}()
-	
-	lazy var locationInfoLabel: UILabel = {
-		let label = UILabel()
-		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .mainBlack
-		
-		return label
-	}()
-	
-	lazy var costTitleLabel: UILabel = {
-		let label = UILabel()
-		label.text = "참가비"
-		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .mainBlack
-		
-		return label
-	}()
-	
-	lazy var costInfoLabel: UILabel = {
-		let label = UILabel()
-		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .mainBlack
-		
-		return label
-	}()
-	
-	lazy var deadlineTitleLabel: UILabel = {
-		let label = UILabel()
-		label.text = "신청 마감"
-		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .mainBlack
-		
-		return label
-	}()
-	
-	lazy var deadlineInfoLabel: UILabel = {
-		let label = UILabel()
-		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .mainBlack
-		
-		return label
-	}()
-	
-	lazy var dateStackView: UIStackView = {
-		let stackView = UIStackView()
-		[dateTitleLabel, dateInfoLabel]
-			.forEach {stackView.addArrangedSubview($0)}
-		stackView.axis = .horizontal
-		stackView.spacing = 8
-		
-		return stackView
-	}()
-	
-	lazy var locationStackView: UIStackView = {
-		let stackView = UIStackView()
-		[locationTitleLabel, locationInfoLabel]
-			.forEach {stackView.addArrangedSubview($0)}
-		stackView.axis = .horizontal
-		stackView.spacing = 8
-		
-		return stackView
-	}()
-
-	lazy var costStackView: UIStackView = {
-		let stackView = UIStackView()
-		[costTitleLabel, costInfoLabel]
-			.forEach {stackView.addArrangedSubview($0)}
-		stackView.axis = .horizontal
-		stackView.spacing = 8
-		
-		return stackView
-	}()
-
-	lazy var deadlineStackView: UIStackView = {
-		let stackView = UIStackView()
-		[deadlineTitleLabel, deadlineInfoLabel]
-			.forEach {stackView.addArrangedSubview($0)}
-		stackView.axis = .horizontal
-		stackView.spacing = 8
-		
-		return stackView
-	}()
-
-	lazy var eventInfoStackView: UIStackView = {
-		let stackView = UIStackView()
-		[dateStackView, locationStackView, costStackView, deadlineStackView]
-			.forEach {stackView.addArrangedSubview($0)}
-		stackView.axis = .vertical
-		stackView.alignment = .leading
-		return stackView
-	}()
+	lazy var programInfoView = ProgramInfoView(showRegisterButton: false)
 	
 	lazy var nameTitleLabel: UILabel = {
 		let label = UILabel()
@@ -180,7 +45,6 @@ class EventApplyVC: UIViewController {
 		textField.addRightPadding()
 //		textField.placeholder = "이름을 입력해주세요"
 		textField.attributedPlaceholder = NSAttributedString(string: "이름을 입력해주세요", attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 14)!])
-
 
 		return textField
 	}()
@@ -356,8 +220,10 @@ class EventApplyVC: UIViewController {
 	
 	init(type: ProgramType, programId: Int) {
 		self.type = type
-		self.memberId = UserDefaults.standard.integer(forKey: "memberIdx")
 		self.programId = programId
+		
+		
+		self.memberId = UserDefaults.standard.integer(forKey: "memberIdx")
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -385,8 +251,6 @@ class EventApplyVC: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         setKeyboardObserverRemove()
-		
-		
     }
 	
 	override func viewDidDisappear(_ animated: Bool) {
@@ -465,12 +329,9 @@ extension EventApplyVC {
 			headerView.titleLabel.text = "네트워킹 신청"
 		}
 		
-		eventNameLabel.text = programInfo.title
-		dateInfoLabel.text = programInfo.date.formattingDetailDate()
-		locationInfoLabel.text = programInfo.location
+		programInfoView.programInfo = self.programInfo
 		
 		if programInfo.fee == 0 {
-			costInfoLabel.text = "무료"
 			accountLabel.isHidden = true
 			clipBoardImageView.isHidden = true
 			descriptionTextView.isHidden = true
@@ -480,13 +341,9 @@ extension EventApplyVC {
 			clipBoardImageView.isHidden = false
 			descriptionTextView.isHidden = false
 			descriptionContainerView.isHidden = false
-			costInfoLabel.text = "\(programInfo.fee)원"
 			accountLabel.text = "\(account)"
 			descriptionTextView.text = "입금자명을 닉네임/이름(예시: 찹도/민세림)으로 해주셔야 합니다.\n\n신청 확정은 신청 마감 이후에 일괄 처리됩니다.\n신청취소는 일주일 전까지 가능합니다.(이후로는 취소 불가)\n환불은 모임 당일부터 7일 이내에 순차적으로 진행됩니다.\n\n입금이 완료되지 않으면 신청이 자동적으로 취소됩니다."
 		}
-		
-		deadlineInfoLabel.text = programInfo.endDate.formattingDetailDate()
-		
 	}
 	
 	private func configureViews() {
@@ -525,17 +382,16 @@ extension EventApplyVC {
 			$0.edges.equalToSuperview()
 		}
 		
-		[eventInfoBackgroundView, nameTitleLabel, nameTextField, nameAlertLabel, nicknameTitleLabel, nicknameTextField, nicknameAlertLabel, numberTitleLabel, numberTextField, numberAlertLabel, descriptionContainerView]
+		[programInfoView, nameTitleLabel, nameTextField, nameAlertLabel, nicknameTitleLabel, nicknameTextField, nicknameAlertLabel, numberTitleLabel, numberTextField, numberAlertLabel, descriptionContainerView]
 			.forEach {contentView.addSubview($0)}
 		
-        // eventInfoBackgroundView
-		eventInfoBackgroundView.snp.makeConstraints {
+		programInfoView.snp.makeConstraints {
 			$0.top.leading.trailing.equalToSuperview().inset(16)
 		}
 		
         // nameTitleLabel
 		nameTitleLabel.snp.makeConstraints {
-			$0.top.equalTo(eventInfoBackgroundView.snp.bottom).offset(16)
+			$0.top.equalTo(programInfoView.snp.bottom).offset(16)
 			$0.leading.equalToSuperview().inset(16)
 		}
 		
@@ -591,24 +447,6 @@ extension EventApplyVC {
 			$0.top.equalTo(numberTextField.snp.bottom).offset(44)
 			$0.leading.trailing.equalToSuperview().inset(16)
 			$0.bottom.equalToSuperview().inset(16)
-		}
-		
-		
-		[eventNameLabel,eventInfoStackView]
-			.forEach {eventInfoBackgroundView.addSubview($0)}
-		
-        // eventNameLabel
-		eventNameLabel.snp.makeConstraints {
-			$0.top.equalToSuperview().offset(5.5)
-			$0.leading.equalToSuperview().inset(16)
-			$0.height.equalTo(29)
-		}
-		
-        // eventInfoStackView
-		eventInfoStackView.snp.makeConstraints {
-			$0.leading.equalToSuperview().inset(16)
-			$0.top.equalTo(eventNameLabel.snp.bottom).offset(8)
-			$0.bottom.equalToSuperview().inset(12)
 		}
 		
 		[accountLabel, clipBoardImageView, descriptionTextView]
