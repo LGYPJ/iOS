@@ -25,7 +25,6 @@
 		2C8A4EF129A098A4004E1FCB /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8A4EF029A098A4004E1FCB /* WebSocketManager.swift */; };
 		2C9E5611297A960900DF9E5A /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9E5610297A960900DF9E5A /* String+.swift */; };
 		2CA85CBB2A01523B00EB8213 /* EventApplyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA85CBA2A01523B00EB8213 /* EventApplyService.swift */; };
-		2CA85CBD2A01FB6400EB8213 /* SeminarDetailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA85CBC2A01FB6400EB8213 /* SeminarDetailService.swift */; };
 		2CBF6C72297A954E00940CBE /* UITextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBF6C71297A954E00940CBE /* UITextField+.swift */; };
 		2CDD94D9296FDB88004B8D56 /* EventApplyCancelVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94D8296FDB88004B8D56 /* EventApplyCancelVC.swift */; };
 		2CDD94DE29700E71004B8D56 /* EventNetworkingDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD94DD29700E71004B8D56 /* EventNetworkingDetailVC.swift */; };
@@ -197,7 +196,6 @@
 		2C8A4EF029A098A4004E1FCB /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		2C9E5610297A960900DF9E5A /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		2CA85CBA2A01523B00EB8213 /* EventApplyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventApplyService.swift; sourceTree = "<group>"; };
-		2CA85CBC2A01FB6400EB8213 /* SeminarDetailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarDetailService.swift; sourceTree = "<group>"; };
 		2CBF6C71297A954E00940CBE /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
 		2CDD94D8296FDB88004B8D56 /* EventApplyCancelVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventApplyCancelVC.swift; sourceTree = "<group>"; };
 		2CDD94DD29700E71004B8D56 /* EventNetworkingDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventNetworkingDetailVC.swift; sourceTree = "<group>"; };
@@ -788,7 +786,6 @@
 			children = (
 				6082992E297FC20C00240036 /* EventService.swift */,
 				2CA85CBA2A01523B00EB8213 /* EventApplyService.swift */,
-				2CA85CBC2A01FB6400EB8213 /* SeminarDetailService.swift */,
 				2CED9B312A066D0E00860302 /* ProgramDetailService.swift */,
 			);
 			path = Service;
@@ -1220,7 +1217,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				603F2734299E12750013FAC6 /* ServiceTermVC.swift in Sources */,
-				2CA85CBD2A01FB6400EB8213 /* SeminarDetailService.swift in Sources */,
 				2CED6913298D258D00C838BD /* LoginModel.swift in Sources */,
 				60513F3F298E5FBF0065CD15 /* RegisterEducationViewModel.swift in Sources */,
 				601823352972F04500160EF4 /* HomeEventCollectionViewCell.swift in Sources */,
