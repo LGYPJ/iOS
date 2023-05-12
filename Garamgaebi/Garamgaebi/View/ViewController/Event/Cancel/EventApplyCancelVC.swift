@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 class EventApplyCancelVC: UIViewController {
 	
@@ -21,144 +22,9 @@ class EventApplyCancelVC: UIViewController {
 		return scrollView
 	}()
 	
-	let contentView: UIView = {
-		let view = UIView()
-		
-		return view
-	}()
-    
-	lazy var programInfoView: UIView = {
-		let view = UIView()
-		view.backgroundColor = .mainLightBlue
-		view.layer.cornerRadius = 12
-		
-		return view
-	}()
-
-	lazy var programNameLabel: UILabel = {
-		let label = UILabel()
-		label.font = UIFont.NotoSansKR(type: .Bold, size: 20)
-		label.textColor = .mainBlack
-		
-		return label
-	}()
+	let contentView = UIView()
 	
-	lazy var dateTitleLabel: UILabel = {
-		let label = UILabel()
-		label.text = "일시"
-		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .mainBlack
-		
-		return label
-	}()
-	
-	lazy var dateInfoLabel: UILabel = {
-		let label = UILabel()
-		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .mainBlack
-		
-		return label
-	}()
-	
-	lazy var locationTitleLabel: UILabel = {
-		let label = UILabel()
-		label.text = "장소"
-		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .mainBlack
-		
-		return label
-	}()
-	
-	lazy var locationInfoLabel: UILabel = {
-		let label = UILabel()
-		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .mainBlack
-		
-		return label
-	}()
-	
-	lazy var costTitleLabel: UILabel = {
-		let label = UILabel()
-		label.text = "참가비"
-		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .mainBlack
-		
-		return label
-	}()
-	
-	lazy var costInfoLabel: UILabel = {
-		let label = UILabel()
-		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .mainBlack
-		
-		return label
-	}()
-	
-	lazy var deadlineTitleLabel: UILabel = {
-		let label = UILabel()
-		label.text = "신청 마감"
-		label.font = UIFont.NotoSansKR(type: .Bold, size: 14)
-		label.textColor = .mainBlack
-		
-		return label
-	}()
-	
-	lazy var deadlineInfoLabel: UILabel = {
-		let label = UILabel()
-		label.font = UIFont.NotoSansKR(type: .Regular, size: 14)
-		label.textColor = .mainBlack
-		
-		return label
-	}()
-	
-	lazy var dateStackView: UIStackView = {
-		let stackView = UIStackView()
-		[dateTitleLabel, dateInfoLabel]
-			.forEach {stackView.addArrangedSubview($0)}
-		stackView.axis = .horizontal
-		stackView.spacing = 8
-		
-		return stackView
-	}()
-	
-	lazy var locationStackView: UIStackView = {
-		let stackView = UIStackView()
-		[locationTitleLabel, locationInfoLabel]
-			.forEach {stackView.addArrangedSubview($0)}
-		stackView.axis = .horizontal
-		stackView.spacing = 8
-		
-		return stackView
-	}()
-
-	lazy var costStackView: UIStackView = {
-		let stackView = UIStackView()
-		[costTitleLabel, costInfoLabel]
-			.forEach {stackView.addArrangedSubview($0)}
-		stackView.axis = .horizontal
-		stackView.spacing = 8
-		
-		return stackView
-	}()
-
-	lazy var deadlineStackView: UIStackView = {
-		let stackView = UIStackView()
-		[deadlineTitleLabel, deadlineInfoLabel]
-			.forEach {stackView.addArrangedSubview($0)}
-		stackView.axis = .horizontal
-		stackView.spacing = 8
-		
-		return stackView
-	}()
-
-	lazy var seminarInfoStackView: UIStackView = {
-		let stackView = UIStackView()
-		[dateStackView, locationStackView, costStackView, deadlineStackView]
-			.forEach {stackView.addArrangedSubview($0)}
-		stackView.axis = .vertical
-		stackView.alignment = .leading
-		return stackView
-	}()
+	lazy var programInfoView = ProgramInfoView(showRegisterButton: false)
 	
 	lazy var nameTextField: UITextField = {
 		let textField = UITextField()
@@ -268,22 +134,14 @@ class EventApplyCancelVC: UIViewController {
 	}()
 	
 	// MARK: Properties
-	var type: String
+	var type: ProgramType
 	var programId: Int
 	var memberId: Int
-	var seminarInfo = SeminarDetailInfo(programIdx: 0, title: "", date: "", location: "", fee: 0, endDate: "", programStatus: "", userButtonStatus: "") {
+	
+	private var programInfo: ProgramDetailInfo = .init(programIdx: 0, title: "", date: "", location: "", fee: 0, endDate: "", programStatus: "", userButtonStatus: "") {
 		didSet {
-			configureSeminarData()
-			if seminarInfo.fee == 0 {
-				cancelButton.isEnabled = true
-				cancelButton.backgroundColor = .mainBlue
-			}
-		}
-	}
-	var networkingInfo = NetworkingDetailInfo(programIdx: 0, title: "", date: "", location: "", fee: 0, endDate: "", programStatus: "", userButtonStatus: "") {
-		didSet {
-			configureNetworkingData()
-			if networkingInfo.fee == 0 {
+			configureProgramData()
+			if programInfo.fee == 0 {
 				cancelButton.isEnabled = true
 				cancelButton.backgroundColor = .mainBlue
 			}
@@ -292,9 +150,13 @@ class EventApplyCancelVC: UIViewController {
 	
 	private var distance : CGFloat = 0
 	private var scrollOffset : CGFloat = 0
+	
+	private let viewModel = EventApplyCancelViewModel()
+	private let input = PassthroughSubject<EventApplyCancelViewModel.Input, Never>()
+	private var cancelBag = Set<AnyCancellable>()
 
     // MARK: - Life Cycle
-	init(type: String, programId: Int) {
+	init(type: ProgramType, programId: Int) {
 		self.type = type
 		self.programId = programId
 		self.memberId = UserDefaults.standard.integer(forKey: "memberIdx")
@@ -308,6 +170,9 @@ class EventApplyCancelVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
+		bind()
+		input.send(.viewDidLoad(type: self.type, programId: self.programId))
+		
 		configureViews()
 		configureAddTarget()
 		configureTextField()
@@ -316,9 +181,7 @@ class EventApplyCancelVC: UIViewController {
     }
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		
-        fetchProgramData()
-        fetchUserData()
+
 		cancelButton.isEnabled = false
 		cancelButton.backgroundColor = .mainGray
         setKeyboardObserver()
@@ -330,6 +193,47 @@ class EventApplyCancelVC: UIViewController {
         super.viewWillDisappear(animated)
         setKeyboardObserverRemove()
     }
+	
+	override func viewDidDisappear(_ animated: Bool) {
+		super.viewDidDisappear(animated)
+		
+		cancelBag.forEach {$0.cancel()}
+		cancelBag.removeAll()
+		print(cancelBag)
+	}
+	
+	private func bind() {
+		let output = viewModel.transform(input: input.eraseToAnyPublisher())
+		
+		output
+			.receive(on: DispatchQueue.main)
+			.sink { event in
+				switch event {
+				case .getProgramDataDidSucceed(let data):
+					guard let data = data.result else {return}
+					self.programInfo = data
+					
+				case .getProgramDataDidFail(let error):
+					print(error.localizedDescription)
+					self.presentErrorView()
+					
+				case .getUserApplyDataDidSucceed(let data):
+					self.configureUserData(data: data)
+					
+				case .getUserApplyDataDidFail(let error):
+					print(error.localizedDescription)
+					self.presentErrorView()
+					
+				case .postProgramApplyCancelDidSucceed(let result):
+					self.presentAlert(result: result)
+					
+				case .postProgramApplyCancelDidFail(let error):
+					print(error.localizedDescription)
+					self.presentErrorView()
+				}
+			}
+			.store(in: &cancelBag)
+	}
     
 }
 
@@ -369,27 +273,7 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 			$0.top.equalToSuperview().inset(16)
 			$0.leading.trailing.equalToSuperview().inset(16)
 		}
-
-        
-		[programNameLabel, seminarInfoStackView]
-			.forEach {programInfoView.addSubview($0)}
-		
-        // seminarNameLabel
-		programNameLabel.snp.makeConstraints {
-			$0.top.equalToSuperview().offset(12)
-			$0.leading.equalToSuperview().inset(16)
-			$0.height.equalTo(29)
-		}
-		
-        // seminarInfoStackView
-		seminarInfoStackView.snp.makeConstraints {
-			$0.leading.equalToSuperview().inset(16)
-			$0.top.equalTo(programNameLabel.snp.bottom).offset(8)
-			$0.bottom.equalToSuperview().inset(12)
-		}
-		
-       
-		
+	
         // nameTextField
 		nameTextField.snp.makeConstraints {
 			$0.leading.trailing.equalToSuperview().inset(16)
@@ -455,39 +339,10 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 		accountTextField.addTarget(self, action: #selector(textFieldInactivated), for: .editingDidEnd)
 	}
 	
-	private func fetchUserData() {
-		EventApplyCancelViewModel.getUserApplyData(memberId: self.memberId, programId: self.programId, completion: {[weak self] result in
-			self?.nameTextField.attributedPlaceholder = NSAttributedString(string: result.name, attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
-			self?.nicknameTextField.attributedPlaceholder = NSAttributedString(string: result.nickname, attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
-			self?.numberTextField.attributedPlaceholder = NSAttributedString(string: result.phone, attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
-		})
-	}
-	
-	private func fetchProgramData() {
-		switch self.type {
-		case "SEMINAR":
-			SeminarDetailViewModel.requestSeminarDetailInfo(memberId: self.memberId, seminarId: self.programId, completion: {[weak self] result in
-				switch result {
-				case .success(let result):
-					guard let result = result.result else {return}
-					self?.seminarInfo = result
-				case .failure(_):
-					self?.presentErrorView()
-				}
-			})
-		case "NETWORKING":
-			NetworkingDetailViewModel.requestNetworkingDetailInfo(memberId: self.memberId, networkingId: self.programId, completion: {[weak self] result in
-				switch result {
-				case .success(let result):
-					guard let result = result.result else {return}
-					self?.networkingInfo = result
-				case .failure(_):
-					self?.presentErrorView()
-				}
-			})
-		default:
-			return
-		}
+	private func configureUserData(data: EventUserApplyModelResponse) {
+		self.nameTextField.attributedPlaceholder = NSAttributedString(string: data.result.name, attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
+		self.nicknameTextField.attributedPlaceholder = NSAttributedString(string: data.result.nickname, attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
+		self.numberTextField.attributedPlaceholder = NSAttributedString(string: data.result.phone, attributes: [.foregroundColor : UIColor.mainGray, .font: UIFont.NotoSansKR(type: .Regular, size: 16)!])
 	}
 	
 	private func presentErrorView() {
@@ -496,44 +351,38 @@ extension EventApplyCancelVC: sendBankNameProtocol {
         self.navigationController?.pushViewController(errorView, animated: false)
 	}
 	
-	private func configureSeminarData() {
-		programNameLabel.text = self.seminarInfo.title
-		dateInfoLabel.text = self.seminarInfo.date.formattingDetailDate()
-		locationInfoLabel.text = self.seminarInfo.location
+	private func configureProgramData() {
+		programInfoView.programInfo = self.programInfo
 		
-		if self.seminarInfo.fee == 0 {
-//			costStackView.isHidden = true
-			costInfoLabel.text = "무료"
+		if programInfo.fee == 0 {
 			bankButton.isHidden = true
 			accountTextField.isHidden = true
 		} else {
-//			costStackView.isHidden = false
 			bankButton.isHidden = false
 			accountTextField.isHidden = false
-			costInfoLabel.text = "\(self.seminarInfo.fee)원"
 		}
-		
-		deadlineInfoLabel.text = self.seminarInfo.endDate.formattingDetailDate()
 	}
 	
-	private func configureNetworkingData() {
-		programNameLabel.text = self.networkingInfo.title
-		dateInfoLabel.text = self.networkingInfo.date.formattingDetailDate()
-		locationInfoLabel.text = self.networkingInfo.location
-		
-		if self.networkingInfo.fee == 0 {
-//			costStackView.isHidden = true
-			costInfoLabel.text = "무료"
-			bankButton.isHidden = true
-			accountTextField.isHidden = true
+	private func presentAlert(result: EventApplyModel) {
+		if !result.isSuccess {
+			let sheet = UIAlertController(title: nil, message: result.message, preferredStyle: .alert)
+			let closeAction = UIAlertAction(title: "닫기", style: .cancel, handler: {[weak self] _ in
+				self?.navigationController?.popViewController(animated: true)
+			})
+			sheet.addAction(closeAction)
+			
+			self.present(sheet, animated: true)
 		} else {
-//			costStackView.isHidden = false
-			bankButton.isHidden = false
-			accountTextField.isHidden = false
-			costInfoLabel.text = "\(self.networkingInfo.fee)원"
+			let sheet = UIAlertController(title: nil, message: "신청 취소가 완료되었습니다.", preferredStyle: .alert)
+			let closeAction = UIAlertAction(title: "닫기", style: .cancel, handler: {[weak self] _ in
+				self?.navigationController?.popViewController(animated: true)
+			})
+			sheet.addAction(closeAction)
+			
+			self.present(sheet, animated: true)
+			NotificationCenter.default.post(name: NSNotification.Name("ReloadMyEvent"), object: nil)
 		}
-		
-		deadlineInfoLabel.text = self.networkingInfo.endDate.formattingDetailDate()
+
 	}
 	
 	private func configureGestureRecognizer() {
@@ -564,34 +413,11 @@ extension EventApplyCancelVC: sendBankNameProtocol {
 		self.present(vc, animated: true)
 	}
 	
-	// 취소 완료 alert
+	// 취소 버튼 tap
 	@objc private func didTapRegisterCancelButton() {
 		let bank = self.bankButton.title(for: .normal) ?? ""
 		let account = self.accountTextField.text ?? ""
-		
-		EventApplyCancelViewModel.postBankAccount(memberId: self.memberId, programId: self.programId, bank: bank, account: account, completion: {[weak self] response in
-			if !response.isSuccess {
-				let sheet = UIAlertController(title: nil, message: response.message, preferredStyle: .alert)
-				let closeAction = UIAlertAction(title: "닫기", style: .cancel, handler: {[weak self] _ in
-					self?.navigationController?.popViewController(animated: true)
-				})
-				sheet.addAction(closeAction)
-				
-				self?.present(sheet, animated: true)
-			} else {
-				let sheet = UIAlertController(title: nil, message: "신청 취소가 완료되었습니다.", preferredStyle: .alert)
-				let closeAction = UIAlertAction(title: "닫기", style: .cancel, handler: {[weak self] _ in
-					self?.navigationController?.popViewController(animated: true)
-				})
-				sheet.addAction(closeAction)
-				
-				self?.present(sheet, animated: true)
-				NotificationCenter.default.post(name: NSNotification.Name("ReloadMyEvent"), object: nil)
-			}
-			
-		})
-		
-		
+		input.send(.applyCancelButtondidTap(bank: bank, account: account))
 	}
 	
 	// 뒤로가기 버튼 did tap

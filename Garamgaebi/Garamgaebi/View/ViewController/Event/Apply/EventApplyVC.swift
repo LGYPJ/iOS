@@ -304,9 +304,6 @@ class EventApplyVC: UIViewController {
 			case .postProgramApplyDidFail(let error):
 				print(error.localizedDescription)
 				self.presentErrorView()
-				
-			case .popVC:
-				self.navigationController?.popViewController(animated: true)
 			}
 		}
 		.store(in: &cancelBag)
@@ -592,11 +589,6 @@ extension EventApplyVC {
 	
 	@objc private func scrollViewDidTap() {
 		self.view.endEditing(true)
-	}
-	
-	// 뒤로가기 버튼 did tap
-	@objc private func didTapBackBarButton() {
-		input.send(.backButtonDidTap)
 	}
 	
 	@objc private func textFieldDidChange(_ sender: UITextField) {

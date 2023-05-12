@@ -11,7 +11,6 @@ import Combine
 class EventApplyViewModel {
 	enum Input {
 		case viewDidLoad(type: ProgramType, programId: Int)
-		case backButtonDidTap
 		case nameTextFieldEditingChanged(name: String)
 		case nicknameTextFieldEditingChanged(nickname: String)
 		case numberTextFieldEditingChanged(number: String)
@@ -26,7 +25,6 @@ class EventApplyViewModel {
 		case isValidNumber(result: Bool)
 		case postProgramApplyDidSucceed(result: EventApplyModel)
 		case postProgramApplyDidFail(error: Error)
-		case popVC
 	}
 	
 	// DI
@@ -56,9 +54,6 @@ class EventApplyViewModel {
 			case .viewDidLoad(let type, let programId):
 				self.programId = programId
 				self.getProgramData(type: type, programId: programId)
-				
-			case .backButtonDidTap:
-				self.output.send(.popVC)
 				
 			case .nameTextFieldEditingChanged(let name):
 				let result = self.isValidName(name: name)
