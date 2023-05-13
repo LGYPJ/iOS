@@ -6,17 +6,21 @@
 //
 
 import UIKit
+import Combine
 
-import SnapKit
-import Then
 import Alamofire
 import Kingfisher
+import SnapKit
+import Then
 
 class ProfileVC: UIViewController {
     
     // MARK: - Properties
+    private let profileVM = ProfileViewModel()
+    private let input: PassthroughSubject<ProfileViewModel.Input, Never> = .init()
+    private var cancellables = Set<AnyCancellable>()
+    
     let memberIdx = UserDefaults.standard.integer(forKey: "memberIdx")
-
     let token = UserDefaults.standard.string(forKey: "BearerToken")
     
     var snsData: [SnsResult] = []
@@ -228,17 +232,16 @@ class ProfileVC: UIViewController {
     // MARK: - LifeCycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        bind()
         configureLayouts()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
         
-        // 서버 통신
-        getMyInfo()
+        // 내 프로필 정보 받아오기
+        input.send(.viewWillAppear(memberIdx: memberIdx))
         
         self.getSnsData { [weak self] result in
             self?.snsData = result
@@ -257,7 +260,37 @@ class ProfileVC: UIViewController {
         }
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        cancellables.forEach { $0.cancel() }
+        cancellables.removeAll()
+    }
+    
     // MARK: - Functions
+    
+    private func bind() {
+        // eraseToAnyPublisher => AnyPublisher로 wrapping 해줌
+        let output = profileVM.transform(input: input.eraseToAnyPublisher())
+        
+        output
+            .receive(on: DispatchQueue.main)
+            .sink { event in
+            switch event {
+            // MARK: - [GET] 내프로필 정보
+            case .fetchMyProfileDidSucceed(let profileRes):
+                print("[Seori] getMyProfile 성공")
+                guard let res = profileRes.result else { return }
+                self.setProfileValue(res: res)
+                self.controlUserIntroLabel(content: res.content)
+                self.controlProfileUrlLabel(urlString: res.profileUrl)
+            case .fetchMyProfileDidFail(let error):
+                print("[Seori] getMyProfile 실패 : \(error.localizedDescription)")
+                let errorView = ErrorPageView()
+                errorView.modalPresentationStyle = .fullScreen
+                errorView.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(errorView, animated: false)
+            }
+        }.store(in: &cancellables)
+    }
     
     @objc func reloadProfile() {
         snsTableView.reloadData()
@@ -503,76 +536,6 @@ class ProfileVC: UIViewController {
         })
     }
     
-    // MARK: - [GET] 내프로필 정보
-    func getMyInfo() {
-        
-        // http 요청 주소 지정
-        let url = "\(Constants.apiUrl)/profile/\(memberIdx)"
-        
-        // httpBody에 parameters 추가
-        AF.request(
-            url, // 주소
-            method: .get, // 전송 타입
-            interceptor: MyRequestInterceptor()
-        )
-        .validate() // statusCode:  200..<300
-        .responseDecodable(of: ProfileResponse.self) { response in
-            switch response.result {
-            case .success(let response):
-                if response.isSuccess {
-                    let result = response.result
-                    // 값 넣어주기
-                    self.nameLabel.text = result?.nickName
-                    self.belongLabel.text = result?.belong
-                    self.emailLabel.text = result?.profileEmail
-                    
-                    UserDefaults.standard.set(result?.uniEmail, forKey: "uniEmail")
-                    UserDefaults.standard.set(result?.nickName, forKey: "nickname")
-                    
-                    // 자기소개
-                    if let userIntro = result?.content { // 자기소개
-                        //있으면 보이게
-                        self.introduceLabel.text = userIntro
-                        self.introduceLabel.isHidden = false
-                        self.introduceLabel.snp.updateConstraints {
-                            $0.top.equalTo(self.profileStackView.snp.bottom).offset(16)
-                            $0.leading.trailing.equalTo(self.profileStackView)
-                            $0.height.equalTo(self.introduceLabel.intrinsicContentSize)
-                        }
-                    } else { // 없으면 안 보이게
-                        self.introduceLabel.text = nil
-                        self.introduceLabel.isHidden = true
-                        self.introduceLabel.snp.updateConstraints {
-                            $0.top.equalTo(self.profileStackView.snp.bottom)
-                            $0.height.equalTo(0)
-                        }
-                    }
-                    // 프로필 이미지
-                    if let urlString = result?.profileUrl {
-                        let processor = RoundCornerImageProcessor(cornerRadius: self.profileImageView.layer.cornerRadius)
-                        guard let url = URL(string: urlString) else { return }
-                        self.profileImageView.backgroundColor = .white
-                        self.profileImageView.kf.setImage(with: url, options: [
-                            .processor(processor),
-                            .scaleFactor(UIScreen.main.scale),
-                            .fromMemoryCacheOrRefresh
-                        ])
-                    } else {
-                        self.profileImageView.image = UIImage(named: "DefaultProfileImage")
-                    }
-                } else {
-                    print("실패(내프로필): \(response.message)")
-                }
-            case .failure(let error):
-                print("실패(AF-내프로필): \(error.localizedDescription)")
-                let errorView = ErrorPageView()
-                errorView.modalPresentationStyle = .fullScreen
-				errorView.hidesBottomBarWhenPushed = true
-                self.navigationController?.pushViewController(errorView, animated: false)
-            }
-        }
-    }
-    
     // MARK: - [GET] SNS 조회
     func getSnsData(completion: @escaping (([SnsResult])) -> Void) {
         
@@ -659,6 +622,53 @@ class ProfileVC: UIViewController {
             case .failure(let error):
                 print("실패(AF-Education조회): \(error.localizedDescription)")
             }
+        }
+    }
+    
+    private func setProfileValue(res: ProfileResult) {
+        // 값 넣어주기
+        self.nameLabel.text = res.nickName
+        self.belongLabel.text = res.belong
+        self.emailLabel.text = res.profileEmail
+        
+        UserDefaults.standard.set(res.uniEmail, forKey: "uniEmail")
+        UserDefaults.standard.set(res.nickName, forKey: "nickname")
+    }
+    
+    private func controlUserIntroLabel(content: String?) {
+        // 자기소개
+        if let userIntro = content { // 자기소개
+            //있으면 보이게
+            self.introduceLabel.text = userIntro
+            self.introduceLabel.isHidden = false
+            self.introduceLabel.snp.updateConstraints {
+                $0.top.equalTo(self.profileStackView.snp.bottom).offset(16)
+                $0.leading.trailing.equalTo(self.profileStackView)
+                $0.height.equalTo(self.introduceLabel.intrinsicContentSize)
+            }
+        } else { // 없으면 안 보이게
+            self.introduceLabel.text = nil
+            self.introduceLabel.isHidden = true
+            self.introduceLabel.snp.updateConstraints {
+                $0.top.equalTo(self.profileStackView.snp.bottom)
+                $0.height.equalTo(0)
+            }
+        }
+    }
+    
+    private func controlProfileUrlLabel(urlString: String?) {
+        // 프로필 이미지
+        if let urlString = urlString {
+            let processor = RoundCornerImageProcessor(cornerRadius: self.profileImageView.layer.cornerRadius)
+            guard let url = URL(string: urlString) else { return }
+            self.profileImageView.backgroundColor = .white
+            self.profileImageView.kf.setImage(with: url, options: [
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .fromMemoryCacheOrRefresh
+            ])
+        } else {
+            self.profileImageView.image = UIImage(named: "DefaultProfileImage")
         }
     }
     
