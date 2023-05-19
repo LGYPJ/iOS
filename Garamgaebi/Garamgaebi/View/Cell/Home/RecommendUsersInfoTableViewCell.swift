@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class RecommendUsersInfoTableViewCell: UITableViewCell {
     
@@ -14,16 +15,13 @@ class RecommendUsersInfoTableViewCell: UITableViewCell {
     }
     
     // MARK: - Properties
+    private let viewModel = HomeViewModel()
+    public var models: [RecommendUsersInfo] = []
+    
+    private let input = PassthroughSubject<HomeViewModel.Input, Never>()
+    private var subscriptions = Set<AnyCancellable>()
     static let identifier = String(describing: RecommendUsersInfoTableViewCell.self)
     static var cellHeight = 254.0
-    
-    public var recommendUsersList: [RecommendUsersInfo] = [] {
-        didSet {
-            self.collectionView.reloadData()
-            // cell -> Home으로 변경사항 알림
-            NotificationCenter.default.post(name: Notification.Name("HomeTableViewReload"), object: nil)
-        }
-    }
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -100,10 +98,35 @@ class RecommendUsersInfoTableViewCell: UITableViewCell {
         self.contentView.addSubview(interSpcace)
         
         configSubViewLayouts()
-        configNotificationCenter()
+
+        bind()
+        input.send(.viewDidLoad)
+        
         NotificationCenter.default.post(name: NSNotification.Name("ReloadMyEvent"), object: nil)
     }
 
+    func bind() {
+        let output = viewModel.transform(input: input.eraseToAnyPublisher())
+        output
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] event in
+                switch event {
+                case .setRecommendUsersInfo:
+                    self?.models = self?.viewModel.recommendUsersData ?? []
+                    self?.configureZeroCell()
+                    self?.collectionView.reloadData()
+                    print(">>> Alert: get recommendUsersInfo (Succuess)")
+                    print(self?.models)
+                case .failedRecommendUsersInfo:
+                    self?.models = self?.viewModel.recommendUsersData ?? []
+                    print(">>> Alert: get recommendUsersInfo (Fail)")
+                default:
+                    print("RecommendUsersInfoTableViewCell bind anything")
+                }
+            }
+            .store(in: &subscriptions)
+    }
+    
     func configSubViewLayouts() {
         titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(16)
@@ -141,7 +164,8 @@ class RecommendUsersInfoTableViewCell: UITableViewCell {
     }
     
     private func configureZeroCell() {
-        if recommendUsersList.count == 0 {
+//        if recommendUsersList.count == 0 {
+        if models.count == 0 {
             // 부모 셀 높이 가변설정 (유저가 하나도 없을 때)
             RecommendUsersInfoTableViewCell.cellHeight = 190
             interSpcace.snp.removeConstraints()
@@ -166,16 +190,6 @@ class RecommendUsersInfoTableViewCell: UITableViewCell {
         }
     }
     
-    func configNotificationCenter() {
-        NotificationCenter.default.addObserver(self, selector: #selector(presentRecommendUsersInfo(_:)), name: Notification.Name("presentRecommendUsersInfo"), object: nil)
-    }
-    
-    @objc func presentRecommendUsersInfo(_ notification: NSNotification) {
-        guard let recommendUsersListBase = notification.object as? [RecommendUsersInfo] else { return }
-        recommendUsersList = recommendUsersListBase
-        configureZeroCell()
-    }
-    
 }
 
 extension RecommendUsersInfoTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -189,7 +203,7 @@ extension RecommendUsersInfoTableViewCell: UICollectionViewDataSource, UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return recommendUsersList.count
+        return models.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -216,13 +230,15 @@ extension RecommendUsersInfoTableViewCell: UICollectionViewDataSource, UICollect
             return UICollectionViewCell()
         }
         
-        cell.configure(recommendUsersList[indexPath.row])
+//        cell.configure(recommendUsersList[indexPath.row])
+        cell.configure(models[indexPath.row])
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        NotificationCenter.default.post(name: Notification.Name("postOtherProfileMemberIdx"), object: recommendUsersList[indexPath.row].memberIdx)
+//        NotificationCenter.default.post(name: Notification.Name("postOtherProfileMemberIdx"), object: recommendUsersList[indexPath.row].memberIdx)
+        NotificationCenter.default.post(name: Notification.Name("postOtherProfileMemberIdx"), object: models[indexPath.row].memberIdx)
     }
 
 }

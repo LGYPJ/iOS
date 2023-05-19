@@ -7,6 +7,7 @@
 
 import Foundation
 import Alamofire
+import Combine
 
 class NotificationViewModel {
     // MARK: Request [Notification]
@@ -37,25 +38,34 @@ class NotificationViewModel {
     }
    
     
-    public static func getIsUnreadNotifications(memberIdx: Int, completion: @escaping ((Result<NotificationUnreadInfoResponse, AFError>) -> Void)) {
+//    public static func getIsUnreadNotifications(memberIdx: Int, completion: @escaping ((Result<NotificationUnreadInfoResponse, AFError>) -> Void)) {
+//        let url = "\(Constants.apiUrl)/notification/unread/\(memberIdx)"
+//        AF.request(url, method: .get, interceptor: MyRequestInterceptor())
+//            .validate()
+//            .responseDecodable(of: NotificationUnreadInfoResponse.self) { response in
+//                switch response.result {
+//                case .success(let result):
+//                    if result.isSuccess {
+//                        completion(response.result)
+//                    } else {
+//                        // 통신은 정상적으로 됐으나(200), error발생
+//                        print("실패(Unread Notification 조회): \(result.message)")
+//                    }
+//                case .failure(let error):
+//                    // 실제 HTTP에러 404
+//                    print("실패(AF-Unread Notification 조회): \(error.localizedDescription)")
+//                }
+//            }
+//
+//    }
+    
+    public static func getIsUnreadNotifications(memberIdx: Int) -> AnyPublisher<Result<NotificationUnreadInfoResponse, AFError>, Never> {
         let url = "\(Constants.apiUrl)/notification/unread/\(memberIdx)"
-        AF.request(url, method: .get, interceptor: MyRequestInterceptor())
+        return AF.request(url, method: .get, interceptor: MyRequestInterceptor())
             .validate()
-            .responseDecodable(of: NotificationUnreadInfoResponse.self) { response in
-                switch response.result {
-                case .success(let result):
-                    if result.isSuccess {
-                        completion(response.result)
-                    } else {
-                        // 통신은 정상적으로 됐으나(200), error발생
-                        print("실패(Unread Notification 조회): \(result.message)")
-                    }
-                case .failure(let error):
-                    // 실제 HTTP에러 404
-                    print("실패(AF-Unread Notification 조회): \(error.localizedDescription)")
-                }
-            }
-        
+            .publishDecodable(type: NotificationUnreadInfoResponse.self)
+            .result()
+            .eraseToAnyPublisher()
     }
     
 }

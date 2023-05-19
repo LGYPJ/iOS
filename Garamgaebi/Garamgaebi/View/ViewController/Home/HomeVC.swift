@@ -12,6 +12,7 @@ import SnapKit
 class HomeVC: UIViewController {
     
     // MARK: - Variable
+    //private let viewModel = HomeViewModel()
     let memberIdx = UserDefaults.standard.integer(forKey: "memberIdx")
     
     // UIRefreshControl
@@ -134,7 +135,7 @@ class HomeVC: UIViewController {
         configNotificationCenter()
         initRefresh()
         initSetDatas()
-        LoadingView.shared.show()
+        //LoadingView.shared.show()
         DispatchQueue.main.async {
             self.fetchData {
                 if self.setSeminarData,
@@ -142,7 +143,7 @@ class HomeVC: UIViewController {
                     self.setNotificationData,
                     self.setMyEventData,
                     self.setRecommendedUserData {
-                    LoadingView.shared.hide()
+                    //LoadingView.shared.hide()
                 }
             }
         }
@@ -247,30 +248,30 @@ class HomeVC: UIViewController {
         }
         
         // 가람개비 유저 10명 추천 API
-        HomeViewModel.getRecommendUsersInfo { [weak self] result in
-            switch result {
-            case .success(let result):
-                if result.isSuccess {
-                    if let result = result.result {
-                        self?.recommendUsersInfo = result
-                    } else {
-                        self?.recommendUsersInfo = []
-                    }
-                    self?.setRecommendedUserData = true
-                    completion()
-                } else {
-                    // TODO: 뭐든 에러가 있을거임
-                    //애니메이션 끄고 에러핸들링
-                    //LoadingView.shared.hide()
-                }
-            case .failure(let error):
-                // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
-                print("실패(AF-홈 화면 RecommedUsers 조회): \(error.localizedDescription)")
-                LoadingView.shared.hide()
-                self?.refresh.endRefreshing()
-                self?.presentErrorView()
-            }
-        }
+//        HomeViewModel.getRecommendUsersInfo { [weak self] result in
+//            switch result {
+//            case .success(let result):
+//                if result.isSuccess {
+//                    if let result = result.result {
+//                        self?.recommendUsersInfo = result
+//                    } else {
+//                        self?.recommendUsersInfo = []
+//                    }
+//                    self?.setRecommendedUserData = true
+//                    completion()
+//                } else {
+//                    // TODO: 뭐든 에러가 있을거임
+//                    //애니메이션 끄고 에러핸들링
+//                    //LoadingView.shared.hide()
+//                }
+//            case .failure(let error):
+//                // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
+//                print("실패(AF-홈 화면 RecommedUsers 조회): \(error.localizedDescription)")
+//                LoadingView.shared.hide()
+//                self?.refresh.endRefreshing()
+//                self?.presentErrorView()
+//            }
+//        }
         // 내 모임 정보 API
         HomeViewModel.getHomeMyEventInfo(memberId: self.memberIdx) { [weak self] result in
             switch result {
@@ -297,32 +298,32 @@ class HomeVC: UIViewController {
             }
         }
         // 읽지 않은 알림 여부 API
-        NotificationViewModel.getIsUnreadNotifications(memberIdx: self.memberIdx) { [weak self] result in
-            switch result {
-            case .success(let result):
-                if result.isSuccess {
-                    guard let result = result.result else { return }
-                    self?.setNotificationData = true
-                    if result.isUnreadExist {
-                        self?.notificationViewButton.setImage(UIImage(named: "NotificationUnreadIcon"), for: .normal)
-                    } else {
-                        self?.notificationViewButton.setImage(UIImage(named: "NotificationIcon"), for: .normal)
-                    }
-                    completion()
-                } else {
-                    // TODO: 뭐든 에러가 있을거임
-                    //애니메이션 끄고 에러핸들링
-                    //LoadingView.shared.hide()
-                }
-            case .failure(let error):
-                // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
-                print("실패(AF-Unread Notification 조회): \(error.localizedDescription)")
-                LoadingView.shared.hide()
-                self?.refresh.endRefreshing()
-                self?.presentErrorView()
-            }
-            
-        }
+//        NotificationViewModel.getIsUnreadNotifications(memberIdx: self.memberIdx) { [weak self] result in
+//            switch result {
+//            case .success(let result):
+//                if result.isSuccess {
+//                    guard let result = result.result else { return }
+//                    self?.setNotificationData = true
+//                    if result.isUnreadExist {
+//                        self?.notificationViewButton.setImage(UIImage(named: "NotificationUnreadIcon"), for: .normal)
+//                    } else {
+//                        self?.notificationViewButton.setImage(UIImage(named: "NotificationIcon"), for: .normal)
+//                    }
+//                    completion()
+//                } else {
+//                    // TODO: 뭐든 에러가 있을거임
+//                    //애니메이션 끄고 에러핸들링
+//                    //LoadingView.shared.hide()
+//                }
+//            case .failure(let error):
+//                // 네트워킹 문제일 시 errorView로 이동, LodingView hiding
+//                print("실패(AF-Unread Notification 조회): \(error.localizedDescription)")
+//                LoadingView.shared.hide()
+//                self?.refresh.endRefreshing()
+//                self?.presentErrorView()
+//            }
+//            
+//        }
         
     }
     
@@ -437,6 +438,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             return cell
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: RecommendUsersInfoTableViewCell.identifier, for: indexPath) as? RecommendUsersInfoTableViewCell else {return UITableViewCell()}
+            cell.models = 
             return cell
         case 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeMyEventInfoTableViewCell.identifier, for: indexPath) as? HomeMyEventInfoTableViewCell else {return UITableViewCell()}

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class HomeMyEventInfoTableViewCell: UITableViewCell {
     
@@ -14,16 +15,13 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
     }
     
     // MARK: - Properties
+    private let viewModel = HomeViewModel()
+    var models: [MyEventInfoReady] = []
+
+    private let input = PassthroughSubject<HomeViewModel.Input, Never>()
+    private var subscriptions = Set<AnyCancellable>()
     static let identifier = String(describing: HomeMyEventInfoTableViewCell.self)
     static var cellHeight = 190.0
-    
-    public var myEventList: [MyEventInfoReady] = [] {
-        didSet {
-            self.collectionView.reloadData()
-            // cell -> Home으로 변경사항 알림
-            NotificationCenter.default.post(name: Notification.Name("HomeTableViewReload"), object: nil)
-        }
-    }
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -88,8 +86,34 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
         zeroDataBackgroundView.addSubview(zeroDataImage)
         zeroDataBackgroundView.addSubview(zeroDataDescriptionLabel)
         configSubViewLayouts()
-        configNotificationCenter()
+        
+        bind()
+        input.send(.viewDidLoad)
+        
         NotificationCenter.default.post(name: NSNotification.Name("ReloadMyEvent"), object: nil)
+    }
+    
+    func bind(){
+        let output = viewModel.transform(input: input.eraseToAnyPublisher())
+        output
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] event in
+                switch event {
+                case .setHomeMyEventInfo:
+                    self?.models = self?.viewModel.homeMyEventData ?? []
+                    self?.configureZeroCell()
+                    self?.collectionView.reloadData()
+                    print(">>> Alert: get homeMyEvent (Succuess)")
+                case .failHomeMyEventInfo:
+                    self?.models = self?.viewModel.homeMyEventData ?? []
+                    print(">>> Alert: get homeMyEvent (Fail)")
+                case .setRecommendUsersInfo:
+                    print("asd")
+                case .failedRecommendUsersInfo:
+                    print("asd")
+                }
+            }
+            .store(in: &subscriptions)
     }
     
     override func layoutIfNeeded() {
@@ -126,41 +150,31 @@ class HomeMyEventInfoTableViewCell: UITableViewCell {
     }
     
     private func configureZeroCell() {
-        if myEventList.count == 0 {
+        if models.count == 0 {
             // 부모 셀 높이 가변설정 (모임이 하나도 없을 때)
             HomeMyEventInfoTableViewCell.cellHeight = 190
             collectionView.isHidden = true
             zeroDataBackgroundView.isHidden = false
         } else {
             // 부모 셀 높이 가변설정 (모임이 하나이상 존재할때)
-            HomeMyEventInfoTableViewCell.cellHeight = 54.0 + 88.0 * Double(myEventList.count) - 8.0 + 16.0
+            HomeMyEventInfoTableViewCell.cellHeight = 54.0 + 88.0 * Double(models.count) - 8.0 + 16.0
             collectionView.isHidden = false
             zeroDataBackgroundView.isHidden = true
         }
-    }
-    
-    func configNotificationCenter() {
-        NotificationCenter.default.addObserver(self, selector: #selector(presentMyEventInfo(_:)), name: Notification.Name("presentMyEventInfo"), object: nil)
-    }
-    
-    @objc func presentMyEventInfo(_ notification: NSNotification) {
-        guard let myEventListBase = notification.object as? [MyEventInfoReady] else { return }
-        myEventList = myEventListBase
-        collectionView.reloadData()
     }
     
 }
 
 extension HomeMyEventInfoTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return myEventList.count
+        return models.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeMyEventCollectionViewCell.identifier, for: indexPath) as? HomeMyEventCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(myEventList[indexPath.row])
+        cell.configure(models[indexPath.row])
         return cell
     }
 
@@ -173,7 +187,7 @@ extension HomeMyEventInfoTableViewCell: UICollectionViewDataSource, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let postObject = myEventList[indexPath.row]
+        let postObject = models[indexPath.row]
         
         switch(postObject.type){
         case "SEMINAR":
