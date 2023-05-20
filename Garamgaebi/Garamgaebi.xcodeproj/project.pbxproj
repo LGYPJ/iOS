@@ -19,10 +19,12 @@
 		2C408319299A9169000747DF /* IcebreakingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C408318299A9169000747DF /* IcebreakingViewModel.swift */; };
 		2C40831D299CB1BA000747DF /* IceBreakingRoomVC_Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C40831C299CB1BA000747DF /* IceBreakingRoomVC_Test.swift */; };
 		2C4822992A0CAB9D00C3587C /* EventApplyCancelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4822982A0CAB9D00C3587C /* EventApplyCancelService.swift */; };
+		2C632C1F2A175A2A00C7D5B9 /* ProgramAttendantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C632C1E2A175A2A00C7D5B9 /* ProgramAttendantView.swift */; };
 		2C65943929968B63007D3619 /* IceBreakingRoomListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C65943829968B63007D3619 /* IceBreakingRoomListViewModel.swift */; };
 		2C65943B29968BB5007D3619 /* GameRoomListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C65943A29968BB5007D3619 /* GameRoomListModel.swift */; };
 		2C65943D29975E85007D3619 /* EventUserApplyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C65943C29975E85007D3619 /* EventUserApplyModel.swift */; };
 		2C6805E42A075DAD00DFD964 /* UITapGestureRecognizer+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6805E32A075DAD00DFD964 /* UITapGestureRecognizer+.swift */; };
+		2C85677C2A18B1DA00D201E1 /* SeminarPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C85677B2A18B1DA00D201E1 /* SeminarPreviewView.swift */; };
 		2C8A4EF129A098A4004E1FCB /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8A4EF029A098A4004E1FCB /* WebSocketManager.swift */; };
 		2C9E5611297A960900DF9E5A /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9E5610297A960900DF9E5A /* String+.swift */; };
 		2CA85CBB2A01523B00EB8213 /* EventApplyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA85CBA2A01523B00EB8213 /* EventApplyService.swift */; };
@@ -191,10 +193,12 @@
 		2C408318299A9169000747DF /* IcebreakingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IcebreakingViewModel.swift; sourceTree = "<group>"; };
 		2C40831C299CB1BA000747DF /* IceBreakingRoomVC_Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IceBreakingRoomVC_Test.swift; sourceTree = "<group>"; };
 		2C4822982A0CAB9D00C3587C /* EventApplyCancelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventApplyCancelService.swift; sourceTree = "<group>"; };
+		2C632C1E2A175A2A00C7D5B9 /* ProgramAttendantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramAttendantView.swift; sourceTree = "<group>"; };
 		2C65943829968B63007D3619 /* IceBreakingRoomListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IceBreakingRoomListViewModel.swift; sourceTree = "<group>"; };
 		2C65943A29968BB5007D3619 /* GameRoomListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomListModel.swift; sourceTree = "<group>"; };
 		2C65943C29975E85007D3619 /* EventUserApplyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventUserApplyModel.swift; sourceTree = "<group>"; };
 		2C6805E32A075DAD00DFD964 /* UITapGestureRecognizer+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITapGestureRecognizer+.swift"; sourceTree = "<group>"; };
+		2C85677B2A18B1DA00D201E1 /* SeminarPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarPreviewView.swift; sourceTree = "<group>"; };
 		2C8A4EF029A098A4004E1FCB /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		2C9E5610297A960900DF9E5A /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		2CA85CBA2A01523B00EB8213 /* EventApplyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventApplyService.swift; sourceTree = "<group>"; };
@@ -689,6 +693,8 @@
 				6025B0FC297A65DF00C91E49 /* Networking */,
 				6025B0FB297A65C400C91E49 /* Seminar */,
 				2C3162462A0C999300D2A4C0 /* ProgramInfoView.swift */,
+				2C632C1E2A175A2A00C7D5B9 /* ProgramAttendantView.swift */,
+				2C85677B2A18B1DA00D201E1 /* SeminarPreviewView.swift */,
 			);
 			path = Event;
 			sourceTree = "<group>";
@@ -1254,6 +1260,7 @@
 				2C8A4EF129A098A4004E1FCB /* WebSocketManager.swift in Sources */,
 				60F91403296D2F4800626C40 /* ProfileVC.swift in Sources */,
 				46876C6729732053000BA1B6 /* ProfileWithdrawalVC.swift in Sources */,
+				2C85677C2A18B1DA00D201E1 /* SeminarPreviewView.swift in Sources */,
 				2C25C6BC29D87A88001A2659 /* VersionManager.swift in Sources */,
 				2C6805E42A075DAD00DFD964 /* UITapGestureRecognizer+.swift in Sources */,
 				46C18D25297866E600A05CBF /* ProfileDataModel.swift in Sources */,
@@ -1297,6 +1304,7 @@
 				2CED690F298CBD2800C838BD /* Status.swift in Sources */,
 				2CDD94E329711EB3004B8D56 /* IceBreakingRoomVC.swift in Sources */,
 				60F91409296D446100626C40 /* UIFont+.swift in Sources */,
+				2C632C1F2A175A2A00C7D5B9 /* ProgramAttendantView.swift in Sources */,
 				2CDD94EE297185A7004B8D56 /* EventIceBreakingTableViewCell.swift in Sources */,
 				2CDD94D9296FDB88004B8D56 /* EventApplyCancelVC.swift in Sources */,
 				2CDD94EC29718548004B8D56 /* EventAttendantCollectionViewCell.swift in Sources */,
