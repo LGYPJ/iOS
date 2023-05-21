@@ -740,6 +740,22 @@ class ProfileVC: UIViewController {
             $0.bottom.equalTo(scrollView).offset(-16)
         }
     }
+	
+	// sns label 탭 시 해당 sns 웹뷰 띄움
+	@objc private func didTapSnsInstagramLabel(gesture: SnsTapGestureRecognizer) {
+		if gesture.type == "인스타그램" {
+			guard var text = gesture.text else {return}
+			text.remove(at: text.startIndex)
+			let url = URL(string: "https://www.instagram.com/\(text)/")!
+			UIApplication.shared.open(url)
+		} else {
+			guard let text = gesture.text,
+				  let url = URL(string: text) else {return}
+			UIApplication.shared.open(url)
+		}
+		
+		
+	}
     
 }
 // MARK: - Extension
@@ -772,6 +788,12 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             cell.snsTypeLabel.text = row.type
             cell.snsLinkLabel.text = row.address
             cell.copyButton.isHidden = true
+			
+			let tapGesture = SnsTapGestureRecognizer(target: self, action: #selector(didTapSnsInstagramLabel))
+			tapGesture.type = row.type
+			tapGesture.text = row.address
+			cell.snsLinkLabel.addGestureRecognizer(tapGesture)
+
             
             // 편집 모드로 넘길 SNS 데이터를 셀에 담기
             cell.snsIdx = row.snsIdx
