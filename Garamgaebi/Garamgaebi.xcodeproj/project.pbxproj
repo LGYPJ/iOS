@@ -163,6 +163,12 @@
 		60F91416296D4B6F00626C40 /* NotoSansKR-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 60F9140C296D46E500626C40 /* NotoSansKR-Regular.otf */; };
 		60F92C53299F4904000AC1C3 /* MyRequestInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F92C52299F4904000AC1C3 /* MyRequestInterceptor.swift */; };
 		8774F3F8C23CF17362051187 /* Pods_GaramgaebiTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE5760D4575087EF7AF0515D /* Pods_GaramgaebiTests.framework */; };
+		A2BDA0092A0EBCBE00A409B6 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BDA0082A0EBCBE00A409B6 /* ProfileViewModel.swift */; };
+		A2BDA00A2A0EBCBE00A409B6 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BDA0082A0EBCBE00A409B6 /* ProfileViewModel.swift */; };
+		A2BDA00B2A0EBCBE00A409B6 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BDA0082A0EBCBE00A409B6 /* ProfileViewModel.swift */; };
+		A2BDA00D2A0EBD3000A409B6 /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BDA00C2A0EBD3000A409B6 /* ProfileService.swift */; };
+		A2BDA00E2A0EBD3000A409B6 /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BDA00C2A0EBD3000A409B6 /* ProfileService.swift */; };
+		A2BDA00F2A0EBD3000A409B6 /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BDA00C2A0EBD3000A409B6 /* ProfileService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -345,6 +351,8 @@
 		60F9140F296D46E500626C40 /* NotoSansKR-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansKR-Black.otf"; sourceTree = "<group>"; };
 		60F91410296D46E500626C40 /* NotoSansKR-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansKR-Thin.otf"; sourceTree = "<group>"; };
 		60F92C52299F4904000AC1C3 /* MyRequestInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyRequestInterceptor.swift; sourceTree = "<group>"; };
+		A2BDA0082A0EBCBE00A409B6 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		A2BDA00C2A0EBD3000A409B6 /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
 		C8CB1AB7E398B75581977FAF /* Pods_Garamgaebi.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Garamgaebi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE5760D4575087EF7AF0515D /* Pods_GaramgaebiTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GaramgaebiTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0F3426C456DDD54ECB7EBDC /* Pods-Garamgaebi-GaramgaebiUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Garamgaebi-GaramgaebiUITests.release.xcconfig"; path = "Target Support Files/Pods-Garamgaebi-GaramgaebiUITests/Pods-Garamgaebi-GaramgaebiUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -404,6 +412,7 @@
 		46AB1231299D3D5D0013371C /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				A2BDA0082A0EBCBE00A409B6 /* ProfileViewModel.swift */,
 				46AB1232299D3D780013371C /* ProfileHistoryViewModel.swift */,
 				46C003E0299DC41600625E79 /* ProfileServiceViewModel.swift */,
 			);
@@ -793,6 +802,7 @@
 			isa = PBXGroup;
 			children = (
 				6082992E297FC20C00240036 /* EventService.swift */,
+				A2BDA00C2A0EBD3000A409B6 /* ProfileService.swift */,
 				2CA85CBA2A01523B00EB8213 /* EventApplyService.swift */,
 				2CED9B312A066D0E00860302 /* ProgramDetailService.swift */,
 				2C4822982A0CAB9D00C3587C /* EventApplyCancelService.swift */,
@@ -1245,6 +1255,7 @@
 				60513F3B298E5F070065CD15 /* RegisterEducationModel.swift in Sources */,
 				6038243C296D7E3F00E12CC2 /* OnboardingDataModel.swift in Sources */,
 				60BD04F22973A3EC00F4B433 /* RecommendUsersInfoTableViewCell.swift in Sources */,
+				A2BDA0092A0EBCBE00A409B6 /* ProfileViewModel.swift in Sources */,
 				60513F35298E43F30065CD15 /* UniEmailAuthViewModel.swift in Sources */,
 				60AA6BC529751D1F002878B6 /* ViewAllSeminarVC.swift in Sources */,
 				601823372972FAD800160EF4 /* HomeEventDataModel.swift in Sources */,
@@ -1282,6 +1293,7 @@
 				2CDD94FC2972DE9F004B8D56 /* IceBreakingUserCollectionViewCell.swift in Sources */,
 				2C40831D299CB1BA000747DF /* IceBreakingRoomVC_Test.swift in Sources */,
 				6055D84529701F5700C86D53 /* InputCareerVC.swift in Sources */,
+				A2BDA00D2A0EBD3000A409B6 /* ProfileService.swift in Sources */,
 				60C6371A2984E1F100D2C814 /* HomeNetworkingPopUpVC.swift in Sources */,
 				46AB1233299D3D780013371C /* ProfileHistoryViewModel.swift in Sources */,
 				2CED690D2989426A00C838BD /* EventApplyModel.swift in Sources */,
@@ -1372,6 +1384,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A2BDA00A2A0EBCBE00A409B6 /* ProfileViewModel.swift in Sources */,
+				A2BDA00E2A0EBD3000A409B6 /* ProfileService.swift in Sources */,
 				609A53E9296AB47400BBD338 /* GaramgaebiTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1381,7 +1395,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				609A53F5296AB47400BBD338 /* GaramgaebiUITestsLaunchTests.swift in Sources */,
+				A2BDA00B2A0EBCBE00A409B6 /* ProfileViewModel.swift in Sources */,
 				609A53F3296AB47400BBD338 /* GaramgaebiUITests.swift in Sources */,
+				A2BDA00F2A0EBD3000A409B6 /* ProfileService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
