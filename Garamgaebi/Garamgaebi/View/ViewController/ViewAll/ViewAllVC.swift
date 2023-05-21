@@ -123,7 +123,14 @@ class ViewAllVC: UIViewController {
     
     @objc func pushApplyCancelVC(_ notification: NSNotification) {
         let detailInfo: MyEventToDetailInfo = notification.object as! MyEventToDetailInfo
-		let vc = EventApplyCancelVC(type: detailInfo.type, programId: detailInfo.programIdx)
+		let type: ProgramType = {
+			if detailInfo.type == "SEMINAR" {
+				return .SEMINAR
+			} else {
+				return .NETWORKING
+			}
+		}()
+		let vc = EventApplyCancelVC(type: type, programId: detailInfo.programIdx)
 		vc.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(vc, animated: true)
         print("ApplyCancel// \(detailInfo.type) id -> \(detailInfo.programIdx)")

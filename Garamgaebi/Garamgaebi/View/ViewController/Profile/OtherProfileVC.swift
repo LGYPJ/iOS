@@ -563,6 +563,22 @@ class OtherProfileVC: UIViewController {
     @objc private func didTapBackBarButton() {
         self.navigationController?.popViewController(animated: true)
     }
+	
+	// sns label 탭 시 해당 sns 웹뷰 띄움
+	@objc private func didTapSnsInstagramLabel(gesture: SnsTapGestureRecognizer) {
+		if gesture.type == "인스타그램" {
+			guard var text = gesture.text else {return}
+			text.remove(at: text.startIndex)
+			let url = URL(string: "https://www.instagram.com/\(text)/")!
+			UIApplication.shared.open(url)
+		} else {
+			guard let text = gesture.text,
+				  let url = URL(string: text) else {return}
+			UIApplication.shared.open(url)
+		}
+		
+		
+	}
 }
 // MARK: - Extension
 extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
@@ -592,10 +608,16 @@ extension OtherProfileVC: UITableViewDataSource, UITableViewDelegate {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileSNSTableViewCell.identifier, for: indexPath) as? ProfileSNSTableViewCell else { return UITableViewCell()}
             
             let type = snsData[indexPath.row].type
+			let snsAddress = snsData[indexPath.row].address
             cell.snsTypeLabel.text = type
-            cell.snsLinkLabel.text = snsData[indexPath.row].address
+            cell.snsLinkLabel.text = snsAddress
             cell.editButton.isHidden = true
-            
+			
+			let tapGesture = SnsTapGestureRecognizer(target: self, action: #selector(didTapSnsInstagramLabel))
+			tapGesture.type = type
+			tapGesture.text = snsAddress
+			cell.snsLinkLabel.addGestureRecognizer(tapGesture)
+
             cell.delegate = self
             cell.selectionStyle = .none
             return cell

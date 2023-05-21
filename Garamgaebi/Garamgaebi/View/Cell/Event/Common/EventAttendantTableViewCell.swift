@@ -148,7 +148,7 @@ extension EventAttendantTableViewCell {
 	private func fetchAttendant() {
 		if self.type == "SEMINAR" {
 			SeminarDetailViewModel.requestSeminarAttendant(seminarId: self.programId, completion: {[weak self] result in
-				self?.seminarAttendants = result.participantList ?? []
+//				self?.seminarAttendants = result.participantList ?? []
 				self?.isUserApply = result.isApply
 				self?.attendantCountLabel.text = "\(result.participantList?.count ?? 0)명"
 			})
