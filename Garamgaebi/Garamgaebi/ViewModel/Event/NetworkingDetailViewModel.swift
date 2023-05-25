@@ -10,7 +10,7 @@ import Alamofire
 class NetworkingDetailViewModel {
 	// MARK: requestData
 	// 세미나 정보 request
-	public static func requestNetworkingDetailInfo(memberId: Int, networkingId: Int, completion: @escaping ((Result<NetworkingDetailInfoResponse, AFError>) -> Void)) {
+	public static func requestNetworkingDetailInfo(memberId: Int, networkingId: Int, completion: @escaping ((Result<ProgramDetailInfoResponse, AFError>) -> Void)) {
 //		let dummyData = NetworkingDetailInfo(programIdx: networkingId,title: "유료 네트워킹1", date: "2023-04-15T18:00:00", location: "가천관", fee: 10000, endDate: "2023-04-08T18:00:00", programStatus: "OPEN", userButtonStatus: "CANCEL")
 //		completion(dummyData)
 		let url = "\(Constants.apiUrl)/networkings/\(networkingId)/info"
@@ -20,7 +20,7 @@ class NetworkingDetailViewModel {
 
 		AF.request(url, method: .get, parameters: params, interceptor: MyRequestInterceptor())
 			.validate()
-			.responseDecodable(of: NetworkingDetailInfoResponse.self) { response in
+			.responseDecodable(of: ProgramDetailInfoResponse.self) { response in
 				switch response.result {
 				case .success(let result):
 					if result.isSuccess {
@@ -39,7 +39,7 @@ class NetworkingDetailViewModel {
 	}
 	
 	// 네트워킹 참가자 request
-	public static func requestNetworkingAttendant(networkingId: Int, completion: @escaping (NetworkingAttendantResult) -> Void) {
+	public static func requestNetworkingAttendant(networkingId: Int, completion: @escaping (ProgramAttendantResult) -> Void) {
 //		let dummyData = [ NetworkingDetailAttendant(memberIdx: 0, nickname: "연현", profileImg: "person.circle"),
 //						  NetworkingDetailAttendant(memberIdx: 1, nickname: "연현2", profileImg: "person"),
 //						  NetworkingDetailAttendant(memberIdx: 2,nickname: "연현3", profileImg: "person.fill"),
@@ -53,7 +53,7 @@ class NetworkingDetailViewModel {
 		]
 		AF.request(url, method: .get, parameters: params, interceptor: MyRequestInterceptor())
 			.validate()
-			.responseDecodable(of: NetworkingDetailAttentdantResponse.self) { response in
+			.responseDecodable(of: ProgramAttentdantResponse.self) { response in
 				switch response.result {
 				case .success(let result):
 					if result.isSuccess {

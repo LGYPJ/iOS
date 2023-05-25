@@ -24,6 +24,7 @@
 		2C65943B29968BB5007D3619 /* GameRoomListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C65943A29968BB5007D3619 /* GameRoomListModel.swift */; };
 		2C65943D29975E85007D3619 /* EventUserApplyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C65943C29975E85007D3619 /* EventUserApplyModel.swift */; };
 		2C6805E42A075DAD00DFD964 /* UITapGestureRecognizer+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6805E32A075DAD00DFD964 /* UITapGestureRecognizer+.swift */; };
+		2C752F8C2A1EE94F00790E30 /* NetworkingIcebreakingEntranceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C752F8B2A1EE94F00790E30 /* NetworkingIcebreakingEntranceView.swift */; };
 		2C85677C2A18B1DA00D201E1 /* SeminarPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C85677B2A18B1DA00D201E1 /* SeminarPreviewView.swift */; };
 		2C8A4EF129A098A4004E1FCB /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8A4EF029A098A4004E1FCB /* WebSocketManager.swift */; };
 		2C9E5611297A960900DF9E5A /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9E5610297A960900DF9E5A /* String+.swift */; };
@@ -204,6 +205,7 @@
 		2C65943A29968BB5007D3619 /* GameRoomListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomListModel.swift; sourceTree = "<group>"; };
 		2C65943C29975E85007D3619 /* EventUserApplyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventUserApplyModel.swift; sourceTree = "<group>"; };
 		2C6805E32A075DAD00DFD964 /* UITapGestureRecognizer+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITapGestureRecognizer+.swift"; sourceTree = "<group>"; };
+		2C752F8B2A1EE94F00790E30 /* NetworkingIcebreakingEntranceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingIcebreakingEntranceView.swift; sourceTree = "<group>"; };
 		2C85677B2A18B1DA00D201E1 /* SeminarPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarPreviewView.swift; sourceTree = "<group>"; };
 		2C8A4EF029A098A4004E1FCB /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		2C9E5610297A960900DF9E5A /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
@@ -703,6 +705,7 @@
 				6025B0FB297A65C400C91E49 /* Seminar */,
 				2C3162462A0C999300D2A4C0 /* ProgramInfoView.swift */,
 				2C632C1E2A175A2A00C7D5B9 /* ProgramAttendantView.swift */,
+				2C752F8B2A1EE94F00790E30 /* NetworkingIcebreakingEntranceView.swift */,
 				2C85677B2A18B1DA00D201E1 /* SeminarPreviewView.swift */,
 			);
 			path = Event;
@@ -1357,6 +1360,7 @@
 				2C316BC52A0BB7A300B62710 /* HeaderView.swift in Sources */,
 				2CDD94EA29718369004B8D56 /* EventAttendantTableViewCell.swift in Sources */,
 				2CDD94E8297173E8004B8D56 /* EventInfoTableViewCell.swift in Sources */,
+				2C752F8C2A1EE94F00790E30 /* NetworkingIcebreakingEntranceView.swift in Sources */,
 				2CED9B322A066D0E00860302 /* ProgramDetailService.swift in Sources */,
 				2CDD9504297573BF004B8D56 /* BankPopUpVC.swift in Sources */,
 				2CDD950029750BC9004B8D56 /* SeminarPreviewPopUpVC.swift in Sources */,
