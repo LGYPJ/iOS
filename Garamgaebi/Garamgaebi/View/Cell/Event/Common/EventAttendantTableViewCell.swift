@@ -154,7 +154,7 @@ extension EventAttendantTableViewCell {
 			})
 		} else {
 			NetworkingDetailViewModel.requestNetworkingAttendant(networkingId: self.programId, completion: {[weak self] result in
-				self?.networkingAttendants = result.participantList ?? []
+//				self?.networkingAttendants = result.participantList ?? []
 				self?.isUserApply = result.isApply
 				self?.attendantCountLabel.text = "\(result.participantList?.count ?? 0)명"
 				
